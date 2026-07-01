@@ -1,0 +1,955 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "asset",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Query the underlying asset balance for an address.\\n\\nbalance = caller_shares / total_shares \\xc3\\x97 (supply_value - debt_value)",
+      "name": "balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deposit underlying asset, execute leverage loop, mint shares.\\n\\nFlow:\\n1. Transfer `amount` from `from` to the strategy contract\\n2. Execute N-loop leverage: SupplyCollateral+Borrow \\xc3\\x97 N + final SupplyCollateral\\n3. Track b/d token deltas, mint proportional shares\\n4. Return the depositor's underlying balance",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Harvest BLND emissions, swap to underlying, re-leverage.\\n\\nCallable only by the keeper. Claims from both supply and borrow emission\\nsides, swaps BLND \\xe2\\x86\\x92 underlying via Soroswap, then re-leverages proceeds.\\nNo new shares are minted \\xe2\\x80\\x94 this increases per-share equity.",
+      "name": "harvest",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "data",
+          "type_": {
+            "option": {
+              "value_type": "bytes"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Current contract version (1 at deploy, bumped on each upgrade).",
+      "name": "version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get current strategy position details.\\nReturns (total_equity, total_shares, b_tokens, d_tokens, b_rate, d_rate).",
+      "name": "position",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": [
+                  "i128",
+                  "i128",
+                  "i128",
+                  "i128",
+                  "i128",
+                  "i128"
+                ]
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Withdraw underlying by unwinding proportional leverage.\\n\\nFlow:\\n1. Calculate proportional b/d tokens for the requested amount\\n2. Submit unwind: repay proportional debt, withdraw proportional collateral\\n3. Burn shares, transfer equity to `to`\\n4. Return the depositor's remaining underlying balance",
+      "name": "withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Rebalance: partial-unwind if HF is in the orange zone (HF < orange_hf),\\nrestoring HF to orange_hf. Callable by anyone (permissionless \\xe2\\x80\\x94 protects\\nthe vault). Emits a `rebalance` event when loops are unwound.",
+      "name": "rebalance",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get the current keeper address.",
+      "name": "get_keeper",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set a new keeper address (keeper self-rotation).\\n\\nGated by the *current* keeper. This is one of two ways to rotate the\\nkeeper; see `admin_set_keeper` for the admin recovery path used when the\\nkeeper key is lost or compromised.",
+      "name": "set_keeper",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_keeper",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The configured share token, or an error if not yet set.",
+      "name": "share_token",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The configured swap account, or an error if unset.",
+      "name": "swap_account",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initialize the strategy with configuration.\\n\\ninit_args layout:\\n[0] pool: Address          \\xe2\\x80\\x94 Blend pool\\n[1] blend_token: Address   \\xe2\\x80\\x94 BLND token\\n[2] router: Address        \\xe2\\x80\\x94 Soroswap router\\n[3] reward_threshold: i128 \\xe2\\x80\\x94 min BLND to trigger harvest\\n[4] keeper: Address        \\xe2\\x80\\x94 authorized harvest caller\\n[5] c_factor: i128         \\xe2\\x80\\x94 collateral factor (1e7)\\n[6] target_loops: u32      \\xe2\\x80\\x94 number of leverage loops\\n[7] min_hf: i128           \\xe2\\x80\\x94 minimum health factor (1e7)\\n[8] orange_hf: i128        \\xe2\\x80\\x94 orange-zone threshold; partial unwind triggered below this (1e7)\\n[9] admin: Address         \\xe2\\x80\\x94 authorized to upgrade the contract and set the share token",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "init_args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Keeper-gated: claim BLND emissions into the strategy and approve the swap\\naccount to pull them (if set) for an off-chain Broker swap. The BLND stays\\nin the contract until pulled, so the on-chain Soroswap path remains a valid\\nfallback. Returns the BLND balance available to swap.",
+      "name": "harvest_claim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get current health factor (1e7 scaled).",
+      "name": "health_factor",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Partial-unwind liquidation protection: unwind just enough loops to restore\\nHF to `target_hf`. Callable by the keeper, or by anyone when HF is already\\nin the orange zone. `target_hf` is floored at config.orange_hf to prevent\\nover-unwinding. Emits a `rebalance` event when loops are unwound.",
+      "name": "partial_unwind",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "target_hf",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set the SEP-41 vault-share token (admin-gated, one-time wiring).\\n\\nThe token must already be deployed with this strategy as its minter.\\nRequired before the first deposit. On a fresh deploy the token is the\\nper-user ledger from day one; for an upgraded legacy deployment, call\\n`migrate_position` per holder afterwards.",
+      "name": "set_share_token",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin recovery path to rotate the keeper (gated by the `admin-sep` admin).\\n\\nComplements `set_keeper`: the keeper rotates itself in normal operation,\\nbut if the keeper key is lost or compromised the admin can install a new\\nkeeper here without the old keeper's cooperation.",
+      "name": "admin_set_keeper",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_keeper",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Keeper-gated: re-leverage harvested proceeds via the chosen route.\\n\\n- `via_soroswap = true`: swap the strategy's BLND \\xe2\\x86\\x92 underlying on-chain\\nthrough Soroswap (mandatory non-zero `amount_out_min`), then re-leverage.\\n- `via_soroswap = false` (Broker): the keeper has already swapped off-chain\\nand transferred `amount_in` of underlying back to the strategy; re-leverage\\nit directly (asserted to be held). `amount_out_min` is ignored here.\\n\\nEmits a `harvest_route` event `(route, amount_in, amount_out_min, realized)`\\nfor the keeper's A/B telemetry. Returns realized underlying re-leveraged.",
+      "name": "harvest_reinvest",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "via_soroswap",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "amount_out_min",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Migrate a legacy `VaultPos` holder onto the share token: mint their\\nshares into the token and zero the legacy entry. Permissionless and\\nidempotent (it only moves a holder's own shares into their token\\nbalance \\xe2\\x80\\x94 no theft possible). Used once after upgrading a deployment\\nthat predates the token; fresh deploys never need it.",
+      "name": "migrate_position",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Keeper-authorised, rate-limited auto-rebalance. Unwinds the minimal loops\\nto restore HF to orange_hf when HF has dropped into the orange zone.\\nLimited to once per `REBALANCE_COOLDOWN_LEDGERS`; emits a `rebalance`\\nevent with before/after HF and loops unwound. Returns loops unwound.",
+      "name": "rebalance_keeper",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set the keeper-controlled account allowed to pull claimed BLND for an\\noff-chain swap (admin-gated).",
+      "name": "set_swap_account",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Config",
+      "fields": [
+        {
+          "doc": "The underlying asset (e.g. USDC)",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "BLND token address",
+          "name": "blend_token",
+          "type_": "address"
+        },
+        {
+          "doc": "Collateral factor (1e7 scaled, e.g. 9_500_000 = 0.95)",
+          "name": "c_factor",
+          "type_": "i128"
+        },
+        {
+          "doc": "Emission claim IDs (supply + borrow sides)",
+          "name": "claim_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "Minimum health factor (1e7 scaled, e.g. 1_050_000 = 1.05)",
+          "name": "min_hf",
+          "type_": "i128"
+        },
+        {
+          "doc": "Orange-zone threshold: HF below this triggers partial unwind (1e7 scaled).\\nMust satisfy min_hf < orange_hf. e.g. 1_150_000 = 1.15",
+          "name": "orange_hf",
+          "type_": "i128"
+        },
+        {
+          "doc": "Blend pool address",
+          "name": "pool",
+          "type_": "address"
+        },
+        {
+          "doc": "Reserve index in the pool",
+          "name": "reserve_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "Minimum BLND balance to trigger harvest swap",
+          "name": "reward_threshold",
+          "type_": "i128"
+        },
+        {
+          "doc": "Soroswap router address",
+          "name": "router",
+          "type_": "address"
+        },
+        {
+          "doc": "Target number of supply+borrow loops",
+          "name": "target_loops",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Config"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Reserves"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "VaultPos",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Keeper"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Monotonic contract version, bumped on each upgrade.",
+            "name": "Version"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "The SEP-41 vault-share token contract \\xe2\\x80\\x94 the canonical per-user share\\nledger. The strategy is its minter (mints on deposit, burns on withdraw).",
+            "name": "ShareToken"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Ledger sequence of the last keeper rebalance (for rate-limiting).",
+            "name": "LastRebalance"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Keeper-controlled account allowed to pull claimed BLND for an off-chain\\n(Stellar Broker) swap during the split harvest flow.",
+            "name": "SwapAccount"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LeverageReserves",
+      "fields": [
+        {
+          "doc": "Last known b_rate from the pool",
+          "name": "b_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "Last known d_rate from the pool",
+          "name": "d_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "Total b-tokens (supply tokens) held by the strategy in the pool",
+          "name": "total_b_tokens",
+          "type_": "i128"
+        },
+        {
+          "doc": "Total d-tokens (debt tokens) owed by the strategy in the pool",
+          "name": "total_d_tokens",
+          "type_": "i128"
+        },
+        {
+          "doc": "Total shares outstanding across all depositors",
+          "name": "total_shares",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StrategyError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 401
+        },
+        {
+          "doc": "",
+          "name": "NegativeNotAllowed",
+          "value": 410
+        },
+        {
+          "doc": "",
+          "name": "InvalidArgument",
+          "value": 411
+        },
+        {
+          "doc": "",
+          "name": "InsufficientBalance",
+          "value": 412
+        },
+        {
+          "doc": "",
+          "name": "UnderflowOverflow",
+          "value": 413
+        },
+        {
+          "doc": "",
+          "name": "ArithmeticError",
+          "value": 414
+        },
+        {
+          "doc": "",
+          "name": "DivisionByZero",
+          "value": 415
+        },
+        {
+          "doc": "",
+          "name": "InvalidSharesMinted",
+          "value": 416
+        },
+        {
+          "doc": "",
+          "name": "OnlyPositiveAmountAllowed",
+          "value": 417
+        },
+        {
+          "doc": "",
+          "name": "NotAuthorized",
+          "value": 418
+        },
+        {
+          "doc": "",
+          "name": "ProtocolAddressNotFound",
+          "value": 420
+        },
+        {
+          "doc": "",
+          "name": "DeadlineExpired",
+          "value": 421
+        },
+        {
+          "doc": "",
+          "name": "ExternalError",
+          "value": 422
+        },
+        {
+          "doc": "",
+          "name": "SoroswapPairError",
+          "value": 423
+        },
+        {
+          "doc": "",
+          "name": "AmountBelowMinDust",
+          "value": 451
+        },
+        {
+          "doc": "",
+          "name": "UnderlyingAmountBelowMin",
+          "value": 452
+        },
+        {
+          "doc": "",
+          "name": "BTokensAmountBelowMin",
+          "value": 453
+        },
+        {
+          "doc": "",
+          "name": "InternalSwapError",
+          "value": 454
+        },
+        {
+          "doc": "",
+          "name": "SupplyNotFound",
+          "value": 455
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DepositEvent",
+      "prefix_topics": [
+        "deposit_event"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "strategy_name",
+          "type_": "string",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "HarvestEvent",
+      "prefix_topics": [
+        "harvest_event"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "strategy_name",
+          "type_": "string",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "price_per_share",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WithdrawEvent",
+      "prefix_topics": [
+        "withdraw_event"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "strategy_name",
+          "type_": "string",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  }
+]
