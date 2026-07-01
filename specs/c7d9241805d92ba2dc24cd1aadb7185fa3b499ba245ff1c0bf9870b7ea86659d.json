@@ -1,0 +1,679 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AgeVerifierError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "MalformedPublicInputs",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidProof",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "NullifierUsed",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "AgeConstraintFailed",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidIssuerSig",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "WithdrawAlreadyPending",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "WithdrawNotPending",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "WithdrawTimelockActive",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "InvalidFeeAmount",
+          "value": 11
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Vk"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "IssuerPubKey"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Nullifier",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Credential",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "CredentialAddr",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Treasury"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "UsdcToken"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Fee"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PendingWithdrawal"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Pending withdrawal locked by a 48h timelock.\\nStored on request_withdraw(); cleared on execute_withdraw() or cancel_withdraw().",
+      "lib": "",
+      "name": "PendingWithdrawalData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "executable_after",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Groth16 verification key \\xe2\\x80\\x94 stored once during initialize().",
+      "lib": "",
+      "name": "StoredVk",
+      "fields": [
+        {
+          "doc": "",
+          "name": "alpha",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "beta",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "delta",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "gamma",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "IC[0..n_public+1] \\xe2\\x80\\x94 one entry per public signal + constant term.\\nFor this circuit: IC has 4 entries (3 public signals + 1 constant).",
+          "name": "ic",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 64
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Groth16 proof submitted by the user.",
+      "lib": "",
+      "name": "Groth16Proof",
+      "fields": [
+        {
+          "doc": "",
+          "name": "a",
+          "type_": {
+            "bytes_n": {
+              "n": 96
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "b",
+          "type_": {
+            "bytes_n": {
+              "n": 192
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "c",
+          "type_": {
+            "bytes_n": {
+              "n": 96
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Store the verification key, Issuer public key, admin, USDC token, and fee.\\nCalled once after a fresh deploy.\\n\\n`fee_amount` \\xe2\\x80\\x94 issuance fee in USDC units (7 decimals).\\n0 = free (recommended for launch). 20_000_000 = 2.00 USDC.\\nAdjustable post-deploy via set_fee() without redeploying.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vk",
+          "type_": {
+            "udt": {
+              "name": "StoredVk"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "issuer_pub_key",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "AgeVerifierError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set admin, USDC token, and fee on an already-initialized contract.\\nUsed after a WASM upgrade when the old contract had no fee config.\\nFails if Admin is already set (one-shot migration only).",
+      "name": "configure_fees",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "AgeVerifierError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Verify a Groth16 proof, collect the USDC issuance fee, and mint a soulbound credential.\\n\\n`caller`      \\xe2\\x80\\x94 address paying the fee and receiving the credential.\\nMust match the Stellar address used to derive pub_inputs[2].\\n`pub_inputs`  \\xe2\\x80\\x94 [isOldEnough: Fr(1), commitment: Fr, addressHash: Fr]\\n`nullifier`   \\xe2\\x80\\x94 unique 32-byte anti-replay token (random, client-side).\\n`issuer_sig`  \\xe2\\x80\\x94 Ed25519 signature (64 bytes) from the trusted Issuer over commitment bytes.",
+      "name": "verify",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "udt": {
+              "name": "Groth16Proof"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "pub_inputs",
+          "type_": {
+            "vec": {
+              "element_type": "u256"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "nullifier",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "issuer_sig",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "bool",
+            "error_type": {
+              "udt": {
+                "name": "AgeVerifierError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Check whether an address hash already has a verified credential.",
+      "name": "has_credential",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "address_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Check credential by Stellar Address \\xe2\\x80\\x94 used by soulbound_nft via cross-contract call.\\nAvoids requiring callers to recompute the BN254 field element from the address.",
+      "name": "has_credential_by_address",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "addr",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Check whether a nullifier has been consumed.",
+      "name": "is_nullifier_used",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "nullifier",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Return the current issuance fee in USDC units (7 decimals). 0 = free.",
+      "name": "get_fee",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Return the current treasury address.",
+      "name": "get_treasury",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin \\xe2\\x80\\x94 rotate the treasury address. Affects only future fee collections;\\nfunds already at the old treasury address are unaffected.\\nDoes not require a timelock \\xe2\\x80\\x94 no funds move, only the destination changes.",
+      "name": "set_treasury",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_treasury",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "AgeVerifierError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin \\xe2\\x80\\x94 update the issuance fee without redeploying.\\nfee_amount in USDC units (7 decimals): 20_000_000 = 2.00 USDC. 0 = free.\\nMaximum fee: 100_000_000 (10.00 USDC) \\xe2\\x80\\x94 enforced to prevent fee-based DoS.",
+      "name": "set_fee",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "fee_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "AgeVerifierError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin \\xe2\\x80\\x94 initiate a withdrawal. Funds are locked for 48h before execution.\\n\\nSecurity model: if the admin key is compromised, this 48h window gives the\\nteam time to detect the attack and rotate the key (via Stellar account management)\\nbefore `execute_withdraw()` can be called with the old compromised key.\\n\\nRecommended: configure the admin Stellar account as a 2-of-3 multisig so that\\na single compromised key cannot even reach this call unilaterally.",
+      "name": "request_withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "AgeVerifierError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin \\xe2\\x80\\x94 execute a previously requested withdrawal after the 48h timelock has expired.\\nRequires the current admin key \\xe2\\x80\\x94 a rotated key blocks a compromised key from executing.",
+      "name": "execute_withdraw",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "AgeVerifierError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin \\xe2\\x80\\x94 cancel a pending withdrawal request before the timelock expires.\\nCall this immediately after detecting a compromise to neutralize the attack.",
+      "name": "cancel_withdraw",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "AgeVerifierError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Return the pending withdrawal request, if any.",
+      "name": "get_pending_withdrawal",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "PendingWithdrawalData"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin \\xe2\\x80\\x94 upgrade the contract WASM. Contract ID stays the same; all storage is preserved.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "AgeVerifierError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

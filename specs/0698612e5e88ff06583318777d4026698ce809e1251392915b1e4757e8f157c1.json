@@ -1,0 +1,498 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SoulboundNftError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInit",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NoCredential",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "AlreadyMinted",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "NonTransferable",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidTier",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "NotTokenHolder",
+          "value": 6
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AgeVerifier"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Treasury"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "UsdcToken"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "TokenHolder",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "AvatarUri",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "AvatarTier",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initialize once after deploy.\\n\\n`age_verifier` \\xe2\\x80\\x94 address of the AgeVerifier contract on this network.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "age_verifier",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc_token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SoulboundNftError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Mint a soulbound identity NFT.\\n\\nRequirements:\\n- `to` must have a verified credential in age_verifier\\n- `to` must not already have a token (one per address)\\n- `tier`: 0 = Basic ($10), 1 = Premium ($25), 2 = Rare ($100)\\n- `avatar_uri`: IPFS or HTTPS URI pointing to the avatar image\\n\\nThe tier fee is forwarded directly to the treasury (same as age_verifier model).",
+      "name": "mint",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tier",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "avatar_uri",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SoulboundNftError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Change the avatar URI. Free \\xe2\\x80\\x94 no fee charged.\\nOnly the token holder can change their own avatar.",
+      "name": "set_avatar",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "avatar_uri",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SoulboundNftError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Burn (revoke) the token. Permanently removes the NFT from the holder.\\nOnly the holder can burn their own token.",
+      "name": "burn",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SoulboundNftError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "token_uri",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "string"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "token_tier",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "u32"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "decimals",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "name",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "symbol",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "allowance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "approve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expiration_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SoulboundNftError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SoulboundNftError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer_from",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SoulboundNftError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "burn_from",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SoulboundNftError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

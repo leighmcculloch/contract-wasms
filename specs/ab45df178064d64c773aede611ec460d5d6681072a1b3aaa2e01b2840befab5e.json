@@ -1,0 +1,66 @@
+[
+  {
+    "function_v0": {
+      "doc": "Atomically pay the merchant and the relayer's gas collector, both in `token`, under the\\npayer's authorization. All-or-nothing: if either transfer fails the whole invocation reverts.",
+      "name": "forward",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "payer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "merchant",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "payment_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "collector",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "payment_amount or fee_amount was not strictly positive.",
+          "name": "NonPositiveAmount",
+          "value": 1
+        }
+      ]
+    }
+  }
+]
