@@ -1,0 +1,466 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "Registro imut\\xc3\\xa1vel-por-append de um lote. `head` encadeado + `count` = prova de completude.",
+      "lib": "",
+      "name": "Lot",
+      "fields": [
+        {
+          "doc": "",
+          "name": "assoc",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "head",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "updated",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AdminOnly",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "AssocExists",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "AssocNotFound",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "AssocInactive",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "AssocAlreadyClaimed",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "LotExists",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "LotNotFound",
+          "value": 8
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Writer"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Assoc",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Lot",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Identidade on-chain da associa\\xc3\\xa7\\xc3\\xa3o. `meta_hash` = commit dos dados verificados (CNPJ/raz\\xc3\\xa3o\\nsocial). `owner=None` \\xe2\\x87\\x92 custodial (Writer escreve). `owner=Some` \\xe2\\x87\\x92 auto-cust\\xc3\\xb3dia.",
+      "lib": "",
+      "name": "Association",
+      "fields": [
+        {
+          "doc": "",
+          "name": "active",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "meta_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "writer",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_lot",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "lot_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "Lot"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Marca recall/descarte no ledger (0=ativo,1=recall,2=descartado).",
+      "name": "set_status",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "lot_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Rotaciona a conta de plataforma custodial (admin-only).",
+      "name": "set_writer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "writer",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Anexa um evento: recomputa o head ENCADEADO no contrato e incrementa `count`.\\nRetorna o novo head. \\xc3\\x89 isto que torna omiss\\xc3\\xa3o/reordena\\xc3\\xa7\\xc3\\xa3o detect\\xc3\\xa1veis on-chain.",
+      "name": "append_event",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "lot_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payload_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Cria o lote: `head = origin_hash`, `count = 1`, `status = ativo`. Append-only\\n(guarda `LotExists`). Autoriza pelo Writer (custodial) ou pelo owner (auto-cust\\xc3\\xb3dia).",
+      "name": "register_lot",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "lot_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "assoc",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "origin_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Bootstrap: define admin (governan\\xc3\\xa7a) e writer (conta de plataforma custodial).",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "writer",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_association",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "Association"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Liga um `owner` (chave da pr\\xc3\\xb3pria associa\\xc3\\xa7\\xc3\\xa3o) \\xe2\\x80\\x94 migra\\xc3\\xa7\\xc3\\xa3o p/ auto-cust\\xc3\\xb3dia.\\nExige aprova\\xc3\\xa7\\xc3\\xa3o do admin E prova de posse da chave pelo owner. Uma vez s\\xc3\\xb3.",
+      "name": "claim_association",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Registra uma associa\\xc3\\xa7\\xc3\\xa3o verificada (admin-only). `meta_hash` = commit do cadastro.",
+      "name": "register_association",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "meta_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Suspende/reativa uma associa\\xc3\\xa7\\xc3\\xa3o (admin-only). Suspensa \\xe2\\x87\\x92 n\\xc3\\xa3o aceita novos lotes.",
+      "name": "set_association_active",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "active",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

@@ -1,0 +1,328 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "public-signal count doesn't match the embedded verifying key",
+          "name": "MalformedVerifyingKey",
+          "value": 1
+        },
+        {
+          "doc": "no public signals supplied (we need at least the nullifier at index 0)",
+          "name": "NoPublicSignals",
+          "value": 2
+        },
+        {
+          "doc": "the Groth16 pairing check failed \\xe2\\x80\\x94 the proof is not valid for this VK",
+          "name": "InvalidProof",
+          "value": 3
+        },
+        {
+          "doc": "this email/proof was already sealed (nullifier seen before) \\xe2\\x80\\x94 anti-replay",
+          "name": "AlreadySealed",
+          "value": 4
+        },
+        {
+          "doc": "a public signal is >= the BN254 scalar field modulus (non-canonical encoding)",
+          "name": "FieldElementNotCanonical",
+          "value": 5
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Proof",
+      "fields": [
+        {
+          "doc": "",
+          "name": "a",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "b",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "c",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted on a successful seal so indexers and the public page can react.\\nTopic: (\"sealed\", nullifier); data: fact_hash.",
+      "lib": "",
+      "name": "Sealed",
+      "prefix_topics": [
+        "sealed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "nullifier",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "statement_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A public, on-chain record that a fact was proven from a DKIM-signed email.\\nStored keyed by `nullifier` \\xe2\\x80\\x94 this is exactly what the public page /p/:id reads.\\nIt holds NO email contents: only commitments. Revealing it leaks nothing.",
+      "lib": "",
+      "name": "Attestation",
+      "fields": [
+        {
+          "doc": "ledger sequence when it was sealed",
+          "name": "ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "unique per email (== pub_signals[0]); the same email can't be sealed twice",
+          "name": "nullifier",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "domain-separated sha256 of the proven statement (public signals EXCEPT the\\nnullifier) \\xe2\\x80\\x94 commits to the fact, recomputable by the frontend from link metadata",
+          "name": "statement_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "ledger close timestamp when it was sealed",
+          "name": "timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VerificationKey",
+      "fields": [
+        {
+          "doc": "",
+          "name": "alpha",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "beta",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "delta",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "gamma",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "ic",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 64
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Whether an email/proof carrying this nullifier has already been sealed.",
+      "name": "is_sealed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "nullifier",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Verify a proof AND seal it as a public attestation.\\n\\nThis is the real entry point. Order matters:\\n1. the proof must verify \\xe2\\x80\\x94 that is what makes `pub_signals` trustworthy\\n(a valid proof cryptographically binds them; they are not free input);\\n2. the nullifier (pub_signals[0], bound by the circuit to the email's DKIM\\nsignature) must be unseen \\xe2\\x80\\x94 otherwise the SAME email is being replayed;\\n3. only then do we persist the attestation and emit an event.\\n\\nReturns the attestation id (== the nullifier) used by the public /p/:id page.",
+      "name": "submit_proof",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "udt": {
+              "name": "Proof"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "pub_signals",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "bytes_n": {
+                "n": 32
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pure verification: is `proof` valid for `pub_signals` under the embedded VK?\\nRead-only, changes no state. Useful for clients/tests; the real flow is\\n`submit_proof`, which also seals the result.",
+      "name": "verify_proof",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "udt": {
+              "name": "Proof"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "pub_signals",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "bool",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Read a sealed attestation by id (== nullifier). Powers the public /p/:id page\\nwith REAL on-chain state. Returns None if nothing was sealed under that id.",
+      "name": "get_attestation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "Attestation"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]
