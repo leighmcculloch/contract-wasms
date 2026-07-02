@@ -1,0 +1,978 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Version"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SecurityContract"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Verify multiple ed25519 signatures and check cumulative weight meets threshold.\\n\\n# Panics\\n\\nPanics if any signature is cryptographically invalid (non-zero but\\ndoes not match its public key and the message). Soroban's `ed25519_verify`\\nhost function traps on verification failure. Callers should use\\n`try_verify` to catch this as a host error. All-zero signatures are\\ncaught before the host call and return `Err(VerifyError::InvalidSignature)`.",
+      "name": "verify",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "envelope",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "signatures",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 64
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signer_pubkeys",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "reference_block",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "VerifyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "new_version",
+          "type_": "string"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "version",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Verify a single ed25519 signature and return the signer's weight.\\n\\n# Panics\\n\\nPanics if the signature is cryptographically invalid (non-zero but\\ndoes not match the public key and message). Soroban's `ed25519_verify`\\nhost function traps on verification failure rather than returning an\\nerror. Callers should use `try_check_one` to catch this as a host error.\\nAll-zero signatures are caught before the host call and return\\n`Err(VerifyError::InvalidSignature)`.",
+      "name": "check_one",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "envelope",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "signature",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signer_pubkey",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "reference_block",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": {
+              "udt": {
+                "name": "VerifyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accept_admin",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "security_contract",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pending_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "propose_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "signer_weight",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signer_pubkey",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "required_weight",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "security_contract",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Forwarded",
+      "prefix_topics": [
+        "forwarded"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when a handler is removed from the tracked set via\\n`unregister_handler`. Removal is always explicit: rotating a handler's admin\\naway with `propose_contract_admin` does **not** untrack it. Unregistering a\\nhandler that isn't tracked is a no-op and does not emit.",
+      "lib": "",
+      "name": "HandlerRemoved",
+      "prefix_topics": [
+        "handler_removed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "handler",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UpdatedSpecRepo",
+      "prefix_topics": [
+        "updated_spec_repo"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "repo",
+          "type_": "string",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProjectRootError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotOurContract",
+          "value": 101
+        },
+        {
+          "doc": "The target is part of this project but is not a handler (e.g. the\\nsecurity or verification contract), so it can't be registered in the\\nhandler set.",
+          "name": "NotAHandler",
+          "value": 102
+        },
+        {
+          "doc": "",
+          "name": "ZeroDenominator",
+          "value": 201
+        },
+        {
+          "doc": "",
+          "name": "NumeratorExceedsDenominator",
+          "value": 202
+        },
+        {
+          "doc": "",
+          "name": "ZeroNumerator",
+          "value": 203
+        },
+        {
+          "doc": "",
+          "name": "ZeroWeight",
+          "value": 204
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "Identifies which cryptographic scheme and encoding format the project's\\nsecurity and verification contracts use.\\n\\nThis is set once at construction time and cannot be changed. It tells\\noff-chain tooling and other contracts which pipeline variant this\\nproject uses:\\n\\n- **`Ethereum`** \\xe2\\x80\\x94 secp256k1 keys, EIP-191 signatures, ABI-encoded\\nenvelopes. Use this when the same signed payloads need to be\\nverifiable on both Ethereum (or other EVM chains) and Stellar.\\n\\n- **`Stellar`** \\xe2\\x80\\x94 ed25519 keys, SEP-0053 signatures, XDR-encoded\\nenvelopes. Use this for Soroban-native solutions that don't need\\nEVM compatibility, giving better efficiency and simpler DevX.",
+      "lib": "",
+      "name": "VerificationType",
+      "cases": [
+        {
+          "doc": "Secp256k1 / EIP-191 / ABI \\xe2\\x80\\x94 Ethereum-compatible multi-chain format.",
+          "name": "Ethereum",
+          "value": 1
+        },
+        {
+          "doc": "Ed25519 / SEP-0053 / XDR \\xe2\\x80\\x94 Soroban-native format.",
+          "name": "Stellar",
+          "value": 2
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when a handler joins this project's tracked handler set \\xe2\\x80\\x94 either\\nexplicitly via `register_handler`, or implicitly when `accept_contract_admin`\\ntakes over a handler's admin. Re-registering an already-tracked handler is a\\nno-op and does not re-emit. The `handler` address is a topic so off-chain\\nconsumers can filter membership changes by handler.",
+      "lib": "",
+      "name": "HandlerRegistered",
+      "prefix_topics": [
+        "handler_registered"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "handler",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VerifyError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidSignature",
+          "value": 301
+        },
+        {
+          "doc": "",
+          "name": "SignerNotRegistered",
+          "value": 302
+        },
+        {
+          "doc": "",
+          "name": "InsufficientWeight",
+          "value": 303
+        },
+        {
+          "doc": "",
+          "name": "EmptySignatures",
+          "value": 304
+        },
+        {
+          "doc": "",
+          "name": "LengthMismatch",
+          "value": 305
+        },
+        {
+          "doc": "",
+          "name": "SignersNotOrdered",
+          "value": 306
+        },
+        {
+          "doc": "",
+          "name": "ZeroRequiredWeight",
+          "value": 307
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Verified",
+      "prefix_topics": [
+        "verified"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "event_id",
+          "type_": {
+            "bytes_n": {
+              "n": 20
+            }
+          },
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Triggered",
+      "prefix_topics": [
+        "triggered"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "trigger_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "event_id",
+          "type_": {
+            "bytes_n": {
+              "n": 20
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "XlmEnvelope",
+      "fields": [
+        {
+          "doc": "",
+          "name": "event_id",
+          "type_": {
+            "bytes_n": {
+              "n": 20
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "ordering",
+          "type_": {
+            "bytes_n": {
+              "n": 12
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payload",
+          "type_": "bytes"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "HandlerError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "EventAlreadySeen",
+          "value": 501
+        },
+        {
+          "doc": "",
+          "name": "InvalidReferenceBlock",
+          "value": 502
+        },
+        {
+          "doc": "",
+          "name": "InvalidEnvelope",
+          "value": 503
+        },
+        {
+          "doc": "",
+          "name": "UnknownVerificationError",
+          "value": 504
+        },
+        {
+          "doc": "",
+          "name": "OtherInvocationError",
+          "value": 505
+        },
+        {
+          "doc": "",
+          "name": "InvalidSignature",
+          "value": 301
+        },
+        {
+          "doc": "",
+          "name": "SignerNotRegistered",
+          "value": 302
+        },
+        {
+          "doc": "",
+          "name": "InsufficientWeight",
+          "value": 303
+        },
+        {
+          "doc": "",
+          "name": "EmptySignatures",
+          "value": 304
+        },
+        {
+          "doc": "",
+          "name": "LengthMismatch",
+          "value": 305
+        },
+        {
+          "doc": "",
+          "name": "SignersNotOrdered",
+          "value": 306
+        },
+        {
+          "doc": "",
+          "name": "ZeroRequiredWeight",
+          "value": 307
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Inner payload carried inside an `XlmEnvelope.payload`. Mirrors the\\nCosmWasm `MessageWithId` so the same logical struct is exchanged across\\nchains, but uses Soroban's native XDR encoding here.",
+      "lib": "",
+      "name": "MessageWithId",
+      "fields": [
+        {
+          "doc": "",
+          "name": "message",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "trigger_id",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SignatureData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "reference_block",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "signatures",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 65
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signers",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 33
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Ed25519SignatureData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "reference_block",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "signatures",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 64
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signers",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SignerInfo",
+      "fields": [
+        {
+          "doc": "",
+          "name": "key",
+          "type_": {
+            "bytes_n": {
+              "n": 33
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "weight",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SignerAdded",
+      "prefix_topics": [
+        "signer_added"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "key",
+          "type_": {
+            "bytes_n": {
+              "n": 33
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "weight",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ThresholdSet",
+      "prefix_topics": [
+        "threshold_set"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "numerator",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "denominator",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SecurityError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "ZeroDenominator",
+          "value": 201
+        },
+        {
+          "doc": "",
+          "name": "NumeratorExceedsDenominator",
+          "value": 202
+        },
+        {
+          "doc": "",
+          "name": "ZeroNumerator",
+          "value": 203
+        },
+        {
+          "doc": "",
+          "name": "ZeroWeight",
+          "value": 204
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SignerRemoved",
+      "prefix_topics": [
+        "signer_removed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "key",
+          "type_": {
+            "bytes_n": {
+              "n": 33
+            }
+          },
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Ed25519SignerInfo",
+      "fields": [
+        {
+          "doc": "",
+          "name": "key",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "weight",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Ed25519SignerAdded",
+      "prefix_topics": [
+        "ed25519_signer_added"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "key",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "weight",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Ed25519SignerRemoved",
+      "prefix_topics": [
+        "ed25519_signer_removed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "key",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AdminAccepted",
+      "prefix_topics": [
+        "admin_accepted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AdminProposed",
+      "prefix_topics": [
+        "admin_proposed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_admin",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ContractUpgraded",
+      "prefix_topics": [
+        "contract_upgraded"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "string",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  }
+]

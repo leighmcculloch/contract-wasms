@@ -1,0 +1,1717 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "Snapshot of the handler's full configuration + runtime state, returned\\nby `query_state()` as a single read. Dashboards and monitoring tools\\nconsume this instead of paying one cross-contract call per field.",
+      "lib": "",
+      "name": "HandlerState",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "blend_pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "blended_pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "blnd_treasury",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "critical_liquid_floor_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "last_harvest_ts",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "last_rebalance_ts",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "max_rebalance_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_rebalance_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_total_usdc",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "pending_admin",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "principal_supplied",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "rebalance_band_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "rebalance_cooldown_secs",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "target_ratio_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "usdc",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc_reserve_token_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "verification_contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "xlm",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Payload encoded inside the XlmEnvelope by the off-chain circuit + quorum.\\n\\nTwo variants:\\n\\n- `Rebalance` - read the blended pool's `query_delegate_state`, compare\\n`liquid_usdc / total_usdc` against the configured 50% target (where\\n`total_usdc = liquid + delegated` - the delegated portion is the\\nprincipal sitting in Blend, accounted as \"virtually in the pool\").\\nIf the drift exceeds `rebalance_band_bps`, move USDC between the pool's\\nliquid balance and Blend to restore the target. Skips if total USDC is\\nbelow `min_total_usdc`.\\n\\n- `HarvestYield` - extract accrued yield (BLND emissions + USDC interest\\nfrom b-token appreciation), convert to USDC, donate to LP holders\\npro-rata via `pool.donate(USDC, ...)`.\\n\\nNo amount/direction crosses the wire: the off-chain circuit only triggers\\na tick. All sizing happens on-chain against authoritative pool state.",
+      "lib": "",
+      "name": "RebalanceAction",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Rebalance"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "HarvestYield"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LocalError",
+      "cases": [
+        {
+          "doc": "`verify_xlm` invoked while the handler is paused. Operators should\\nnot retry until the dashboard shows `paused = false`.",
+          "name": "Paused",
+          "value": 600
+        },
+        {
+          "doc": "Post-condition violation: the handler still holds USDC after an\\naction completed. Indicates a code bug that would otherwise leak\\nfunds; reverts the tx so the previous-state invariant is preserved.",
+          "name": "UsdcLeak",
+          "value": 601
+        },
+        {
+          "doc": "`usdc_reserve_token_id` set to an even value. Blend's emissions\\ndistributor branches on parity (`% 2 == 1` is the supplier-side\\nb-token, `% 2 == 0` is the liability d-token); a wrong parity\\nsilently claims zero BLND for the supplier role forever.",
+          "name": "InvalidReserveTokenId",
+          "value": 602
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin-only: pause the handler. `verify_xlm` panics with `LocalError::Paused`\\n(code 600) while paused; the envelope is NOT marked seen, so a\\nre-submission after `unpause` will proceed normally.",
+      "name": "pause",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "View: is the handler currently paused?",
+      "name": "paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "payload",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "event_id",
+          "type_": {
+            "bytes_n": {
+              "n": 20
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "bytes"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin-only: lift a pause.",
+      "name": "unpause",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "new_version",
+          "type_": "string"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "version",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "blend_pool",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Quorum-signed entrypoint. Verifies the envelope, decodes a\\n`RebalanceAction`, and dispatches forward or reverse.",
+      "name": "verify_xlm",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "envelope_bytes",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "sig_data",
+          "type_": {
+            "udt": {
+              "name": "Ed25519SignatureData"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "HandlerError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Dashboard-friendly aggregate view. Returns every config + runtime\\nfield in one read, eliminating ~18 separate cross-contract calls\\nthe dashboard would otherwise need. The shape is stable across\\nupgrades; new fields are appended, never reordered or removed.",
+      "name": "query_state",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "HandlerState"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accept_admin",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "blended_pool",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "verification_contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "blended_pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "blend_pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "xlm",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "blnd_treasury",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc_reserve_token_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "target_ratio_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "rebalance_band_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "min_total_usdc",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "rebalance_cooldown_secs",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "critical_liquid_floor_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "blnd_treasury",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pending_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "propose_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "min_total_usdc",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "last_harvest_ts",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin-only: push `amount` USDC from the blended pool to Blend out\\nof band. Useful for the initial seeding right after deploy (when\\nno swap events have fired) and for manual top-ups during operator\\ndowntime.\\n\\nBypasses cooldown, band, min-total, and scope-limit gates because\\nthe admin already exercised judgement. Still honours pause and the\\nBlend-health gate (a Supply into a Frozen pool would revert anyway).",
+      "name": "manual_to_blend",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin-only: drain the entire Blend USDC position back to the pool's\\nliquid balance, bypassing cooldown / band / scope-limit gating.\\n\\nOperationally this is the off-ramp when Blend's status goes Frozen,\\nwhen the operator network is paused but funds need to come home, or\\nwhen migrating to a new handler.\\n\\nMechanic:\\n1. `Blend.submit(Withdraw, USDC, i128::MAX)` \\xe2\\x86\\x92 handler holds USDC.\\n2. Deposit `min(redeemed, principal_before)` back via\\n`deposit_from_delegate`; this matches the pool's\\n`delegated_out_*` counter so the call doesn't underflow.\\n3. Donate any excess (accrued interest) to the pool via `donate`.\\n4. Reset `principal_supplied = 0`.",
+      "name": "emergency_unwind",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "target_ratio_bps",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "last_rebalance_ts",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin-only: pull `amount` USDC from Blend back to the blended pool\\nout of band. The dual of `manual_to_blend`. `emergency_unwind` is\\nthe right tool for a full drain; this exists for partial unwinds\\nwhere the admin wants tactical control over the amount.",
+      "name": "manual_from_blend",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin-only: address that receives BLND emissions on every harvest.\\nThe handler never holds BLND, so this is a pure routing knob.",
+      "name": "set_blnd_treasury",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "principal_supplied",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "rebalance_band_bps",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin-only: floor on total pool USDC below which Rebalance is a\\nno-op (does not consume cooldown).",
+      "name": "set_min_total_usdc",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "max_rebalance_amount",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "min_rebalance_amount",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin-only: tighten or relax the target liquid-USDC share of total\\nUSDC. Same range validation as the constructor (strictly within\\n(0, 10000) bps).",
+      "name": "set_target_ratio_bps",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin-only: view of the current usdc_reserve_token_id (kept here\\nsince the constructor takes it but there was no view accessor).",
+      "name": "usdc_reserve_token_id",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "verification_contract",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin-only: widen or tighten the no-op band around the target. Same\\nrange as the constructor (`< 10000` bps).",
+      "name": "set_rebalance_band_bps",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "rebalance_cooldown_secs",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin-only: clamp the per-tx USDC amount moved between pool and Blend.\\n`0` is the \"unlimited\" sentinel. Emits a `ConfigUpdated` event so\\ndashboards can react.",
+      "name": "set_max_rebalance_amount",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin-only: dust floor below which a Rebalance is a silent no-op\\n(does not consume the cooldown window). `0` means \"no floor\".",
+      "name": "set_min_rebalance_amount",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "critical_liquid_floor_bps",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin-only: id of the (reserve, b-token) pair the handler claims\\nBLND emissions against on Blend. Derived from `reserve_index * 2 +\\n1` for the USDC reserve. Must be updated if Blend reconfigures the\\nreserve set or the handler is repointed at a new Blend pool.",
+      "name": "set_usdc_reserve_token_id",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin-only: minimum seconds between successful Rebalance actions.\\n`0` disables the cooldown gate entirely.",
+      "name": "set_rebalance_cooldown_secs",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "secs",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin-only: critical liquid-USDC ratio (bps) below which\\n`execute_rebalance` bypasses the cooldown gate and pulls USDC from\\nBlend immediately. `0` disables the bypass entirely (cooldown is the\\nonly rate-limit).\\n\\nBound: must be strictly less than the normal lower band\\n(`target_ratio_bps - rebalance_band_bps`). Above that, the bypass\\nwould overlap with the normal cooldown-respecting rebalance window,\\neffectively disabling the cooldown gate. An admin typo near 10_000\\nis the canonical failure this guard prevents. The bypass is only\\never useful for ratios genuinely BELOW the lower band, so the bound\\nrejects anything else.",
+      "name": "set_critical_liquid_floor_bps",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BlendRequest",
+      "fields": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "request_type",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DelegateState",
+      "fields": [
+        {
+          "doc": "",
+          "name": "delegate",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "delegated_a",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "delegated_b",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "liquid_a",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "liquid_b",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_a",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_b",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BlendPositions",
+      "fields": [
+        {
+          "doc": "",
+          "name": "collateral",
+          "type_": {
+            "map": {
+              "key_type": "u32",
+              "value_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "liabilities",
+          "type_": {
+            "map": {
+              "key_type": "u32",
+              "value_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "supply",
+          "type_": {
+            "map": {
+              "key_type": "u32",
+              "value_type": "i128"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Mirror of Blend's `PoolConfig` struct (see\\n`blend-contracts-v2/pool/src/storage.rs::PoolConfig`). We only consume\\n`status` for the health pre-check; the other fields ride along to keep\\nthe contracttype wire shape compatible.\\n\\n`status` semantics (from `blend-contracts-v2/pool/src/pool/status.rs`):\\n- 0 / 1: Active / Admin-Active \\xe2\\x80\\x94 supply, withdraw, claim all allowed.\\n- 2 / 3: Admin-OnIce / OnIce \\xe2\\x80\\x94 withdraw + claim allowed; new supply blocked.\\n- 4 / 5: Admin-Frozen / Frozen \\xe2\\x80\\x94 all standard ops restricted.\\n- 6:     Setup \\xe2\\x80\\x94 not yet operational.",
+      "lib": "",
+      "name": "BlendPoolConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "bstop_rate",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_positions",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "min_collateral",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "oracle",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "VerificationContract"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "BlendedPool"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "BlendPool"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Usdc"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Xlm"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "BlndTreasury"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "UsdcReserveTokenId"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PrincipalSupplied"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TargetRatioBps"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "RebalanceBandBps"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "CriticalLiquidFloorBps"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MinTotalUsdc"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MaxRebalanceAmount"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MinRebalanceAmount"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "RebalanceCooldownSecs"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LastRebalanceTs"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LastHarvestTs"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Version"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "EventSeen",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 20
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted whenever the admin toggles the pause state.",
+      "lib": "",
+      "name": "PauseToggled",
+      "prefix_topics": [
+        "pause_toggled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted after any admin-mediated configuration change. `field` is a\\nshort Symbol identifying which knob changed (see comments at each call\\nsite); `value` carries the new value coerced to i128 (bps fields fit,\\nu64 cooldowns fit, addresses use a separate event type if needed).",
+      "lib": "",
+      "name": "ConfigUpdated",
+      "prefix_topics": [
+        "config_updated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "field",
+          "type_": "symbol",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "value",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when the BLND claim leg of `execute_harvest_yield` succeeded but\\nthe interest leg (withdraw \\xe2\\x86\\x92 resupply \\xe2\\x86\\x92 donate) was skipped because\\nBlend's `submit(WITHDRAW)` reverted \\xe2\\x80\\x94 usually pool utilization at 100%\\nor a frozen reserve mid-flight. `blnd_routed` is preserved (BLND went to\\ntreasury); `interest_donated` for the cycle is zero. Monitoring SHOULD\\nalert on this event so the operator can investigate Blend health before\\nthe next harvest tick.",
+      "lib": "",
+      "name": "HarvestPartial",
+      "prefix_topics": [
+        "harvest_partial"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "blnd_routed",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when `execute_harvest_yield` ran but produced no observable\\nmovement (no BLND claimed, no USDC interest donated). The cron tick\\nstill fired; monitoring can use this event to confirm operator\\nliveness while gating \"last_harvest_ts hasn't advanced\" on real work.\\n`reason` is one of: `\"noprin\"` (handler holds nothing in Blend),\\n`\"frozen\"` (Blend pool status > healthy max), `\"noyield\"` (interest\\nleg ran but yielded zero AND BLND claim returned zero).",
+      "lib": "",
+      "name": "HarvestSkipped",
+      "prefix_topics": [
+        "harvest_skipped"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "reason",
+          "type_": "symbol",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted whenever `principal_supplied` shrinks because Blend redeemed\\nfewer USDC than the handler accounts for. The shortfall is exactly\\n`previous_principal - redeemable`. Monitoring dashboards SHOULD alert\\non this event since it indicates Blend recorded a bad-debt write-down\\nagainst the handler's b-token position.",
+      "lib": "",
+      "name": "BadDebtDetected",
+      "prefix_topics": [
+        "bad_debt_detected"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "previous_principal",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "redeemable",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "shortfall",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted at the end of every `emergency_unwind` call. `redeemed` is the\\ntotal USDC pulled out of Blend; `principal_before` is the value\\n`principal_supplied` had at call entry. After the call,\\n`principal_supplied = 0`.",
+      "lib": "",
+      "name": "EmergencyUnwound",
+      "prefix_topics": [
+        "emergency_unwound"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "redeemed",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "principal_before",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "HarvestCompleted",
+      "prefix_topics": [
+        "harvest_completed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "interest_donated",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "blnd_routed",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "principal_after",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when execute_rebalance bypassed the cooldown gate because the\\npool's liquid USDC ratio fell below `critical_liquid_floor_bps`.\\nDistinct from `RebalanceExecuted` so monitoring can alert specifically\\non the critical-bypass path. `liquid_ratio_bps` is the ratio AT entry\\n(before the move); `floor_bps` is the configured floor.",
+      "lib": "",
+      "name": "CriticalRebalance",
+      "prefix_topics": [
+        "critical_rebalance"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "liquid_ratio_bps",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "floor_bps",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "bypassed_cooldown_secs",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RebalanceExecuted",
+      "prefix_topics": [
+        "rebalance_executed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "direction",
+          "type_": "symbol",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "liquid_after",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "delegated_after",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "principal_after",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when the admin changes an address-typed config field (currently\\n`blnd_treasury`). Separate from `ConfigUpdated` so consumers don't need\\nto coerce between i128 and Address.",
+      "lib": "",
+      "name": "AddressConfigUpdated",
+      "prefix_topics": [
+        "address_config_updated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "field",
+          "type_": "symbol",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "value",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when execute_rebalance determined a critical-low bypass was\\nwarranted (liquid_ratio < critical_floor, cooldown active) but the\\nrebalance couldn't actually pull funds from Blend \\xe2\\x80\\x94 most commonly\\nbecause the handler has no principal supplied (principal_supplied == 0)\\nafter an emergency_unwind or before the first ToBlend ever fired.\\nMonitoring SHOULD treat this as a high-severity alert: the pool is at\\ncritical-low liquid but the handler cannot help. `reason` is a short\\nSymbol describing the cause (currently only `\"no_princ\"` is emitted \\xe2\\x80\\x94\\nprincipal_supplied == 0 \\xe2\\x80\\x94 but the field reserves space for future\\ncauses without a schema break).",
+      "lib": "",
+      "name": "CriticalBypassUnavailable",
+      "prefix_topics": [
+        "critical_bypass_unavailable"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "liquid_ratio_bps",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "floor_bps",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "principal_supplied",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "reason",
+          "type_": "symbol",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UpdatedSpecRepo",
+      "prefix_topics": [
+        "updated_spec_repo"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "repo",
+          "type_": "string",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "Identifies which cryptographic scheme and encoding format the project's\\nsecurity and verification contracts use.\\n\\nThis is set once at construction time and cannot be changed. It tells\\noff-chain tooling and other contracts which pipeline variant this\\nproject uses:\\n\\n- **`Ethereum`** \\xe2\\x80\\x94 secp256k1 keys, EIP-191 signatures, ABI-encoded\\nenvelopes. Use this when the same signed payloads need to be\\nverifiable on both Ethereum (or other EVM chains) and Stellar.\\n\\n- **`Stellar`** \\xe2\\x80\\x94 ed25519 keys, SEP-0053 signatures, XDR-encoded\\nenvelopes. Use this for Soroban-native solutions that don't need\\nEVM compatibility, giving better efficiency and simpler DevX.",
+      "lib": "",
+      "name": "VerificationType",
+      "cases": [
+        {
+          "doc": "Secp256k1 / EIP-191 / ABI \\xe2\\x80\\x94 Ethereum-compatible multi-chain format.",
+          "name": "Ethereum",
+          "value": 1
+        },
+        {
+          "doc": "Ed25519 / SEP-0053 / XDR \\xe2\\x80\\x94 Soroban-native format.",
+          "name": "Stellar",
+          "value": 2
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VerifyError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidSignature",
+          "value": 301
+        },
+        {
+          "doc": "",
+          "name": "SignerNotRegistered",
+          "value": 302
+        },
+        {
+          "doc": "",
+          "name": "InsufficientWeight",
+          "value": 303
+        },
+        {
+          "doc": "",
+          "name": "EmptySignatures",
+          "value": 304
+        },
+        {
+          "doc": "",
+          "name": "LengthMismatch",
+          "value": 305
+        },
+        {
+          "doc": "",
+          "name": "SignersNotOrdered",
+          "value": 306
+        },
+        {
+          "doc": "",
+          "name": "ZeroRequiredWeight",
+          "value": 307
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AdminAccepted",
+      "prefix_topics": [
+        "admin_accepted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AdminProposed",
+      "prefix_topics": [
+        "admin_proposed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_admin",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ContractUpgraded",
+      "prefix_topics": [
+        "contract_upgraded"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "string",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Verified",
+      "prefix_topics": [
+        "verified"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "event_id",
+          "type_": {
+            "bytes_n": {
+              "n": 20
+            }
+          },
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Triggered",
+      "prefix_topics": [
+        "triggered"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "trigger_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "event_id",
+          "type_": {
+            "bytes_n": {
+              "n": 20
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "XlmEnvelope",
+      "fields": [
+        {
+          "doc": "",
+          "name": "event_id",
+          "type_": {
+            "bytes_n": {
+              "n": 20
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "ordering",
+          "type_": {
+            "bytes_n": {
+              "n": 12
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payload",
+          "type_": "bytes"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "HandlerError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "EventAlreadySeen",
+          "value": 501
+        },
+        {
+          "doc": "",
+          "name": "InvalidReferenceBlock",
+          "value": 502
+        },
+        {
+          "doc": "",
+          "name": "InvalidEnvelope",
+          "value": 503
+        },
+        {
+          "doc": "",
+          "name": "UnknownVerificationError",
+          "value": 504
+        },
+        {
+          "doc": "",
+          "name": "OtherInvocationError",
+          "value": 505
+        },
+        {
+          "doc": "",
+          "name": "InvalidSignature",
+          "value": 301
+        },
+        {
+          "doc": "",
+          "name": "SignerNotRegistered",
+          "value": 302
+        },
+        {
+          "doc": "",
+          "name": "InsufficientWeight",
+          "value": 303
+        },
+        {
+          "doc": "",
+          "name": "EmptySignatures",
+          "value": 304
+        },
+        {
+          "doc": "",
+          "name": "LengthMismatch",
+          "value": 305
+        },
+        {
+          "doc": "",
+          "name": "SignersNotOrdered",
+          "value": 306
+        },
+        {
+          "doc": "",
+          "name": "ZeroRequiredWeight",
+          "value": 307
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Inner payload carried inside an `XlmEnvelope.payload`. Mirrors the\\nCosmWasm `MessageWithId` so the same logical struct is exchanged across\\nchains, but uses Soroban's native XDR encoding here.",
+      "lib": "",
+      "name": "MessageWithId",
+      "fields": [
+        {
+          "doc": "",
+          "name": "message",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "trigger_id",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SignatureData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "reference_block",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "signatures",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 65
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signers",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 33
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Ed25519SignatureData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "reference_block",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "signatures",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 64
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signers",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]
