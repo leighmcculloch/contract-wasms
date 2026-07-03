@@ -1,0 +1,85 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Pool",
+      "fields": [
+        {
+          "doc": "",
+          "name": "usdc",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "xlm",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Pool"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_pool",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Pool"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_pool",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "xlm",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "usdc",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "swap_xlm_to_usdc",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "xlm_in",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  }
+]

@@ -1,0 +1,603 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "One sealed bid. The opening (price/quantity/blinding) is never revealed on-chain;\\nonly `commitment` is stored, and after settlement only `fill` (which may be 0).",
+      "lib": "",
+      "name": "Bid",
+      "fields": [
+        {
+          "doc": "",
+          "name": "bidder",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "claimed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "collateral",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fill",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "AuctionNotFound",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "NotOpen",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "NotClosed",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "NotSettled",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "DeadlinePassed",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "DeadlineNotReached",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "AuctionFull",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "InvalidProof",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "BadPublicInputs",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "AlreadyClaimed",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "InsufficientCollateral",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "InvalidParams",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "InvalidSlot",
+          "value": 15
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Winner / loser settlement for a single slot. The recorded bidder claims their\\n`fill` units at the uniform clearing price; unspent collateral is refunded.\\nLosers (`fill == 0`) simply get their full collateral back. The opening is\\nnever disclosed \\xe2\\x80\\x94 the proof already bound the fill to the commitment.",
+      "name": "claim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "slot",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Close bidding once the deadline has passed. After this, only `settle` can run.",
+      "name": "close",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "count",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Status",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Open"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Closed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Settled"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_vk",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Vk"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Settle the auction. Anyone may submit the off-chain-computed `clearing_price`,\\nper-slot `fills`, `total_cleared` and a Groth16 `proof`. The contract rebuilds\\nthe circuit's public-signal vector from its *own* committed state and verifies\\nthe proof natively; only a genuinely correct clearing can pass.",
+      "name": "settle",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "clearing_price",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "fills",
+          "type_": {
+            "vec": {
+              "element_type": "u64"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "total_cleared",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "udt": {
+              "name": "Proof"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Auction",
+      "fields": [
+        {
+          "doc": "Token being sold (e.g. a tokenized treasury bill).",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "bids",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Bid"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "clearing_price",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "commit_deadline",
+          "type_": "u64"
+        },
+        {
+          "doc": "Token used for payment / collateral (e.g. a USD stablecoin).",
+          "name": "quote",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "reserve",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "seller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "Status"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "supply",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "total_cleared",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Vk"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Count"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Auction",
+            "type_": [
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Submit a sealed bid (Poseidon commitment) and escrow `collateral` of the quote token.\\nReturns the bid's slot index, which fixes its marginal tie-break priority.",
+      "name": "commit_bid",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "bidder",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "collateral",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "One-time setup: store the admin and the fixed circuit verifying key.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "vk",
+          "type_": {
+            "udt": {
+              "name": "Vk"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_auction",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Auction"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Open a new auction. The seller escrows `supply` units of `asset` into the contract.",
+      "name": "create_auction",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "seller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "quote",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "supply",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "reserve",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "commit_deadline",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Stateless, permissionless on-chain audit of a clearing proof against the\\ncontract's configured verifying key. Returns whether the proof is valid for\\nthe given public signals. This is a public good (anyone can verify a clearing\\nnatively) and the most direct demonstration of ZK verification on Stellar.",
+      "name": "verify_clearing",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "udt": {
+              "name": "Proof"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "public",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A Groth16 verifying key (BN254). `ic` has length `n_public + 1`.",
+      "lib": "",
+      "name": "Vk",
+      "fields": [
+        {
+          "doc": "",
+          "name": "alpha",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "beta",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "delta",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "gamma",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "ic",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 64
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A Groth16 proof (BN254): A, C in G1; B in G2.",
+      "lib": "",
+      "name": "Proof",
+      "fields": [
+        {
+          "doc": "",
+          "name": "a",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "b",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "c",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ]
+    }
+  }
+]
