@@ -1,0 +1,599 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidProof",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "UnknownRoot",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "NullifierAlreadySpent",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "TreeFull",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "RecipientMismatch",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "NotPending",
+          "value": 9
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "VkShield"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "VkWithdraw"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "VkTransfer"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "VkClaim"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Token"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "NextIndex"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Frontier"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Roots"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Nullifier",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "A transfer's recipient output, awaiting the recipient to claim + insert it (backing that\\nprevents inserting a note with no matching spent input, i.e. inflation).",
+            "name": "Pending",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Atomic constructor \\xe2\\x80\\x94 runs exactly once, at deploy: pin both verifying keys and\\nthe pooled asset, and seed the empty incremental tree (frontier = zero subtrees,\\nroot = the empty-tree root).\\n\\nH1: this is a `__constructor` rather than a separate `init` call, so there is no\\npost-deploy window in which an attacker could front-run initialization and bind a\\nmalicious verifying key (which would accept forged proofs and drain the pool).\\nVerifying keys and the asset are fixed in the same transaction that creates the\\ncontract, and cannot be changed afterward.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "vk_shield",
+          "type_": {
+            "udt": {
+              "name": "VerifyingKey"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vk_withdraw",
+          "type_": {
+            "udt": {
+              "name": "VerifyingKey"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vk_transfer",
+          "type_": {
+            "udt": {
+              "name": "VerifyingKey"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vk_claim",
+          "type_": {
+            "udt": {
+              "name": "VerifyingKey"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Shield `amount` of the pooled asset under `commitment`.\\n\\nVerifies the shield proof binds `commitment` to the PUBLIC `amount`, pulls the\\nfunds from `depositor`, inserts the commitment into the tree, and emits\\nDepositCreated. Public inputs (pinned order): [commitment, amount].",
+      "name": "shield",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "udt": {
+              "name": "Proof"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "depositor",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Shielded\\xe2\\x86\\x92public withdrawal with PRIVATE CHANGE (join-split, 1-in / 1-public-out / 1-change).\\n\\nVerifies the withdraw proof (inclusion of the spent note, its nullifier, a well-formed\\nchange commitment, value conservation `value == amount + change`, a 64-bit range on every\\namount, and the C1 recipient binding), spends the nullifier, and pays the PUBLIC `amount`\\nout to `to`. When `has_change` is true it inserts the change commitment as a new private\\nnote; when false (a FULL EXIT, where the circuit forces change == 0) it inserts nothing and\\nneeds no free leaf \\xe2\\x80\\x94 so a note can always be withdrawn even when the tree is full. Only\\n`amount` is public; the change value is hidden.\\n\\nPublic inputs (pinned order): [root, nullifier, recipient, amount, change_commitment, has_change].\\nEmits WithdrawalCompleted; returns the change note's leaf index (0 on a full exit).",
+      "name": "withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "udt": {
+              "name": "Proof"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "root",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "nullifier",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "change_commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "has_change",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "change_ct",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Confidential shielded\\xe2\\x86\\x92shielded transfer (join-split, 1-in / 2-out).\\n\\nVerifies the transfer proof (which proves, in zero knowledge, inclusion of the spent\\ninput note, its nullifier, two well-formed output commitments, value conservation,\\nand a 64-bit range on every amount), spends the input nullifier, and inserts BOTH\\noutput commitments (recipient + change). **No amount is revealed and NO token\\nmoves** \\xe2\\x80\\x94 value stays in the pool, re-split. Public inputs (pinned order):\\n[root, nullifier, out_commitment1, out_commitment2].\\n\\nONE on-chain insert: only the sender's change (out2) is inserted; the recipient's note\\n(out1) is recorded PENDING for the recipient to insert themselves via `claim_insert`.\\nHalving the per-tx Merkle work is what lets the tree be far deeper. Returns out2's leaf.",
+      "name": "transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "udt": {
+              "name": "Proof"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "root",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "nullifier",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "out_commitment1",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "out_commitment2",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "change_ct",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Claim a received private-send note: verify the recipient holds a valid opening of\\n`commitment` (the `claim` circuit \\xe2\\x80\\x94 value stays hidden), confirm it is a PENDING transfer\\noutput (backing \\xe2\\x86\\x92 no inflation), insert it into the tree, clear the pending flag, and emit\\nits encrypted opening for cross-device recovery. This is the deferred second insert that\\nmakes `transfer` a single-insert operation. No token moves \\xe2\\x80\\x94 the value is already pooled.\\nReturns the leaf index.",
+      "name": "claim_insert",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "udt": {
+              "name": "Proof"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "note_ct",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "current_root",
+      "inputs": [],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_spent",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "nullifier",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "next_index",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Groth16 verifying key (snarkjs layout, serialized to Soroban point bytes).",
+      "lib": "",
+      "name": "VerifyingKey",
+      "fields": [
+        {
+          "doc": "",
+          "name": "alpha",
+          "type_": {
+            "bytes_n": {
+              "n": 96
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "beta",
+          "type_": {
+            "bytes_n": {
+              "n": 192
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "delta",
+          "type_": {
+            "bytes_n": {
+              "n": 192
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "gamma",
+          "type_": {
+            "bytes_n": {
+              "n": 192
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "ic",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 96
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A Groth16 proof (\\xcf\\x80_A \\xe2\\x88\\x88 G1, \\xcf\\x80_B \\xe2\\x88\\x88 G2, \\xcf\\x80_C \\xe2\\x88\\x88 G1).",
+      "lib": "",
+      "name": "Proof",
+      "fields": [
+        {
+          "doc": "",
+          "name": "a",
+          "type_": {
+            "bytes_n": {
+              "n": 96
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "b",
+          "type_": {
+            "bytes_n": {
+              "n": 192
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "c",
+          "type_": {
+            "bytes_n": {
+              "n": 96
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Thin contract wrapper around [`verify_groth16`].",
+      "name": "verify",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vk",
+          "type_": {
+            "udt": {
+              "name": "VerifyingKey"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "udt": {
+              "name": "Proof"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "public_inputs",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  }
+]
