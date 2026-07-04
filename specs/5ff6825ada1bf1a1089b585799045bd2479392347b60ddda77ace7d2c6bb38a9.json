@@ -1,0 +1,388 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Q4W",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "exp",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Errors",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InternalError",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitializedError",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "UnauthorizedError",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "NegativeAmountError",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "BalanceError",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "OverflowError",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "BadRequest",
+          "value": 1000
+        },
+        {
+          "doc": "",
+          "name": "NotExpired",
+          "value": 1001
+        },
+        {
+          "doc": "",
+          "name": "InvalidRewardZoneEntry",
+          "value": 1002
+        },
+        {
+          "doc": "",
+          "name": "InsufficientFunds",
+          "value": 1003
+        },
+        {
+          "doc": "",
+          "name": "NotPool",
+          "value": 1004
+        },
+        {
+          "doc": "",
+          "name": "InvalidShareMintAmount",
+          "value": 1005
+        },
+        {
+          "doc": "",
+          "name": "InvalidTokenWithdrawAmount",
+          "value": 1006
+        },
+        {
+          "doc": "",
+          "name": "TooManyQ4WEntries",
+          "value": 1007
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "xlm_sac",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PoolBalance",
+      "fields": [
+        {
+          "doc": "",
+          "name": "q4w",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "tokens",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PoolUserKey",
+      "fields": [
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "add_user_tokens",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "native_xlm_swap",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BackstopDataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "PoolBalance",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "PoolUSDC",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "PoolEmis",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "BEmisCfg",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "BEmisData",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "UEmisData",
+            "type_": [
+              {
+                "udt": {
+                  "name": "PoolUserKey"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PoolBackstopData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "blnd",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "q4w_pct",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "tokens",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "usdc",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UserEmissionData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "accrued",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "settlement_authorize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expiration_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BackstopEmissionsData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "last_time",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BackstopEmissionConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "eps",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "expiration",
+          "type_": "u64"
+        }
+      ]
+    }
+  }
+]
