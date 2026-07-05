@@ -1,0 +1,285 @@
+[
+  {
+    "function_v0": {
+      "doc": "Unsubscribe. Unredeemed rewards can still be claimed before cancellation.",
+      "name": "cancel",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "subscriber",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "claimable",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "subscriber",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pay the monthly fee and start the subscription.\\n\\nAuth note: the subscriber must sign the outer transaction that calls\\nthis function. That signature covers the inner token.transfer, so no\\nseparate token.approve step is required.",
+      "name": "subscribe",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "subscriber",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ZiToken"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Ledgers per billing epoch (= 1 \"month\").\\n\\xe2\\x80\\xa2 Testing mode  : 12    (\\xe2\\x89\\x88 60 s per \"month\" at 5 s/ledger)\\n\\xe2\\x80\\xa2 Production    : 518_400 (30 days \\xc3\\x97 86_400 s \\xc3\\xb7 5 s/ledger)",
+            "name": "EpochLedgers"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Subscription fee in Zi stroops (7 decimal places, so 1 Zi = 10_000_000).",
+            "name": "MonthlyFeeZi"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Per-subscriber state \\xe2\\x80\\x94 persistent storage (survives ledger archival bumps).",
+            "name": "Sub",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deploy once.  `epoch_ledgers` is the key testability knob:\\n- Pass 12 for ~60-second \"months\" on testnet.\\n- Pass 518_400 for real 30-day months on mainnet.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "zi_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "epoch_ledgers",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "monthly_fee_zi",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "monthly_fee",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Claim all pending rewards (50 % of monthly_fee \\xc3\\x97 epochs elapsed since last claim).\\nRewards are sent to `payout_address` if set, otherwise back to `subscriber`.\\nReturns the Zi amount transferred.",
+      "name": "claim_reward",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "subscriber",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Load Zi tokens into the contract so it can pay rewards.",
+      "name": "fund_reserve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "epoch_ledgers",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Subscription",
+      "fields": [
+        {
+          "doc": "",
+          "name": "fee_in_zi",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "last_claim_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "payout_address",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "subscribed_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "total_claimed",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_monthly_fee",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "monthly_fee_zi",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_subscription",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "subscriber",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "Subscription"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Switch between test mode (e.g. 12) and production mode (518_400).",
+      "name": "set_epoch_ledgers",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "epoch_ledgers",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Update (or clear) the payout address for reward claims.\\nPass `None` to revert to the subscriber's own address.",
+      "name": "set_payout_address",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "subscriber",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "payout",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  }
+]
