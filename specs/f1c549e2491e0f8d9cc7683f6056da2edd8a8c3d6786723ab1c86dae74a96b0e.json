@@ -1,0 +1,2549 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StorageKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Marca que `bootstrap()` ya corri\\xc3\\xb3. Antes de eso el SA tiene contract\\ninstance pero ninguna rule \\xe2\\x80\\x94 todas las operaciones del usuario fallan.",
+            "name": "Initialized"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Address que firm\\xc3\\xb3 el `createContract`. Es el \\xc3\\xbanico que puede llamar a\\n`bootstrap()`. Para Accesly esto es siempre `channels-fund` del backend.\\nEsta storage entry se borra al final de `bootstrap()` (one-shot use).",
+            "name": "Deployer"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "SHA-256(email || salt) \\xe2\\x80\\x94 usado por el backend para discovery v\\xc3\\xada emailHash.\\nSe actualiza en cada `rotate_signer`.",
+            "name": "EmailCommitment"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Address del verifier ed25519 \\xe2\\x80\\x94 necesario para reconstruir `Signer::External`\\ndentro de `rotate_signer`.",
+            "name": "Ed25519Verifier"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Address del verifier secp256r1 \\xe2\\x80\\x94 idem para el signer del passkey.",
+            "name": "Secp256r1Verifier"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitido cuando `rotate_signer` rota exitosamente al nuevo set de signers.\\nEl backend escucha este evento como audit trail del recovery completado.",
+      "lib": "",
+      "name": "SignerRotated",
+      "prefix_topics": [
+        "signer_rotated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "new_owner_ed25519",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_secp256r1_pubkey",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_email_commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SmartAccountV3Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 9001
+        },
+        {
+          "doc": "`bootstrap` requiere auth del deployer que se registr\\xc3\\xb3 en el constructor.",
+          "name": "NotAuthorizedDeployer",
+          "value": 9002
+        },
+        {
+          "doc": "Operaci\\xc3\\xb3n sobre un SA que a\\xc3\\xban no llam\\xc3\\xb3 a `bootstrap()`.",
+          "name": "NotYetBootstrapped",
+          "value": 9003
+        },
+        {
+          "doc": "`rotate_signer` no encontr\\xc3\\xb3 un signer existente que reemplazar.",
+          "name": "SignerNotFoundForRotation",
+          "value": 9101
+        },
+        {
+          "doc": "`rotate_signer_partial` recibi\\xc3\\xb3 `rule_ids` vac\\xc3\\xado. El caller debe pasar\\nal menos un rule para rotar; si no hay nada que rotar, no llamar.",
+          "name": "EmptyRuleIdsInPartial",
+          "value": 9102
+        },
+        {
+          "doc": "`rotate_signer_partial` recibi\\xc3\\xb3 un rule_id que no existe en la wallet.",
+          "name": "RuleIdOutOfRange",
+          "value": 9103
+        },
+        {
+          "doc": "`rotate_signer_partial` intent\\xc3\\xb3 tocar una regla que no es biometric-tx,\\nadmin-cfg ni sep10-auth. Esas se rotan aparte con `add_signer/remove_signer`\\nfirmado por admin-cfg \\xe2\\x80\\x94 no las mueve el flow de recovery.",
+          "name": "RuleNotRotatable",
+          "value": 9104
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Executes a function call on a target contract from within the smart\\naccount context.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `target` - The address of the contract to call.\\n* `target_fn` - The function name to invoke on the target contract.\\n* `target_args` - Arguments to pass to the target function.\\n\\n# Notes\\n\\nDefaults to requiring authorization from the smart account itself\\n(`e.current_contract_address().require_auth()`) and then calling\\n`e.invoke_contract()`.",
+      "name": "execute",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "target_fn",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "target_args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Completa la inicializaci\\xc3\\xb3n del Smart Account: persiste signers + verifiers\\nen storage e instala las 3 context rules base (biometric-tx \\xc3\\x97 N + admin-cfg\\n+ sep10-auth).\\n\\nSolo puede llamarse UNA VEZ y solo por el `deployer` registrado en\\n`__constructor`. Tras el \\xc3\\xa9xito, el storage de `Deployer` se borra y el\\nflag `Initialized` se setea \\xe2\\x80\\x94 futuras llamadas a `bootstrap` panican.\\n\\n# Arguments\\n* `owner_ed25519`         \\xe2\\x80\\x94 Pubkey ed25519 reconstruida F1+F2+F3 (32 bytes).\\n* `email_commitment`      \\xe2\\x80\\x94 `sha256(email || salt)` (32 bytes).\\n* `secp256r1_pubkey`      \\xe2\\x80\\x94 Pubkey del passkey (65 bytes uncompressed).\\n* `ed25519_verifier`      \\xe2\\x80\\x94 Address del Ed25519Verifier compartido.\\n* `secp256r1_verifier`    \\xe2\\x80\\x94 Address del Secp256r1Verifier compartido.\\n* `spending_limit_policy` \\xe2\\x80\\x94 Address del SpendingLimitPolicy compartido.\\n* `spending_limit_params` \\xe2\\x80\\x94 XDR `SpendingLimitAccountParams`.\\n* `tx_targets`            \\xe2\\x80\\x94 Vec de SAC addresses para spending-limit.\\nVac\\xc3\\xado \\xe2\\x86\\x92 solo 2 rules base (admin-cfg + sep10-auth); el ba",
+      "name": "bootstrap",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner_ed25519",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "email_commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "secp256r1_pubkey",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "ed25519_verifier",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "secp256r1_verifier",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spending_limit_policy",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spending_limit_params",
+          "type_": "val"
+        },
+        {
+          "doc": "",
+          "name": "tx_targets",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Adds a new policy to an existing context rule, installs it, and returns\\nthe assigned policy ID. The policy's `install` method will be called\\nduring this operation.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `context_rule_id` - The ID of the context rule to modify.\\n* `policy` - The address of the policy contract to add.\\n* `install_param` - The installation parameter for the policy.\\n\\n# Errors\\n\\n* [`SmartAccountError::ContextRuleNotFound`] - When no context rule\\nexists with the given ID.\\n* [`SmartAccountError::DuplicatePolicy`] - When the policy already\\nexists in the rule.\\n* [`SmartAccountError::TooManyPolicies`] - When adding would exceed\\nMAX_POLICIES (5).\\n\\n# Events\\n\\n* topics - `[\"policy_added\", context_rule_id: u32]`\\n* data - `[policy_id: u32]`\\n\\n# Notes\\n\\nDefaults to requiring authorization from the smart account itself\\n(`e.current_contract_address().require_auth()`) and then delegating to\\n[`storage::add_policy`].",
+      "name": "add_policy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "policy",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "install_param",
+          "type_": "val"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Adds a new signer to an existing context rule, returning the assigned\\nsigner ID.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `context_rule_id` - The ID of the context rule to modify.\\n* `signer` - The signer to add to the context rule.\\n\\n# Errors\\n\\n* [`SmartAccountError::ContextRuleNotFound`] - When no context rule\\nexists with the given ID.\\n* [`SmartAccountError::DuplicateSigner`] - When the signer already\\nexists in the rule.\\n* [`SmartAccountError::TooManySigners`] - When adding would exceed\\nMAX_SIGNERS (15).\\n\\n# Events\\n\\n* topics - `[\"signer_added\", context_rule_id: u32]`\\n* data - `[signer_id: u32]`\\n\\n# Notes\\n\\nDefaults to requiring authorization from the smart account itself\\n(`e.current_contract_address().require_auth()`) and then delegating to\\n[`storage::add_signer`].",
+      "name": "add_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": {
+            "udt": {
+              "name": "Signer"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__check_auth",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signature_payload",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signatures",
+          "type_": {
+            "udt": {
+              "name": "AuthPayload"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "auth_contexts",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Context"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SmartAccountError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Crea el Smart Account v3 con storage m\\xc3\\xadnimo. Solo guarda el `deployer`\\nautorizado para llamar a `bootstrap()`.\\n\\nEsta separaci\\xc3\\xb3n deploy/bootstrap es por el cap de `txWriteBytes` de\\nSoroban protocol 27 (132KB). Un constructor que invocara\\n`setup_context_rules` tocar\\xc3\\xada las WASMs de los 2 verifiers (~47KB) +\\nla WASM del SA (~91KB) + storage = ~163KB, sobre el cap. Splitea:\\n- Deploy (`__constructor`): SA WASM + 1 storage entry \\xe2\\x86\\x92 ~95KB \\xe2\\x9c\\x93\\n- Bootstrap: verifiers como readOnly + rules/signers data \\xe2\\x86\\x92 ~30KB \\xe2\\x9c\\x93\\n\\n# Arguments\\n* `deployer` \\xe2\\x80\\x94 Address que firm\\xc3\\xb3 el `createContract`. Es el \\xc3\\xbanico que\\npuede llamar `bootstrap()` para completar la inicializaci\\xc3\\xb3n. En el\\nbackend de Accesly esto es siempre `channels-fund`.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "deployer",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Retrieves the global registry ID for a policy.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `policy` - The policy address to look up.\\n\\n# Errors\\n\\n* [`SmartAccountError::PolicyNotFound`] - When the policy is not\\nregistered in the global registry.",
+      "name": "get_policy_id",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "policy",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Retrieves the global registry ID for a signer.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `signer` - The signer to look up.\\n\\n# Errors\\n\\n* [`SmartAccountError::SignerNotFound`] - When the signer is not\\nregistered in the global registry.",
+      "name": "get_signer_id",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": {
+            "udt": {
+              "name": "Signer"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Removes a policy from an existing context rule and uninstalls it. The\\npolicy's `uninstall` method will be called during this operation.\\nRemoving the last policy is allowed only if the rule has at least\\none signer.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `context_rule_id` - The ID of the context rule to modify.\\n* `policy_id` - The ID of the policy to remove from the context rule.\\n\\n# Errors\\n\\n* [`SmartAccountError::ContextRuleNotFound`] - When no context rule\\nexists with the given ID.\\n* [`SmartAccountError::PolicyNotFound`] - When the policy doesn't exist\\nin the rule.\\n\\n# Events\\n\\n* topics - `[\"policy_removed\", context_rule_id: u32]`\\n* data - `[policy_id: u32]`\\n\\n# Notes\\n\\nDefaults to requiring authorization from the smart account itself\\n(`e.current_contract_address().require_auth()`) and then delegating to\\n[`storage::remove_policy`].",
+      "name": "remove_policy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Removes a signer from an existing context rule. Removing the last signer\\nis allowed only if the rule has at least one policy.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `context_rule_id` - The ID of the context rule to modify.\\n* `signer_id` - The ID of the signer to remove from the context rule.\\n\\n# Errors\\n\\n* [`SmartAccountError::ContextRuleNotFound`] - When no context rule\\nexists with the given ID.\\n* [`SmartAccountError::SignerNotFound`] - When the signer doesn't exist\\nin the rule.\\n\\n# Events\\n\\n* topics - `[\"signer_removed\", context_rule_id: u32]`\\n* data - `[signer_id: u32]`\\n\\n# Notes\\n\\nDefaults to requiring authorization from the smart account itself\\n(`e.current_contract_address().require_auth()`) and then delegating to\\n[`storage::remove_signer`].",
+      "name": "remove_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "signer_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Rota los signers principales del Smart Account en una sola tx at\\xc3\\xb3mica.\\n\\nPieza clave del flujo de recovery v2:\\n1. SDK reconstruye seed con F2+F3 (sin device).\\n2. SDK registra un new passkey + genera nuevo Shamir \\xe2\\x86\\x92 F1', F2', F3'.\\n3. SDK firma esta tx con la seed VIEJA (sigue v\\xc3\\xa1lida hasta rotate).\\n4. Soroban valida la firma contra `admin-cfg` rule.\\n5. Esta funci\\xc3\\xb3n rota:\\n- owner_ed25519 en todas las reglas biometric-tx + admin-cfg\\n- secp256r1_pubkey en sep10-auth\\n- email_commitment en storage\\n6. Emite `SignerRotated` event para audit trail del backend.\\n\\n# Auth\\nRequiere que el Smart Account autorice (via context rule `admin-cfg`).",
+      "name": "rotate_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_owner_ed25519",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "new_secp256r1_pubkey",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "new_email_commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Devuelve `true` si `bootstrap()` ya fue llamado y el SA est\\xc3\\xa1 operativo.",
+      "name": "is_initialized",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Creates a new context rule with the specified configuration, returning\\nthe newly created `ContextRule` with a unique ID assigned. Installs\\nall specified policies during creation.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `context_type` - The type of context this rule applies to.\\n* `name` - Human-readable name for the context rule.\\n* `valid_until` - Optional expiration ledger sequence.\\n* `signers` - List of signers authorized by this rule.\\n* `policies` - Map of policy addresses to their installation parameters.\\n\\n# Errors\\n\\n* [`SmartAccountError::NoSignersAndPolicies`] - When both signers and\\npolicies are empty.\\n* [`SmartAccountError::TooManySigners`] - When signers exceed\\nMAX_SIGNERS (15).\\n* [`SmartAccountError::TooManyPolicies`] - When policies exceed\\nMAX_POLICIES (5).\\n* [`SmartAccountError::DuplicateSigner`] - When the same signer appears\\nmultiple times.\\n* [`SmartAccountError::PastValidUntil`] - When valid_until is in the\\npast.\\n* [`SmartAccountError::MathOverflow`] - When the context rule, si",
+      "name": "add_context_rule",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_type",
+          "type_": {
+            "udt": {
+              "name": "ContextRuleType"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "valid_until",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signers",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Signer"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "policies",
+          "type_": {
+            "map": {
+              "key_type": "address",
+              "value_type": "val"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "ContextRule"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Retrieves a context rule by its unique ID, returning the\\n`ContextRule` containing all metadata, signers, and policies.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `context_rule_id` - The unique identifier of the context rule to\\nretrieve.\\n\\n# Errors\\n\\n* [`SmartAccountError::ContextRuleNotFound`] - When no context rule\\nexists with the given ID.",
+      "name": "get_context_rule",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "ContextRule"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Cierra un flow de rotate particionado \\xe2\\x80\\x94 pieza 2 (final) de v3.2.0.\\n\\nPersiste `email_commitment` en storage y emite `SignerRotated` con el\\nset completo de nuevos identificadores. NO toca ning\\xc3\\xban rule; asume que\\nlas calls previas a `rotate_signer_partial` ya cubrieron todas las\\nrules que ten\\xc3\\xadan el signer viejo.\\n\\n# Auth\\nRequiere admin-cfg firmado por el **nuevo** owner ed25519 (las calls\\nprevias ya migraron al menos la rule admin-cfg). Este check funciona\\ncomo safety net contra un caller que llame `finalize_rotation` sin\\nhaber ejecutado el batch completo.",
+      "name": "finalize_rotation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_owner_ed25519",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "new_secp256r1_pubkey",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "new_email_commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Removes a context rule and cleans up all associated data. This function\\nuninstalls all policies associated with the rule and removes all stored\\ndata including signers, policies, and metadata.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `context_rule_id` - The ID of the context rule to remove.\\n\\n# Errors\\n\\n* [`SmartAccountError::ContextRuleNotFound`] - When no context rule\\nexists with the given ID.\\n\\n# Events\\n\\n* topics - `[\"context_rule_removed\", context_rule_id: u32]`\\n* data - `[]`\\n\\n# Notes\\n\\nDefaults to requiring authorization from the smart account itself\\n(`e.current_contract_address().require_auth()`) and then delegating to\\n[`storage::remove_context_rule`].",
+      "name": "remove_context_rule",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Devuelve el `email_commitment` actual (\\xc3\\xbatil para auditor\\xc3\\xada off-chain).\\nDevuelve zeros si el SA a\\xc3\\xban no se bootstrappe\\xc3\\xb3.",
+      "name": "get_email_commitment",
+      "inputs": [],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Rota el signer de un subconjunto de rules \\xe2\\x80\\x94 pieza 1 del flow de recovery\\nparticionado (v3.2.0, Fase T).\\n\\nDise\\xc3\\xb1ada para wallets con 4+ context rules donde el `rotate_signer`\\nat\\xc3\\xb3mico excede el cap P27 de `txWriteBytes` (132KB). El caller (SDK)\\nenumera las rules on-chain, agrupa por batches que caben bajo el cap\\n(~2-3 rules por batch en la pr\\xc3\\xa1ctica), y llama esta funci\\xc3\\xb3n N veces.\\nTermina con `finalize_rotation` para persistir `email_commitment` y\\nemitir `SignerRotated`.\\n\\n# Estado intermedio\\nDurante la ventana entre el primer `rotate_signer_partial` y el\\n`finalize_rotation`, algunas rules apuntan al signer viejo y otras al\\nnuevo. Ambos pueden firmar mientras dure ese estado \\xe2\\x80\\x94 es responsabilidad\\ndel SDK completar el flow en el mismo commit l\\xc3\\xb3gico. Si el SDK falla\\nentre calls, retry hasta cerrar la rotaci\\xc3\\xb3n con `finalize_rotation`.\\n\\n# Auth\\nRequiere admin-cfg. La primera call se autoriza con el signer viejo;\\nlas siguientes tambi\\xc3\\xa9n, mientras `admin-cfg` a\\xc3\\xban tenga el viejo. Si el\\ncaller decidi\\xc3\\xb3 incluir `a",
+      "name": "rotate_signer_partial",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "rule_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "new_owner_ed25519",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "new_secp256r1_pubkey",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Retrieves the number of all context rules, including expired rules.\\nDefaults to 0.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.",
+      "name": "get_context_rules_count",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Updates the name of an existing context rule, returning the updated\\n`ContextRule` with the new name.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `context_rule_id` - The ID of the context rule to update.\\n* `name` - The new human-readable name for the context rule.\\n\\n# Errors\\n\\n* [`SmartAccountError::ContextRuleNotFound`] - When no context rule\\nexists with the given ID.\\n\\n# Events\\n\\n* topics - `[\"context_rule_meta_updated\", context_rule_id: u32]`\\n* data - `[name: String, context_type: ContextRuleType, valid_until:\\nOption<u32>]`\\n\\n# Notes\\n\\nDefaults to requiring authorization from the smart account itself\\n(`e.current_contract_address().require_auth()`) and then delegating to\\n[`storage::update_context_rule_name`].",
+      "name": "update_context_rule_name",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "ContextRule"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Updates the expiration time of an existing context rule, returning the\\nupdated `ContextRule` with the new expiration time.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `context_rule_id` - The ID of the context rule to update.\\n* `valid_until` - New optional expiration ledger sequence. Use `None`\\nfor no expiration.\\n\\n# Errors\\n\\n* [`SmartAccountError::ContextRuleNotFound`] - When no context rule\\nexists with the given ID.\\n* [`SmartAccountError::PastValidUntil`] - When valid_until is in the\\npast.\\n\\n# Events\\n\\n* topics - `[\"context_rule_meta_updated\", context_rule_id: u32]`\\n* data - `[name: String, context_type: ContextRuleType, valid_until:\\nOption<u32>]`\\n\\n# Notes\\n\\nDefaults to requiring authorization from the smart account itself\\n(`e.current_contract_address().require_auth()`) and then delegating to\\n[`storage::update_context_rule_valid_until`].",
+      "name": "update_context_rule_valid_until",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "valid_until",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "ContextRule"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UpgradeableStorageKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SchemaVersion"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the merkle root is set.",
+      "lib": "",
+      "name": "SetRoot",
+      "prefix_topics": [
+        "set_root"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "root",
+          "type_": "bytes",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an index is claimed.",
+      "lib": "",
+      "name": "SetClaimed",
+      "prefix_topics": [
+        "set_claimed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MerkleDistributorError",
+      "cases": [
+        {
+          "doc": "The merkle root is not set.",
+          "name": "RootNotSet",
+          "value": 1300
+        },
+        {
+          "doc": "The provided index was already claimed.",
+          "name": "IndexAlreadyClaimed",
+          "value": 1301
+        },
+        {
+          "doc": "The proof is invalid.",
+          "name": "InvalidProof",
+          "value": 1302
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys for the data associated with `MerkleDistributor`",
+      "lib": "",
+      "name": "MerkleDistributorStorageKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "The Merkle root of the distribution tree",
+            "name": "Root"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Maps an index to its claimed status",
+            "name": "Claimed",
+            "type_": [
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Rounding direction for division operations",
+      "lib": "",
+      "name": "Rounding",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Round toward negative infinity (down)",
+            "name": "Floor"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Round toward positive infinity (up)",
+            "name": "Ceil"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Round toward zero (truncation)",
+            "name": "Truncate"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SorobanFixedPointError",
+      "cases": [
+        {
+          "doc": "Arithmetic overflow occurred",
+          "name": "Overflow",
+          "value": 1500
+        },
+        {
+          "doc": "Division by zero",
+          "name": "DivisionByZero",
+          "value": 1501
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CryptoError",
+      "cases": [
+        {
+          "doc": "The merkle proof length is out of bounds.",
+          "name": "MerkleProofOutOfBounds",
+          "value": 1400
+        },
+        {
+          "doc": "The index of the leaf is out of bounds.",
+          "name": "MerkleIndexOutOfBounds",
+          "value": 1401
+        },
+        {
+          "doc": "No data in hasher state.",
+          "name": "HasherEmptyState",
+          "value": 1402
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the contract is paused.",
+      "lib": "",
+      "name": "Paused",
+      "prefix_topics": [
+        "paused"
+      ],
+      "params": [],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the contract is unpaused.",
+      "lib": "",
+      "name": "Unpaused",
+      "prefix_topics": [
+        "unpaused"
+      ],
+      "params": [],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PausableError",
+      "cases": [
+        {
+          "doc": "The operation failed because the contract is paused.",
+          "name": "EnforcedPause",
+          "value": 1000
+        },
+        {
+          "doc": "The operation failed because the contract is not paused.",
+          "name": "ExpectedPause",
+          "value": 1001
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage key for the pausable state",
+      "lib": "",
+      "name": "PausableStorageKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Indicates whether the contract is in paused state.",
+            "name": "Paused"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a policy is added to a context rule.",
+      "lib": "",
+      "name": "PolicyAdded",
+      "prefix_topics": [
+        "policy_added"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a signer is added to a context rule.",
+      "lib": "",
+      "name": "SignerAdded",
+      "prefix_topics": [
+        "signer_added"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "signer_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a policy is removed from a context rule.",
+      "lib": "",
+      "name": "PolicyRemoved",
+      "prefix_topics": [
+        "policy_removed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a signer is removed from a context rule.",
+      "lib": "",
+      "name": "SignerRemoved",
+      "prefix_topics": [
+        "signer_removed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "signer_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a context rule is added.",
+      "lib": "",
+      "name": "ContextRuleAdded",
+      "prefix_topics": [
+        "context_rule_added"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "context_type",
+          "type_": {
+            "udt": {
+              "name": "ContextRuleType"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "valid_until",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "signer_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "policy_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a policy is registered in the global registry.",
+      "lib": "",
+      "name": "PolicyRegistered",
+      "prefix_topics": [
+        "policy_registered"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "policy",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a signer is registered in the global registry.",
+      "lib": "",
+      "name": "SignerRegistered",
+      "prefix_topics": [
+        "signer_registered"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "signer_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": {
+            "udt": {
+              "name": "Signer"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Error codes for smart account operations.",
+      "lib": "",
+      "name": "SmartAccountError",
+      "cases": [
+        {
+          "doc": "The specified context rule does not exist.",
+          "name": "ContextRuleNotFound",
+          "value": 3000
+        },
+        {
+          "doc": "The provided context cannot be validated against any rule.",
+          "name": "UnvalidatedContext",
+          "value": 3002
+        },
+        {
+          "doc": "External signature verification failed.",
+          "name": "ExternalVerificationFailed",
+          "value": 3003
+        },
+        {
+          "doc": "Context rule must have at least one signer or policy.",
+          "name": "NoSignersAndPolicies",
+          "value": 3004
+        },
+        {
+          "doc": "The valid_until timestamp is in the past.",
+          "name": "PastValidUntil",
+          "value": 3005
+        },
+        {
+          "doc": "The specified signer was not found.",
+          "name": "SignerNotFound",
+          "value": 3006
+        },
+        {
+          "doc": "The signer already exists in the context rule.",
+          "name": "DuplicateSigner",
+          "value": 3007
+        },
+        {
+          "doc": "The specified policy was not found.",
+          "name": "PolicyNotFound",
+          "value": 3008
+        },
+        {
+          "doc": "The policy already exists in the context rule.",
+          "name": "DuplicatePolicy",
+          "value": 3009
+        },
+        {
+          "doc": "Too many signers in the context rule.",
+          "name": "TooManySigners",
+          "value": 3010
+        },
+        {
+          "doc": "Too many policies in the context rule.",
+          "name": "TooManyPolicies",
+          "value": 3011
+        },
+        {
+          "doc": "An internal ID counter (context rule, signer, or policy) has reached\\nits maximum value (`u32::MAX`) and cannot be incremented further.",
+          "name": "MathOverflow",
+          "value": 3012
+        },
+        {
+          "doc": "External signer key data exceeds the maximum allowed size.",
+          "name": "KeyDataTooLarge",
+          "value": 3013
+        },
+        {
+          "doc": "context_rule_ids length does not match auth_contexts length.",
+          "name": "ContextRuleIdsLengthMismatch",
+          "value": 3014
+        },
+        {
+          "doc": "Context rule name exceeds the maximum allowed length.",
+          "name": "NameTooLong",
+          "value": 3015
+        },
+        {
+          "doc": "A signer in `AuthPayload` is not part of any selected context rule.",
+          "name": "UnauthorizedSigner",
+          "value": 3016
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a context rule is removed.",
+      "lib": "",
+      "name": "ContextRuleRemoved",
+      "prefix_topics": [
+        "context_rule_removed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a policy is deregistered from the global registry.",
+      "lib": "",
+      "name": "PolicyDeregistered",
+      "prefix_topics": [
+        "policy_deregistered"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": "u32",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a signer is deregistered from the global registry.",
+      "lib": "",
+      "name": "SignerDeregistered",
+      "prefix_topics": [
+        "signer_deregistered"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "signer_id",
+          "type_": "u32",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a context rule name or valid_until are updated.",
+      "lib": "",
+      "name": "ContextRuleMetaUpdated",
+      "prefix_topics": [
+        "context_rule_meta_updated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "valid_until",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Represents different types of signers in the smart account system.",
+      "lib": "",
+      "name": "Signer",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "A delegated signer that uses built-in signature verification.",
+            "name": "Delegated",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "An external signer with custom verification logic.\\nContains the verifier contract address and the public key data.",
+            "name": "External",
+            "type_": [
+              "address",
+              "bytes"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "The authorization payload passed to `__check_auth`, bundling cryptographic\\nproofs with context rule selection.\\n\\nThis struct carries two distinct pieces of information that are both\\nrequired for authorization but cannot be derived from each other:\\n\\n- `signers` maps each [`Signer`] to its raw signature bytes, providing\\ncryptographic proof that the signer actually signed the transaction\\npayload. A context rule stores which signer *identities* are authorized\\n(via `signer_ids`), but the rule does not contain the signatures\\nthemselves \\xe2\\x80\\x94 those must be supplied here.\\n\\n- `context_rule_ids` tells the system which rule to validate for each auth\\ncontext. Because multiple rules can exist for the same context type, the\\ncaller must explicitly select one per context rather than relying on\\nauto-discovery. Each entry is aligned by index with the `auth_contexts`\\npassed to `__check_auth`.\\n\\nThe length of `context_rule_ids` must equal the number of auth contexts;\\na mismatch is rejected with\\n[`SmartAccountError::ContextRuleIdsLen",
+      "lib": "",
+      "name": "AuthPayload",
+      "fields": [
+        {
+          "doc": "Per-context rule IDs, aligned by index with `auth_contexts`.",
+          "name": "context_rule_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "Signature data mapped to each signer.",
+          "name": "signers",
+          "type_": {
+            "map": {
+              "key_type": {
+                "udt": {
+                  "name": "Signer"
+                }
+              },
+              "value_type": "bytes"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A complete context rule defining authorization requirements.",
+      "lib": "",
+      "name": "ContextRule",
+      "fields": [
+        {
+          "doc": "The type of context this rule applies to.",
+          "name": "context_type",
+          "type_": {
+            "udt": {
+              "name": "ContextRuleType"
+            }
+          }
+        },
+        {
+          "doc": "Unique identifier for the context rule.",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "Human-readable name for the context rule.",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "List of policy contracts that must be satisfied.",
+          "name": "policies",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "Global registry IDs for each policy, positionally aligned with\\n`policies`.",
+          "name": "policy_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "Global registry IDs for each signer, positionally aligned with\\n`signers`.",
+          "name": "signer_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "List of signers authorized by this rule.",
+          "name": "signers",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Signer"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "Optional expiration ledger sequence for the rule.",
+          "name": "valid_until",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Combines policy data and its reference count into a single storage entry.",
+      "lib": "",
+      "name": "PolicyEntry",
+      "fields": [
+        {
+          "doc": "Number of context rules referencing this policy.",
+          "name": "count",
+          "type_": "u32"
+        },
+        {
+          "doc": "The policy address stored in the global registry.",
+          "name": "policy",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Combines signer data and its reference count into a single storage entry.",
+      "lib": "",
+      "name": "SignerEntry",
+      "fields": [
+        {
+          "doc": "Number of context rules referencing this signer.",
+          "name": "count",
+          "type_": "u32"
+        },
+        {
+          "doc": "The signer stored in the global registry.",
+          "name": "signer",
+          "type_": {
+            "udt": {
+              "name": "Signer"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Types of contexts that can be authorized by smart account rules.",
+      "lib": "",
+      "name": "ContextRuleType",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Default rules that can authorize any context.",
+            "name": "Default"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Rules specific to calling a particular contract.",
+            "name": "CallContract",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Rules specific to creating a contract with a particular WASM hash.",
+            "name": "CreateContract",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Combines context rule metadata, signer IDs, and policy addresses into a\\nsingle storage entry, reducing persistent reads per auth check from 3 to 1.",
+      "lib": "",
+      "name": "ContextRuleEntry",
+      "fields": [
+        {
+          "doc": "The type of context this rule applies to.",
+          "name": "context_type",
+          "type_": {
+            "udt": {
+              "name": "ContextRuleType"
+            }
+          }
+        },
+        {
+          "doc": "Human-readable name for the context rule.",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "Policy IDs referenced by this rule.",
+          "name": "policy_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "Global signer IDs referenced by this rule.",
+          "name": "signer_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "Optional expiration ledger sequence.",
+          "name": "valid_until",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys for smart account data.",
+      "lib": "",
+      "name": "SmartAccountStorageKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "Storage key for combined context rule data.\\nMaps context rule ID to `ContextRuleEntry` (signer IDs, policies, and\\nmetadata stored in a single entry).",
+            "name": "ContextRuleData",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Storage key for the next available context rule ID.",
+            "name": "NextId"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Storage key for the count of active context rules.",
+            "name": "Count"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Storage key for global signer data.\\nMaps signer ID to `SignerEntry` (stored once, referenced by rules).",
+            "name": "SignerData",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Storage key for signer lookup by hash.\\nMaps `sha256(Signer XDR)` to signer ID for deduplication.",
+            "name": "SignerLookup",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Storage key for the next available global signer ID (monotonically\\nincreasing).",
+            "name": "NextSignerId"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Storage key for global policy data.\\nMaps policy ID to `PolicyEntry`.",
+            "name": "PolicyData",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Storage key for policy lookup by address.\\nMaps policy `Address` to its policy ID for deduplication.",
+            "name": "PolicyLookup",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Storage key for the next available global policy ID (monotonically\\nincreasing).",
+            "name": "NextPolicyId"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Individual spending entry for tracking purposes.",
+      "lib": "",
+      "name": "SpendingEntry",
+      "fields": [
+        {
+          "doc": "The amount spent in this transaction.",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "The ledger sequence when this transaction occurred.",
+          "name": "ledger_sequence",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Internal storage structure for spending limit tracking.",
+      "lib": "",
+      "name": "SpendingLimitData",
+      "fields": [
+        {
+          "doc": "Cached total of all amounts in spending_history.",
+          "name": "cached_total_spent",
+          "type_": "i128"
+        },
+        {
+          "doc": "The period in ledgers over which the spending limit applies.",
+          "name": "period_ledgers",
+          "type_": "u32"
+        },
+        {
+          "doc": "History of spending transactions with their ledger sequences.",
+          "name": "spending_history",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "SpendingEntry"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "The spending limit for the period.",
+          "name": "spending_limit",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Error codes for spending limit policy operations.",
+      "lib": "",
+      "name": "SpendingLimitError",
+      "cases": [
+        {
+          "doc": "The smart account does not have a spending limit policy installed.",
+          "name": "SmartAccountNotInstalled",
+          "value": 3220
+        },
+        {
+          "doc": "The spending limit has been exceeded.",
+          "name": "SpendingLimitExceeded",
+          "value": 3221
+        },
+        {
+          "doc": "The spending limit or period is invalid.",
+          "name": "InvalidLimitOrPeriod",
+          "value": 3222
+        },
+        {
+          "doc": "The transaction is not allowed by this policy.",
+          "name": "NotAllowed",
+          "value": 3223
+        },
+        {
+          "doc": "The spending history has reached maximum capacity.",
+          "name": "HistoryCapacityExceeded",
+          "value": 3224
+        },
+        {
+          "doc": "The context rule for the smart account has been already installed.",
+          "name": "AlreadyInstalled",
+          "value": 3225
+        },
+        {
+          "doc": "The transfer amount is negative.",
+          "name": "LessThanZero",
+          "value": 3226
+        },
+        {
+          "doc": "Only the `CallContract` context rule type is allowed.",
+          "name": "OnlyCallContractAllowed",
+          "value": 3227
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the spending limit value is changed.",
+      "lib": "",
+      "name": "SpendingLimitChanged",
+      "prefix_topics": [
+        "spending_limit_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "spending_limit",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a spending limit policy is enforced.",
+      "lib": "",
+      "name": "SpendingLimitEnforced",
+      "prefix_topics": [
+        "spending_limit_enforced"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context",
+          "type_": {
+            "udt": {
+              "name": "Context"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "total_spent_in_period",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a spending limit policy is installed.",
+      "lib": "",
+      "name": "SpendingLimitInstalled",
+      "prefix_topics": [
+        "spending_limit_installed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "spending_limit",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "period_ledgers",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys for spending limit policy data.",
+      "lib": "",
+      "name": "SpendingLimitStorageKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "Storage key for spending limit data of a smart account context rule.",
+            "name": "AccountContext",
+            "type_": [
+              "address",
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a spending limit policy is uninstalled.",
+      "lib": "",
+      "name": "SpendingLimitUninstalled",
+      "prefix_topics": [
+        "spending_limit_uninstalled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Installation parameters for the spending limit policy.",
+      "lib": "",
+      "name": "SpendingLimitAccountParams",
+      "fields": [
+        {
+          "doc": "The period in ledgers over which the spending limit applies.",
+          "name": "period_ledgers",
+          "type_": "u32"
+        },
+        {
+          "doc": "The maximum amount that can be spent within the specified period (in\\nstroops).",
+          "name": "spending_limit",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a simple threshold policy is enforced.",
+      "lib": "",
+      "name": "SimpleEnforced",
+      "prefix_topics": [
+        "simple_enforced"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context",
+          "type_": {
+            "udt": {
+              "name": "Context"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "authenticated_signers",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Signer"
+                }
+              }
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a simple threshold policy is installed.",
+      "lib": "",
+      "name": "SimpleInstalled",
+      "prefix_topics": [
+        "simple_installed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a simple threshold policy is uninstalled.",
+      "lib": "",
+      "name": "SimpleUninstalled",
+      "prefix_topics": [
+        "simple_uninstalled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Error codes for simple threshold policy operations.",
+      "lib": "",
+      "name": "SimpleThresholdError",
+      "cases": [
+        {
+          "doc": "The smart account does not have a simple threshold policy installed.",
+          "name": "SmartAccountNotInstalled",
+          "value": 3200
+        },
+        {
+          "doc": "When threshold is 0 or exceeds the number of available signers.",
+          "name": "InvalidThreshold",
+          "value": 3201
+        },
+        {
+          "doc": "The transaction is not allowed by this policy.",
+          "name": "NotAllowed",
+          "value": 3202
+        },
+        {
+          "doc": "The context rule for the smart account has been already installed.",
+          "name": "AlreadyInstalled",
+          "value": 3203
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the threshold of a simple threshold policy is changed.",
+      "lib": "",
+      "name": "SimpleThresholdChanged",
+      "prefix_topics": [
+        "simple_threshold_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys for simple threshold policy data.",
+      "lib": "",
+      "name": "SimpleThresholdStorageKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "AccountContext",
+            "type_": [
+              "address",
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Installation parameters for the simple threshold policy.",
+      "lib": "",
+      "name": "SimpleThresholdAccountParams",
+      "fields": [
+        {
+          "doc": "The minimum number of signers required for authorization.",
+          "name": "threshold",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a weighted threshold policy is enforced.",
+      "lib": "",
+      "name": "WeightedEnforced",
+      "prefix_topics": [
+        "weighted_enforced"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context",
+          "type_": {
+            "udt": {
+              "name": "Context"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "authenticated_signers",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Signer"
+                }
+              }
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a weighted threshold policy is installed.",
+      "lib": "",
+      "name": "WeightedInstalled",
+      "prefix_topics": [
+        "weighted_installed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "signer_weights",
+          "type_": {
+            "map": {
+              "key_type": {
+                "udt": {
+                  "name": "Signer"
+                }
+              },
+              "value_type": "u32"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a weighted threshold policy is uninstalled.",
+      "lib": "",
+      "name": "WeightedUninstalled",
+      "prefix_topics": [
+        "weighted_uninstalled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Error codes for weighted threshold policy operations.",
+      "lib": "",
+      "name": "WeightedThresholdError",
+      "cases": [
+        {
+          "doc": "The smart account does not have a weighted threshold policy installed.",
+          "name": "SmartAccountNotInstalled",
+          "value": 3210
+        },
+        {
+          "doc": "The threshold value is invalid.",
+          "name": "InvalidThreshold",
+          "value": 3211
+        },
+        {
+          "doc": "A mathematical operation would overflow.",
+          "name": "MathOverflow",
+          "value": 3212
+        },
+        {
+          "doc": "The transaction is not allowed by this policy.",
+          "name": "NotAllowed",
+          "value": 3213
+        },
+        {
+          "doc": "The context rule for the smart account has been already installed.",
+          "name": "AlreadyInstalled",
+          "value": 3214
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the threshold of a weighted threshold policy is changed.",
+      "lib": "",
+      "name": "WeightedThresholdChanged",
+      "prefix_topics": [
+        "weighted_threshold_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys for weighted threshold policy data.",
+      "lib": "",
+      "name": "WeightedThresholdStorageKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "Storage key for the threshold value and signer weights of a smart\\naccount context rule. Maps to a `WeightedThresholdAccountParams`\\ncontaining threshold and signer weights.",
+            "name": "AccountContext",
+            "type_": [
+              "address",
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a signer weight is changed in a weighted threshold\\npolicy.",
+      "lib": "",
+      "name": "WeightedSignerWeightChanged",
+      "prefix_topics": [
+        "weighted_signer_weight_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": {
+            "udt": {
+              "name": "Signer"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "weight",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Installation parameters for the weighted threshold policy.",
+      "lib": "",
+      "name": "WeightedThresholdAccountParams",
+      "fields": [
+        {
+          "doc": "Mapping of signers to their respective weights.",
+          "name": "signer_weights",
+          "type_": {
+            "map": {
+              "key_type": {
+                "udt": {
+                  "name": "Signer"
+                }
+              },
+              "value_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "The minimum total weight required for authorization.",
+          "name": "threshold",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Error types for WebAuthn verification operations.",
+      "lib": "",
+      "name": "WebAuthnError",
+      "cases": [
+        {
+          "doc": "The signature payload is invalid or has incorrect format.",
+          "name": "SignaturePayloadInvalid",
+          "value": 3110
+        },
+        {
+          "doc": "The client data exceeds the maximum allowed length.",
+          "name": "ClientDataTooLong",
+          "value": 3111
+        },
+        {
+          "doc": "Failed to parse JSON from client data.",
+          "name": "JsonParseError",
+          "value": 3112
+        },
+        {
+          "doc": "The type field in client data is not \"webauthn.get\".",
+          "name": "TypeFieldInvalid",
+          "value": 3113
+        },
+        {
+          "doc": "The challenge in client data does not match expected value.",
+          "name": "ChallengeInvalid",
+          "value": 3114
+        },
+        {
+          "doc": "The authenticator data format is invalid or too short.",
+          "name": "AuthDataFormatInvalid",
+          "value": 3115
+        },
+        {
+          "doc": "The User Present (UP) bit is not set in authenticator flags.",
+          "name": "PresentBitNotSet",
+          "value": 3116
+        },
+        {
+          "doc": "The User Verified (UV) bit is not set in authenticator flags.",
+          "name": "VerifiedBitNotSet",
+          "value": 3117
+        },
+        {
+          "doc": "Invalid relationship between Backup Eligibility and State bits.",
+          "name": "BackupEligibilityAndStateNotSet",
+          "value": 3118
+        },
+        {
+          "doc": "The provided key data does not contain a valid 65-byte public key.",
+          "name": "KeyDataInvalid",
+          "value": 3119
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "WebAuthn signature data structure containing all components needed for\\nverification.\\n\\nThis structure encapsulates the signature and associated data generated\\nduring a WebAuthn authentication ceremony.",
+      "lib": "",
+      "name": "WebAuthnSigData",
+      "fields": [
+        {
+          "doc": "Raw authenticator data from the WebAuthn response.",
+          "name": "authenticator_data",
+          "type_": "bytes"
+        },
+        {
+          "doc": "Raw client data JSON from the WebAuthn response.",
+          "name": "client_data",
+          "type_": "bytes"
+        },
+        {
+          "doc": "The cryptographic signature (64 bytes for secp256r1).",
+          "name": "signature",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ]
+    }
+  }
+]

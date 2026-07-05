@@ -1,0 +1,1867 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StorageKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Session",
+            "type_": [
+              "address",
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Estado interno de una sesi\\xc3\\xb3n activa.",
+      "lib": "",
+      "name": "SessionData",
+      "fields": [
+        {
+          "doc": "Ledger sequence en que expira la sesi\\xc3\\xb3n.",
+          "name": "expires_at",
+          "type_": "u32"
+        },
+        {
+          "doc": "Gasto m\\xc3\\xa1ximo acumulado (0 = ilimitado).",
+          "name": "max_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "Gasto acumulado hasta ahora.",
+          "name": "spent",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SessionKeyError",
+      "cases": [
+        {
+          "doc": "Sesi\\xc3\\xb3n no encontrada para esta cuenta y context rule.",
+          "name": "NotInstalled",
+          "value": 5000
+        },
+        {
+          "doc": "La sesi\\xc3\\xb3n ha expirado.",
+          "name": "Expired",
+          "value": 5001
+        },
+        {
+          "doc": "Se super\\xc3\\xb3 el monto m\\xc3\\xa1ximo de la sesi\\xc3\\xb3n.",
+          "name": "AmountExceeded",
+          "value": 5002
+        },
+        {
+          "doc": "Ya existe una sesi\\xc3\\xb3n para esta context rule.",
+          "name": "AlreadyInstalled",
+          "value": 5003
+        },
+        {
+          "doc": "Llamada no-transfer rechazada cuando hay l\\xc3\\xadmite de monto activo.",
+          "name": "NonTransferNotAllowed",
+          "value": 5004
+        },
+        {
+          "doc": "La duraci\\xc3\\xb3n de la sesi\\xc3\\xb3n supera el m\\xc3\\xa1ximo permitido (30 d\\xc3\\xadas).",
+          "name": "SessionTooLong",
+          "value": 5005
+        },
+        {
+          "doc": "Monto de transferencia negativo o cero \\xe2\\x80\\x94 rechazado para evitar bypass del cap.",
+          "name": "InvalidAmount",
+          "value": 5006
+        },
+        {
+          "doc": "approve() y transfer_from() est\\xc3\\xa1n siempre prohibidos \\xe2\\x80\\x94 crean allowances persistentes.",
+          "name": "ApproveForbidden",
+          "value": 5007
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Revoca la sesi\\xc3\\xb3n inmediatamente poniendo `expires_at = 0`.\\nRequiere autorizaci\\xc3\\xb3n del Smart Account.",
+      "name": "revoke",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Verifica que la sesi\\xc3\\xb3n est\\xc3\\xa9 activa y que el gasto no supere el l\\xc3\\xadmite.",
+      "name": "enforce",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context",
+          "type_": {
+            "udt": {
+              "name": "Context"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "authenticated_signers",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Signer"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "context_rule",
+          "type_": {
+            "udt": {
+              "name": "ContextRule"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Inicializa la sesi\\xc3\\xb3n con los par\\xc3\\xa1metros dados.",
+      "name": "install",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "install_params",
+          "type_": {
+            "udt": {
+              "name": "SessionKeyInstallParams"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "context_rule",
+          "type_": {
+            "udt": {
+              "name": "ContextRule"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Comprueba si la sesi\\xc3\\xb3n sigue activa.",
+      "name": "is_active",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Elimina los datos de la sesi\\xc3\\xb3n.",
+      "name": "uninstall",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_rule",
+          "type_": {
+            "udt": {
+              "name": "ContextRule"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Consulta el estado de la sesi\\xc3\\xb3n. Requiere auth del Smart Account.\\nPara saber si una sesi\\xc3\\xb3n est\\xc3\\xa1 activa sin auth, usar `is_active()`.",
+      "name": "get_session",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "SessionData"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Par\\xc3\\xa1metros que el Smart Account env\\xc3\\xada al instalar la pol\\xc3\\xadtica.",
+      "lib": "",
+      "name": "SessionKeyInstallParams",
+      "fields": [
+        {
+          "doc": "Ledger sequence de expiraci\\xc3\\xb3n.",
+          "name": "expires_at",
+          "type_": "u32"
+        },
+        {
+          "doc": "Monto m\\xc3\\xa1ximo acumulado en stroops (0 = sin l\\xc3\\xadmite).",
+          "name": "max_amount",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a policy is added to a context rule.",
+      "lib": "",
+      "name": "PolicyAdded",
+      "prefix_topics": [
+        "policy_added"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a signer is added to a context rule.",
+      "lib": "",
+      "name": "SignerAdded",
+      "prefix_topics": [
+        "signer_added"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "signer_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a policy is removed from a context rule.",
+      "lib": "",
+      "name": "PolicyRemoved",
+      "prefix_topics": [
+        "policy_removed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a signer is removed from a context rule.",
+      "lib": "",
+      "name": "SignerRemoved",
+      "prefix_topics": [
+        "signer_removed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "signer_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a context rule is added.",
+      "lib": "",
+      "name": "ContextRuleAdded",
+      "prefix_topics": [
+        "context_rule_added"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "context_type",
+          "type_": {
+            "udt": {
+              "name": "ContextRuleType"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "valid_until",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "signer_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "policy_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a policy is registered in the global registry.",
+      "lib": "",
+      "name": "PolicyRegistered",
+      "prefix_topics": [
+        "policy_registered"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "policy",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a signer is registered in the global registry.",
+      "lib": "",
+      "name": "SignerRegistered",
+      "prefix_topics": [
+        "signer_registered"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "signer_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": {
+            "udt": {
+              "name": "Signer"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Error codes for smart account operations.",
+      "lib": "",
+      "name": "SmartAccountError",
+      "cases": [
+        {
+          "doc": "The specified context rule does not exist.",
+          "name": "ContextRuleNotFound",
+          "value": 3000
+        },
+        {
+          "doc": "The provided context cannot be validated against any rule.",
+          "name": "UnvalidatedContext",
+          "value": 3002
+        },
+        {
+          "doc": "External signature verification failed.",
+          "name": "ExternalVerificationFailed",
+          "value": 3003
+        },
+        {
+          "doc": "Context rule must have at least one signer or policy.",
+          "name": "NoSignersAndPolicies",
+          "value": 3004
+        },
+        {
+          "doc": "The valid_until timestamp is in the past.",
+          "name": "PastValidUntil",
+          "value": 3005
+        },
+        {
+          "doc": "The specified signer was not found.",
+          "name": "SignerNotFound",
+          "value": 3006
+        },
+        {
+          "doc": "The signer already exists in the context rule.",
+          "name": "DuplicateSigner",
+          "value": 3007
+        },
+        {
+          "doc": "The specified policy was not found.",
+          "name": "PolicyNotFound",
+          "value": 3008
+        },
+        {
+          "doc": "The policy already exists in the context rule.",
+          "name": "DuplicatePolicy",
+          "value": 3009
+        },
+        {
+          "doc": "Too many signers in the context rule.",
+          "name": "TooManySigners",
+          "value": 3010
+        },
+        {
+          "doc": "Too many policies in the context rule.",
+          "name": "TooManyPolicies",
+          "value": 3011
+        },
+        {
+          "doc": "An internal ID counter (context rule, signer, or policy) has reached\\nits maximum value (`u32::MAX`) and cannot be incremented further.",
+          "name": "MathOverflow",
+          "value": 3012
+        },
+        {
+          "doc": "External signer key data exceeds the maximum allowed size.",
+          "name": "KeyDataTooLarge",
+          "value": 3013
+        },
+        {
+          "doc": "context_rule_ids length does not match auth_contexts length.",
+          "name": "ContextRuleIdsLengthMismatch",
+          "value": 3014
+        },
+        {
+          "doc": "Context rule name exceeds the maximum allowed length.",
+          "name": "NameTooLong",
+          "value": 3015
+        },
+        {
+          "doc": "A signer in `AuthPayload` is not part of any selected context rule.",
+          "name": "UnauthorizedSigner",
+          "value": 3016
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a context rule is removed.",
+      "lib": "",
+      "name": "ContextRuleRemoved",
+      "prefix_topics": [
+        "context_rule_removed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a policy is deregistered from the global registry.",
+      "lib": "",
+      "name": "PolicyDeregistered",
+      "prefix_topics": [
+        "policy_deregistered"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": "u32",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a signer is deregistered from the global registry.",
+      "lib": "",
+      "name": "SignerDeregistered",
+      "prefix_topics": [
+        "signer_deregistered"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "signer_id",
+          "type_": "u32",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a context rule name or valid_until are updated.",
+      "lib": "",
+      "name": "ContextRuleMetaUpdated",
+      "prefix_topics": [
+        "context_rule_meta_updated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "valid_until",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Represents different types of signers in the smart account system.",
+      "lib": "",
+      "name": "Signer",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "A delegated signer that uses built-in signature verification.",
+            "name": "Delegated",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "An external signer with custom verification logic.\\nContains the verifier contract address and the public key data.",
+            "name": "External",
+            "type_": [
+              "address",
+              "bytes"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "The authorization payload passed to `__check_auth`, bundling cryptographic\\nproofs with context rule selection.\\n\\nThis struct carries two distinct pieces of information that are both\\nrequired for authorization but cannot be derived from each other:\\n\\n- `signers` maps each [`Signer`] to its raw signature bytes, providing\\ncryptographic proof that the signer actually signed the transaction\\npayload. A context rule stores which signer *identities* are authorized\\n(via `signer_ids`), but the rule does not contain the signatures\\nthemselves \\xe2\\x80\\x94 those must be supplied here.\\n\\n- `context_rule_ids` tells the system which rule to validate for each auth\\ncontext. Because multiple rules can exist for the same context type, the\\ncaller must explicitly select one per context rather than relying on\\nauto-discovery. Each entry is aligned by index with the `auth_contexts`\\npassed to `__check_auth`.\\n\\nThe length of `context_rule_ids` must equal the number of auth contexts;\\na mismatch is rejected with\\n[`SmartAccountError::ContextRuleIdsLen",
+      "lib": "",
+      "name": "AuthPayload",
+      "fields": [
+        {
+          "doc": "Per-context rule IDs, aligned by index with `auth_contexts`.",
+          "name": "context_rule_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "Signature data mapped to each signer.",
+          "name": "signers",
+          "type_": {
+            "map": {
+              "key_type": {
+                "udt": {
+                  "name": "Signer"
+                }
+              },
+              "value_type": "bytes"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A complete context rule defining authorization requirements.",
+      "lib": "",
+      "name": "ContextRule",
+      "fields": [
+        {
+          "doc": "The type of context this rule applies to.",
+          "name": "context_type",
+          "type_": {
+            "udt": {
+              "name": "ContextRuleType"
+            }
+          }
+        },
+        {
+          "doc": "Unique identifier for the context rule.",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "Human-readable name for the context rule.",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "List of policy contracts that must be satisfied.",
+          "name": "policies",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "Global registry IDs for each policy, positionally aligned with\\n`policies`.",
+          "name": "policy_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "Global registry IDs for each signer, positionally aligned with\\n`signers`.",
+          "name": "signer_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "List of signers authorized by this rule.",
+          "name": "signers",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Signer"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "Optional expiration ledger sequence for the rule.",
+          "name": "valid_until",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Combines policy data and its reference count into a single storage entry.",
+      "lib": "",
+      "name": "PolicyEntry",
+      "fields": [
+        {
+          "doc": "Number of context rules referencing this policy.",
+          "name": "count",
+          "type_": "u32"
+        },
+        {
+          "doc": "The policy address stored in the global registry.",
+          "name": "policy",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Combines signer data and its reference count into a single storage entry.",
+      "lib": "",
+      "name": "SignerEntry",
+      "fields": [
+        {
+          "doc": "Number of context rules referencing this signer.",
+          "name": "count",
+          "type_": "u32"
+        },
+        {
+          "doc": "The signer stored in the global registry.",
+          "name": "signer",
+          "type_": {
+            "udt": {
+              "name": "Signer"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Types of contexts that can be authorized by smart account rules.",
+      "lib": "",
+      "name": "ContextRuleType",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Default rules that can authorize any context.",
+            "name": "Default"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Rules specific to calling a particular contract.",
+            "name": "CallContract",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Rules specific to creating a contract with a particular WASM hash.",
+            "name": "CreateContract",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Combines context rule metadata, signer IDs, and policy addresses into a\\nsingle storage entry, reducing persistent reads per auth check from 3 to 1.",
+      "lib": "",
+      "name": "ContextRuleEntry",
+      "fields": [
+        {
+          "doc": "The type of context this rule applies to.",
+          "name": "context_type",
+          "type_": {
+            "udt": {
+              "name": "ContextRuleType"
+            }
+          }
+        },
+        {
+          "doc": "Human-readable name for the context rule.",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "Policy IDs referenced by this rule.",
+          "name": "policy_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "Global signer IDs referenced by this rule.",
+          "name": "signer_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "Optional expiration ledger sequence.",
+          "name": "valid_until",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys for smart account data.",
+      "lib": "",
+      "name": "SmartAccountStorageKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "Storage key for combined context rule data.\\nMaps context rule ID to `ContextRuleEntry` (signer IDs, policies, and\\nmetadata stored in a single entry).",
+            "name": "ContextRuleData",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Storage key for the next available context rule ID.",
+            "name": "NextId"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Storage key for the count of active context rules.",
+            "name": "Count"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Storage key for global signer data.\\nMaps signer ID to `SignerEntry` (stored once, referenced by rules).",
+            "name": "SignerData",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Storage key for signer lookup by hash.\\nMaps `sha256(Signer XDR)` to signer ID for deduplication.",
+            "name": "SignerLookup",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Storage key for the next available global signer ID (monotonically\\nincreasing).",
+            "name": "NextSignerId"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Storage key for global policy data.\\nMaps policy ID to `PolicyEntry`.",
+            "name": "PolicyData",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Storage key for policy lookup by address.\\nMaps policy `Address` to its policy ID for deduplication.",
+            "name": "PolicyLookup",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Storage key for the next available global policy ID (monotonically\\nincreasing).",
+            "name": "NextPolicyId"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Individual spending entry for tracking purposes.",
+      "lib": "",
+      "name": "SpendingEntry",
+      "fields": [
+        {
+          "doc": "The amount spent in this transaction.",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "The ledger sequence when this transaction occurred.",
+          "name": "ledger_sequence",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Internal storage structure for spending limit tracking.",
+      "lib": "",
+      "name": "SpendingLimitData",
+      "fields": [
+        {
+          "doc": "Cached total of all amounts in spending_history.",
+          "name": "cached_total_spent",
+          "type_": "i128"
+        },
+        {
+          "doc": "The period in ledgers over which the spending limit applies.",
+          "name": "period_ledgers",
+          "type_": "u32"
+        },
+        {
+          "doc": "History of spending transactions with their ledger sequences.",
+          "name": "spending_history",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "SpendingEntry"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "The spending limit for the period.",
+          "name": "spending_limit",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Error codes for spending limit policy operations.",
+      "lib": "",
+      "name": "SpendingLimitError",
+      "cases": [
+        {
+          "doc": "The smart account does not have a spending limit policy installed.",
+          "name": "SmartAccountNotInstalled",
+          "value": 3220
+        },
+        {
+          "doc": "The spending limit has been exceeded.",
+          "name": "SpendingLimitExceeded",
+          "value": 3221
+        },
+        {
+          "doc": "The spending limit or period is invalid.",
+          "name": "InvalidLimitOrPeriod",
+          "value": 3222
+        },
+        {
+          "doc": "The transaction is not allowed by this policy.",
+          "name": "NotAllowed",
+          "value": 3223
+        },
+        {
+          "doc": "The spending history has reached maximum capacity.",
+          "name": "HistoryCapacityExceeded",
+          "value": 3224
+        },
+        {
+          "doc": "The context rule for the smart account has been already installed.",
+          "name": "AlreadyInstalled",
+          "value": 3225
+        },
+        {
+          "doc": "The transfer amount is negative.",
+          "name": "LessThanZero",
+          "value": 3226
+        },
+        {
+          "doc": "Only the `CallContract` context rule type is allowed.",
+          "name": "OnlyCallContractAllowed",
+          "value": 3227
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the spending limit value is changed.",
+      "lib": "",
+      "name": "SpendingLimitChanged",
+      "prefix_topics": [
+        "spending_limit_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "spending_limit",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a spending limit policy is enforced.",
+      "lib": "",
+      "name": "SpendingLimitEnforced",
+      "prefix_topics": [
+        "spending_limit_enforced"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context",
+          "type_": {
+            "udt": {
+              "name": "Context"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "total_spent_in_period",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a spending limit policy is installed.",
+      "lib": "",
+      "name": "SpendingLimitInstalled",
+      "prefix_topics": [
+        "spending_limit_installed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "spending_limit",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "period_ledgers",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys for spending limit policy data.",
+      "lib": "",
+      "name": "SpendingLimitStorageKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "Storage key for spending limit data of a smart account context rule.",
+            "name": "AccountContext",
+            "type_": [
+              "address",
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a spending limit policy is uninstalled.",
+      "lib": "",
+      "name": "SpendingLimitUninstalled",
+      "prefix_topics": [
+        "spending_limit_uninstalled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Installation parameters for the spending limit policy.",
+      "lib": "",
+      "name": "SpendingLimitAccountParams",
+      "fields": [
+        {
+          "doc": "The period in ledgers over which the spending limit applies.",
+          "name": "period_ledgers",
+          "type_": "u32"
+        },
+        {
+          "doc": "The maximum amount that can be spent within the specified period (in\\nstroops).",
+          "name": "spending_limit",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a simple threshold policy is enforced.",
+      "lib": "",
+      "name": "SimpleEnforced",
+      "prefix_topics": [
+        "simple_enforced"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context",
+          "type_": {
+            "udt": {
+              "name": "Context"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "authenticated_signers",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Signer"
+                }
+              }
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a simple threshold policy is installed.",
+      "lib": "",
+      "name": "SimpleInstalled",
+      "prefix_topics": [
+        "simple_installed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a simple threshold policy is uninstalled.",
+      "lib": "",
+      "name": "SimpleUninstalled",
+      "prefix_topics": [
+        "simple_uninstalled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Error codes for simple threshold policy operations.",
+      "lib": "",
+      "name": "SimpleThresholdError",
+      "cases": [
+        {
+          "doc": "The smart account does not have a simple threshold policy installed.",
+          "name": "SmartAccountNotInstalled",
+          "value": 3200
+        },
+        {
+          "doc": "When threshold is 0 or exceeds the number of available signers.",
+          "name": "InvalidThreshold",
+          "value": 3201
+        },
+        {
+          "doc": "The transaction is not allowed by this policy.",
+          "name": "NotAllowed",
+          "value": 3202
+        },
+        {
+          "doc": "The context rule for the smart account has been already installed.",
+          "name": "AlreadyInstalled",
+          "value": 3203
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the threshold of a simple threshold policy is changed.",
+      "lib": "",
+      "name": "SimpleThresholdChanged",
+      "prefix_topics": [
+        "simple_threshold_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys for simple threshold policy data.",
+      "lib": "",
+      "name": "SimpleThresholdStorageKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "AccountContext",
+            "type_": [
+              "address",
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Installation parameters for the simple threshold policy.",
+      "lib": "",
+      "name": "SimpleThresholdAccountParams",
+      "fields": [
+        {
+          "doc": "The minimum number of signers required for authorization.",
+          "name": "threshold",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a weighted threshold policy is enforced.",
+      "lib": "",
+      "name": "WeightedEnforced",
+      "prefix_topics": [
+        "weighted_enforced"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context",
+          "type_": {
+            "udt": {
+              "name": "Context"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "authenticated_signers",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Signer"
+                }
+              }
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a weighted threshold policy is installed.",
+      "lib": "",
+      "name": "WeightedInstalled",
+      "prefix_topics": [
+        "weighted_installed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "signer_weights",
+          "type_": {
+            "map": {
+              "key_type": {
+                "udt": {
+                  "name": "Signer"
+                }
+              },
+              "value_type": "u32"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a weighted threshold policy is uninstalled.",
+      "lib": "",
+      "name": "WeightedUninstalled",
+      "prefix_topics": [
+        "weighted_uninstalled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Error codes for weighted threshold policy operations.",
+      "lib": "",
+      "name": "WeightedThresholdError",
+      "cases": [
+        {
+          "doc": "The smart account does not have a weighted threshold policy installed.",
+          "name": "SmartAccountNotInstalled",
+          "value": 3210
+        },
+        {
+          "doc": "The threshold value is invalid.",
+          "name": "InvalidThreshold",
+          "value": 3211
+        },
+        {
+          "doc": "A mathematical operation would overflow.",
+          "name": "MathOverflow",
+          "value": 3212
+        },
+        {
+          "doc": "The transaction is not allowed by this policy.",
+          "name": "NotAllowed",
+          "value": 3213
+        },
+        {
+          "doc": "The context rule for the smart account has been already installed.",
+          "name": "AlreadyInstalled",
+          "value": 3214
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the threshold of a weighted threshold policy is changed.",
+      "lib": "",
+      "name": "WeightedThresholdChanged",
+      "prefix_topics": [
+        "weighted_threshold_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys for weighted threshold policy data.",
+      "lib": "",
+      "name": "WeightedThresholdStorageKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "Storage key for the threshold value and signer weights of a smart\\naccount context rule. Maps to a `WeightedThresholdAccountParams`\\ncontaining threshold and signer weights.",
+            "name": "AccountContext",
+            "type_": [
+              "address",
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a signer weight is changed in a weighted threshold\\npolicy.",
+      "lib": "",
+      "name": "WeightedSignerWeightChanged",
+      "prefix_topics": [
+        "weighted_signer_weight_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": {
+            "udt": {
+              "name": "Signer"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "weight",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Installation parameters for the weighted threshold policy.",
+      "lib": "",
+      "name": "WeightedThresholdAccountParams",
+      "fields": [
+        {
+          "doc": "Mapping of signers to their respective weights.",
+          "name": "signer_weights",
+          "type_": {
+            "map": {
+              "key_type": {
+                "udt": {
+                  "name": "Signer"
+                }
+              },
+              "value_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "The minimum total weight required for authorization.",
+          "name": "threshold",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Error types for WebAuthn verification operations.",
+      "lib": "",
+      "name": "WebAuthnError",
+      "cases": [
+        {
+          "doc": "The signature payload is invalid or has incorrect format.",
+          "name": "SignaturePayloadInvalid",
+          "value": 3110
+        },
+        {
+          "doc": "The client data exceeds the maximum allowed length.",
+          "name": "ClientDataTooLong",
+          "value": 3111
+        },
+        {
+          "doc": "Failed to parse JSON from client data.",
+          "name": "JsonParseError",
+          "value": 3112
+        },
+        {
+          "doc": "The type field in client data is not \"webauthn.get\".",
+          "name": "TypeFieldInvalid",
+          "value": 3113
+        },
+        {
+          "doc": "The challenge in client data does not match expected value.",
+          "name": "ChallengeInvalid",
+          "value": 3114
+        },
+        {
+          "doc": "The authenticator data format is invalid or too short.",
+          "name": "AuthDataFormatInvalid",
+          "value": 3115
+        },
+        {
+          "doc": "The User Present (UP) bit is not set in authenticator flags.",
+          "name": "PresentBitNotSet",
+          "value": 3116
+        },
+        {
+          "doc": "The User Verified (UV) bit is not set in authenticator flags.",
+          "name": "VerifiedBitNotSet",
+          "value": 3117
+        },
+        {
+          "doc": "Invalid relationship between Backup Eligibility and State bits.",
+          "name": "BackupEligibilityAndStateNotSet",
+          "value": 3118
+        },
+        {
+          "doc": "The provided key data does not contain a valid 65-byte public key.",
+          "name": "KeyDataInvalid",
+          "value": 3119
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "WebAuthn signature data structure containing all components needed for\\nverification.\\n\\nThis structure encapsulates the signature and associated data generated\\nduring a WebAuthn authentication ceremony.",
+      "lib": "",
+      "name": "WebAuthnSigData",
+      "fields": [
+        {
+          "doc": "Raw authenticator data from the WebAuthn response.",
+          "name": "authenticator_data",
+          "type_": "bytes"
+        },
+        {
+          "doc": "Raw client data JSON from the WebAuthn response.",
+          "name": "client_data",
+          "type_": "bytes"
+        },
+        {
+          "doc": "The cryptographic signature (64 bytes for secp256r1).",
+          "name": "signature",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ]
+    }
+  }
+]
