@@ -1,0 +1,553 @@
+[
+  {
+    "function_v0": {
+      "doc": "\\xea\\xb3\\xa0\\xeb\\xa3\\x8c \\xec\\x88\\x98\\xeb\\xa0\\xb9 \\xe2\\x80\\x94 \\xeb\\xac\\xb4\\xed\\x97\\x88\\xea\\xb0\\x80. \\xec\\xb1\\x84\\xed\\x83\\x9d\\xec\\x9c\\xbc\\xeb\\xa1\\x9c \\xed\\x99\\x95\\xec\\xa0\\x95\\xeb\\x90\\x9c \\xec\\x88\\x98\\xeb\\xa0\\xb9\\xea\\xb6\\x8c\\xec\\x9d\\x98 \\xed\\x96\\x89\\xec\\x82\\xac\\xec\\x9d\\xb4\\xeb\\xa9\\xb0 \\xec\\x8a\\xb9\\xec\\x9d\\xb8\\xec\\x9d\\xb4 \\xec\\x95\\x84\\xeb\\x8b\\x88\\xeb\\x8b\\xa4.\\n\\xeb\\x88\\x84\\xea\\xb0\\x80 \\xed\\x98\\xb8\\xec\\xb6\\x9c\\xed\\x95\\x98\\xeb\\x93\\xa0 \\xec\\x9e\\x90\\xea\\xb8\\x88\\xec\\x9d\\x80 \\xed\\x88\\xac\\xea\\xb3\\xa0\\xec\\x97\\x90 \\xea\\xb8\\xb0\\xeb\\xa1\\x9d\\xeb\\x90\\x9c author \\xec\\xa3\\xbc\\xec\\x86\\x8c\\xeb\\xa1\\x9c\\xeb\\xa7\\x8c \\xea\\xb0\\x84\\xeb\\x8b\\xa4.\\n\\xed\\x9a\\x8c\\xec\\xb0\\xa8 \\xec\\xa2\\x85\\xeb\\xa3\\x8c \\xed\\x9b\\x84\\xec\\x97\\x90\\xeb\\x8f\\x84 \\xec\\x9c\\xa0\\xed\\x9a\\xa8\\xed\\x95\\x98\\xeb\\x8b\\xa4.",
+      "name": "claim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "round_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "sub_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "\\xec\\xb1\\x84\\xed\\x83\\x9d \\xe2\\x80\\x94 \\xed\\x81\\x90\\xeb\\xa0\\x88\\xec\\x9d\\xb4\\xed\\x84\\xb0 \\xec\\xa0\\x84\\xec\\x9a\\xa9. \\xed\\x8e\\xb8\\xec\\xa7\\x91 \\xed\\x96\\x89\\xec\\x9c\\x84\\xeb\\x8b\\xa4: \\xec\\xb1\\x84\\xed\\x83\\x9d\\xec\\x9d\\x84 \\xed\\x91\\x9c\\xec\\x8b\\x9c\\xed\\x95\\x98\\xea\\xb3\\xa0 \\xea\\xb3\\xa0\\xeb\\xa3\\x8c \\xec\\x88\\x98\\xeb\\xa0\\xb9\\xea\\xb6\\x8c\\xec\\x9d\\x84\\n\\xed\\x99\\x95\\xec\\xa0\\x95\\xed\\x95\\x9c\\xeb\\x8b\\xa4(\\xec\\x97\\x90\\xec\\x8a\\xa4\\xed\\x81\\xac\\xeb\\xa1\\x9c \\xe2\\x86\\x92 vested). \\xec\\xa0\\x84\\xec\\x86\\xa1\\xec\\x9d\\x80 \\xed\\x95\\x98\\xec\\xa7\\x80 \\xec\\x95\\x8a\\xeb\\x8a\\x94\\xeb\\x8b\\xa4 \\xe2\\x80\\x94 \\xec\\x88\\x98\\xeb\\xa0\\xb9\\xec\\x9d\\x80 claim\\xec\\x9c\\xbc\\xeb\\xa1\\x9c,\\n\\xec\\xb1\\x84\\xed\\x83\\x9d \\xec\\x9d\\xb4\\xed\\x9b\\x84 \\xeb\\x88\\x84\\xea\\xb5\\xac\\xeb\\x8f\\x84(\\xed\\x81\\x90\\xeb\\xa0\\x88\\xec\\x9d\\xb4\\xed\\x84\\xb0\\xeb\\x8f\\x84) \\xec\\xa7\\x80\\xea\\xb8\\x89\\xec\\x9d\\x84 \\xeb\\xa7\\x89\\xea\\xb1\\xb0\\xeb\\x82\\x98 \\xeb\\x90\\x98\\xeb\\x8f\\x8c\\xeb\\xa6\\xb4 \\xec\\x88\\x98 \\xec\\x97\\x86\\xeb\\x8b\\xa4.",
+      "name": "accept",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "round_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "sub_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "\\xec\\x9b\\x90\\xea\\xb3\\xa0 \\xed\\x88\\xac\\xea\\xb3\\xa0 \\xe2\\x80\\x94 \\xeb\\x88\\x84\\xea\\xb5\\xac\\xeb\\x82\\x98, \\xeb\\xa7\\x88\\xea\\xb0\\x90 \\xec\\xa0\\x84 + \\xed\\x9a\\x8c\\xec\\xb0\\xa8 \\xeb\\xaf\\xb8\\xec\\xa2\\x85\\xeb\\xa3\\x8c \\xec\\x8b\\x9c.\\nmanuscript_tx: \\xeb\\xb9\\x84\\xed\\x8f\\x89 \\xeb\\xb3\\xb8\\xeb\\xac\\xb8\\xec\\x9d\\xb4 \\xec\\x98\\xac\\xeb\\x9d\\xbc\\xea\\xb0\\x84 Arweave TX ID.",
+      "name": "submit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "round_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "author",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "manuscript_tx",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "model",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Meta",
+      "fields": [
+        {
+          "doc": "",
+          "name": "anchor_tx",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "curator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "guide_tx",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "RoundNotFound",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "RoundClosed",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "DeadlinePassed",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "DeadlineInPast",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidParams",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "QuotaFull",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "SubmissionNotFound",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "AlreadyAccepted",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "InsufficientEscrow",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "NotAccepted",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "AlreadyClaimed",
+          "value": 11
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Round",
+      "fields": [
+        {
+          "doc": "",
+          "name": "accepted",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "call_tx",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "closed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "escrow",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_accept",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "reward",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "submitted",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "vested",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "\\xec\\x99\\xb8\\xeb\\xb6\\x80 \\xed\\x88\\xac\\xea\\xb3\\xa0 \\xeb\\x93\\xb1\\xeb\\xa1\\x9d \\xe2\\x80\\x94 \\xed\\x81\\x90\\xeb\\xa0\\x88\\xec\\x9d\\xb4\\xed\\x84\\xb0 \\xec\\xa0\\x84\\xec\\x9a\\xa9. \\xec\\xb2\\xb4\\xec\\x9d\\xb8 \\xec\\xa4\\x91\\xeb\\xa6\\xbd \\xec\\xa0\\x91\\xec\\x88\\x98 \\xea\\xb2\\xbd\\xeb\\xa1\\x9c:\\n\\xec\\x95\\x8c\\xec\\x9c\\x84\\xeb\\xb8\\x8c\\xec\\x97\\x90 \\xed\\x83\\x9c\\xea\\xb7\\xb8\\xeb\\xa1\\x9c \\xec\\xa0\\x91\\xec\\x88\\x98\\xeb\\x90\\x9c \\xec\\x9b\\x90\\xea\\xb3\\xa0\\xeb\\xa5\\xbc \\xed\\x81\\x90\\xeb\\xa0\\x88\\xec\\x9d\\xb4\\xed\\x84\\xb0\\xea\\xb0\\x80 \\xec\\x98\\xa8\\xec\\xb2\\xb4\\xec\\x9d\\xb8\\xec\\x97\\x90 \\xeb\\x93\\xb1\\xeb\\xa1\\x9d\\xed\\x95\\x9c\\xeb\\x8b\\xa4.\\nauthor\\xec\\x9d\\x98 \\xec\\x84\\x9c\\xeb\\xaa\\x85\\xec\\x9d\\x80 \\xec\\x9a\\x94\\xea\\xb5\\xac\\xed\\x95\\x98\\xec\\xa7\\x80 \\xec\\x95\\x8a\\xeb\\x8a\\x94\\xeb\\x8b\\xa4 (\\xec\\x99\\xb8\\xeb\\xb6\\x80 \\xec\\x97\\x90\\xec\\x9d\\xb4\\xec\\xa0\\x84\\xed\\x8a\\xb8\\xeb\\x8a\\x94 \\xec\\x9d\\xb4 \\xec\\xb2\\xb4\\xec\\x9d\\xb8\\xec\\x97\\x90 \\xec\\x97\\x86\\xeb\\x8b\\xa4).\\n\\xeb\\xa7\\x88\\xea\\xb0\\x90\\xec\\x9d\\x80 \\xec\\x98\\xa8\\xec\\xb2\\xb4\\xec\\x9d\\xb8\\xec\\x97\\x90\\xec\\x84\\x9c \\xea\\xb2\\x80\\xec\\x82\\xac\\xed\\x95\\x98\\xec\\xa7\\x80 \\xec\\x95\\x8a\\xeb\\x8a\\x94\\xeb\\x8b\\xa4 \\xe2\\x80\\x94 \\xed\\x88\\xac\\xea\\xb3\\xa0 \\xec\\x8b\\x9c\\xec\\xa0\\x90\\xec\\x9d\\x80 \\xec\\x95\\x8c\\xec\\x9c\\x84\\xeb\\xb8\\x8c \\xeb\\x8d\\xb0\\xec\\x9d\\xb4\\xed\\x84\\xb0 \\xec\\x95\\x84\\xec\\x9d\\xb4\\xed\\x85\\x9c\\xec\\x9d\\x98\\n\\xed\\x83\\x80\\xec\\x9e\\x84\\xec\\x8a\\xa4\\xed\\x83\\xac\\xed\\x94\\x84\\xec\\x9d\\xb4\\xeb\\xa9\\xb0, \\xec\\xa0\\x84\\xec\\x9b\\x90 \\xeb\\x93\\xb1\\xeb\\xa1\\x9d \\xec\\x9b\\x90\\xec\\xb9\\x99\\xea\\xb3\\xbc \\xed\\x95\\xa8\\xea\\xbb\\x98 \\xec\\x98\\xa4\\xed\\x94\\x84\\xec\\xb2\\xb4\\xec\\x9d\\xb8\\xec\\x97\\x90\\xec\\x84\\x9c \\xea\\xb2\\x80\\xec\\xa6\\x9d\\xc2\\xb7\\xea\\xb3\\xb5\\xea\\xb0\\x9c\\xeb\\x90\\x9c\\xeb\\x8b\\xa4.",
+      "name": "register",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "round_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "author",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "manuscript_tx",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "model",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "\\xec\\x95\\xb5\\xec\\xbb\\xa4/\\xec\\x95\\x88\\xeb\\x82\\xb4 \\xeb\\xac\\xb8\\xec\\x84\\x9c \\xea\\xb0\\xb1\\xec\\x8b\\xa0 \\xe2\\x80\\x94 \\xed\\x81\\x90\\xeb\\xa0\\x88\\xec\\x9d\\xb4\\xed\\x84\\xb0 \\xec\\xa0\\x84\\xec\\x9a\\xa9.",
+      "name": "set_docs",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "anchor_tx",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "guide_tx",
+          "type_": "string"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_round",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "round_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Round"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Meta"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "RoundCount"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Round",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Sub",
+            "type_": [
+              "u32",
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "\\xea\\xb3\\xb5\\xeb\\xaa\\xa8 \\xed\\x9a\\x8c\\xec\\xb0\\xa8 \\xea\\xb0\\x9c\\xec\\x8b\\x9c \\xe2\\x80\\x94 \\xed\\x81\\x90\\xeb\\xa0\\x88\\xec\\x9d\\xb4\\xed\\x84\\xb0 \\xec\\xa0\\x84\\xec\\x9a\\xa9. reward \\xc3\\x97 max_accept \\xeb\\xa7\\x8c\\xed\\x81\\xbc \\xec\\x97\\x90\\xec\\x8a\\xa4\\xed\\x81\\xac\\xeb\\xa1\\x9c \\xec\\x98\\x88\\xec\\xb9\\x98.",
+      "name": "open_round",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "reward",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "max_accept",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "call_tx",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "\\xed\\x9a\\x8c\\xec\\xb0\\xa8 \\xec\\xa2\\x85\\xeb\\xa3\\x8c \\xe2\\x80\\x94 \\xed\\x81\\x90\\xeb\\xa0\\x88\\xec\\x9d\\xb4\\xed\\x84\\xb0 \\xec\\xa0\\x84\\xec\\x9a\\xa9. \\xeb\\xaf\\xb8\\xec\\xb1\\x84\\xed\\x83\\x9d\\xeb\\xb6\\x84 \\xec\\x97\\x90\\xec\\x8a\\xa4\\xed\\x81\\xac\\xeb\\xa1\\x9c\\xeb\\xa7\\x8c \\xed\\x99\\x98\\xea\\xb8\\x89\\xeb\\x90\\x9c\\xeb\\x8b\\xa4.\\n\\xec\\xb1\\x84\\xed\\x83\\x9d\\xec\\x9c\\xbc\\xeb\\xa1\\x9c \\xed\\x99\\x95\\xec\\xa0\\x95\\xeb\\x90\\x9c \\xec\\x88\\x98\\xeb\\xa0\\xb9\\xea\\xb6\\x8c(vested)\\xec\\x9d\\x80 \\xec\\xa2\\x85\\xeb\\xa3\\x8c\\xec\\x99\\x80 \\xeb\\xac\\xb4\\xea\\xb4\\x80\\xed\\x95\\x98\\xea\\xb2\\x8c \\xeb\\x82\\xa8\\xeb\\x8a\\x94\\xeb\\x8b\\xa4. \\xec\\x9d\\xb4\\xed\\x9b\\x84 \\xed\\x88\\xac\\xea\\xb3\\xa0/\\xec\\xb1\\x84\\xed\\x83\\x9d \\xeb\\xb6\\x88\\xea\\xb0\\x80.",
+      "name": "close_round",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "round_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "round_count",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "\\xed\\x81\\x90\\xeb\\xa0\\x88\\xec\\x9d\\xb4\\xed\\x84\\xb0(\\xed\\x8e\\xb8\\xec\\xa7\\x91 \\xea\\xb6\\x8c\\xed\\x95\\x9c) \\xec\\x9d\\xb4\\xec\\x96\\x91 \\xe2\\x80\\x94 \\xed\\x98\\x84 \\xed\\x81\\x90\\xeb\\xa0\\x88\\xec\\x9d\\xb4\\xed\\x84\\xb0 \\xec\\xa0\\x84\\xec\\x9a\\xa9.\\n\\xeb\\xaa\\xa8\\xeb\\x8d\\xb8 \\xeb\\x84\\xa4\\xec\\x9d\\xb4\\xed\\x8b\\xb0\\xeb\\xb8\\x8c \\xec\\xa0\\x80\\xeb\\x84\\x90\\xeb\\xa1\\x9c \\xea\\xb0\\x80\\xeb\\x8a\\x94 \\xea\\xb2\\xbd\\xeb\\xa1\\x9c: \\xed\\x8e\\xb8\\xec\\xa7\\x91 \\xea\\xb6\\x8c\\xed\\x95\\x9c\\xec\\x9d\\x84 \\xeb\\xaa\\xa8\\xeb\\x8d\\xb8\\xec\\x9d\\x98 \\xec\\xa3\\xbc\\xec\\x86\\x8c\\xeb\\xa1\\x9c \\xeb\\x84\\x98\\xea\\xb8\\xb8 \\xec\\x88\\x98 \\xec\\x9e\\x88\\xeb\\x8b\\xa4.",
+      "name": "set_curator",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_curator",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "\\xec\\xa0\\x80\\xeb\\x84\\x90 \\xec\\x9e\\x90\\xea\\xb8\\xb0\\xec\\x86\\x8c\\xea\\xb0\\x9c: \\xed\\x81\\x90\\xeb\\xa0\\x88\\xec\\x9d\\xb4\\xed\\x84\\xb0, \\xea\\xb3\\xa0\\xeb\\xa3\\x8c \\xed\\x86\\xa0\\xed\\x81\\xb0, \\xec\\x95\\xb5\\xec\\xbb\\xa4 \\xeb\\xac\\xb8\\xec\\x84\\x9c\\xc2\\xb7\\xec\\xb0\\xb8\\xec\\x97\\xac \\xec\\x95\\x88\\xeb\\x82\\xb4\\xeb\\xac\\xb8 Arweave TX.",
+      "name": "journal_meta",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Meta"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Submission",
+      "fields": [
+        {
+          "doc": "",
+          "name": "accepted",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "author",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "claimed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "manuscript_tx",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "model",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "round_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "submitted_at",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "\\xeb\\xb0\\xb0\\xed\\x8f\\xac \\xec\\x8b\\x9c 1\\xed\\x9a\\x8c \\xec\\x8b\\xa4\\xed\\x96\\x89. token: Testnet native XLM SAC =\\nCDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "curator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "anchor_tx",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "guide_tx",
+          "type_": "string"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_submission",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "round_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "sub_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Submission"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_submissions",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "round_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "Submission"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]
