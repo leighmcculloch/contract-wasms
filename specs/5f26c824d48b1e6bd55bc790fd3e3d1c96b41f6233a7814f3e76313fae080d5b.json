@@ -1,0 +1,1686 @@
+[
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Kyc",
+      "prefix_topics": [
+        "kyc"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "allowed",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Burn",
+      "prefix_topics": [
+        "burn"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "barrels",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Mint",
+      "prefix_topics": [
+        "mint"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "barrels",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Xfer",
+      "prefix_topics": [
+        "xfer"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "barrels",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "fee_usdc",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "NotKyc",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "CapExceeded",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "Overflow",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "NoPendingAdmin",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "TimelockNotElapsed",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "InvalidFee",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "NoPrice",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "StalePrice",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "NotDistributor",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "NoPendingUpgrade",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "UpgradeTimelockNotElapsed",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "UpgradePending",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "UnknownAsset",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "AssetExists",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "PriceOutOfBand",
+          "value": 19
+        },
+        {
+          "doc": "",
+          "name": "UpgradeHashMismatch",
+          "value": 20
+        },
+        {
+          "doc": "",
+          "name": "MaxBelowMinted",
+          "value": 21
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Price",
+      "fields": [
+        {
+          "doc": "",
+          "name": "ts",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "value",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Per-asset configuration (keyed by the asset's SAC address).",
+      "lib": "",
+      "name": "Config",
+      "fields": [
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_supply",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "price_oracle",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Frozen",
+      "prefix_topics": [
+        "frozen"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "frozen",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Paused",
+      "prefix_topics": [
+        "paused"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetFee",
+      "prefix_topics": [
+        "set_fee"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Config",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Minted",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Paused",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Price",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Distributor",
+            "type_": [
+              "address",
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Settled",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "KycManager"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PendingAdmin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PendingAdminAt"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Kyc",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PendingUpgradeHash"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PendingUpgradeAt"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Burn redeemed inventory (warehouse NOT refreshed): admin clawback + DECREMENT minted so the\\nfreed cap can be re-minted when new barrels arrive \\xe2\\x80\\x94 keeping tokens 1:1 with physical barrels.",
+      "name": "burn",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "barrels",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Cap-enforced mint of whole barrels of `sac` (authorize \\xe2\\x86\\x92 mint \\xe2\\x86\\x92 de-authorize).",
+      "name": "mint",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "barrels",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "price",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "Price"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Upgraded",
+      "prefix_topics": [
+        "upgraded"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "kyc_ok",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "minted",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "resume",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "fee_bps",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin sets an account's GLOBAL KYC/whitelist flag (valid for every commodity).",
+      "name": "kyc_set",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "allowed",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Dual-controlled per-asset fee change (admin = multisig). In-contract so callers can't pass 0.",
+      "name": "set_fee",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Distribute",
+      "prefix_topics": [
+        "distribute"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "barrels",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Remediation clawback via the SAC (requires AUTH_CLAWBACK_ENABLED). Does NOT touch minted \\xe2\\x80\\x94\\nuse `burn` for redemption burns that should free the cap.",
+      "name": "clawback",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "barrels",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "One leg of a batched distribution. `settlement_id` is a unique per-order key\\n(e.g. a hash of the order id) used for on-chain idempotency \\xe2\\x80\\x94 a leg whose id is\\nalready `Settled` is skipped, so a retried batch never double-sends.",
+      "lib": "",
+      "name": "Distribution",
+      "fields": [
+        {
+          "doc": "",
+          "name": "barrels",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "settlement_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_paused",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The asset's price-oracle hot key pushes its current USD price (USDC stroops per 1 barrel).",
+      "name": "set_price",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "value",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RedeemEscrow",
+      "prefix_topics": [
+        "redeem_escrow"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "barrels",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetAssetUsdc",
+      "prefix_topics": [
+        "set_asset_usdc"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "usdc",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetMaxSupply",
+      "prefix_topics": [
+        "set_max_supply"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "max_supply",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Platform/custodian DISTRIBUTION of existing inventory to a KYC'd buyer (the buy settlement).\\n`from` must be an allow-listed distributor for `sac`; NO fee (the buy fee is in the price).",
+      "name": "distribute",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "barrels",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_settled",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "settlement_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "max_supply",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Explicit freeze/unfreeze of a single account for `sac` (de-authorize / authorize its trustline).",
+      "name": "set_frozen",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "frozen",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetKycManager",
+      "prefix_topics": [
+        "set_kyc_manager"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "manager",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "kyc_manager",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetDistributor",
+      "prefix_topics": [
+        "set_distributor"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "distributor",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "allowed",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accept_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AssetRegistered",
+      "prefix_topics": [
+        "asset_registered"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "max_supply",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UpgradeProposed",
+      "prefix_topics": [
+        "upgrade_proposed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "execute_at",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Constructor \\xe2\\x80\\x94 sets the GLOBAL admin (issuer cold multisig). Commodities are onboarded\\nafterwards via `register_asset`. Runs once, atomically, at deploy.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_registered",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "propose_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Redeem escrow \\xe2\\x80\\x94 a KYC'd holder moves inventory INTO a platform holding/escrow wallet (an\\nallow-listed distributor `to`) to start a physical redemption. User-signed, NO fee.",
+      "name": "redeem_escrow",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "barrels",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UpgradeCancelled",
+      "prefix_topics": [
+        "upgrade_cancelled"
+      ],
+      "params": [],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel_upgrade",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The doorman \\xe2\\x80\\x94 the only path a regulated asset moves peer-to-peer. Atomic authorize \\xe2\\x86\\x92 transfer\\n\\xe2\\x86\\x92 de-authorize, then the USDC fee (priced off this asset's fresh pushed oracle; fail-closed).",
+      "name": "gated_transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "barrels",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_distributor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Onboard a commodity: register its asset config. Admin-only. The contract must ALSO be made\\nthe SAC admin of `sac` (issuer/old-controller calls `set_admin`/`transfer_sac_admin` \\xe2\\x86\\x92 this\\ncontract). `initial_minted` seeds the cap counter with supply already in circulation (0 for a\\nfresh asset; the current minted total when migrating behind an existing SAC).",
+      "name": "register_asset",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "price_oracle",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "max_supply",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "initial_minted",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin: repoint an asset's transfer-fee USDC SAC. Used to migrate the fee\\ncurrency to the canonical USDC when an asset was registered against a\\nlegacy USDC issuer (so gated_transfer pulls the fee in a USDC holders\\nactually trust). Only `cfg.usdc` changes \\xe2\\x80\\x94 supply, cap, treasury, oracle\\nand fee_bps are untouched.",
+      "name": "set_asset_usdc",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin: adjust the asset's max-supply cap. Set at registration, then this\\ngoverned setter lets the admin RAISE the ceiling (e.g. more warehouse stock\\nnow backs the token) or lower it \\xe2\\x80\\x94 but NEVER below what is already minted,\\nwhich would strand outstanding supply. Same require_admin gate as\\nmint/set_fee, so it is M-of-N once the admin account is multisig.",
+      "name": "set_max_supply",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_max",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execute_upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "expected_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "propose_upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin registers/de-registers an inventory wallet allowed to `distribute`/receive `redeem_escrow`\\nfor `sac` (platform distribution wallet, or a 3rd-party-custodian wallet later).",
+      "name": "set_distributor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "distributor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "allowed",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set the dedicated KYC-manager address (admin-only). Splits HOT kyc_set from the\\nCOLD M-of-N admin: pointed at a hot single-key, kyc_set stays a fast single-sig\\nsettlement op while mint/clawback/pause/upgrade require M-of-N. Defaults to the\\nadmin until set (so behaviour is unchanged pre-split and on upgraded contracts).",
+      "name": "set_kyc_manager",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "manager",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Batched distribution: settle MANY buys in ONE transaction (one sequence number) \\xe2\\x80\\x94 the\\nthroughput primitive for the adaptive settlement worker. `from` (an allow-listed distributor)\\nis authorized ONCE for the whole batch. Each leg is idempotent (skips an already-`Settled`\\nsettlement_id, so a retried batch can't double-send) and skip-and-continue (a leg whose\\nrecipient is not KYC'd / amount is invalid is SKIPPED, not reverted \\xe2\\x80\\x94 one bad leg can't sink\\nthe batch). NO fee. Returns the number actually settled this call.",
+      "name": "distribute_batch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "items",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Distribution"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Escape hatch: hand one asset's SAC admin to a new address (A\\xe2\\x86\\x92B opening / future migration).",
+      "name": "transfer_sac_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_pending_upgrade",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "tuple": {
+                "value_types": [
+                  {
+                    "bytes_n": {
+                      "n": 32
+                    }
+                  },
+                  "u64"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]
