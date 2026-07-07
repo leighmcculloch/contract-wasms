@@ -1,0 +1,958 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PendingAdmin"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Market",
+            "type_": [
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "CoreError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "nominate_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "next_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "CoreError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accept_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "CoreError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_market",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market",
+          "type_": {
+            "udt": {
+              "name": "MarketSnapshot"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "CoreError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_account_health",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": {
+            "udt": {
+              "name": "AccountSnapshot"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "AccountHealth"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "CoreError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "validate_withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": {
+            "udt": {
+              "name": "AccountSnapshot"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "withdrawal_value",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "AccountHealth"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "CoreError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "liquidation_plan",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": {
+            "udt": {
+              "name": "AccountSnapshot"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "position_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "partial_liquidation_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "LiquidationPlan"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "CoreError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FundingConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "imbalance_coeff",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_rate_per_hour",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FundingState",
+      "fields": [
+        {
+          "doc": "",
+          "name": "last_update",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "long_index",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "rate_per_hour",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "short_index",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LiquidationMode",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "None"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Partial"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Full"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LiquidationPlan",
+      "fields": [
+        {
+          "doc": "",
+          "name": "close_size",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expected_health",
+          "type_": {
+            "udt": {
+              "name": "AccountHealth"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "mode",
+          "type_": {
+            "udt": {
+              "name": "LiquidationMode"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "penalty",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "position_id",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccountHealth",
+      "fields": [
+        {
+          "doc": "",
+          "name": "collateral_value",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "equity",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "free_collateral",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "initial_margin_required",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "liquidatable",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "maintenance_margin_required",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "margin_ratio",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "unrealized_pnl",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CoreError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "MathOverflow",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "DivisionByZero",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidPrice",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidConfig",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "StaleOracle",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "OracleConfidenceTooWide",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "AccountInsolvent",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "InsufficientCollateral",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "NotLiquidatable",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "AssetDisabled",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "PositionNotFound",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "DirectionMismatch",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "PriceOutsideBand",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "OpenInterestExceeded",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "LiquidationWouldNotImproveHealth",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "InsuranceFundInsufficient",
+          "value": 19
+        },
+        {
+          "doc": "",
+          "name": "OrderExpired",
+          "value": 20
+        },
+        {
+          "doc": "",
+          "name": "OrderCancelled",
+          "value": 21
+        },
+        {
+          "doc": "",
+          "name": "OrderOverfilled",
+          "value": 22
+        },
+        {
+          "doc": "",
+          "name": "SelfTrade",
+          "value": 23
+        },
+        {
+          "doc": "",
+          "name": "OracleQuorumNotMet",
+          "value": 24
+        },
+        {
+          "doc": "",
+          "name": "OracleDeviationTooWide",
+          "value": 25
+        },
+        {
+          "doc": "",
+          "name": "DuplicateOracleSource",
+          "value": 26
+        },
+        {
+          "doc": "",
+          "name": "TooManyPositions",
+          "value": 27
+        },
+        {
+          "doc": "",
+          "name": "DepositCapExceeded",
+          "value": 28
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OracleSource",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "RedStone"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Pyth"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Reflector"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Quorum"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OracleSnapshot",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "confidence",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "publish_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "source",
+          "type_": {
+            "udt": {
+              "name": "OracleSource"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "write_time",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OracleGuard",
+      "fields": [
+        {
+          "doc": "",
+          "name": "max_age_secs",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "max_confidence_bps",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarginMode",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cross"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Isolated"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketId",
+      "fields": [
+        {
+          "doc": "",
+          "name": "0",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "active",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "base_asset",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "initial_margin_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "liquidation_fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "maintenance_margin_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_leverage_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_open_interest",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_oracle_age_secs",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "max_oracle_confidence_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "settlement_asset",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Position",
+      "fields": [
+        {
+          "doc": "",
+          "name": "entry_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "is_long",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "last_funding_index",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "margin",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "mode",
+          "type_": {
+            "udt": {
+              "name": "MarginMode"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "position_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "size",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CollateralBalance",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "haircut_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "value",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CollateralConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "active",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "haircut_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "oracle_asset",
+          "type_": "symbol"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccountSnapshot",
+      "fields": [
+        {
+          "doc": "",
+          "name": "collateral",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "CollateralBalance"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "positions",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Position"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketSnapshot",
+      "fields": [
+        {
+          "doc": "",
+          "name": "config",
+          "type_": {
+            "udt": {
+              "name": "MarketConfig"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "funding_index_long",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "funding_index_short",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "oracle_price",
+          "type_": "i128"
+        }
+      ]
+    }
+  }
+]

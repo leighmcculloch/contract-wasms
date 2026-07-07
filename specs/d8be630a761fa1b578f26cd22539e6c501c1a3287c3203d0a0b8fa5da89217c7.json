@@ -1,0 +1,232 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "Contract has already been initialized.",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "Contract has not been initialized yet.",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "Caller is not the admin (registry contract).",
+          "name": "Unauthorized",
+          "value": 3
+        },
+        {
+          "doc": "The target address already holds an active SBT.",
+          "name": "AlreadyHoldsToken",
+          "value": 4
+        },
+        {
+          "doc": "The target address does not hold an SBT.",
+          "name": "NoTokenToRevoke",
+          "value": 5
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "The admin address (the registry contract) that is authorized to mint/revoke.",
+            "name": "Admin"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Per-holder balance: always 0 or 1.",
+            "name": "Balance",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Expiration timestamp in seconds.",
+            "name": "Expiry",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Global counter of active SBTs.",
+            "name": "TotalSupply"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Human-readable token name.",
+            "name": "TokenName"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Human-readable token symbol.",
+            "name": "TokenSymbol"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Mint exactly 1 SBT to `to`. Only the admin may call this.\\nFails if `to` already holds an active token.",
+      "name": "mint",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the token name.",
+      "name": "name",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Revoke (burn) an SBT from `holder`. Only the admin may call this.\\nFails if `holder` does not hold a token.",
+      "name": "revoke",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the token symbol.",
+      "name": "symbol",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns token decimals. Always 0 since SBTs are indivisible.",
+      "name": "decimals",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns `1` if the holder has an active and valid (not expired) SBT, `0` otherwise.",
+      "name": "balance_of",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get the expiration timestamp of a holder's compliance SBT.",
+      "name": "expires_at",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initialize the SBT contract.\\n\\n* `admin`  \\xe2\\x80\\x93 the address authorized to mint and revoke (should be the\\nregistry contract address).\\n* `name`   \\xe2\\x80\\x93 human-readable token name, e.g. \"Luminar Compliance SBT\".\\n* `symbol` \\xe2\\x80\\x93 token ticker symbol, e.g. \"LSBT\".",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "symbol",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the total number of active SBTs.",
+      "name": "total_supply",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  }
+]
