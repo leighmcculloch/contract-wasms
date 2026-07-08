@@ -1,0 +1,260 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ContractError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "NotRegistered",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InsufficientStake",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "NotSlasher",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "Unbonding",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "NotExpired",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "BadAmount",
+          "value": 8
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "judge",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "map": {
+            "key_type": "val",
+            "value_type": "val"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "slash",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "judge",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "reason",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "stake",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "judge",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "register",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "judge",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "model_tags",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "endpoint",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "judge",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "min_stake",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "min_stake",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "unbond_secs",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "slasher",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_eligible",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "judge",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "record_accuracy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "judge",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "agreed",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "request_unstake",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "judge",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  }
+]

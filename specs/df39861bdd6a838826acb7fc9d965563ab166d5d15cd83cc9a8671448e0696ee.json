@@ -1,0 +1,172 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "refund",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "depositor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "judge",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "timeout",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee_collector",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "claim_funds",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "evidence_root",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_details",
+      "inputs": [],
+      "outputs": [
+        {
+          "map": {
+            "key_type": "val",
+            "value_type": "val"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ContractError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "AlreadySettled",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidProof",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "NotExpired",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "BadSplit",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "FeeTooHigh",
+          "value": 7
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "claim_and_split",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "evidence_root",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "recipients",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amounts",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  }
+]
