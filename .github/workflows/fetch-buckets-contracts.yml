@@ -378,6 +378,10 @@ jobs:
         run: >
           ./.scripts/find_sep50_nft_contracts_token_id_types.sh | tee analysis/find_sep50_nft_contracts_token_id_types_results.csv
 
+      - name: Run find option type usage script
+        run: >
+          ./.scripts/find_option_type_usage.sh | tee analysis/find_option_type_usage_results.csv
+
       - name: Commit contracts
         id: commit
         run: |
