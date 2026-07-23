@@ -312,7 +312,7 @@ jobs:
 
       - name: Run lib-analysis
         run: >
-          cargo run --locked --release --manifest-path .scripts/lib-analysis/Cargo.toml contracts/ > analysis/lib-analysis.csv
+          cargo run --locked --release --manifest-path .scripts/lib-analysis/Cargo.toml contracts/ > analysis/spec-contracttype-lib-usage.csv
 
       - name: Run dupe-code-analysis
         run: >
