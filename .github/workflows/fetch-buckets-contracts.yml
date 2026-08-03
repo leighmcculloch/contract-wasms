@@ -302,6 +302,10 @@ jobs:
         run: >
           cargo run --locked --release --manifest-path .scripts/extract-meta/Cargo.toml contracts/ meta/
 
+      - name: Run find sep47 meta script
+        run: >
+          cargo run --locked --release --manifest-path .scripts/find-sep47-meta/Cargo.toml contracts/ | tee analysis/find_sep47_meta_results.csv
+
       - name: Run optimize-analysis
         run: >
           cargo run --locked --release --manifest-path .scripts/optimize-analysis/Cargo.toml contracts/ > analysis/optimize.csv
