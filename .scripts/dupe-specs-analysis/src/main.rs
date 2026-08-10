@@ -30,8 +30,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut total_specs = 0;
     let mut spec_counts: HashMap<String, u32> = HashMap::new();
     let mut function_names: HashMap<String, Vec<String>> = HashMap::new();
+    let mut unprocessable: Vec<(String, String)> = Vec::new();
 
-    for path in paths {
+    'wasms: for path in paths {
         let Some(extension) = path.extension() else {
             continue;
         };
@@ -39,12 +40,22 @@ fn main() -> Result<(), Box<dyn Error>> {
             continue;
         }
 
+        let wasm_hash = path.file_stem().unwrap().to_string_lossy().to_string();
         let wasm_bytes = fs::read(&path)?;
 
         let parser = Parser::new(0);
 
         for payload in parser.parse_all(&wasm_bytes) {
-            let payload = payload?;
+            // A wasm that fails to parse, or whose contractspecv0 section
+            // fails to decode, is marked unprocessable rather than aborting
+            // the whole run.
+            let payload = match payload {
+                Ok(payload) => payload,
+                Err(err) => {
+                    unprocessable.push((wasm_hash, err.to_string()));
+                    continue 'wasms;
+                }
+            };
             let wasmparser::Payload::CustomSection(c) = payload else {
                 continue;
             };
@@ -53,15 +64,25 @@ fn main() -> Result<(), Box<dyn Error>> {
             }
             let data = c.data();
             let mut limited = Limited::new(Cursor::new(data), Limits::none());
-            let mut entries = ScSpecEntry::read_xdr_iter(&mut limited).collect::<Result<Vec<_>,_>>().unwrap();
+            let mut entries =
+                match ScSpecEntry::read_xdr_iter(&mut limited).collect::<Result<Vec<_>, _>>() {
+                    Ok(entries) => entries,
+                    Err(err) => {
+                        unprocessable.push((wasm_hash, err.to_string()));
+                        continue 'wasms;
+                    }
+                };
 
-            let fn_names: Vec<String> = entries.iter().filter_map(|e| {
-                if let ScSpecEntry::FunctionV0(f) = e {
-                    Some(f.name.to_string())
-                } else {
-                    None
-                }
-            }).collect();
+            let fn_names: Vec<String> = entries
+                .iter()
+                .filter_map(|e| {
+                    if let ScSpecEntry::FunctionV0(f) = e {
+                        Some(f.name.to_string())
+                    } else {
+                        None
+                    }
+                })
+                .collect();
 
             let mut sorted_fn_names = fn_names.clone();
             sorted_fn_names.sort();
@@ -87,6 +108,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     eprintln!("Total specs: {}", total_specs);
     eprintln!("Unique specs: {}", spec_counts.len());
+    eprintln!("Unprocessable contracts: {}", unprocessable.len());
 
     let mut spec_vec: Vec<_> = spec_counts.iter().collect();
     spec_vec.sort_by(|a, b| b.1.cmp(a.1).then(a.0.cmp(b.0)));
@@ -102,8 +124,16 @@ fn main() -> Result<(), Box<dyn Error>> {
         let fn_str = fns.join(" ");
         wtr.write_record(&[hash, &count.to_string(), &fn_str])?;
     }
+    for (wasm_hash, error) in &unprocessable {
+        wtr.write_record(&[wasm_hash.as_str(), "unprocessable", error.as_str()])?;
+    }
     wtr.write_record(&["Total specs", &total_specs.to_string(), ""])?;
     wtr.write_record(&["Unique specs", &spec_counts.len().to_string(), ""])?;
+    wtr.write_record(&[
+        "Unprocessable contracts",
+        &unprocessable.len().to_string(),
+        "",
+    ])?;
     wtr.flush()?;
 
     Ok(())
