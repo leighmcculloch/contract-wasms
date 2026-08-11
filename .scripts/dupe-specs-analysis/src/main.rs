@@ -30,6 +30,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut total_specs = 0;
     let mut spec_counts: HashMap<String, u32> = HashMap::new();
     let mut function_names: HashMap<String, Vec<String>> = HashMap::new();
+
     'wasms: for path in paths {
         let Some(extension) = path.extension() else {
             continue;
@@ -71,16 +72,13 @@ fn main() -> Result<(), Box<dyn Error>> {
                     }
                 };
 
-            let fn_names: Vec<String> = entries
-                .iter()
-                .filter_map(|e| {
-                    if let ScSpecEntry::FunctionV0(f) = e {
-                        Some(f.name.to_string())
-                    } else {
-                        None
-                    }
-                })
-                .collect();
+            let fn_names: Vec<String> = entries.iter().filter_map(|e| {
+                if let ScSpecEntry::FunctionV0(f) = e {
+                    Some(f.name.to_string())
+                } else {
+                    None
+                }
+            }).collect();
 
             let mut sorted_fn_names = fn_names.clone();
             sorted_fn_names.sort();
