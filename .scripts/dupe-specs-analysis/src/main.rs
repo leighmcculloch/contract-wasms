@@ -30,8 +30,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut total_specs = 0;
     let mut spec_counts: HashMap<String, u32> = HashMap::new();
     let mut function_names: HashMap<String, Vec<String>> = HashMap::new();
-    let mut skipped = 0u32;
-
     'wasms: for path in paths {
         let Some(extension) = path.extension() else {
             continue;
@@ -53,7 +51,6 @@ fn main() -> Result<(), Box<dyn Error>> {
                 Ok(payload) => payload,
                 Err(err) => {
                     eprintln!("Failed to parse wasm for {wasm_hash}: {err}");
-                    skipped += 1;
                     continue 'wasms;
                 }
             };
@@ -70,7 +67,6 @@ fn main() -> Result<(), Box<dyn Error>> {
                     Ok(entries) => entries,
                     Err(err) => {
                         eprintln!("Failed to parse contract spec for {wasm_hash}: {err}");
-                        skipped += 1;
                         continue 'wasms;
                     }
                 };
@@ -110,7 +106,6 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     eprintln!("Total specs: {}", total_specs);
     eprintln!("Unique specs: {}", spec_counts.len());
-    eprintln!("Contracts skipped due to parse errors: {}", skipped);
 
     let mut spec_vec: Vec<_> = spec_counts.iter().collect();
     spec_vec.sort_by(|a, b| b.1.cmp(a.1).then(a.0.cmp(b.0)));
