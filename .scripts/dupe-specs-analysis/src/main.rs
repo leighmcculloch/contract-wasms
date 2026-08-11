@@ -31,7 +31,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut spec_counts: HashMap<String, u32> = HashMap::new();
     let mut function_names: HashMap<String, Vec<String>> = HashMap::new();
 
-    for path in paths {
+    'wasms: for path in paths {
         let Some(extension) = path.extension() else {
             continue;
         };
@@ -39,12 +39,22 @@ fn main() -> Result<(), Box<dyn Error>> {
             continue;
         }
 
+        let wasm_hash = path.file_stem().unwrap().to_string_lossy().to_string();
         let wasm_bytes = fs::read(&path)?;
 
         let parser = Parser::new(0);
 
         for payload in parser.parse_all(&wasm_bytes) {
-            let payload = payload?;
+            // A wasm that fails to parse, or whose contractspecv0 section
+            // fails to decode, is logged and skipped rather than aborting
+            // the whole run.
+            let payload = match payload {
+                Ok(payload) => payload,
+                Err(err) => {
+                    eprintln!("Failed to parse wasm for {wasm_hash}: {err}");
+                    continue 'wasms;
+                }
+            };
             let wasmparser::Payload::CustomSection(c) = payload else {
                 continue;
             };
@@ -53,7 +63,14 @@ fn main() -> Result<(), Box<dyn Error>> {
             }
             let data = c.data();
             let mut limited = Limited::new(Cursor::new(data), Limits::none());
-            let mut entries = ScSpecEntry::read_xdr_iter(&mut limited).collect::<Result<Vec<_>,_>>().unwrap();
+            let mut entries =
+                match ScSpecEntry::read_xdr_iter(&mut limited).collect::<Result<Vec<_>, _>>() {
+                    Ok(entries) => entries,
+                    Err(err) => {
+                        eprintln!("Failed to parse contract spec for {wasm_hash}: {err}");
+                        continue 'wasms;
+                    }
+                };
 
             let fn_names: Vec<String> = entries.iter().filter_map(|e| {
                 if let ScSpecEntry::FunctionV0(f) = e {

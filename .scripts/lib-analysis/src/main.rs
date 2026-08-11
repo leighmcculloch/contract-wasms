@@ -1,4 +1,4 @@
-use soroban_spec::read::from_wasm;
+use soroban_spec::read::{from_wasm, FromWasmError};
 use std::collections::BTreeSet;
 use std::path::Path;
 use std::{error::Error, fs};
@@ -51,6 +51,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let mut wasms_with_specs = 0u32;
     let mut wasms_without_specs = 0u32;
+    let mut wasms_with_invalid_specs = 0u32;
     let mut wasms_with_lib = 0u32;
     let mut global_libs: BTreeSet<String> = BTreeSet::new();
 
@@ -67,9 +68,16 @@ fn main() -> Result<(), Box<dyn Error>> {
 
         let entries = match from_wasm(&wasm_bytes) {
             Ok(entries) => entries,
-            Err(_) => {
+            Err(FromWasmError::NotFound) => {
                 // Not a Soroban contract, or no contract spec embedded.
                 wasms_without_specs += 1;
+                continue;
+            }
+            Err(err) => {
+                // Contract spec present but invalid: log and skip the
+                // contract without failing the run.
+                wasms_with_invalid_specs += 1;
+                eprintln!("Failed to extract spec for {hash}: {err}");
                 continue;
             }
         };
@@ -99,8 +107,12 @@ fn main() -> Result<(), Box<dyn Error>> {
     eprintln!("---");
     eprintln!("Contract wasms with specs: {wasms_with_specs}");
     eprintln!("Contract wasms without specs (skipped): {wasms_without_specs}");
+    eprintln!("Contract wasms with invalid specs (skipped): {wasms_with_invalid_specs}");
     eprintln!("Contract wasms with at least one lib defined: {wasms_with_lib}");
-    eprintln!("Distinct lib values across all wasms: {}", global_libs.len());
+    eprintln!(
+        "Distinct lib values across all wasms: {}",
+        global_libs.len()
+    );
     for lib in &global_libs {
         eprintln!("  {lib}");
     }
