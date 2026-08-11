@@ -7,10 +7,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let args: Vec<String> = std::env::args().collect();
 
     if args.len() < 2 || args.len() > 3 {
-        eprintln!(
-            "Usage: {} <contracts_directory> [--debug-keys-stderr]",
-            args[0]
-        );
+        eprintln!("Usage: {} <contracts_directory> [--debug-keys-stderr]", args[0]);
         std::process::exit(1);
     }
 
@@ -29,13 +26,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     paths.sort();
 
     let mut writer = csv::Writer::from_writer(std::io::stdout());
-    writer.write_record([
-        "wasm_hash",
-        "result",
-        "message",
-        "sep_meta_values",
-        "sep_ids",
-    ])?;
+    writer.write_record(["wasm_hash", "sep_meta_values", "sep_ids"])?;
     let mut global_keys = BTreeSet::new();
 
     for path in paths {
@@ -52,17 +43,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         let entries = match from_wasm(&wasm_bytes) {
             Ok(entries) => entries,
             Err(err) => {
-                // Contract meta invalid: mark the contract as unprocessable
-                // rather than dropping it from the report.
                 eprintln!("Failed to extract meta for {wasm_hash}: {err}");
-                let message = err.to_string();
-                writer.write_record([
-                    wasm_hash.as_str(),
-                    "unprocessable",
-                    message.as_str(),
-                    "_",
-                    "_",
-                ])?;
                 continue;
             }
         };
@@ -106,8 +87,6 @@ fn main() -> Result<(), Box<dyn Error>> {
 
         writer.write_record([
             wasm_hash,
-            "ok".to_string(),
-            "_".to_string(),
             sep_meta_values.join("|"),
             sep_ids
                 .iter()

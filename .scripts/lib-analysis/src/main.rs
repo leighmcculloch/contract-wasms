@@ -47,13 +47,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     paths.sort();
     let paths = paths;
 
-    println!(
-        "wasm,result,message,structs,unions,enums,error_enums,events,total_with_lib,unique_libs"
-    );
+    println!("wasm,structs,unions,enums,error_enums,events,total_with_lib,unique_libs");
 
     let mut wasms_with_specs = 0u32;
     let mut wasms_without_specs = 0u32;
-    let mut wasms_unprocessable = 0u32;
+    let mut wasms_with_invalid_specs = 0u32;
     let mut wasms_with_lib = 0u32;
     let mut global_libs: BTreeSet<String> = BTreeSet::new();
 
@@ -76,13 +74,10 @@ fn main() -> Result<(), Box<dyn Error>> {
                 continue;
             }
             Err(err) => {
-                // Contract spec present but invalid: mark the contract as
-                // unprocessable rather than dropping it from the report.
-                wasms_unprocessable += 1;
-                println!(
-                    "{hash},unprocessable,{},_,_,_,_,_,_,_",
-                    csv_quote(&err.to_string())
-                );
+                // Contract spec present but invalid: log and skip the
+                // contract without failing the run.
+                wasms_with_invalid_specs += 1;
+                eprintln!("Failed to extract spec for {hash}: {err}");
                 continue;
             }
         };
@@ -97,7 +92,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
         let unique_libs = libs.into_iter().collect::<Vec<_>>().join("; ");
         println!(
-            "{hash},ok,_,{},{},{},{},{},{},{}",
+            "{hash},{},{},{},{},{},{},{}",
             counts.structs,
             counts.unions,
             counts.enums,
@@ -112,7 +107,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     eprintln!("---");
     eprintln!("Contract wasms with specs: {wasms_with_specs}");
     eprintln!("Contract wasms without specs (skipped): {wasms_without_specs}");
-    eprintln!("Contract wasms with invalid specs (unprocessable): {wasms_unprocessable}");
+    eprintln!("Contract wasms with invalid specs (skipped): {wasms_with_invalid_specs}");
     eprintln!("Contract wasms with at least one lib defined: {wasms_with_lib}");
     eprintln!(
         "Distinct lib values across all wasms: {}",

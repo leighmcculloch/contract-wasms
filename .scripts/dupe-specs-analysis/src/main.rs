@@ -30,7 +30,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut total_specs = 0;
     let mut spec_counts: HashMap<String, u32> = HashMap::new();
     let mut function_names: HashMap<String, Vec<String>> = HashMap::new();
-    let mut unprocessable: Vec<(String, String)> = Vec::new();
+    let mut skipped = 0u32;
 
     'wasms: for path in paths {
         let Some(extension) = path.extension() else {
@@ -47,12 +47,13 @@ fn main() -> Result<(), Box<dyn Error>> {
 
         for payload in parser.parse_all(&wasm_bytes) {
             // A wasm that fails to parse, or whose contractspecv0 section
-            // fails to decode, is marked unprocessable rather than aborting
+            // fails to decode, is logged and skipped rather than aborting
             // the whole run.
             let payload = match payload {
                 Ok(payload) => payload,
                 Err(err) => {
-                    unprocessable.push((wasm_hash, err.to_string()));
+                    eprintln!("Failed to parse wasm for {wasm_hash}: {err}");
+                    skipped += 1;
                     continue 'wasms;
                 }
             };
@@ -68,7 +69,8 @@ fn main() -> Result<(), Box<dyn Error>> {
                 match ScSpecEntry::read_xdr_iter(&mut limited).collect::<Result<Vec<_>, _>>() {
                     Ok(entries) => entries,
                     Err(err) => {
-                        unprocessable.push((wasm_hash, err.to_string()));
+                        eprintln!("Failed to parse contract spec for {wasm_hash}: {err}");
+                        skipped += 1;
                         continue 'wasms;
                     }
                 };
@@ -108,7 +110,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     eprintln!("Total specs: {}", total_specs);
     eprintln!("Unique specs: {}", spec_counts.len());
-    eprintln!("Unprocessable contracts: {}", unprocessable.len());
+    eprintln!("Contracts skipped due to parse errors: {}", skipped);
 
     let mut spec_vec: Vec<_> = spec_counts.iter().collect();
     spec_vec.sort_by(|a, b| b.1.cmp(a.1).then(a.0.cmp(b.0)));
@@ -124,16 +126,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         let fn_str = fns.join(" ");
         wtr.write_record(&[hash, &count.to_string(), &fn_str])?;
     }
-    for (wasm_hash, error) in &unprocessable {
-        wtr.write_record(&[wasm_hash.as_str(), "unprocessable", error.as_str()])?;
-    }
     wtr.write_record(&["Total specs", &total_specs.to_string(), ""])?;
     wtr.write_record(&["Unique specs", &spec_counts.len().to_string(), ""])?;
-    wtr.write_record(&[
-        "Unprocessable contracts",
-        &unprocessable.len().to_string(),
-        "",
-    ])?;
     wtr.flush()?;
 
     Ok(())
