@@ -28,7 +28,8 @@ use std::{error::Error, fs};
 // with initialization state (an address that isn't a token contract, an amount
 // a contract considers invalid, etc). Numbers are generated in a small
 // non-negative range to give the first call the best chance of getting through
-// contract-level validation.
+// contract-level validation, and the first call is retried with fresh arguments
+// until it succeeds or the attempt limit is reached.
 
 /// Maximum nesting depth when generating a value for a spec type.
 const MAX_DEPTH: u32 = 6;
@@ -38,6 +39,10 @@ const MAX_LEN: u32 = 3;
 
 /// Upper bound (inclusive) on generated numbers.
 const MAX_NUM: u64 = 1_000_000;
+
+/// How many times to retry the first call to `initialize` with freshly
+/// generated arguments before giving up on getting a successful call.
+const MAX_ATTEMPTS: u32 = 200;
 
 /// Budget for a single contract invocation. Generous compared to the network
 /// limits, but finite so that a contract that doesn't terminate doesn't hang
@@ -74,7 +79,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     paths.sort();
     let paths = paths;
 
-    eprintln!("contract,args,call_1,call_2,callable_more_than_once");
+    eprintln!("contract,args,attempts,call_1,call_2,callable_more_than_once");
 
     for path in paths {
         let Some(extension) = path.extension() else {
@@ -106,8 +111,9 @@ fn main() -> Result<(), Box<dyn Error>> {
         match outcome {
             Outcome::Skipped(reason) => {
                 eprintln!(
-                    "{},{},{},{},{}",
+                    "{},{},{},{},{},{}",
                     csv(&file_name),
+                    csv(""),
                     csv(""),
                     csv(&format!("skipped: {reason}")),
                     csv(""),
@@ -116,6 +122,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             }
             Outcome::Called {
                 args,
+                attempts,
                 call_1,
                 call_2,
             } => {
@@ -129,9 +136,10 @@ fn main() -> Result<(), Box<dyn Error>> {
                     "unknown"
                 };
                 eprintln!(
-                    "{},{},{},{},{}",
+                    "{},{},{},{},{},{}",
                     csv(&file_name),
                     csv(&args),
+                    csv(&attempts.to_string()),
                     csv(&result(&call_1)),
                     csv(&result(&call_2)),
                     csv(repeatable),
@@ -149,13 +157,16 @@ enum Outcome {
     Skipped(String),
     Called {
         args: String,
+        /// Number of times the first call was attempted, each with freshly
+        /// generated arguments.
+        attempts: u32,
         call_1: Result<Val, HostError>,
         call_2: Result<Val, HostError>,
     },
 }
 
-/// Register the wasm in a fresh host and call `initialize` twice on it with the
-/// same generated arguments.
+/// Register the wasm in a fresh host, find arguments that `initialize` accepts,
+/// then call `initialize` a second time with those same arguments.
 fn run(wasm: &[u8], spec: &[ScSpecEntry], seed: u64) -> Outcome {
     let mut rng = StdRng::seed_from_u64(seed);
     let udts: HashMap<String, &ScSpecEntry> = spec
@@ -166,10 +177,6 @@ fn run(wasm: &[u8], spec: &[ScSpecEntry], seed: u64) -> Outcome {
     let initialize = match function(spec, "initialize") {
         Some(f) => f,
         None => return Outcome::Skipped("no initialize function".to_string()),
-    };
-    let args = match gen_args(&initialize.inputs, &udts, &mut rng) {
-        Ok(args) => args,
-        Err(e) => return Outcome::Skipped(format!("cannot generate args: {e}")),
     };
     let constructor_args = match function(spec, "__constructor") {
         Some(f) => match gen_args(&f.inputs, &udts, &mut rng) {
@@ -193,15 +200,42 @@ fn run(wasm: &[u8], spec: &[ScSpecEntry], seed: u64) -> Outcome {
         Err(e) => return Outcome::Skipped(format!("cannot register: {:?}", e.error)),
     };
 
-    let call = || -> Result<Val, HostError> {
+    let call = |args: &[ScVal]| -> Result<Val, HostError> {
         host.with_budget(|b| b.reset_limits(BUDGET_CPU, BUDGET_MEM))?;
         let func = Symbol::try_from_val(&host, &"initialize")?;
-        let args = to_vec_object(&host, &args)?;
+        let args = to_vec_object(&host, args)?;
         host.call(contract, func, args)
     };
-    let call_1 = catch_unwind(AssertUnwindSafe(call));
-    let call_2 = catch_unwind(AssertUnwindSafe(call));
-    let (Ok(call_1), Ok(call_2)) = (call_1, call_2) else {
+
+    // Random arguments are often rejected by the contract's own validation, so
+    // keep trying fresh arguments until the first call succeeds. A call that
+    // fails rolls back its storage changes, so a failed attempt leaves the
+    // contract as uninitialized as it was before, and the next attempt can
+    // reuse the same contract instance.
+    //
+    // Arguments are only worth regenerating if there are any: a function with
+    // no inputs gets the same call every time.
+    let max_attempts = if initialize.inputs.is_empty() {
+        1
+    } else {
+        MAX_ATTEMPTS
+    };
+    let mut attempts = 0;
+    let (args, call_1) = loop {
+        attempts += 1;
+        let args = match gen_args(&initialize.inputs, &udts, &mut rng) {
+            Ok(args) => args,
+            Err(e) => return Outcome::Skipped(format!("cannot generate args: {e}")),
+        };
+        let Ok(call_1) = catch_unwind(AssertUnwindSafe(|| call(&args))) else {
+            return Outcome::Skipped("host panicked".to_string());
+        };
+        if call_1.is_ok() || attempts >= max_attempts {
+            break (args, call_1);
+        }
+    };
+
+    let Ok(call_2) = catch_unwind(AssertUnwindSafe(|| call(&args))) else {
         return Outcome::Skipped("host panicked".to_string());
     };
 
@@ -211,6 +245,7 @@ fn run(wasm: &[u8], spec: &[ScSpecEntry], seed: u64) -> Outcome {
             .map(display_scval)
             .collect::<Vec<_>>()
             .join(", "),
+        attempts,
         call_1,
         call_2,
     }
