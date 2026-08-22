@@ -1,0 +1,116 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "The builder amount must be greater than zero.",
+          "name": "InvalidAmount",
+          "value": 1
+        },
+        {
+          "doc": "The fee cannot be negative.",
+          "name": "InvalidFee",
+          "value": 2
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted on every settlement so a payment is attributable from chain data\\nalone. `payer` is a topic (indexable); the rest is the settlement breakdown.",
+      "lib": "",
+      "name": "Settle",
+      "prefix_topics": [
+        "settle"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "payer",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "builder",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "fee_to",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "fee",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Settle one capability call.\\n\\nMoves `amount` of `token` from `payer` to `builder` (the capability's\\npayout) and `fee` of `token` from `payer` to `fee_to` (Tael's fee wallet),\\natomically. `payer` must authorize the call, so no one can move an agent's\\nfunds without its Card's signature. A `settle` event is emitted with the\\nfull breakdown.\\n\\n* `token`   - the token contract address (the USDC Stellar Asset Contract)\\n* `payer`   - the agent's Card (funds source; must authorize)\\n* `builder` - the capability builder's payout address\\n* `fee_to`  - Tael's fee wallet\\n* `amount`  - the builder's share (must be > 0)\\n* `fee`     - Tael's fee (>= 0; skipped if 0)",
+      "name": "settle",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "payer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "builder",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

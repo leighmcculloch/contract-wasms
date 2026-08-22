@@ -1,0 +1,463 @@
+[
+  {
+    "function_v0": {
+      "doc": "One-time setup. `empty_root` is the depth-10 empty-tree root (computed\\noff-chain with the same circomlib Poseidon as the circuits).",
+      "name": "init",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "empty_root",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "NotAdmin",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "NoVerificationKey",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidProof",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "StaleRoot",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "BadLeafIndex",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "UnknownRoot",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "NullifierUsed",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "RecipientMismatch",
+          "value": 10
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deposit `amount` USDC and append `commitment` to the tree. The caller\\nproves the append is correct (`old_root` \\xe2\\x86\\x92 `new_root`); the contract\\ntrusts no root it didn't verify.",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "ephemeral_pubkey",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "new_root",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "leaf_index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "udt": {
+              "name": "ProofBytes"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Install the insert + withdraw verification keys (admin only).",
+      "name": "set_vks",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "insert_vk",
+          "type_": {
+            "udt": {
+              "name": "VkBytes"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "withdraw_vk",
+          "type_": {
+            "udt": {
+              "name": "VkBytes"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_spent",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "nullifier_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Withdraw `amount` USDC to `to`, proving ownership of an unspent note in\\nthe tree at `root` without revealing which one. `to` is bound to the\\nproof via keccak256(ScAddress) so a relayer can't redirect the payout.",
+      "name": "withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "udt": {
+              "name": "ProofBytes"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "root",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "nullifier_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Usdc"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "InsertVk"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "WithdrawVk"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "CurrentRoot"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LeafCount"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Root",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Nullifier",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Groth16 verification key, components as raw BN254 bytes.",
+      "lib": "",
+      "name": "VkBytes",
+      "fields": [
+        {
+          "doc": "",
+          "name": "alpha",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "beta",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "delta",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "gamma",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "ic",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 64
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "leaf_count",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Groth16 proof, components as raw BN254 bytes.",
+      "lib": "",
+      "name": "ProofBytes",
+      "fields": [
+        {
+          "doc": "",
+          "name": "a",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "b",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "c",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "current_root",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "bytes_n": {
+                "n": 32
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

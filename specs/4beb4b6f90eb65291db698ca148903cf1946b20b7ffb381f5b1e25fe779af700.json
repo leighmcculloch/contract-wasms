@@ -1,0 +1,989 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SaleConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "payment_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MinterUpdated",
+      "prefix_topics": [
+        "minter_updated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "minter",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "enabled",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CollectionError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "OwnerOnly",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "UnauthorizedMinter",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "DuplicateToken",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidRoyalty",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidPrice",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "SaleDisabled",
+          "value": 6
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PrimaryPurchase",
+      "prefix_topics": [
+        "primary_purchase"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "buyer",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "burn",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "mint",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "name",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "owner",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "symbol",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "approve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "approver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "approved",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "owner_of",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "purchase",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "buyer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "burn_from",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_minter",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "token_uri",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_minter",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "minter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "enabled",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "sale_config",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "SaleConfig"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "disable_sale",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_approved",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "royalty_info",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "sale_price",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "address",
+              "i128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "symbol",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "base_uri",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "royalty_receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "royalty_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer_from",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "approve_for_all",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_sale_config",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "payment_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_token_royalty",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "basis_points",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer_ownership",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_approved_for_all",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_default_royalty",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "basis_points",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "remove_token_royalty",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a token is burned.",
+      "lib": "",
+      "name": "Burn",
+      "prefix_topics": [
+        "burn"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when token royalty is set.",
+      "lib": "",
+      "name": "SetTokenRoyalty",
+      "prefix_topics": [
+        "set_token_royalty"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "basis_points",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when default royalty is set.",
+      "lib": "",
+      "name": "SetDefaultRoyalty",
+      "prefix_topics": [
+        "set_default_royalty"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "basis_points",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when token royalty is removed.",
+      "lib": "",
+      "name": "RemoveTokenRoyalty",
+      "prefix_topics": [
+        "remove_token_royalty"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a token is minted.",
+      "lib": "",
+      "name": "Mint",
+      "prefix_topics": [
+        "mint"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an approval is granted.",
+      "lib": "",
+      "name": "Approve",
+      "prefix_topics": [
+        "approve"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "approver",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "approved",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a token is transferred.",
+      "lib": "",
+      "name": "Transfer",
+      "prefix_topics": [
+        "transfer"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when approval for all tokens is granted.",
+      "lib": "",
+      "name": "ApproveForAll",
+      "prefix_topics": [
+        "approve_for_all"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "NonFungibleTokenError",
+      "cases": [
+        {
+          "doc": "Indicates a non-existent `token_id`.",
+          "name": "NonExistentToken",
+          "value": 200
+        },
+        {
+          "doc": "Indicates an error related to the ownership over a particular token.\\nUsed in transfers.",
+          "name": "IncorrectOwner",
+          "value": 201
+        },
+        {
+          "doc": "Indicates a failure with the `operator`s approval. Used in transfers.",
+          "name": "InsufficientApproval",
+          "value": 202
+        },
+        {
+          "doc": "Indicates a failure with the `approver` of a token to be approved. Used\\nin approvals.",
+          "name": "InvalidApprover",
+          "value": 203
+        },
+        {
+          "doc": "Indicates an invalid value for `live_until_ledger` when setting\\napprovals.",
+          "name": "InvalidLiveUntilLedger",
+          "value": 204
+        },
+        {
+          "doc": "Indicates overflow when adding two values",
+          "name": "MathOverflow",
+          "value": 205
+        },
+        {
+          "doc": "Indicates all possible `token_id`s are already in use.",
+          "name": "TokenIDsAreDepleted",
+          "value": 206
+        },
+        {
+          "doc": "Indicates an invalid amount to batch mint in `consecutive` extension.",
+          "name": "InvalidAmount",
+          "value": 207
+        },
+        {
+          "doc": "Indicates the token does not exist in owner's list.",
+          "name": "TokenNotFoundInOwnerList",
+          "value": 208
+        },
+        {
+          "doc": "Indicates the token does not exist in global list.",
+          "name": "TokenNotFoundInGlobalList",
+          "value": 209
+        },
+        {
+          "doc": "Indicates access to unset metadata.",
+          "name": "UnsetMetadata",
+          "value": 210
+        },
+        {
+          "doc": "Indicates the length of the base URI exceeds the maximum allowed.",
+          "name": "BaseUriMaxLenExceeded",
+          "value": 211
+        },
+        {
+          "doc": "Indicates the royalty amount is higher than 10_000 (100%) basis points.",
+          "name": "InvalidRoyaltyAmount",
+          "value": 212
+        },
+        {
+          "doc": "Indicates the length of the name exceeds the maximum allowed.",
+          "name": "NameMaxLenExceeded",
+          "value": 213
+        },
+        {
+          "doc": "Indicates the length of the symbol exceeds the maximum allowed.",
+          "name": "SymbolMaxLenExceeded",
+          "value": 214
+        }
+      ]
+    }
+  }
+]

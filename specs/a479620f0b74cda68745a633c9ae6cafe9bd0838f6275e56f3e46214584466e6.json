@@ -1,0 +1,832 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "Configuration for a standard referral-based job escrow.\\nDefines the participating parties, the payment tokens, and the reward distribution logic.",
+      "lib": "",
+      "name": "ReferralConfig",
+      "fields": [
+        {
+          "doc": "The anchor address representing the cross-border payment gateway",
+          "name": "anchor_address",
+          "type_": "address"
+        },
+        {
+          "doc": "Total bounty deposited by the client",
+          "name": "bounty_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "The candidate being hired",
+          "name": "candidate",
+          "type_": "address"
+        },
+        {
+          "doc": "The client funding the escrow",
+          "name": "client",
+          "type_": "address"
+        },
+        {
+          "doc": "Duration in seconds for the mandatory dispute window after confirmation",
+          "name": "dispute_window_secs",
+          "type_": "u64"
+        },
+        {
+          "doc": "Ledger sequence after which the escrow expires and can be refunded",
+          "name": "expiry_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "Backend tracking ID \\xe2\\x80\\x94 used in events so SDP can map to DB record",
+          "name": "job_id",
+          "type_": "string"
+        },
+        {
+          "doc": "The platform backend key responsible for co-signing actions (Ed25519)",
+          "name": "platform_address",
+          "type_": "address"
+        },
+        {
+          "doc": "Platform's share in basis points (e.g., 2000 = 20%)",
+          "name": "platform_rate",
+          "type_": "u32"
+        },
+        {
+          "doc": "Wallet address that receives platform fee when hired",
+          "name": "platform_wallet",
+          "type_": "address"
+        },
+        {
+          "doc": "Scout's share in basis points (e.g., 8000 = 80%)",
+          "name": "scout_rate",
+          "type_": "u32"
+        },
+        {
+          "doc": "Token used for escrow (usually USDC)",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Tracks the lifecycle state of a referral escrow.",
+      "lib": "",
+      "name": "ReferralStatus",
+      "fields": [
+        {
+          "doc": "The timestamp when the deposit was made, used to track dispute window",
+          "name": "deposit_timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "True if the client has deposited the required bounty",
+          "name": "is_deposited",
+          "type_": "bool"
+        },
+        {
+          "doc": "True if a dispute has been opened by either party",
+          "name": "is_disputed",
+          "type_": "bool"
+        },
+        {
+          "doc": "True if funds were refunded to the client after expiry",
+          "name": "is_refunded",
+          "type_": "bool"
+        },
+        {
+          "doc": "True if funds have been released to the anchor/scout",
+          "name": "is_released",
+          "type_": "bool"
+        },
+        {
+          "doc": "True if the platform fee has been released to platform_wallet",
+          "name": "platform_fee_released",
+          "type_": "bool"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Milestone",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "is_completed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "is_disputed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "is_withdrawn",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "milestone_id",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Configuration for a milestone-based freelance job escrow.\\nDefines multiple payouts corresponding to project milestones and safety buffers.",
+      "lib": "",
+      "name": "MilestoneConfig",
+      "fields": [
+        {
+          "doc": "The cross-border payment anchor address",
+          "name": "anchor_address",
+          "type_": "address"
+        },
+        {
+          "doc": "The client funding the milestones",
+          "name": "client",
+          "type_": "address"
+        },
+        {
+          "doc": "Ledger limit after which unclaimed funds can be refunded",
+          "name": "expiry_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "Freelancer's KYC verification ID",
+          "name": "freelancer_kyc_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "Freelancer's share rate in basis points",
+          "name": "freelancer_rate",
+          "type_": "u32"
+        },
+        {
+          "doc": "Backend tracking ID \\xe2\\x80\\x94 used in events so SDP can map to DB record",
+          "name": "gig_id",
+          "type_": "string"
+        },
+        {
+          "doc": "Array representing the payment amounts for each milestone",
+          "name": "milestones",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "The platform's admin address for co-signing",
+          "name": "platform_address",
+          "type_": "address"
+        },
+        {
+          "doc": "Platform fee rate in basis points",
+          "name": "platform_rate",
+          "type_": "u32"
+        },
+        {
+          "doc": "Wallet address that receives platform fee when hired",
+          "name": "platform_wallet",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "private_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "Probation lock in seconds (production: 30 * 24 * 3600 = 2_592_000)",
+          "name": "probation_seconds",
+          "type_": "u64"
+        },
+        {
+          "doc": "Escrow token (usually USDC)",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Tracks the state of a milestone-based freelance gig.",
+      "lib": "",
+      "name": "MilestoneStatus",
+      "fields": [
+        {
+          "doc": "True if the gig was cancelled by the client",
+          "name": "is_cancelled",
+          "type_": "bool"
+        },
+        {
+          "doc": "True if the total fund (buffer + milestones) has been deposited",
+          "name": "is_deposited",
+          "type_": "bool"
+        },
+        {
+          "doc": "Array tracking individual milestones' lifecycle",
+          "name": "milestones",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Milestone"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "True if the platform fee has been released to platform_wallet",
+          "name": "platform_fee_released",
+          "type_": "bool"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Metadata stored on-chain after 9Pay confirms a disbursement.\\nEnables full audit trail reconciliation between on-chain and off-chain data.",
+      "lib": "",
+      "name": "WithdrawalRecord",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount_usdc",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "amount_vnd",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "exchange_rate_bps",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "freelancer_kyc_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "napas_ref",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "platform_fee_usdc",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "stellar_tx_hash",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "tax_withheld_vnd",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "WasmHash"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "EscrowCounter"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Config"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Status"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MilestoneConfig"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MilestoneStatus"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "WithdrawalRecords"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "factory_init",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_referral_escrow",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "config",
+          "type_": {
+            "udt": {
+              "name": "ReferralConfig"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_milestone_escrow",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "config",
+          "type_": {
+            "udt": {
+              "name": "MilestoneConfig"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_and_fund_referral_escrow",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "config",
+          "type_": {
+            "udt": {
+              "name": "ReferralConfig"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_and_fund_milestone_escrow",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "config",
+          "type_": {
+            "udt": {
+              "name": "MilestoneConfig"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "referral_init",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "config",
+          "type_": {
+            "udt": {
+              "name": "ReferralConfig"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "milestone_init",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "config",
+          "type_": {
+            "udt": {
+              "name": "MilestoneConfig"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "client",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Referral bounty release",
+      "name": "release_bounty",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "client",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "has_scout",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "scout_kyc_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Mark milestone as completed (state change only, no funds moved)",
+      "name": "complete_milestone",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "client",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Release platform fee to platform_wallet (called when candidate is hired)",
+      "name": "release_platform_fee",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "platform",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Assign freelancer KYC ID to the escrow",
+      "name": "assign_freelancer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "kyc_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Freelancer (via platform) withdraws completed milestone funds to anchor",
+      "name": "withdraw_to_anchor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "platform",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Record withdrawal audit metadata on-chain after 9Pay confirms disbursement",
+      "name": "record_withdrawal_metadata",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "platform",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "record",
+          "type_": {
+            "udt": {
+              "name": "WithdrawalRecord"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Client or Freelancer opens a dispute, freezing the milestone funds",
+      "name": "dispute_milestone",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "initiator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "dispute_referral",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "initiator",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "refund",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel_remaining",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_status",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "ReferralStatus"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_config",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "ReferralConfig"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_milestone_status",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "MilestoneStatus"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_milestone_config",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "MilestoneConfig"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admin_resolve_dispute",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "client_pct",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "developer_pct",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admin_resolve_referral_dispute",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "client_pct",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "scout_pct",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "update_milestone_amount",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "client",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "new_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

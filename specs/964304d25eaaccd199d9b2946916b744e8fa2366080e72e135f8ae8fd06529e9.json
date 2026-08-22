@@ -1,0 +1,1128 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_badge",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "builder",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "badge_bit",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "grant_manager",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_passport",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "builder",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "BuilderPassport"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_verification_history",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "builder",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "VerificationRecord"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "increment_completed_grants",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "builder",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "record_milestone_completion",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "builder",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "grant_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "milestone_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "amount_released",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "verification_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "reputation_delta",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PassportContract"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "GrantCount"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "VerificationOperator"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Initialized"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "NativeToken"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "GrantKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Grant",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Milestone",
+            "type_": [
+              "u64",
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PassportKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Passport",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "History",
+            "type_": [
+              "address",
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "HistoryCount",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AuthorizedUpdater"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Initialized"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Role",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Admin",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "GrantProvider",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Builder",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Reviewer",
+          "value": 3
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Grant",
+      "fields": [
+        {
+          "doc": "",
+          "name": "builder",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "created_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "escrowed_balance",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "metadata_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "milestone_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "released_total",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "reviewer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "GrantStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "total_budget",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Milestone",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "evidence_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "grant_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "milestone_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "paid_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "payment_tx_guard",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "reviewed_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "MilestoneStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "submitted_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "verification_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "GrantStatus",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Active",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Completed",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Cancelled",
+          "value": 2
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BuilderPassport",
+      "fields": [
+        {
+          "doc": "",
+          "name": "badges",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "builder",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "completed_grants",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "completed_milestones",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "last_updated_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "reputation_score",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "total_funds_received",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "verification_count",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MilestoneStatus",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Pending",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Submitted",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "UnderReview",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Approved",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "Rejected",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "Paid",
+          "value": 5
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VerificationRecord",
+      "fields": [
+        {
+          "doc": "",
+          "name": "approved",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "grant_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "milestone_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "verification_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ContractError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "GrantNotFound",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "MilestoneNotFound",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidStatusTransition",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InsufficientEscrow",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "AlreadyPaid",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "GrantNotActive",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "GrantCancelled",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "ArithmeticOverflow",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "ContractPaused",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "CannotCancelWithPendingPayouts",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "PassportCallFailed",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "BuilderMismatch",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "ReviewerMismatch",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "PassportNotFound",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "HistoryNotFound",
+          "value": 19
+        },
+        {
+          "doc": "",
+          "name": "InvalidReputationDelta",
+          "value": 20
+        },
+        {
+          "doc": "",
+          "name": "InvalidBadgeBit",
+          "value": 21
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "GrantCreated",
+      "prefix_topics": [
+        "grant_created"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "grant_id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "builder",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "reviewer",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "total_budget",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "metadata_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FundsDeposited",
+      "prefix_topics": [
+        "funds_deposited"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "grant_id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_escrow_balance",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "GrantCancelled",
+      "prefix_topics": [
+        "grant_cancelled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "grant_id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "refund_amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PaymentReleased",
+      "prefix_topics": [
+        "payment_released"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "grant_id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "milestone_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "builder",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MilestoneApproved",
+      "prefix_topics": [
+        "milestone_approved"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "grant_id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "milestone_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "reviewer",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MilestoneRejected",
+      "prefix_topics": [
+        "milestone_rejected"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "grant_id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "milestone_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "reviewer",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ReputationUpdated",
+      "prefix_topics": [
+        "reputation_updated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "builder",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_score",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "completed_milestones",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "total_funds_received",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MilestoneSubmitted",
+      "prefix_topics": [
+        "milestone_submitted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "grant_id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "milestone_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "builder",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "evidence_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AiVerificationAdded",
+      "prefix_topics": [
+        "ai_verification_added"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "grant_id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "milestone_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "verification_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  }
+]

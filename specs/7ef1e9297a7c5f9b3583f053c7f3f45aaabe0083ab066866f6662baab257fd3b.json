@@ -1,0 +1,627 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "MissingAdmin",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "MissingController",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "MissingCertifier",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidHash",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidValidityWindow",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "CardRevisionConflict",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "CredentialAlreadyBound",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "CertificationNotFound",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "CertificationNotActive",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "InvalidFee",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "DuplicateFeeRecipient",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "MissingLbxSac",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "MissingFeeRecipients",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "MissingCertificationFee",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "RenewalCardMismatch",
+          "value": 15
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FeeRecipients",
+      "fields": [
+        {
+          "doc": "",
+          "name": "network",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "primary",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "satellite",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "IdentityRevoked",
+      "prefix_topics": [
+        "identity_revoked"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "card_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "credential_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "reason_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "IdentityCertified",
+      "prefix_topics": [
+        "identity_certified"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "card_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "credential_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "valid_from_ledger",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "valid_until_ledger",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "revision",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "fee_payer",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "primary_reward",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "satellite_reward",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "network_reward",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccountInitialized",
+      "prefix_topics": [
+        "account_initialized"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "controller",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "certifier",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CertificationRecord",
+      "fields": [
+        {
+          "doc": "",
+          "name": "card_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "credential_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fee_total",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "revision",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "CertificationStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "valid_from_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "valid_until_ledger",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CertificationStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Active"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Expired"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Revoked"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Superseded"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "renew",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "card_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "credential_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "valid_until_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "fee_payer",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "CertificationRecord"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "revoke",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "reason_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "CertificationRecord"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "certify",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "card_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "credential_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "valid_until_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "fee_payer",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "CertificationRecord"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "lbx_sac",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "certifier",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "controller",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "controller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "certifier",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "lbx_sac",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_recipients",
+          "type_": {
+            "udt": {
+              "name": "FeeRecipients"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "certification_fee",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "certification",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "CertificationRecord"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "fee_recipients",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "FeeRecipients"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "certification_fee",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "certification_revision",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "revision",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "CertificationRecord"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

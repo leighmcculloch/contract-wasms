@@ -1,0 +1,142 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "bill_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "BillInfo"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pay",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "payer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "bill_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "organizer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "bill_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Contract error codes.",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInit",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotFound",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Overfund",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "AlreadySettled",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "ZeroAmount",
+          "value": 5
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Bill information stored on-chain.",
+      "lib": "",
+      "name": "BillInfo",
+      "fields": [
+        {
+          "doc": "",
+          "name": "funded",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "organizer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "payers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "settled",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "u32"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,1253 @@
+[
+  {
+    "function_v0": {
+      "doc": "Cancels the scheduled operation identified by `(caller, target, function,\\nargs)`. `canceller` must be the operation's scheduler (`caller`), an\\neffective `ADMIN_ROLE` member, or an effective member of the guardian\\nrole of the function's required role. Returns the canceled nonce.\\n\\n# Errors\\n\\n* [`AccessManagerError::OperationNotScheduled`] - No pending operation\\nexists for the given parameters.\\n* [`AccessManagerError::UnauthorizedCancel`] - `canceller` is not allowed\\nto cancel the operation.",
+      "name": "cancel",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "canceller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Relays a call to `function` on `target` with `args`, on behalf of\\n`caller`, returning the target's return value.\\n\\n`caller` must currently be allowed to call the function (see\\n[`AccessManager::can_call`]). Because the manager is the owner/admin of\\n`target`, the target authorizes the relayed call. If the caller holds the\\nrequired role behind a non-zero execution delay, the call must have been\\nscheduled via [`AccessManager::schedule`] and its delay must have elapsed;\\nthe matching scheduled operation is consumed.\\n\\n# Errors\\n\\n* [`AccessManagerError::TargetClosed`] - The target is closed.\\n* [`AccessManagerError::Unauthorized`] - The caller lacks the role.\\n* [`AccessManagerError::OperationNotScheduled`] - The caller has an\\nexecution delay but no matching scheduled operation.\\n* [`AccessManagerError::OperationNotReady`] - The scheduled operation's\\ndelay has not yet elapsed.\\n* [`AccessManagerError::OperationExpired`] - The scheduled operation has\\nexpired and must be scheduled again.",
+      "name": "execute",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "val"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns whether `caller` may call `function` on `target` right now, and\\nthe execution delay that applies.",
+      "name": "can_call",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "CanCall"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns whether `account` is an effective member of `role` and the\\nexecution delay attached to that membership.",
+      "name": "has_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "RoleStatus"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Schedules a delayed call to `function` on `target` with `args`, on behalf\\nof `caller`, so it can later be run through [`AccessManager::execute`]\\nonce the caller's execution delay has elapsed.\\n\\n`when` is the desired execution timestamp; pass `0` to schedule at the\\nearliest permitted time (`now + execution_delay`). Returns the operation\\nid and its nonce.\\n\\n# Errors\\n\\n* [`AccessManagerError::TargetClosed`] - The target is closed.\\n* [`AccessManagerError::Unauthorized`] - The caller is not a member of\\nthe required role, or holds it with no execution delay (in which case\\nit can call [`AccessManager::execute`] directly without scheduling).\\n* [`AccessManagerError::InvalidScheduleTime`] - `when` is earlier than\\n`now + execution_delay`.\\n* [`AccessManagerError::OperationAlreadyScheduled`] - An identical\\noperation is already scheduled and still pending.",
+      "name": "schedule",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "when",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              },
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the latest nonce assigned to operation `id` (`0` if it was never\\nscheduled).",
+      "name": "get_nonce",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The super-role.",
+      "name": "admin_role",
+      "inputs": [],
+      "outputs": [
+        "symbol"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the raw membership record for `(account, role)`, if any. The\\nmembership may exist but not yet be effective (its `since` is in the\\nfuture) when granted under a grant delay.",
+      "name": "get_access",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "Membership"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Grants `role` to `account` with the given `execution_delay`.\\n\\n`caller` must be an effective member of `role`'s admin role. The grant\\nbecomes effective after the role's grant delay; for an account that is\\nalready a member, only the execution delay is updated.\\n\\n`PUBLIC_ROLE` cannot be granted (everyone holds it implicitly).",
+      "name": "grant_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "execution_delay",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The open role implicitly held by every account.",
+      "name": "public_role",
+      "inputs": [],
+      "outputs": [
+        "symbol"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Revokes `role` from `account`. `caller` must be an effective member of\\n`role`'s admin role. `PUBLIC_ROLE` cannot be revoked.",
+      "name": "revoke_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the timestamp at which the operation `id` becomes executable, or\\n`0` if it is not currently scheduled (never scheduled, already executed,\\ncanceled, or expired).",
+      "name": "get_schedule",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initializes the manager, granting `admin` the `ADMIN_ROLE` effective\\nimmediately and with no execution delay.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Renounces `role` for the caller's own account. `account` must equal\\n`caller`.",
+      "name": "renounce_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_role_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        "symbol"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the operation id (a hash over `caller`, `target`, `function` and\\n`args`) used to schedule, execute and cancel a delayed call.",
+      "name": "hash_operation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sets the admin role of `role` (the role allowed to grant/revoke it).\\n`caller` must be an effective `ADMIN_ROLE` member.",
+      "name": "set_role_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "admin_role",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sets the grant delay (seconds) of `role`. `caller` must be an effective\\n`ADMIN_ROLE` member.",
+      "name": "set_grant_delay",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "delay",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_target_closed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_role_guardian",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        "symbol"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sets the guardian role of `role`. `caller` must be an effective\\n`ADMIN_ROLE` member.",
+      "name": "set_role_guardian",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "guardian",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Opens or closes `target`. A closed target rejects every call routed\\nthrough [`AccessManager::execute`]. `caller` must be an effective\\n`ADMIN_ROLE` member.",
+      "name": "set_target_closed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "closed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_role_grant_delay",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_target_admin_delay",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sets the admin delay (seconds) of `target`. Stored for parity with the\\nEVM contract; reserved for a future scheduling implementation. `caller`\\nmust be an effective `ADMIN_ROLE` member.",
+      "name": "set_target_admin_delay",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "delay",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_target_function_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        "symbol"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sets the role required to call each function in `functions` on `target`.\\n`caller` must be an effective `ADMIN_ROLE` member.",
+      "name": "set_target_function_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "functions",
+          "type_": {
+            "vec": {
+              "element_type": "symbol"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccessManagerError",
+      "cases": [
+        {
+          "doc": "The caller is not allowed to perform the requested action.",
+          "name": "Unauthorized",
+          "value": 1
+        },
+        {
+          "doc": "The target contract is closed and rejects all calls routed through the\\nmanager.",
+          "name": "TargetClosed",
+          "value": 2
+        },
+        {
+          "doc": "`ADMIN_ROLE` / `PUBLIC_ROLE` cannot be granted, revoked or used as a\\nregular role in this context.",
+          "name": "RoleIsBuiltin",
+          "value": 3
+        },
+        {
+          "doc": "The caller holds the role but only with a non-zero execution delay, and\\ninvoked [`crate::AccessManager::execute`] without a ready scheduled\\noperation. Such calls must first be scheduled via\\n[`crate::AccessManager::schedule`].",
+          "name": "ExecutionDelayRequired",
+          "value": 4
+        },
+        {
+          "doc": "An account tried to renounce a role on behalf of a different account.",
+          "name": "BadRenounceConfirmation",
+          "value": 5
+        },
+        {
+          "doc": "No scheduled operation exists for the given parameters (it was never\\nscheduled, or has already been executed or canceled).",
+          "name": "OperationNotScheduled",
+          "value": 6
+        },
+        {
+          "doc": "The scheduled operation exists but its delay has not yet elapsed.",
+          "name": "OperationNotReady",
+          "value": 7
+        },
+        {
+          "doc": "The scheduled operation has expired and can no longer be executed; it\\nmust be scheduled again.",
+          "name": "OperationExpired",
+          "value": 8
+        },
+        {
+          "doc": "An operation with the same parameters is already scheduled and still\\npending.",
+          "name": "OperationAlreadyScheduled",
+          "value": 9
+        },
+        {
+          "doc": "The requested execution time is sooner than the caller's execution delay\\nallows.",
+          "name": "InvalidScheduleTime",
+          "value": 10
+        },
+        {
+          "doc": "The account attempting to cancel a scheduled operation is neither its\\nscheduler, an admin, nor a guardian of the required role.",
+          "name": "UnauthorizedCancel",
+          "value": 11
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when a role is granted to an account (or its parameters updated).\\n\\n* topics - `[\"role_granted\", role: Symbol, account: Address]`\\n* data - `[execution_delay: u32, since: u64, new_member: bool]`",
+      "lib": "",
+      "name": "RoleGranted",
+      "prefix_topics": [
+        "role_granted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "execution_delay",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "since",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_member",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when a role is revoked from (or renounced by) an account.\\n\\n* topics - `[\"role_revoked\", role: Symbol, account: Address]`",
+      "lib": "",
+      "name": "RoleRevoked",
+      "prefix_topics": [
+        "role_revoked"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when a target is opened or closed.\\n\\n* topics - `[\"target_closed\", target: Address]`\\n* data - `[closed: bool]`",
+      "lib": "",
+      "name": "TargetClosed",
+      "prefix_topics": [
+        "target_closed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "closed",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when the admin role of a role changes.\\n\\n* topics - `[\"role_admin_changed\", role: Symbol]`\\n* data - `[admin_role: Symbol]`",
+      "lib": "",
+      "name": "RoleAdminChanged",
+      "prefix_topics": [
+        "role_admin_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "admin_role",
+          "type_": "symbol",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when a scheduled operation is canceled before execution.\\n\\n* topics - `[\"operation_canceled\", operation_id: BytesN<32>]`\\n* data - `[nonce: u32]`",
+      "lib": "",
+      "name": "OperationCanceled",
+      "prefix_topics": [
+        "operation_canceled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "operation_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "nonce",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when the manager relays a call to a target on behalf of a caller.\\n\\n* topics - `[\"operation_executed\", target: Address, function: Symbol, caller: Address]`",
+      "lib": "",
+      "name": "OperationExecuted",
+      "prefix_topics": [
+        "operation_executed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when a delayed operation is scheduled for later execution.\\n\\n* topics - `[\"operation_scheduled\", operation_id: BytesN<32>, caller: Address]`\\n* data - `[nonce: u32, when: u64, target: Address, function: Symbol]`",
+      "lib": "",
+      "name": "OperationScheduled",
+      "prefix_topics": [
+        "operation_scheduled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "operation_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "nonce",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "when",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when the guardian role of a role changes.\\n\\n* topics - `[\"role_guardian_changed\", role: Symbol]`\\n* data - `[guardian: Symbol]`",
+      "lib": "",
+      "name": "RoleGuardianChanged",
+      "prefix_topics": [
+        "role_guardian_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "guardian",
+          "type_": "symbol",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when the grant delay of a role changes.\\n\\n* topics - `[\"role_grant_delay_changed\", role: Symbol]`\\n* data - `[delay: u32]`",
+      "lib": "",
+      "name": "RoleGrantDelayChanged",
+      "prefix_topics": [
+        "role_grant_delay_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "delay",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when the admin delay of a target changes.\\n\\n* topics - `[\"target_admin_delay_updated\", target: Address]`\\n* data - `[delay: u32]`",
+      "lib": "",
+      "name": "TargetAdminDelayUpdated",
+      "prefix_topics": [
+        "target_admin_delay_updated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "delay",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when the role required to call a function on a target changes.\\n\\n* topics - `[\"target_function_role_updated\", target: Address, function: Symbol]`\\n* data - `[role: Symbol]`",
+      "lib": "",
+      "name": "TargetFunctionRoleUpdated",
+      "prefix_topics": [
+        "target_function_role_updated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Result of [`crate::AccessManager::can_call`].",
+      "lib": "",
+      "name": "CanCall",
+      "fields": [
+        {
+          "doc": "The execution delay that would apply. `0` when the caller is allowed\\nimmediately or not allowed at all; non-zero when the caller holds the\\nrequired role but only behind an execution delay.",
+          "name": "delay",
+          "type_": "u64"
+        },
+        {
+          "doc": "Whether the call can be performed immediately via\\n[`crate::AccessManager::execute`].",
+          "name": "immediate",
+          "type_": "bool"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "(account, role) -> Membership",
+            "name": "RoleMember",
+            "type_": [
+              "address",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "operation id -> Schedule (temporary; TTL sized to outlive its window)",
+            "name": "ScheduledOp",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "role -> admin role (who may grant/revoke `role`)",
+            "name": "RoleAdmin",
+            "type_": [
+              "symbol"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "role -> guardian role (reserved for cancelling scheduled operations)",
+            "name": "RoleGuardian",
+            "type_": [
+              "symbol"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "role -> grant delay in seconds",
+            "name": "RoleGrantDelay",
+            "type_": [
+              "symbol"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "(target, function) -> required role",
+            "name": "TargetFunctionRole",
+            "type_": [
+              "address",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "target -> closed flag",
+            "name": "TargetClosed",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "target -> admin delay in seconds (reserved for scheduling)",
+            "name": "TargetAdminDelay",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A scheduled, delayed operation awaiting execution.",
+      "lib": "",
+      "name": "Schedule",
+      "fields": [
+        {
+          "doc": "Monotonic counter incremented each time this operation id is scheduled,\\ndistinguishing successive schedules of identical parameters.",
+          "name": "nonce",
+          "type_": "u32"
+        },
+        {
+          "doc": "Ledger timestamp (seconds) at which the operation becomes executable. A\\nvalue of `0` marks a slot that has been executed or canceled while\\nretaining its `nonce`.",
+          "name": "timepoint",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "The (caller, target, function, args) tuple that uniquely identifies a\\nschedulable operation. Hashed to produce the operation id.",
+      "lib": "",
+      "name": "Operation",
+      "fields": [
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A single account's membership of a role.",
+      "lib": "",
+      "name": "Membership",
+      "fields": [
+        {
+          "doc": "Execution delay (seconds) imposed on this account when acting under the\\nrole. A non-zero delay means the account must schedule its calls; since\\nthis manager does not implement scheduling, such calls are rejected by\\n[`crate::AccessManager::execute`].",
+          "name": "execution_delay",
+          "type_": "u64"
+        },
+        {
+          "doc": "Ledger timestamp (seconds) at which the membership becomes effective.\\nA grant subject to a grant delay is recorded with a future `since`.",
+          "name": "since",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Result of [`crate::AccessManager::has_role`].",
+      "lib": "",
+      "name": "RoleStatus",
+      "fields": [
+        {
+          "doc": "The execution delay attached to the membership (`0` if not a member).",
+          "name": "execution_delay",
+          "type_": "u64"
+        },
+        {
+          "doc": "Whether the account is an effective member of the role right now.",
+          "name": "is_member",
+          "type_": "bool"
+        }
+      ]
+    }
+  }
+]

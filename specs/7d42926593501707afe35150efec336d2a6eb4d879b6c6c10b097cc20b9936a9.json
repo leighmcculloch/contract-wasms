@@ -1,0 +1,150 @@
+[
+  {
+    "function_v0": {
+      "doc": "Admin address.",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initialize the registry. Can only be called once.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Certificate",
+      "fields": [
+        {
+          "doc": "",
+          "name": "cert_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "course_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "issued_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "valid",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Total certificates issued.",
+      "name": "get_cert_count",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the full certificate record, or panics if not found.",
+      "name": "get_certificate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Certificate"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Issue a certificate for a wallet. Only admin can call.\\nReturns the new certificate ID.",
+      "name": "issue_certificate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "course_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Revoke a certificate. Only admin can call.",
+      "name": "revoke_certificate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns true if wallet has a valid certificate for the given course.",
+      "name": "verify_certificate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "course_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  }
+]

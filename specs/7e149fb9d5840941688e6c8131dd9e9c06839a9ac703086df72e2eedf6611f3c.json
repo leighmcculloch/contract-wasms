@@ -1,0 +1,254 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "order_book",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "escrow_vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "settlement",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "zk_verifier",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "relayer_1",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "relayer_2",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "relayer_3",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin-only emergency switch. Pausing blocks new match submissions only.",
+      "name": "set_paused",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Validate and settle a matched order pair \\xe2\\x80\\x94 trustlessly.\\n\\nInstead of trusting the relayer's revealed prices, the relayer supplies a\\nGroth16 `match_proof`. The MatchProof circuit proves, in zero knowledge, that\\nboth commitments open to real orders, the clearing price lies within both\\nlimit prices, the fill is within both committed quantities, and\\n`usdc_amount = floor(xlm_amount * clearing_price / 1e6)`.\\n\\nPublic signals (verified against the on-chain MatchVk):\\n[buyer_commitment, seller_commitment, clearing_price, xlm_amount, usdc_amount]\\nThis contract binds those signals to the orders it settles, so a valid proof\\ncannot be replayed against different orders or amounts.\\n\\nv1: requires relayer_1 auth (chooses WHICH crossing pairs to match).\\nv2: upgrade to 2-of-3 threshold multisig.",
+      "name": "submit_match",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "buyer_commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "seller_commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "xlm_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "usdc_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "match_proof",
+          "type_": {
+            "udt": {
+              "name": "Groth16Proof"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "match_public_signals",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_match_count",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "OrderBook"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "EscrowVault"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Settlement"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ZkVerifier"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Relayer1"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Relayer2"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Relayer3"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MatchCount"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Local Groth16 proof type so matching_engine's own contract spec embeds the\\ntype definition (the stellar CLI can't resolve an imported type used in this\\ncontract's public interface \\xe2\\x80\\x94 same fix order_book uses). Layout matches\\nzk_verifier's Groth16Proof exactly; converted at the call site.",
+      "lib": "",
+      "name": "Groth16Proof",
+      "fields": [
+        {
+          "doc": "",
+          "name": "pi_a",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "pi_b",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "pi_c",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ]
+    }
+  }
+]

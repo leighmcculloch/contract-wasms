@@ -1,0 +1,226 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "IsBlocklisted",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "AlreadyBlocked",
+          "value": 4
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Root"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Stores blocked leaves (the leaf hash maps to true)",
+            "name": "BlockedLeaf",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Total number of blocked leaves",
+            "name": "BlockedCount"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "root",
+      "inputs": [],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get the admin authorized to upgrade this contract.",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Upgrade the contract's WASM code in place (admin-gated).\\nKeeps the blocklist and sparse-tree root intact.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Add a leaf to the blocklist (admin-gated).\\nIn a full implementation, this would update a sparse Merkle tree.\\nFor the buildathon, we track blocked leaves in storage and update the root\\nby hashing the new leaf into the existing root (simplified but functional).",
+      "name": "block_leaf",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "leaf",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "blocked_count",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Check that a leaf is NOT blocklisted.\\nReturns true if the leaf is NOT in the blocklist (i.e., the address is clean).\\nIn the full system, the ZK circuit verifies a sparse Merkle non-membership proof,\\nand this on-chain check is a secondary validation.",
+      "name": "is_not_blocked",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "leaf",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Assert non-membership. Returns Ok(true) if leaf is not blocked.",
+      "name": "assert_non_member",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "leaf",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "bool",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

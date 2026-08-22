@@ -1,0 +1,303 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidMonths",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "ScheduleNotFound",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "NotDueYet",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "AllReleased",
+          "value": 7
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Token"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "NextId"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Schedule",
+            "type_": [
+              "u64"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Schedule",
+      "fields": [
+        {
+          "doc": "",
+          "name": "monthly_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "months",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "next_due_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "periods_released",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_schedule",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "monthly_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "months",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "first_due_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "release",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "schedule_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "schedule_status",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "schedule_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": [
+                  "i128",
+                  "u32",
+                  "u32",
+                  "u32"
+                ]
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_schedule",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "schedule_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Schedule"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_token",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

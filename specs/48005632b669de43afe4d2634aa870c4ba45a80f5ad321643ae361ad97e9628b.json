@@ -1,0 +1,378 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AlreadyRegistered",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "NotRegistered",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidScore",
+          "value": 4
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Registered",
+      "prefix_topics": [
+        "registered"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "signer",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ScorePublished",
+      "prefix_topics": [
+        "score"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "score",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "tier",
+          "type_": {
+            "udt": {
+              "name": "Tier"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Register an agent against its own address. Idempotency is enforced \\xe2\\x80\\x94 an\\nagent registers itself once.",
+      "name": "register",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Current score data for an agent. Returns an `Unrated`/zero record if the\\nagent has no published score yet (so callers get a safe default).",
+      "name": "get_score",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "ScoreData"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Rotate the trusted signer. Admin-only.",
+      "name": "set_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_signer",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RepaymentRecorded",
+      "prefix_topics": [
+        "repaid"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "on_time",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set the admin (can rotate the signer) and the trusted signer (publishes\\nscores + repayment outcomes). Runs once at deploy.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_registered",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Publish a signed score for a registered agent. Only the trusted signer\\nmay call this; the tier is banded on-chain from the score.",
+      "name": "publish_score",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "score",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "revenue",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_repayments",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "RepaymentRecord"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Record a repayment outcome (reported by the signer/engine after observing\\nsettlement). Feeds future re-scoring.",
+      "name": "record_repayment",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "on_time",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "Underwriting tier, derived from the published score. Ordered worst\\xe2\\x86\\x92best so\\nthe enum's discriminants are meaningful if ever compared.",
+      "lib": "",
+      "name": "Tier",
+      "cases": [
+        {
+          "doc": "Below the lending threshold \\xe2\\x80\\x94 no credit extended.",
+          "name": "Unrated",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "C",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "B",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "A",
+          "value": 3
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "What the registry stores per agent and what cross-contract readers consume.",
+      "lib": "",
+      "name": "ScoreData",
+      "fields": [
+        {
+          "doc": "Verified trailing revenue (USDC, 7-decimal stroops) the score was\\ncomputed against. Drives the credit limit.",
+          "name": "revenue",
+          "type_": "i128"
+        },
+        {
+          "doc": "Composite revenue-coverage score, 0..=850 (FICO-like range).",
+          "name": "score",
+          "type_": "u32"
+        },
+        {
+          "doc": "Tier banded from `score`.",
+          "name": "tier",
+          "type_": {
+            "udt": {
+              "name": "Tier"
+            }
+          }
+        },
+        {
+          "doc": "Ledger timestamp the score was last published.",
+          "name": "updated_at",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Running tally of an agent's repayment history, maintained by `score_registry`\\nand consumed on-chain by the credit ramp (`ramp_limit`). Lives here (the\\nshared-types home) so the vault and the registry agree on its shape.",
+      "lib": "",
+      "name": "RepaymentRecord",
+      "fields": [
+        {
+          "doc": "Loans repaid on or before their due date.",
+          "name": "on_time",
+          "type_": "u32"
+        },
+        {
+          "doc": "Total repayment outcomes observed (on-time + missed).",
+          "name": "total",
+          "type_": "u32"
+        }
+      ]
+    }
+  }
+]

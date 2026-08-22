@@ -1,0 +1,523 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "Error codes live at 300+ **on purpose**, for the same reason `vesting` moved\\nto 100+ and `factory` to 200+.\\n\\n`claim` and `withdraw_unclaimed` both reach `token_client.transfer`, and a\\nStellar Asset Contract raises its own `contracterror` codes across 1\\xe2\\x80\\x9313.\\nUnder the old 1..=16 numbering thirteen of the sixteen variants collided\\nwith that range, and the collisions fell on exactly the failures a caller\\nmust tell apart: an underfunded instance traps with SAC `BalanceError = 10`,\\nwhich this ABI decoded as `TokenTransferMismatch` \\xe2\\x80\\x94 an accusation that the\\ntoken short-credited the transfer, when the campaign simply has no money \\xe2\\x80\\x94\\nand SAC `AllowanceError = 9` decoded as `InvalidAmount`.\\n\\n300+ rather than reusing 100+ or 200+: the ranges must stay MUTUALLY\\ndisjoint, not merely clear of the token. RPC and wallet layers surface a\\nrevert as a bare `Error(Contract, #N)` string with no contract attached, so\\nthe number is the only identifier a decoder has \\xe2\\x80\\x94 1\\xe2\\x80\\x9313 the token, 101\\xe2\\x80\\x93122\\n`vesting`, 201\\xe2\\x80\\x93210 `factory`,",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyClaimed",
+          "value": 301
+        },
+        {
+          "doc": "",
+          "name": "InvalidProof",
+          "value": 302
+        },
+        {
+          "doc": "",
+          "name": "Expired",
+          "value": 303
+        },
+        {
+          "doc": "",
+          "name": "NotYetWithdrawable",
+          "value": 304
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 305
+        },
+        {
+          "doc": "",
+          "name": "InvalidIndex",
+          "value": 306
+        },
+        {
+          "doc": "",
+          "name": "NothingToWithdraw",
+          "value": 307
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 308
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 309
+        },
+        {
+          "doc": "",
+          "name": "TokenTransferMismatch",
+          "value": 310
+        },
+        {
+          "doc": "",
+          "name": "InvalidLimit",
+          "value": 311
+        },
+        {
+          "doc": "",
+          "name": "InvalidDeadline",
+          "value": 312
+        },
+        {
+          "doc": "",
+          "name": "InvalidProofLength",
+          "value": 313
+        },
+        {
+          "doc": "",
+          "name": "InvalidRecipientCount",
+          "value": 314
+        },
+        {
+          "doc": "",
+          "name": "ProgressOverflow",
+          "value": 315
+        },
+        {
+          "doc": "",
+          "name": "DistributionExceeded",
+          "value": 316
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Config",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "locked",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "merkle_root",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "Number of leaves committed by `merkle_root`. Valid claim indices are\\nexactly `0..recipient_count`.",
+          "name": "recipient_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "Declared distribution size. Equals `\\xce\\xa3 leaf amount` only by the TRUSTED\\nOFF-CHAIN SOLVENCY INVARIANT: the root commits per-leaf `(index, address,\\namount)`, so the instance can verify a single claim's amount via its proof\\nbut cannot sum all leaves (that needs every proof) \\xe2\\x80\\x94 `total` is therefore\\nNOT bound on-chain to the leaf sum. Construction floor-binds it\\n(`total >= recipient_count`) because every valid claim amount is at\\nleast one base unit; the factory funds exactly `total`.\\nOver-declared `total` strands the surplus (sweepable via\\n`withdraw_unclaimed`); under-declared `total` caps payouts at the funded\\nbalance (claims that would cross the declared total are rejected).",
+          "name": "total",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Config"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Progress"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "ClaimedWord",
+            "type_": [
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Claimed",
+      "prefix_topics": [
+        "claim"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Progress",
+      "fields": [
+        {
+          "doc": "",
+          "name": "claimed_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "claimed_total",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Withdrawn",
+      "prefix_topics": [
+        "withdraw"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Claim `amount` for the leaf at `index`. Recipient signs and pays the fee.\\n\\nOrder (02 \\xc2\\xa73.6): config -> expired -> amount -> already-claimed -> proof ->\\nauth -> set-claimed (BEFORE transfer) -> transfer + balance guard (rollback\\nthe bit on mismatch) -> event + TTL.",
+      "name": "claim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "claimant",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "token",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "config",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Config"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "progress",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Progress"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_claimed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Permissionless, paged TTL maintenance for dormant campaigns. The\\ncontract and instance storage share a TTL; claimed bitmap words are\\npersistent and renewed in bounded windows. Returns the exclusive next\\nword cursor; the sweep is complete when it reaches the word count\\nderived from `config().recipient_count`.",
+      "name": "keep_alive",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "start_word",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "limit",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "merkle_root",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "bytes_n": {
+                "n": 32
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Atomic init at deploy. Validates `total > 0`, a nonzero root, and a\\nnot-already-past `deadline` (defense in depth \\xe2\\x80\\x94 the factory checks these\\ntoo). No BN254 canonical-field check: the root is a raw keccak256 digest,\\nnot a BN254 scalar.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "merkle_root",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "total",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "recipient_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "locked",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Bitmap status over `start..(start+limit)`. The full requested window is\\nreturned (unwritten words read all-false); callers can use the config's\\n`recipient_count` as the campaign boundary.",
+      "name": "claimed_statuses",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "start",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "limit",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "vec": {
+                "element_type": "bool"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin sweeps the remaining balance to `to`. Gated by the `locked`/`deadline`\\ntrust matrix (02 \\xc2\\xa73.7): `locked && (deadline==0 || now<=deadline)` => blocked.",
+      "name": "withdraw_unclaimed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

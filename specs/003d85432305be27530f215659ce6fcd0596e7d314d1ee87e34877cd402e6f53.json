@@ -1,0 +1,286 @@
+[
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Protocol",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Soroswap",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Phoenix",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Aqua",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Comet",
+          "value": 3
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DexDistribution",
+      "fields": [
+        {
+          "doc": "",
+          "name": "bytes",
+          "type_": {
+            "option": {
+              "value_type": {
+                "vec": {
+                  "element_type": {
+                    "bytes_n": {
+                      "n": 32
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "parts",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "path",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "protocol_id",
+          "type_": {
+            "udt": {
+              "name": "Protocol"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ArbError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidProfit",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "Expired",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidFirstRoute",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidSecondRoute",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "DirtyExecutorBalance",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "InsufficientIntermediate",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "IntermediateResidue",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "InsufficientProfit",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "ReentrantCall",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "ArithmeticError",
+          "value": 13
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "aggregator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "native",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "ArbError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execute",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "intermediate",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_profit",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "first_distribution",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "DexDistribution"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "second_distribution",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "DexDistribution"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "ArbError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "config",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": [
+                  "address",
+                  "address",
+                  "address"
+                ]
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "ArbError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

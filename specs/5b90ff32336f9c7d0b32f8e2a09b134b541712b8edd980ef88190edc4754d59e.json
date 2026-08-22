@@ -1,0 +1,348 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidParams",
+          "value": 3
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Reputation"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Token"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "CircleWasm"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Count"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Circles"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AdminChanged",
+      "prefix_topics": [
+        "admin_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CircleCreated",
+      "prefix_topics": [
+        "circle_created"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "circle",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Replace this contract's code. The factory only deploys and indexes\\ncircles \\xe2\\x80\\x94 it never custodies member funds \\xe2\\x80\\x94 so upgrading it cannot\\ntouch money already committed to a circle.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Hand the admin role to another account \\xe2\\x80\\x94 the route to a multisig or a\\ntimelock once the protocol is live.",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CircleWasmChanged",
+      "prefix_topics": [
+        "circle_wasm_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "wasm",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Configure the factory with the shared reputation contract, the\\ncontribution token, and the Circle wasm hash to deploy.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "reputation",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "circle_wasm",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "list_circles",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deploy a new circle, initialize it, and authorize it in reputation.",
+      "name": "create_circle",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "contribution_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "collateral_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_members",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "round_timeout_ledgers",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_circle_wasm",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "bytes_n": {
+                "n": 32
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Point the factory at a new Circle wasm. Circles already deployed keep\\nrunning the code their members agreed to \\xe2\\x80\\x94 this only affects circles\\ncreated from here on.",
+      "name": "set_circle_wasm",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wasm",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_circle_count",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  }
+]

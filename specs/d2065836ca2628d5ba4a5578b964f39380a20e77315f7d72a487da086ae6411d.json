@@ -1,0 +1,1240 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidConfiguration",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "WrongFactory",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "WrongController",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "StaleState",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "DuplicateCandidate",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidCandidate",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "DuplicateCommitment",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "InsufficientIdle",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "WithdrawalLimited",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "AllocationNotFound",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "InvalidCell",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "InvalidPhase",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "TransferMismatch",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "Arithmetic",
+          "value": 15
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PoolNav",
+      "fields": [
+        {
+          "doc": "",
+          "name": "active_ceiling_assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "active_floor_assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "conditional_fees_excluded",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "deposit_nav",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "funding_assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "idle_assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "immediate_assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "limiter_resets_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "terminal_assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "withdrawal_nav",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CellInfo",
+      "fields": [
+        {
+          "doc": "",
+          "name": "activation_cutoff",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "decimals",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "factory",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "funded_assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "funding_deadline",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "locked_shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "market",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "phase",
+          "type_": {
+            "udt": {
+              "name": "CellPhase"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "share_controller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "state_version",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "target_assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "terminal_assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_shares",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PoolInfo",
+      "fields": [
+        {
+          "doc": "",
+          "name": "active_allocations",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "allocation_cursor",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "deployed_principal",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "factory",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "governance",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "idle_assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "pending_candidates",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "policy",
+          "type_": {
+            "udt": {
+              "name": "RiskPolicy"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "queue_head",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "queue_tail",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "shared_vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "state_version",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "withdrawal_window_limit",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "withdrawal_window_started_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "withdrawal_window_used",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CellPhase",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Funding"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Ready"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Active"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cancelled"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Settled"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RiskPolicy",
+      "fields": [
+        {
+          "doc": "",
+          "name": "deposit_cap",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_active_allocations",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_deployed_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_group_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_market_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_withdrawal_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "minimum_idle_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "withdrawal_window",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PoolRedeem",
+      "prefix_topics": [
+        "pool_redeem"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "assets",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "total_shares",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "state_version",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PoolDeposit",
+      "prefix_topics": [
+        "pool_deposit"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "assets",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "total_shares",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "state_version",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PoolHarvest",
+      "prefix_topics": [
+        "pool_harvest"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "liquidity_vault",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "principal",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "terminal_assets",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "realized_pnl",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "state_version",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FundingResult",
+      "fields": [
+        {
+          "doc": "",
+          "name": "accepted_assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "shares_minted",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "state_version",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "unused_assets",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PoolCandidate",
+      "prefix_topics": [
+        "pool_candidate"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "sequence",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "liquidity_vault",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "target_assets",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PoolAllocation",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "cell_shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "liquidity_vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "principal",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "risk_group",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "AllocationStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "terminal_assets",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CandidateStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Pending"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Allocated"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Skipped"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AllocationStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Deployed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Harvested"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "nav",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "PoolNav"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RedemptionPreview",
+      "fields": [
+        {
+          "doc": "",
+          "name": "assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "can_redeem_now",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "immediate_assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "limiter_resets_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "state_version",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "info",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "PoolInfo"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CellMarketSnapshot",
+      "fields": [
+        {
+          "doc": "",
+          "name": "conditional_lp_fees",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "equity_if_no",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "equity_if_yes",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "state_version",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "updated_at",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AllocationCandidate",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "funding_deadline",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "liquidity_vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "risk_group",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "sequence",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "CandidateStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "target_assets",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unfund",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "controller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expected_version",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PoolAllocationEvent",
+      "prefix_topics": [
+        "pool_allocation"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "sequence",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "liquidity_vault",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "risk_group",
+          "type_": "symbol",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "principal",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "state_version",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "harvest",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "liquidity_vault",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "candidate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sequence",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "AllocationCandidate"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "allocation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "liquidity_vault",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "PoolAllocation"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "extend_ttl",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "factory",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "shared_vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "governance",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "policy",
+          "type_": {
+            "udt": {
+              "name": "RiskPolicy"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "allocate_next",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "PoolAllocation"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "fund_received",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "controller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "share_commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "prior_unallocated_balance",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expected_version",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "FundingResult"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "state_version",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "group_exposure",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "risk_group",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "preview_redeem",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "RedemptionPreview"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "preview_deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "assets",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "register_candidate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "factory",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "liquidity_vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "risk_group",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "target_assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "funding_deadline",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unallocated_balance",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  }
+]

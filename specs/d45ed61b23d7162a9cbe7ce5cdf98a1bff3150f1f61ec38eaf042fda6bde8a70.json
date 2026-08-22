@@ -1,0 +1,740 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "AttestationNotFound",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "Overflow",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "HistoryFull",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidPayment",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidLedgerRange",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "TitleTooLong",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "DuplicateAttestation",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "InvalidWorkSession",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "InvalidRequestId",
+          "value": 12
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "init",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "stream_contract",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AttestationMinted",
+      "prefix_topics": [
+        "attestation_minted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "attestation_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "checkpoint_index",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount_paid",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "kind",
+          "type_": {
+            "udt": {
+              "name": "AttestationKind"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "client_confirmed",
+          "type_": "bool",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "auto_released",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_attestation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "attestation_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "AttestationRecord"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "mint_attestation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "kind",
+          "type_": {
+            "udt": {
+              "name": "AttestationKind"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "checkpoint_index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount_paid",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "category",
+          "type_": {
+            "udt": {
+              "name": "Category"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "title",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "period_start_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "period_end_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "active_duration_seconds",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "client_confirmed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "auto_released",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "report_hash",
+          "type_": {
+            "option": {
+              "value_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "verify_attestation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "attestation_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_sender_attestations",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "u64"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_recipient_attestations",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "u64"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Category",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Freelance"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Salary"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Bounty"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Grant"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AgentTask"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Subscription"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StreamRecord",
+      "fields": [
+        {
+          "doc": "",
+          "name": "approval_timeout_ledgers",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "category",
+          "type_": {
+            "udt": {
+              "name": "Category"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "checkpoint_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "checkpoint_span_ledgers",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "duration_ledgers",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "paused_at_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "paused_duration_ledgers",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "rate_per_ledger",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "start_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "StreamStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "title",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "total_deposited",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_withdrawn",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "withdrawable_cap_percent",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StreamStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Active"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Completed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cancelled"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AttestationKind",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Checkpoint"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LegacyReviewed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "StreamCompletion"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CheckpointRecord",
+      "fields": [
+        {
+          "doc": "",
+          "name": "approved",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "attestation_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "auto_approved",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "due_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "evidence_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "submitted",
+          "type_": "bool"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AttestationRecord",
+      "fields": [
+        {
+          "doc": "",
+          "name": "active_duration_seconds",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "amount_paid",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "auto_released",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "category",
+          "type_": {
+            "udt": {
+              "name": "Category"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "checkpoint_index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "client_confirmed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "kind",
+          "type_": {
+            "udt": {
+              "name": "AttestationKind"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "minted_at_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "period_end_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "period_start_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "report_hash",
+          "type_": {
+            "option": {
+              "value_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "title",
+          "type_": "string"
+        }
+      ]
+    }
+  }
+]

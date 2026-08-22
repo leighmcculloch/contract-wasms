@@ -1,0 +1,318 @@
+[
+  {
+    "function_v0": {
+      "doc": "Fill a signed swap intent. User auth via composable auth on token transfer.\\n`intent_hash` is SHA-256 of canonical intent JSON (off-chain).",
+      "name": "fill",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "solver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "intent_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "nonce",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_amount_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "deadline_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Configure reactor with default token pair (admin only).",
+      "name": "init",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TokenIn"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TokenOut"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Nonce",
+            "type_": [
+              "address",
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "EmergencyBeneficiary"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "EmergencyToken"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "EmergencyRedeemed"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Check whether a nonce has been consumed for a user.",
+      "name": "is_nonce_used",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "nonce",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ReactorError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "IntentExpired",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "NonceConsumed",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "SlippageExceeded",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidIntentHash",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "EmergencyNotConfigured",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "EmergencyAlreadyRedeemed",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "InsufficientReserve",
+          "value": 11
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_emergency_token",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_emergency_redeemed",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Redeem the full 50 XLM emergency reserve. Callable only by the configured beneficiary.",
+      "name": "redeem_emergency_reserve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "beneficiary",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_emergency_beneficiary",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Configure a one-time 50 XLM emergency reserve redeemable only by `beneficiary`.\\nFund the contract with at least 50 XLM (SAC) before redemption.",
+      "name": "configure_emergency_reserve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "beneficiary",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_emergency_reserve_amount",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  }
+]

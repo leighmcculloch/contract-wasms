@@ -1,0 +1,312 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "Supported DEX protocol types (shared by aggregator + vault).",
+      "lib": "",
+      "name": "DexType",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Aquarius"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SoroswapPair"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Phoenix"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Sushi"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "CometDex"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A sub-route in a split order.",
+      "lib": "",
+      "name": "SubRoute",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "steps",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "SwapStep"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A single swap step in the aggregation path.",
+      "lib": "",
+      "name": "SwapStep",
+      "fields": [
+        {
+          "doc": "",
+          "name": "dex_id",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "dex_type",
+          "type_": {
+            "udt": {
+              "name": "DexType"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "in_idx",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "out_idx",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pull tokens from `from` into the vault (any account may fund the vault).",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_caller",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "add_caller",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "remove_caller",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin emergency withdrawal from vault balances.",
+      "name": "admin_withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Authorized caller executes a round-trip arb atomically:\\nvault \\xe2\\x86\\x92 caller \\xe2\\x86\\x92 aggregator \\xe2\\x86\\x92 caller \\xe2\\x86\\x92 vault.",
+      "name": "execute_round_trip",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "aggregator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "base_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "bridge_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "leg_out",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "SubRoute"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "leg_back",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "SubRoute"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "min_amount_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  }
+]

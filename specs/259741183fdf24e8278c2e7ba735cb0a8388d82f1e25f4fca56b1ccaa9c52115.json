@@ -1,0 +1,327 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "One-time initialization. Sets the admin and all three verification keys.\\nPanics if called a second time.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "vk_order",
+          "type_": {
+            "udt": {
+              "name": "VerificationKey"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vk_balance",
+          "type_": {
+            "udt": {
+              "name": "VerificationKey"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vk_range",
+          "type_": {
+            "udt": {
+              "name": "VerificationKey"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vk_match",
+          "type_": {
+            "udt": {
+              "name": "VerificationKey"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Verify a MatchProof Groth16 proof. Public signals:\\n[buyer_commitment, seller_commitment, clearing_price, xlm_amount, usdc_amount].",
+      "name": "verify_match_proof",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "udt": {
+              "name": "Groth16Proof"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "public_signals",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Verify an OrderCommitment Groth16 proof.",
+      "name": "verify_order_proof",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "udt": {
+              "name": "Groth16Proof"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "public_signals",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Verify a RangeProof Groth16 proof.",
+      "name": "verify_range_proof",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "udt": {
+              "name": "Groth16Proof"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "public_signals",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Verify a BalanceProof Groth16 proof.",
+      "name": "verify_balance_proof",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "udt": {
+              "name": "Groth16Proof"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "public_signals",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "VkOrder"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "VkBalance"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "VkRange"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "VkMatch"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Groth16 proof points on BN254.\\npi_a, pi_c: G1 points (64 bytes each \\xe2\\x80\\x94 uncompressed x,y)\\npi_b:       G2 point  (128 bytes \\xe2\\x80\\x94 uncompressed x0,x1,y0,y1)",
+      "lib": "",
+      "name": "Groth16Proof",
+      "fields": [
+        {
+          "doc": "",
+          "name": "pi_a",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "pi_b",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "pi_c",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Groth16 verification key.\\ngamma_abc has length n+1 where n is the number of public inputs.",
+      "lib": "",
+      "name": "VerificationKey",
+      "fields": [
+        {
+          "doc": "",
+          "name": "alpha",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "beta",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "delta",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "gamma",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "gamma_abc",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 64
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

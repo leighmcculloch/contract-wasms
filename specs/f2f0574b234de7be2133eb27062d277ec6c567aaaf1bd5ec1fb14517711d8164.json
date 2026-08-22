@@ -1,0 +1,139 @@
+[
+  {
+    "function_v0": {
+      "doc": "One-time init: claim the admin role (attacker). First caller wins.",
+      "name": "init",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "name",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "symbol",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "SEP-0041 balance read \\xe2\\x80\\x94 returns the REAL stored balance while the entry\\nis alive, and 0 the moment it is evicted. No event marks the transition.",
+      "name": "balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Credit `to` with a REAL balance and emit a REAL transfer event, with an\\nattacker-chosen fuse.\\n\\n`ttl_ledgers` is the number of ledgers the balance survives. Stellar\\ncloses a ledger roughly every 5 seconds, so:\\n17280  ~= 1 day      (a plausible settlement window; sweep succeeds)\\n120960 ~= 7 days\\n60     ~= 5 minutes  (fast demo on testnet)\\n\\nNothing else about this function is hostile. It mints, it writes, it\\nemits. An auditor reading it sees a normal token.",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "ttl_ledgers",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "decimals",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Standard SEP-0041 transfer. Completely honest and symmetric \\xe2\\x80\\x94 there is\\nno pause, no lock, no allow-list. It works perfectly for as long as the\\nbalance entry is alive, which is exactly what makes a deposit-time test\\nsweep pass.\\n\\nAfter eviction `read_balance` returns 0 (the entry no longer exists) and\\nthis panics with \"insufficient balance\" \\xe2\\x80\\x94 indistinguishable from the\\nexchange having already spent the funds.",
+      "name": "transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "ttl_ledgers",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Balance",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

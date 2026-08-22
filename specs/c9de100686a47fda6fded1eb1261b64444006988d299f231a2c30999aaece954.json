@@ -1,0 +1,450 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "ReceiptExists",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "ReceiptNotFound",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidRewardPoints",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "AlreadySettled",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "NotSettled",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "RewardAlreadyGranted",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "RewardNotGranted",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "RewardAlreadyRedeemed",
+          "value": 11
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Receipt",
+      "fields": [
+        {
+          "doc": "",
+          "name": "customer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "merchant",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "purchase_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "reward_points",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "settled",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "RewardStatus"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RewardStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Registered"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Granted"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Redeemed"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RewardGranted",
+      "prefix_topics": [
+        "reward_granted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "receipt_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "points",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ReceiptSettled",
+      "prefix_topics": [
+        "receipt_settled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "receipt_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RewardRedeemed",
+      "prefix_topics": [
+        "reward_redeemed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "receipt_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "customer",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "points",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ReceiptRegistered",
+      "prefix_topics": [
+        "receipt_registered"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "receipt_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RewardAssetInitialized",
+      "prefix_topics": [
+        "reward_asset_initialized"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_receipt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "receipt_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Receipt"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "grant_reward",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "receipt_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "reward_points",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "mark_settled",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "receipt_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "redeem_reward",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "receipt_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "register_receipt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "receipt_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "merchant",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "customer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "purchase_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

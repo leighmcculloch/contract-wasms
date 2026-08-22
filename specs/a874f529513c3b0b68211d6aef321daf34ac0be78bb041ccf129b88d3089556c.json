@@ -1,0 +1,413 @@
+[
+  {
+    "function_v0": {
+      "doc": "Draws from a specific pool by liquidation engine.",
+      "name": "draw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "liquidation_engine",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "shortfall",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deposits capital into pool backstop.",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initializes backstop pool admin and dependencies.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "governance",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "liquidation_engine",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "base_asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pulls emissions into accounting.",
+      "name": "gulp_emissions",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sets governance-defined allocation weight.",
+      "name": "set_allocation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "weight_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Calculates share percentage of a user in a pool proportional to total deposit.",
+      "name": "calculate_share",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Claims a queued withdrawal after cooldown expires.",
+      "name": "claim_withdrawal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Gets the current pool balance for namespaced assets.",
+      "name": "get_pool_balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Gets a user's deposited balance in a pool.",
+      "name": "get_user_balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Queues a withdrawal with cooldown.",
+      "name": "queue_withdrawal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "PoolNotFound",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "CooldownActive",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InsufficientFunds",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "CooldownNotMet",
+          "value": 6
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Governance"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "PoolBalance",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "PendingWithdrawal",
+            "type_": [
+              "u32",
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LiquidationEngine"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "BaseAsset"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Allocation",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "UserBalance",
+            "type_": [
+              "u32",
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WithdrawalRequest",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "unlock_timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  }
+]

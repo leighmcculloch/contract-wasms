@@ -1,0 +1,1142 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WProxyError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidRatio",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotDelegateable",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "SelfDelegate",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "NotImplemented",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidDelegationSum",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "DuplicateDelegate",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 7
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Timelock"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Ratio"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Delegateable"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Name"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Symbol"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Decimals"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "VotingContract"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "PosDelegation",
+            "type_": [
+              "address",
+              "u32",
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "PosDelegateList",
+            "type_": [
+              "address",
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "DelegateIncoming",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PositionDataMirror",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "cb_id",
+          "type_": {
+            "option": {
+              "value_type": "bytes"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "end",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "migrated",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "start",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PositionDelegation",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "lock_end",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "slope",
+          "type_": "u128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DelegateIncomingData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "bias",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "slope",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "slope_changes",
+          "type_": {
+            "map": {
+              "key_type": "u64",
+              "value_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "ts",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "burn",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "name",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "symbol",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "approve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expiration_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "decimals",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "muxed_address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "allowance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "burn_from",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "timelock",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "numerator",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "denominator",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "delegateable",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "symbol",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "decimals",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "emergency_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "apply_upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "contract_name",
+      "inputs": [],
+      "outputs": [
+        "symbol"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer_from",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "commit_upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "revert_upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "delegate_position",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "position_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "delegate",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_emergency_mode",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_future_address",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "role_name",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_emergency_mode",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "emergency_admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "value",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_voting_contract",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "voting",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "undelegate_position",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "position_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "delegate",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "apply_transfer_ownership",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "role_name",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_position_delegations",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "position_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "map": {
+            "key_type": "address",
+            "value_type": "u128"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_undelegated_schedule",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "u128",
+              "u128",
+              "u64",
+              {
+                "map": {
+                  "key_type": "u64",
+                  "value_type": "i128"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "commit_transfer_ownership",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "role_name",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "new_address",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "revert_transfer_ownership",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "role_name",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "checkpoint_position_delegation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "position_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "delegate",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_delegate_incoming_schedule",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "delegate",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "DelegateIncomingData"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccessControlError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "RoleNotFound",
+          "value": 101
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 102
+        },
+        {
+          "doc": "",
+          "name": "AdminAlreadySet",
+          "value": 103
+        },
+        {
+          "doc": "",
+          "name": "BadRoleUsage",
+          "value": 104
+        },
+        {
+          "doc": "",
+          "name": "AnotherActionActive",
+          "value": 2906
+        },
+        {
+          "doc": "",
+          "name": "NoActionActive",
+          "value": 2907
+        },
+        {
+          "doc": "",
+          "name": "ActionNotReadyYet",
+          "value": 2908
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetPrivilegedAddrs",
+      "prefix_topics": [
+        "set_privileged_addrs"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "rewards_admin",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "operations_admin",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "pause_admin",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "emergency_pause_admins",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "system_fee_admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "EnableEmergencyMode",
+      "prefix_topics": [
+        "enable_emergency_mode"
+      ],
+      "params": [],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DisableEmergencyMode",
+      "prefix_topics": [
+        "disable_emergency_mode"
+      ],
+      "params": [],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ApplyTransferOwnership",
+      "prefix_topics": [
+        "apply_transfer_ownership"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CommitTransferOwnership",
+      "prefix_topics": [
+        "commit_transfer_ownership"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "new_address",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RevertTransferOwnership",
+      "prefix_topics": [
+        "revert_transfer_ownership"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AnotherActionActive",
+          "value": 2906
+        },
+        {
+          "doc": "",
+          "name": "NoActionActive",
+          "value": 2907
+        },
+        {
+          "doc": "",
+          "name": "ActionNotReadyYet",
+          "value": 2908
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ApplyUpgrade",
+      "prefix_topics": [
+        "apply_upgrade"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_wasms",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CommitUpgrade",
+      "prefix_topics": [
+        "commit_upgrade"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_wasms",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RevertUpgrade",
+      "prefix_topics": [
+        "revert_upgrade"
+      ],
+      "params": [],
+      "data_format": "vec"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MathError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NumberOverflow",
+          "value": 510
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StorageError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 201
+        },
+        {
+          "doc": "",
+          "name": "ValueNotInitialized",
+          "value": 501
+        },
+        {
+          "doc": "",
+          "name": "ValueMissing",
+          "value": 502
+        },
+        {
+          "doc": "",
+          "name": "ValueConversionError",
+          "value": 503
+        }
+      ]
+    }
+  }
+]

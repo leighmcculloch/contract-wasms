@@ -1,0 +1,68 @@
+[
+  {
+    "function_v0": {
+      "doc": "Verify a WebAuthn authentication assertion against a Soroban auth payload hash.\\n\\n# Arguments\\n\\n* `hash` - The 32-byte Soroban auth payload hash. The client base64url-encodes\\nthis and embeds it as the `challenge` field in `clientDataJSON`.\\n* `key_data` - Bytes containing a 65-byte uncompressed secp256r1 public key\\n(0x04 prefix + 32-byte X + 32-byte Y) followed by an optional variable-length\\ncredential ID suffix. The credential ID is client-side metadata and is stripped\\nby `canonicalize_key`.\\n* `sig_data` - XDR-encoded `WebAuthnSigData` struct containing:\\n- `signature`: 64-byte compact P-256 signature (r || s)\\n- `authenticator_data`: raw authenticator data bytes (\\xe2\\x89\\xa537 bytes)\\n- `client_data`: raw clientDataJSON bytes\\n\\n# Returns\\n\\n`true` if the assertion is valid. Panics on any verification failure.",
+      "name": "verify",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hash",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "key_data",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "sig_data",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the canonical 65-byte public key, stripping any credential ID suffix.\\n\\nTwo registrations of the same P-256 key with different credential IDs must\\nproduce identical canonical output \\xe2\\x80\\x94 this enables the smart account to detect\\nand reject duplicate signers regardless of which device was used to register.\\n\\nPanics with `Error(Contract, #3119)` if `key_data` is shorter than 65 bytes.",
+      "name": "canonicalize_key",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key_data",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        "bytes"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Canonicalizes a batch of WebAuthn keys, preserving input order.",
+      "name": "batch_canonicalize_key",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key_data",
+          "type_": {
+            "vec": {
+              "element_type": "bytes"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "bytes"
+          }
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,440 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "Every failure mode is an explicit, contiguous `u32` so the TypeScript client\\ncan map a contract error straight to a user-facing message without guessing.",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "NotAuthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "AlreadyDisbursed",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "DisbursementNotFound",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InsufficientPool",
+          "value": 8
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys. `Disbursement` rows live in *persistent* storage (they are a\\npermanent ledger and must outlive the contract instance), while the admin,\\ntoken, pool balance, counters and pause flag share the instance TTL.",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Token"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Running custody balance held by the contract (deposited minus disbursed).",
+            "name": "Pool"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Number of disbursements settled.",
+            "name": "Count"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Lifetime total paid out, in token minor units.",
+            "name": "TotalOut"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "grant_ref -> Disbursement",
+            "name": "Grant",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A single immutable disbursement record. Once written it is never mutated:\\nthe on-chain ledger of who received what, when, keyed by a 32-byte\\n`grant_ref` (sha256 of the app's grant id) so the app can address it\\ndirectly and so the same grant can never be paid out twice.",
+      "lib": "",
+      "name": "Disbursement",
+      "fields": [
+        {
+          "doc": "Amount paid in the token's minor units (stroops for XLM; 7 decimals).",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "Ledger sequence the disbursement landed on (proof-of-time).",
+          "name": "ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "The address the pool paid.",
+          "name": "recipient",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "One-time setup. Records the admin and the pool's SAC token, then unpauses.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deposit `amount` of the pool token into the contract's custody.\\n\\nAuth: requires the funder's signature; the same authorization covers the\\ninner SAC `transfer(funder -> contract)`. Anyone may top up the pool.",
+      "name": "fund",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "funder",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Release a grant from the pool to `recipient` and write a permanent\\non-chain receipt under `grant_ref`.\\n\\nAuth: the contract admin only. A grant can be disbursed exactly once.",
+      "name": "disburse",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "grant_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_disbursement",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "grant_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Disbursement"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_disbursed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "grant_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pool_balance",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_disbursed",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_disbursements",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_token",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unpause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Replace the contract's own code (admin-gated). Lets Tulong ship fixes\\nwithout migrating receipt state \\xe2\\x80\\x94 important for a mainnet (L6) deploy.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

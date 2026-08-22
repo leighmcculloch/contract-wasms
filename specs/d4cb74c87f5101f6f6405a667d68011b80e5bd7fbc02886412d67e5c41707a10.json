@@ -1,0 +1,101 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidUsername",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "UsernameTaken",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "AlreadyRegistered",
+          "value": 3
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Resolves a claimed username to its owning address, or `None` if it\\nis unclaimed (or was never valid to begin with).",
+      "name": "resolve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "username",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Claims `username` for `user`. Permanent: once claimed a username can\\nnever be released, changed, or transferred, and each address may\\nclaim only one. `username` must already be lowercase - the contract\\nrejects anything else rather than silently normalizing it, so a\\ncaller never claims a different string than what it typed.",
+      "name": "register",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "username",
+          "type_": "string"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the username `user` has claimed, if any.",
+      "name": "username_of",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "string"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "True if `username` is well-formed AND still unclaimed.",
+      "name": "is_available",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "username",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  }
+]

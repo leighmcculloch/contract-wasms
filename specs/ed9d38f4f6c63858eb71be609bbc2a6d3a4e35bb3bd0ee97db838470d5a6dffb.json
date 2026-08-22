@@ -1,0 +1,510 @@
+[
+  {
+    "function_v0": {
+      "doc": "Initialize the contract. Caller becomes admin. Only callable once.\\n`caller.require_auth()` prevents front-running \\xe2\\x80\\x94 the first authenticated\\ncaller to invoke `init` is the admin.",
+      "name": "init",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "oracle",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Retrieve admin address",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pause all escrow operations (admin only)",
+      "name": "pause",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin cancels an escrow (refunds to sender)",
+      "name": "cancel",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "escrow_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sender reclaims tokens after timeout",
+      "name": "refund",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "escrow_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin finalizes settlement. Applies locked FX rate.",
+      "name": "settle",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "escrow_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Resume escrow operations (admin only)",
+      "name": "unpause",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "EscrowNotFound",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "NotInCreatedState",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "NotInCounterpartyApprovedState",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "NotInRefundableState",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "AlreadyResolved",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "TimeoutNotReached",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "FxComputationOverflow",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "InsufficientBalance",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "InvalidTimeout",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "InvalidCorridor",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "ContractPaused",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "TransferFailed",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "InvalidRate",
+          "value": 17
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Escrow",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "approved_at",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "cancelled_by",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "corridor",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "created_at",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "fx_rate",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "oracle_id",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "settled_at",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "EscrowStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "timeout_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_escrow",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "escrow_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "Escrow"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_oracle",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Update the FX rate oracle address (admin only)",
+      "name": "set_oracle",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "oracle",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "escrow_count",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "list_escrows",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "start",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "limit",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "u64"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Create a new escrow. Returns the escrow ID.",
+      "name": "create_escrow",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "timeout_blocks",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "corridor",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Transfer admin authority to a new address (current admin only)",
+      "name": "transfer_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "EscrowStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Created"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "CounterpartyApproved"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Settled"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Refunded"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cancelled"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "escrow_summaries",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "ids",
+          "type_": {
+            "vec": {
+              "element_type": "u64"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "map": {
+            "key_type": "u64",
+            "value_type": {
+              "udt": {
+                "name": "EscrowStatus"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Counterparty (receiver) approves the settlement terms.",
+      "name": "counterparty_approve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "escrow_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

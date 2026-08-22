@@ -1,0 +1,1711 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execute",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "commands",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Command"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unpause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "View: whether `account` currently holds `role`.",
+      "name": "has_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_bridge",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_broker",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_engine",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Grant `role` to `account`. `caller` must be the contract admin or hold\\nthe admin-role of `role`. Auth + admin checks are enforced by\\n`access_control::grant_role`.",
+      "name": "grant_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_bridge",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_bridge",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_broker",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_broker",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_engine",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_engine",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Revoke `role` from `account`. Same auth model as `grant_role`.",
+      "name": "revoke_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_registry",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_registry",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_registry",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "registry",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_min_gas_floor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "target_chain_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "gas_token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Minimum gas a bridge-out command must attach for a given\\n`(target_chain_id, gas_token)`. Default 0 (disabled).",
+      "name": "set_min_gas_floor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "target_chain_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "gas_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_floor",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer_admin_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accept_admin_transfer",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PausedSet",
+      "prefix_topics": [
+        "paused_set"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BridgeChanged",
+      "prefix_topics": [
+        "bridge_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BrokerChanged",
+      "prefix_topics": [
+        "broker_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "EngineChanged",
+      "prefix_topics": [
+        "engine_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RegistryChanged",
+      "prefix_topics": [
+        "registry_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ExecuteCompleted",
+      "prefix_topics": [
+        "execute_completed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "command_count",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MinGasFloorChanged",
+      "prefix_topics": [
+        "min_gas_floor_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "target_chain_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "gas_token",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "old",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Multi-hop swap route descriptor, matching `stellar_broker::types::route::Route`.",
+      "lib": "",
+      "name": "Route",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "estimated",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "path",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "PathStep"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Sentinel for an amount slot of a command argument.\\n\\n`Balance` instructs the dispatcher to use the Router's current balance\\nof the relevant token (Solidity's `CONTRACT_BALANCE` sentinel). `Exact`\\nis a plain `i128` value.\\n\\nNOTE: `TransferFrom + Balance` is a special case \\xe2\\x80\\x94 the owner is the\\ncaller, so it resolves to `token.balance(&caller)` and attempts to pull\\nthat entire balance via SEP-41 `transfer_from`. The caller must have\\npre-approved the Router for at least that amount, otherwise the call\\npanics with `InsufficientAllowance`. All other commands resolve\\n`Balance` against the Router's own balance.",
+      "lib": "",
+      "name": "Amount",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Balance"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Exact",
+            "type_": [
+              "i128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "The Router's `execute(caller, commands, deadline)` entry point loops\\nover a `Vec<Command>` and dispatches each variant. Sentinel enums in\\nthe recipient/amount slots are resolved per command.\\n\\nVariants map to Solidity opcodes from `Commands.sol`:\\n- `TransferFrom`             \\xe2\\x86\\x92 0x00 TRANSFER_FROM\\n- `Transfer`                 \\xe2\\x86\\x92 0x02 TRANSFER\\n- `AssertMinBalance`         \\xe2\\x86\\x92 0x0f ASSERT_MIN_BALANCE\\n- `DepositAssetInIbt`        \\xe2\\x86\\x92 0x04 DEPOSIT_ASSET_IN_IBT\\n- `DepositIbtInPt`           \\xe2\\x86\\x92 0x06 DEPOSIT_IBT_IN_PT\\n- `RedeemIbtForAsset`        \\xe2\\x86\\x92 0x07 REDEEM_IBT_FOR_ASSET\\n- `RedeemPtForIbt`           \\xe2\\x86\\x92 0x09 REDEEM_PT_FOR_IBT\\n- `CancelOrders`             \\xe2\\x86\\x92 (Stellar-only; no Solidity opcode)\\n- `FillOrders`               \\xe2\\x86\\x92 (Stellar-only; no Solidity opcode)\\n- `BridgeNativePtToEvm`      \\xe2\\x86\\x92 (Stellar-only; no Solidity opcode)\\n- `BridgeWrappedPtBackToEvm` \\xe2\\x86\\x92 (Stellar-only; no Solidity opcode)\\n- `BrokerSwap`               \\xe2\\x86\\x92 (Stellar-only; no Solidity opcode)",
+      "lib": "",
+      "name": "Command",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "TransferFrom",
+            "type_": [
+              {
+                "udt": {
+                  "name": "TransferFromArgs"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Transfer",
+            "type_": [
+              {
+                "udt": {
+                  "name": "TransferArgs"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "AssertMinBalance",
+            "type_": [
+              {
+                "udt": {
+                  "name": "AssertMinBalanceArgs"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "DepositAssetInIbt",
+            "type_": [
+              {
+                "udt": {
+                  "name": "DepositAssetInIbtArgs"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "DepositIbtInPt",
+            "type_": [
+              {
+                "udt": {
+                  "name": "DepositIbtInPtArgs"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "RedeemIbtForAsset",
+            "type_": [
+              {
+                "udt": {
+                  "name": "RedeemIbtForAssetArgs"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "RedeemPtForIbt",
+            "type_": [
+              {
+                "udt": {
+                  "name": "RedeemPtForIbtArgs"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "RegisterOrders",
+            "type_": [
+              {
+                "udt": {
+                  "name": "RegisterOrdersArgs"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "CancelOrders",
+            "type_": [
+              {
+                "udt": {
+                  "name": "CancelOrdersArgs"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "FillOrders",
+            "type_": [
+              {
+                "udt": {
+                  "name": "FillOrdersArgs"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "BridgeNativePtToEvm",
+            "type_": [
+              {
+                "udt": {
+                  "name": "BridgeNativePtToEvmArgs"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "BridgeWrappedPtBackToEvm",
+            "type_": [
+              {
+                "udt": {
+                  "name": "BridgeWrappedPtBackToEvmArgs"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "BrokerSwap",
+            "type_": [
+              {
+                "udt": {
+                  "name": "BrokerSwapArgs"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A single hop inside a swap route.",
+      "lib": "",
+      "name": "PathStep",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "bi",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "protocol",
+          "type_": {
+            "udt": {
+              "name": "Protocol"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "si",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "LP protocol identifier, mirroring `stellar_broker::types::protocol::Protocol`.",
+      "lib": "",
+      "name": "Protocol",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AquaConstant",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "AquaStable",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Soroswap",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Comet",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "Phoenix",
+          "value": 4
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Sentinel for the recipient slot of a command argument.\\n\\nResolved by the Router's dispatcher to a concrete `Address` at execute\\ntime. `Caller` is the original `execute` caller, `Router` is the Router\\ncontract itself, and `Address` is an explicit third-party address.",
+      "lib": "",
+      "name": "Recipient",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Caller"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Router"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Address",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TransferArgs",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": {
+            "udt": {
+              "name": "Amount"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": {
+            "udt": {
+              "name": "Recipient"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BrokerSwapArgs",
+      "fields": [
+        {
+          "doc": "",
+          "name": "fee_path",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "PathStep"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fixed_fee_permille",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "min_amount_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "routes",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Route"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FillOrdersArgs",
+      "fields": [
+        {
+          "doc": "",
+          "name": "params",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "FillOrderParams"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": {
+            "udt": {
+              "name": "Recipient"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "taker_input_amount",
+          "type_": {
+            "udt": {
+              "name": "Amount"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "taker_input_token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Cancel resting maker orders on the LimitOrderEngine. Cancellation is\\nself-service: every order in the batch must share one maker, whose auth the\\nengine requires once over the whole batch. Wraps `cancel_orders_batch`.",
+      "lib": "",
+      "name": "CancelOrdersArgs",
+      "fields": [
+        {
+          "doc": "",
+          "name": "orders",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Order"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TransferFromArgs",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": {
+            "udt": {
+              "name": "Amount"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DepositIbtInPtArgs",
+      "fields": [
+        {
+          "doc": "",
+          "name": "ibts",
+          "type_": {
+            "udt": {
+              "name": "Amount"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "min_shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "pt",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pt_recipient",
+          "type_": {
+            "udt": {
+              "name": "Recipient"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "yt_recipient",
+          "type_": {
+            "udt": {
+              "name": "Recipient"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RedeemPtForIbtArgs",
+      "fields": [
+        {
+          "doc": "",
+          "name": "min_ibts",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "pt",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": {
+            "udt": {
+              "name": "Recipient"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": {
+            "udt": {
+              "name": "Amount"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Register (create) resting maker orders on the LimitOrderEngine. Each order\\ncarries its own `maker`, whose auth the engine requires \\xe2\\x80\\x94 so a maker can\\ncreate orders through the router in the same `execute` that later fills or\\nstages them. Wraps the engine's `register_orders_batch`.",
+      "lib": "",
+      "name": "RegisterOrdersArgs",
+      "fields": [
+        {
+          "doc": "",
+          "name": "orders",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Order"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AssertMinBalanceArgs",
+      "fields": [
+        {
+          "doc": "",
+          "name": "min_value",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": {
+            "udt": {
+              "name": "Recipient"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DepositAssetInIbtArgs",
+      "fields": [
+        {
+          "doc": "",
+          "name": "assets",
+          "type_": {
+            "udt": {
+              "name": "Amount"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "ibt",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": {
+            "udt": {
+              "name": "Recipient"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RedeemIbtForAssetArgs",
+      "fields": [
+        {
+          "doc": "",
+          "name": "ibt",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": {
+            "udt": {
+              "name": "Recipient"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": {
+            "udt": {
+              "name": "Amount"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BridgeNativePtToEvmArgs",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": {
+            "udt": {
+              "name": "Amount"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "evm_recipient",
+          "type_": {
+            "bytes_n": {
+              "n": 20
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "gas_amount",
+          "type_": {
+            "udt": {
+              "name": "Amount"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "gas_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "min_amount_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "pt",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "refund_address",
+          "type_": {
+            "udt": {
+              "name": "Recipient"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "target_chain_id",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BridgeWrappedPtBackToEvmArgs",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": {
+            "udt": {
+              "name": "Amount"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "evm_recipient",
+          "type_": {
+            "bytes_n": {
+              "n": 20
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "gas_amount",
+          "type_": {
+            "udt": {
+              "name": "Amount"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "gas_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "min_amount_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "refund_address",
+          "type_": {
+            "udt": {
+              "name": "Recipient"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "target_chain_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "wrapped_pt",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Order",
+      "fields": [
+        {
+          "doc": "Order expiry \\xe2\\x80\\x94 unix seconds. Must satisfy `now < expiry <= pt.maturity`.",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "Slippage floor for the wrapper conversions, expressed as **output per\\ninput**: the minimum raw output-token amount per `1e18` raw input-token\\nunits. `0` disables the floor.\\n\\nThe engine applies it as `floor = amount * fail_safe_rate / 1e18` against\\nthe realized output of `deposit` / `redeem` (Underlying path), or passes\\nit natively as `min_shares` / `min_vault_shares` to `wrap_with_min_shares`\\n/ `unwrap_with_min_vault_shares` (VaultShare path).\\n\\nBeing raw-output-per-raw-input it carries the output token's decimals and\\nso implicitly encodes the underlying\\xe2\\x86\\x94IBT decimal gap \\xe2\\x80\\x94 set it to\\n`previewConversion(1e18)` of the order's conversion (`previewDeposit`\\nfunding, `previewRedeem` payout, wrap/unwrap preview for VaultShare). It\\nis *not* a decimal-agnostic value ratio: a gapped market holds a large\\nmarket-specific value (e.g. ~`1e30` for a value-preserving\\n6-dec-underlying / 18-dec-IBT deposit), not `~1e18`, and no decimal\\nrescaling is applied on-chain.",
+          "name": "fail_safe_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "Implied APY, 18-decimal fixed-point (1e18 = 100%). Used by the pricing\\nlibrary to compute spot + fee-adjusted prices.",
+          "name": "implied_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "maker",
+          "type_": "address"
+        },
+        {
+          "doc": "Denomination of the IBT leg. For IBT-funding order types (`IbtForPt`,\\n`IbtForYt`) governs what the maker deposits. For IBT-payout types\\n(`PtForIbt`, `YtForIbt`) governs what the maker receives. `Ibt` is the\\npassthrough; `Underlying` and `VaultShare` route through the IBT's\\n`SpectraFungibleVaultWrapper` surface and require `pt.get_ibt()` to\\nhost that wrapper.",
+          "name": "maker_token_type",
+          "type_": {
+            "udt": {
+              "name": "MakerTokenType"
+            }
+          }
+        },
+        {
+          "doc": "Total amount of the making token offered (token-decimals of the making side).",
+          "name": "making_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "order_type",
+          "type_": {
+            "udt": {
+              "name": "OrderType"
+            }
+          }
+        },
+        {
+          "doc": "PrincipalToken contract for which this order is placed.",
+          "name": "pt",
+          "type_": "address"
+        },
+        {
+          "doc": "Where the maker receives the taker's payment.",
+          "name": "receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "Disambiguates otherwise-identical orders (same maker/pt/amount/rate)",
+          "name": "salt",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Order direction. Solidity `OrderType` enum (ILimitOrderEngine.sol).\\n`#[contracttype]` unit-variant enums serialize as the variant name\\n(`Symbol`), so off-chain consumers see `\"IbtForPt\"` on the wire \\xe2\\x80\\x94 not a\\nnumeric discriminant. Cross-chain consumers must therefore match on the\\nvariant name, not on a numeric value shared with the Solidity enum.",
+      "lib": "",
+      "name": "OrderType",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "maker sells IBT, taker pays PT",
+            "name": "IbtForPt"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "maker sells PT, taker pays IBT",
+            "name": "PtForIbt"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "maker sells IBT, taker pays YT",
+            "name": "IbtForYt"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "maker sells YT, taker pays IBT",
+            "name": "YtForIbt"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Denomination the maker funds (or receives, on payout-side) the IBT leg\\nin. Mirrors Solidity `MakerTokenType` from PR #22. `Ibt` is the no-conversion\\npath and equals `pt.get_ibt()` (whether or not that IBT is a Spectra wrapper).",
+      "lib": "",
+      "name": "MakerTokenType",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Ibt"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "VaultShare"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Underlying"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FillOrderParams",
+      "fields": [
+        {
+          "doc": "Amount of the making side the caller wants this order to provide.\\nEngine fills `min(making_amount, status.remaining)`.",
+          "name": "making_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_taking",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "order",
+          "type_": {
+            "udt": {
+              "name": "Order"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a role is granted.",
+      "lib": "",
+      "name": "RoleGranted",
+      "prefix_topics": [
+        "role_granted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a role is revoked.",
+      "lib": "",
+      "name": "RoleRevoked",
+      "prefix_topics": [
+        "role_revoked"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an admin transfer is completed.",
+      "lib": "",
+      "name": "AdminTransferCompleted",
+      "prefix_topics": [
+        "admin_transfer_completed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "previous_admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an admin transfer is initiated.",
+      "lib": "",
+      "name": "AdminTransferInitiated",
+      "prefix_topics": [
+        "admin_transfer_initiated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "current_admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the contract is paused.",
+      "lib": "",
+      "name": "Paused",
+      "prefix_topics": [
+        "paused"
+      ],
+      "params": [],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the contract is unpaused.",
+      "lib": "",
+      "name": "Unpaused",
+      "prefix_topics": [
+        "unpaused"
+      ],
+      "params": [],
+      "data_format": "map"
+    }
+  }
+]

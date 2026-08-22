@@ -1,0 +1,406 @@
+[
+  {
+    "function_v0": {
+      "doc": "Registers a new TLD when called by the trusted factory contract.",
+      "name": "add_tld",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "contract",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the contract address responsible for a TLD.",
+      "name": "get_tld",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Upgrades the current contract to a new WASM hash.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the user's name from the TLD they chose for global reverse resolution.",
+      "name": "get_name",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "string"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the configured admin address.",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys used by the root registry contract.",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Factory"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "DaoTreasuryAddress"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "DefaultRecordTtlLedgers"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MaxRecordTtlLedgers"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Tld",
+            "type_": [
+              "string"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "GlobalTld",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initializes the contract and stores the admin address.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Removes a TLD when called by the admin.",
+      "name": "remove_tld",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the address for a local name inside the requested TLD.",
+      "name": "get_address",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "tld",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the configured factory contract, if present.",
+      "name": "get_factory",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sets the factory contract allowed to register new TLDs.",
+      "name": "set_factory",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "factory",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the TLD assigned for the user's global resolution, if any.",
+      "name": "get_global_tld",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "string"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sets the TLD the user chose for global resolution.",
+      "name": "set_global_tld",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tld",
+          "type_": "string"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Removes the user's global TLD assignment.",
+      "name": "clear_global_tld",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the configured DAO treasury contract.",
+      "name": "get_dao_treasury",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sets the DAO treasury contract that receives registration payments.",
+      "name": "set_dao_treasury",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Errors emitted by the root registry contract.",
+      "lib": "",
+      "name": "RootRegistryError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "FactoryNotSet",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "DaoTreasuryNotSet",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "TldAlreadyExists",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "TldNotFound",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "GlobalTldNotFound",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "InvalidRecordTtl",
+          "value": 9
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the configured upper bound for user-facing record TTL choices.",
+      "name": "get_max_record_ttl_ledgers",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Updates the upper bound exposed to UI/API record TTL flows.",
+      "name": "set_max_record_ttl_ledgers",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "value",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the default TTL used by hot record write paths.",
+      "name": "get_default_record_ttl_ledgers",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Updates the default TTL used by hot record write paths.",
+      "name": "set_default_record_ttl_ledgers",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "value",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

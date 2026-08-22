@@ -1,0 +1,2051 @@
+[
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Paused",
+      "prefix_topics": [
+        "pause"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Role",
+            "type_": [
+              "symbol"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Request",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "MarketRequest",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "NextRequestId"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RoleSet",
+      "prefix_topics": [
+        "role"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "module",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AdminSet",
+      "prefix_topics": [
+        "admin"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "request",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "ResolutionRequest"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "module",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OutcomeDisputed",
+      "prefix_topics": [
+        "dispute"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "disputer",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OutcomeProposed",
+      "prefix_topics": [
+        "propose"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "proposer",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "market_request",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RequestEscalated",
+      "prefix_topics": [
+        "escal"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u64",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RequestFinalized",
+      "prefix_topics": [
+        "final"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "dispute_outcome",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "disputer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "counter_outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "evidence_uri",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "propose_outcome",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proposer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "evidence_uri",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ResolutionRequested",
+      "prefix_topics": [
+        "res_req"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "request_resolution",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "question_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "rules_uri",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "bond_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "dispute_window",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "escalate_to_council",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "finalize_undisputed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Outcome"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CouncilOutcomeReported",
+      "prefix_topics": [
+        "cod_fin"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Atomicity guarantee for the sequential bond distribution below:\\n\\n`vault_client.release_bond` and `vault_client.slash_bond` are called via\\nthe generated non-Try client.  Any `Err` or trap returned by a nested\\ncall propagates as a trap/panic, which causes Soroban to revert the\\n*entire* top-level transaction write-set \\xe2\\x80\\x94 including storage mutations and\\ntoken transfers from all prior steps in this same invocation.  Therefore\\nbonds can never be partially distributed: either every slash/release in\\nthis function commits atomically, or none of them do.",
+      "name": "report_council_outcome",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Outcome",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Yes"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "No"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Invalid"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PoolData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "accumulated_cod_fees",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "accumulated_lp_fees",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "accumulated_protocol_fees",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee_per_share_scaled",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "live",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "no_reserve",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_lp_shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "yes_reserve",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DikeError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidInput",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidStatus",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidTransition",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "MarketExists",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "MarketNotFound",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "PoolNotFound",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "RequestNotFound",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "CaseNotFound",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "AlreadyResolved",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "AlreadyRedeemed",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "InsufficientBalance",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "InsufficientCollateral",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "SlippageExceeded",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "DeadlineExpired",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "NotExpired",
+          "value": 19
+        },
+        {
+          "doc": "",
+          "name": "DisputeWindowOpen",
+          "value": 20
+        },
+        {
+          "doc": "",
+          "name": "DisputeWindowClosed",
+          "value": 21
+        },
+        {
+          "doc": "",
+          "name": "EvidenceRequired",
+          "value": 22
+        },
+        {
+          "doc": "",
+          "name": "AlreadyDisputed",
+          "value": 23
+        },
+        {
+          "doc": "",
+          "name": "InvalidReveal",
+          "value": 24
+        },
+        {
+          "doc": "",
+          "name": "VoteAlreadyCommitted",
+          "value": 25
+        },
+        {
+          "doc": "",
+          "name": "VoteNotCommitted",
+          "value": 26
+        },
+        {
+          "doc": "",
+          "name": "TooEarly",
+          "value": 27
+        },
+        {
+          "doc": "",
+          "name": "TimelockNotReady",
+          "value": 28
+        },
+        {
+          "doc": "",
+          "name": "ActionConsumed",
+          "value": 29
+        },
+        {
+          "doc": "",
+          "name": "UnsupportedCollateral",
+          "value": 30
+        },
+        {
+          "doc": "",
+          "name": "CreatorNotApproved",
+          "value": 31
+        },
+        {
+          "doc": "",
+          "name": "ArithmeticError",
+          "value": 32
+        },
+        {
+          "doc": "",
+          "name": "ChainDepthExceeded",
+          "value": 33
+        },
+        {
+          "doc": "",
+          "name": "ChildCollateralLimitExceeded",
+          "value": 34
+        },
+        {
+          "doc": "",
+          "name": "EncumberedPosition",
+          "value": 35
+        },
+        {
+          "doc": "",
+          "name": "NotLiquidatable",
+          "value": 36
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FeeConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "cod_fee_share_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "council_reward",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "creation_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "lp_fee_share_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "trading_fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "treasury_fee_share_bps",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "bond_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "collateral",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "created_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "dispute_window",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "fee_config",
+          "type_": {
+            "udt": {
+              "name": "FeeConfig"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "final_outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "has_final_outcome",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "has_request",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "no_token_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "question",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "question_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "rules_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "rules_uri",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "MarketStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "yes_token_id",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TradeQuote",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "amount_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "average_price_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "net_in",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CouncilCase",
+      "fields": [
+        {
+          "doc": "",
+          "name": "commit_end",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "dispute_bond",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "disputer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "disputer_evidence_uri",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "disputer_outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "final_outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "has_final_outcome",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "invalid_votes",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "no_votes",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "proposal_bond",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "proposer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "proposer_evidence_uri",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "proposer_outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "reveal_end",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "CouncilCaseStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "total_valid_votes",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "voting_start",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "yes_votes",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "bond_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "category",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "collateral",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "dispute_window",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "fee_config",
+          "type_": {
+            "udt": {
+              "name": "FeeConfig"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "question",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "question_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "rules_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "rules_uri",
+          "type_": "string"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Created"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Live"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TradingClosed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ResolutionRequested"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Proposed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Disputed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "CouncilVoting"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Resolved"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cancelled"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OracleStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "None"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Requested"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Proposed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Disputed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Escalated"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Finalized"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OpenCaseConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "commit_duration",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "dispute_bond",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "proposal_bond",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "reveal_duration",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TimelockAction",
+      "fields": [
+        {
+          "doc": "",
+          "name": "cancelled",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "execute_after",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "executed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "kind",
+          "type_": {
+            "udt": {
+              "name": "TimelockActionKind"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payload",
+          "type_": {
+            "udt": {
+              "name": "TimelockPayload"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payload_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TimelockPayload",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Treasury",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Creator",
+            "type_": [
+              "address",
+              "bool"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "CouncilMember",
+            "type_": [
+              "address",
+              "bool"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "SupportedCollateral",
+            "type_": [
+              "address",
+              "bool"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "ModuleAddress",
+            "type_": [
+              "symbol",
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Pause",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "FeeConfig",
+            "type_": [
+              {
+                "udt": {
+                  "name": "FeeConfig"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Upgrade",
+            "type_": [
+              "symbol",
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Timelock",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VaultAccounting",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amm_collateral",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "child_collateral_defaulted",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "child_collateral_issued",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "child_collateral_repaid",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "cod_fees",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "collateral_backing",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "dispute_bonds",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "lp_fees",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "proposal_bonds",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "protocol_fees",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "redeemed",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "refundable",
+          "type_": "i128"
+        },
+        {
+          "doc": "Known unrecoverable deficit for this market \\xe2\\x80\\x94 claims that exceed real\\nbacking after insurance-reserve absorption. Read by `capped_payout`\\nto pro-rata haircut redemptions instead of hard-reverting.",
+          "name": "shortfall",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_deposited",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CouncilCaseStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Opened"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "CommitPhase"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "RevealPhase"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ReadyToFinalize"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Finalized"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cancelled"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ResolutionRequest",
+      "fields": [
+        {
+          "doc": "",
+          "name": "bond_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "dispute_evidence_uri",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "dispute_window",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "disputed_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "disputed_outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "disputer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "final_outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "has_dispute",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "has_final_outcome",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "has_proposal",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "proposal_evidence_uri",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "proposed_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "proposed_outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "proposer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "question_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "requested_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "rules_uri",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "OracleStatus"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TimelockActionKind",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "FeeConfig"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Treasury"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SupportedCollateral"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Creator"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "CouncilMember"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ModuleAddress"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Pause"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Upgrade"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Timelock"
+          }
+        }
+      ]
+    }
+  }
+]

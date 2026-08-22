@@ -1,0 +1,162 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "The two shares do not sum to 10000.",
+          "name": "InvalidBpsSum",
+          "value": 1
+        },
+        {
+          "doc": "One share is zero. Each recipient must get a part.",
+          "name": "ZeroBps",
+          "value": 2
+        },
+        {
+          "doc": "The two recipients are the same address.",
+          "name": "DuplicateRecipient",
+          "value": 3
+        },
+        {
+          "doc": "The contract holds no balance of the token.",
+          "name": "NoBalance",
+          "value": 4
+        },
+        {
+          "doc": "The multiplication of the balance and the share overflowed.",
+          "name": "MathOverflow",
+          "value": 5
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "The contract emits this event one time for each successful withdraw.",
+      "lib": "",
+      "name": "Withdraw",
+      "prefix_topics": [
+        "withdraw"
+      ],
+      "params": [
+        {
+          "doc": "The token that the contract sent.",
+          "name": "token",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "recipient_a",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount_a",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "recipient_b",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount_b",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the two recipients and their shares, in constructor order.",
+      "name": "config",
+      "inputs": [],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              {
+                "tuple": {
+                  "value_types": [
+                    "address",
+                    "u32"
+                  ]
+                }
+              },
+              {
+                "tuple": {
+                  "value_types": [
+                    "address",
+                    "u32"
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sends the full balance of `token` to the two recipients.\\n\\nAny account can call this function. The function does not read the\\ncaller and does not require the authorization of the caller.\\n\\nThe recipient with the larger share gets\\n`floor(balance * bps / 10000)`. The other recipient gets the rest.\\nThe rounding remainder, which is smaller than one unit of the token,\\nalways goes to the recipient with the smaller share. If the two shares\\nare equal, the remainder goes to `recipient_b`.\\n\\nReturns the two amounts in constructor order.",
+      "name": "withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "i128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Writes the two recipients and their shares. This runs one time, at\\ndeployment. After this function, the configuration is permanent.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "recipient_a",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "bps_a",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "recipient_b",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "bps_b",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

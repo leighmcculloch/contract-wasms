@@ -1,0 +1,138 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "hash de consolidaci\\xc3\\xb3n \\xe2\\x86\\x92 versi\\xc3\\xb3n de regla (String corta, p.ej. \"1.0.0\")",
+            "name": "Registered",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "hash de valoraci\\xc3\\xb3n convertida (existencia = ya convertida)",
+            "name": "Converted",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Fija la cuenta administradora. Solo puede llamarse una vez.",
+      "name": "init",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Registra el hash de una consolidaci\\xc3\\xb3n con la versi\\xc3\\xb3n de regla usada.\\nSolo el admin (el backend de Flow-Where) puede registrar.",
+      "name": "register",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "rule_version",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "\\xc2\\xbfFue convertida la valoraci\\xc3\\xb3n con este hash? (verificaci\\xc3\\xb3n p\\xc3\\xbablica)",
+      "name": "is_converted",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "\\xc2\\xbfEst\\xc3\\xa1 registrado este hash de consolidaci\\xc3\\xb3n? (verificaci\\xc3\\xb3n p\\xc3\\xbablica)",
+      "name": "is_registered",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Marca la conversi\\xc3\\xb3n autorizada de una valoraci\\xc3\\xb3n consolidada.\\nFALLA si el hash no est\\xc3\\xa1 registrado o si YA fue convertido:\\nninguna doble conversi\\xc3\\xb3n es posible (criterio de la Etapa 4).",
+      "name": "mark_converted",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

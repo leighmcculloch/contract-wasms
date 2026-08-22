@@ -1,0 +1,352 @@
+[
+  {
+    "function_v0": {
+      "doc": "Called by each of the registered attestors.\\nOnce the 2-of-3 threshold is reached, `mint_receivable_token` is\\ncalled automatically and status moves to Attested.",
+      "name": "attest",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "attestor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "receivable_id",
+          "type_": "u128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_count",
+      "inputs": [],
+      "outputs": [
+        "u128"
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Receivable",
+            "type_": [
+              "u128"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Counter"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Must be called once after deployment.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Called by FractionalSale contract when sale closes and exporter is paid.",
+      "name": "mark_active",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "receivable_id",
+          "type_": "u128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Called by SettlementEscrow after successful payout.",
+      "name": "mark_settled",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "receivable_id",
+          "type_": "u128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Receivable",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount_usd_cents",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "attestations",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "attestors",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "buyer_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "created_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "currency",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "doc_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "exporter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "ipfs_cid",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "maturity_date",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "ReceivableStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "token_asset_code",
+          "type_": {
+            "option": {
+              "value_type": "symbol"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Emergency clawback \\xe2\\x80\\x94 issuer only.",
+      "name": "mark_clawback",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "receivable_id",
+          "type_": "u128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_receivable",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "receivable_id",
+          "type_": "u128"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Receivable"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ReceivableStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Pending"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Attested"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Active"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Settled"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Clawback"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Exporter submits a purchase order / bill of lading.\\n`doc_hash` is the SHA-256 of the uploaded document (computed off-chain).\\n`ipfs_cid` is the IPFS content identifier where the file is pinned.\\n`attestors` is a Vec of up to 3 addresses (logistics partner, export\\ncouncil, NBFC) who must attest before minting.",
+      "name": "register_receivable",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "exporter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "buyer_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amount_usd_cents",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "currency",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "maturity_date",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "doc_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "ipfs_cid",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "attestors",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "u128"
+      ]
+    }
+  }
+]

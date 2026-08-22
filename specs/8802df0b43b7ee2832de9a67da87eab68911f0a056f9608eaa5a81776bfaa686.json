@@ -1,0 +1,569 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidConfiguration",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "RouteNotFound",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "RouteDisabled",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "PendingExists",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "NoPendingRoute",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "TooEarly",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "StaleRevision",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "Arithmetic",
+          "value": 9
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Config",
+      "fields": [
+        {
+          "doc": "",
+          "name": "assets",
+          "type_": {
+            "vec": {
+              "element_type": "symbol"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "delay",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "governance",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "InitialRoute",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "registration_required",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "resolver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "risk_group",
+          "type_": "symbol"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PendingRoute",
+      "fields": [
+        {
+          "doc": "",
+          "name": "enabled",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "execute_after",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "expected_revision",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "registration_required",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "resolver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "risk_group",
+          "type_": "symbol"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ResolverRoute",
+      "fields": [
+        {
+          "doc": "",
+          "name": "enabled",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "registration_required",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "resolver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "revision",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "risk_group",
+          "type_": "symbol"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RouteExecuted",
+      "prefix_topics": [
+        "route_executed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "resolver",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "risk_group",
+          "type_": "symbol",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "registration_required",
+          "type_": "bool",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "enabled",
+          "type_": "bool",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "revision",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RouteProposed",
+      "prefix_topics": [
+        "route_proposed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "resolver",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "risk_group",
+          "type_": "symbol",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "registration_required",
+          "type_": "bool",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "enabled",
+          "type_": "bool",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "expected_revision",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "execute_after",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "route",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "ResolverRoute"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RouteCancelled",
+      "prefix_topics": [
+        "route_cancelled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "expected_revision",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "config",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Config"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "extend_ttl",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_current",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "revision",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "resolver",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "active_route",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "ResolverRoute"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel_route",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "governance",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "governance",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "delay",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "initial_routes",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "InitialRoute"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execute_route",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "ResolverRoute"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pending_route",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "PendingRoute"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "propose_route",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "governance",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "resolver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "risk_group",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "registration_required",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "enabled",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "PendingRoute"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

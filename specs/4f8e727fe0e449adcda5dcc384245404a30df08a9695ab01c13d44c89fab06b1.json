@@ -1,0 +1,458 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidParty",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidDueLedger",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "PledgeExists",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "PledgeNotFound",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidStatus",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "DueDateNotReached",
+          "value": 9
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Pledge",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "charity",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "donor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "due_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "PledgeStatus"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PledgePaid",
+      "prefix_topics": [
+        "pledge_paid"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "pledge_id",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Initialized",
+      "prefix_topics": [
+        "initialized"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PledgeStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Open"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Funded"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paid"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Refunded"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cancelled"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PledgeFunded",
+      "prefix_topics": [
+        "pledge_funded"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "pledge_id",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PledgeCreated",
+      "prefix_topics": [
+        "pledge_created"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "pledge_id",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PledgeRefunded",
+      "prefix_topics": [
+        "pledge_refunded"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "pledge_id",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PledgeCancelled",
+      "prefix_topics": [
+        "pledge_cancelled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "pledge_id",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "fund",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pledge_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "asset",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pledge_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "refund",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pledge_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "release",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pledge_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_pledge",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pledge_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Pledge"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_pledge",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pledge_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "donor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "charity",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "due_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

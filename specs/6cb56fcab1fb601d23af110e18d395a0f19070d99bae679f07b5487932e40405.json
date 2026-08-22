@@ -1,0 +1,619 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Err",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotAllowed",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "InsufficientBalance",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "NegativeAmount",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "Overflow",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "Frozen",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "VenueNotFreezable",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "CapExceeded",
+          "value": 12
+        },
+        {
+          "doc": "`#16` - this contract, `disallow` refused because the target is\\na venue address (one the operator has marked with `add_venue`).\\nNOT 14 or 15: the SAC occupies 1 THROUGH 15 inclusive in\\nsoroban-env-host-27.0.1, the version pinned in Cargo.lock, so\\n`#16` is the first slot it does not use. Re-check the SAC table\\nbefore assigning any further local code.",
+          "name": "VenueProtected",
+          "value": 16
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Key",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Underlying"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Name"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Symbol"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Entry pause (blocks `wrap`). The ONLY pause in this contract.\\nThere is deliberately no exit pause - see the file-level comment.",
+            "name": "Paused"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Balance",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Set on admit by `allow` and `add_venue`; REMOVED on `disallow`.\\nThere is no function in this contract that writes `false` to an\\n`Allowed` key - the entry is either present (`allow`-side) or\\nabsent (`disallow`-side), matching the unfreeze pattern. Venue\\naddresses are structurally protected from `disallow` (see the\\nfile-level comment and `#16 VenueProtected`), so the venue\\nsubset of this map remains monotone-additive; non-venue\\nadmittees can be removed by admin and re-admitted.",
+            "name": "Allowed",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Sender-side freeze. Set on `freeze`, REMOVED on `unfreeze` (not\\nwritten as `false`). A missing entry means NOT frozen; a present\\nentry means frozen. The remove-on-unfreeze pattern keeps the\\ninvariant symmetric with the age-out failure mode: an archived\\nFrozen entry fails at footprint load, which fails CLOSED.",
+            "name": "Frozen",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Venue marker. Set on `add_venue`, NEVER unset (no remove_venue\\nfunction exists). Presence is the semantic; readers use `has()`,\\nnever read the stored value. A marked address is one the operator\\nhas declared part of the venue payout path (Blend pool, facade,\\netc.) and `freeze` must refuse to point at it because freezing\\nthe venue sender would strand every supplied balance until\\nunfrozen - see `add_venue` and the file-level comment.",
+            "name": "Venue",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WrapEvent",
+      "prefix_topics": [
+        "wrap_event"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AllowEvent",
+      "prefix_topics": [
+        "allow_event"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VenueEvent",
+      "prefix_topics": [
+        "venue_event"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FreezeEvent",
+      "prefix_topics": [
+        "freeze_event"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UnwrapEvent",
+      "prefix_topics": [
+        "unwrap_event"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DisallowEvent",
+      "prefix_topics": [
+        "disallow_event"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TransferEvent",
+      "prefix_topics": [
+        "transfer_event"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UnfreezeEvent",
+      "prefix_topics": [
+        "unfreeze_event"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetPausedEvent",
+      "prefix_topics": [
+        "set_paused_event"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "name",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pull the restricted asset in, mint wrapped 1:1. The `from` is\\ngated: a non-allowlisted address cannot wrap because that would\\nbe a way to acquire the wrapped token.",
+      "name": "wrap",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin adds an address to the transfer allowlist. The counterpart\\nis `disallow`, which REMOVES the entry rather than writing `false`\\n(presence is the semantic, matching the unfreeze pattern).\\n`disallow` is REFUSED against any address the operator has marked\\nwith `add_venue` (panics with `#16 VenueProtected`); the venue\\nguard is mandatory because removing the Blend pool or the facade\\nfrom the allowlist strands every supplier at once. The new entry\\nis bumped to the network maximum TTL because admission is\\npermanent-by-design (a quiet-but-readmitted member must never see\\ntheir entry archive) and re-`allow` after `disallow` re-applies\\nthe same bump.",
+      "name": "allow",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin freezes an address. The `from`-side gate in `transfer`\\nthen refuses that address with `#8`. `wrap` and `unwrap` are\\nNOT affected - a frozen member can still be paid out by a\\nvenue (Blend payout is `transfer(pool -> member)` where `from`\\nis the pool, not the member) and can still redeem their own\\nwrapped balance. Admins can be frozen; the admin multisig\\nitself is the only address that can write the entry. Bumps\\nthe entry to the network maximum TTL because an archived\\nFrozen entry fails at footprint load, which fails CLOSED.\\n\\nVenue guard: a venue address (one the operator has marked with\\n`add_venue`) is REFUSED with `#9 VenueNotFreezable`. Freezing\\nthe venue sender would strand every supplied balance until\\nunfrozen, because `transfer` applies `require_not_frozen` to\\nany `from` - and Blend's payout is `transfer(pool -> member)`\\nwhere the POOL is the sender. The guard closes that. There is\\nno `remove_venue` so the marker is monotone-additive; an\\naddress that was a venue stays one, and `freeze` continues to\\n",
+      "name": "freeze",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "symbol",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Burn wrapped, return the restricted asset. Deliberately has NO\\neligibility check on `from`: the underlying asset's authorization\\nflags refuse the payout if the holder is no longer eligible\\n(`SAC` error `#11`). Adding a check here would be redundant and\\nrisks diverging from the asset's own view. Exit is structurally\\nunpausable - see the file-level comment.",
+      "name": "unwrap",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "decimals",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin removes an address from the transfer allowlist. The\\ncounterpart of `allow`. REMOVES the storage entry rather than\\nwriting `false` - mirrors `unfreeze` exactly so the invariant is\\nsymmetric with the age-out failure mode: a missing Allowed entry\\nfails the next transaction at footprint load (which fails CLOSED\\nfor a withdrawal) rather than silently admitting. The transfer\\ngate (`require_allowed`) uses `has()` and reads `unwrap_or(false)`;\\nafter `disallow` the gate panics with `#1 NotAllowed` for any\\nwrap or inbound transfer into the address - the same code as a\\nnever-admitted address, so existing telemetry and indexer rules\\nfor `#1` continue to apply.\\n\\nVenue guard: a venue address (one the operator has marked with\\n`add_venue`) is REFUSED with `#16 VenueProtected`. Removing the\\nBlend pool or the facade from the allowlist would strand every\\nsupplier at once: a supply transfers wrapped tokens TO the pool,\\nso the pool must remain receivable. The guard is the structural\\nmirror of the freeze guard (which uses `#",
+      "name": "disallow",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_venue",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Gate on the RECIPIENT (`to`). This is `pool/src/pool/submit.rs:243`\\n(`transfer(pool, to, amount)`) plus the pool-initiated credit\\npaths; an ineligible `to` is refused with `#1`. Gate is a pure\\nlocal storage read - see the file-level comment.\\n\\nSender-side freeze: a frozen `from` is refused with `#8`. The\\ncheck is on `from` ONLY - deliberately NOT on `to` (a frozen\\naddress can still RECEIVE wrapped tokens, which is what makes\\na venue payout into a frozen member succeed). See the\\nfile-level comment for why this is the only place the check\\nlives and why that placement is the only acceptable one.",
+      "name": "transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin reverses a freeze. REMOVES the storage entry rather than\\nwriting `false`. Only frozen addresses then hold a Frozen\\nentry; an archived entry fails at footprint load, which fails\\nCLOSED (transfer blocked). The remove-on-unfreeze pattern\\nkeeps the invariant symmetric with the age-out failure mode -\\nmissing = not frozen, present = frozen. See the file-level\\ncomment for why this gate and the allowlist stay separate:\\n`unfreeze` reverses a SENDER-side restriction and `allow`\\nreverses a RECIPIENT-side one, so neither substitutes for the\\nother.",
+      "name": "unfreeze",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin marks an address as a venue AND allowlists it in a single\\ncall. ADD-ONLY - there is deliberately NO `remove_venue` function:\\nif venue status could be removed, an admin could strip the marker\\nfrom a venue and then call `freeze` on it, which would defeat the\\n`freeze` guard and re-open the strand-every-supplier failure mode\\nthis contract is built to refuse. The marker is monotone-additive\\nand, since `disallow` exists, it is now the ONLY monotone record\\nhere: the allowlist is revocable for ordinary admittees, while\\nthis marker must stay one-way because both guards it backs\\n(`#9` on `freeze`, `#16` on `disallow`) are one-way trips.\\n\\nMarking and allowlisting happen together because a venue that is\\nnot on the allowlist cannot receive wrapped tokens at all\\n(`transfer` rejects with `#1`), so splitting them across two\\ncalls would leave a window in which the two records disagree.\\nBoth entries are bumped to the network maximum TTL for the same\\nreason `allow` is: a quiet venue that ages out silently would\\nstrand its",
+      "name": "add_venue",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_frozen",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_allowed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The ONLY pause in this contract. Gates the ENTRY side (`wrap`)\\nonly. There is deliberately no exit pause - see the file-level\\ncomment for why a halt on `unwrap` would be a trap power. If\\nredemption needs to be halted the issuer does it at the asset\\nlayer (`SAC set_authorized`).",
+      "name": "set_paused",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Constructor. Runs ATOMICALLY as part of contract creation, which\\nis the only window in which admin / underlying / name / symbol\\ncan be set. There is no separate `init` step and so no init\\nfront-run window for an attacker to claim admin: the only way\\nadmin is set is the deploy transaction itself. Requires\\n`--admin <A> --underlying <U> --name <N> --symbol <S>` at\\ndeploy time.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "underlying",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "symbol",
+          "type_": "string"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Like `unwrap`, but with a caller-chosen upper bound on `amount`\\nthat the contract binds the auth to. Sibling of `unwrap`; the\\nexisting `unwrap` is unchanged.\\n\\nWHY THIS EXISTS. The `unwrap` auth is `require_auth()`, which\\ninfers the signed args from the invocation. For a facade that\\ncomputes `amount` from live pool state AFTER calling the pool\\n(e.g. an overpaid Repay where the residue is the pool refund),\\nthe actual `amount` argument can drift between simulation and\\ninclusion (~17 stroops/second of accruing interest on this\\ndebt) and the signed auth no longer matches the invocation\\n- the transaction fails with `Error(auth, invalid_action)` on\\nthe `unwrap` sub-invocation. `require_auth_for_args` lets the\\nCONTRACT decide which values belong to the auth, so we authorise\\nover `cap` only (a stable value the facade knows from the\\nmember's own request vector before any sub-invocation) and\\nallow `amount` to drift without invalidating the tree.\\n\\nSAFETY. Cap-only authorisation is safe here precisely because\\nproceeds go ",
+      "name": "unwrap_capped",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "cap",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

@@ -1,0 +1,36 @@
+[
+  {
+    "function_v0": {
+      "doc": "Deploys a new smart wallet using the provided Wasm hash.\\nBinds the wallet to a specific Passkey (represented here as an admin address/hash for the hackathon context).",
+      "name": "deploy_wallet",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  }
+]

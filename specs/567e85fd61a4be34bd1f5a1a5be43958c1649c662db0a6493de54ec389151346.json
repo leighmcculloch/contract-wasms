@@ -1,0 +1,1863 @@
+[
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Buy",
+      "prefix_topics": [
+        "buy"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "trader",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "side",
+          "type_": {
+            "udt": {
+              "name": "Side"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "cost",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "qy",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "qn",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Which outcome a trade is on.",
+      "lib": "",
+      "name": "Side",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Yes"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "No"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Fund",
+      "prefix_topics": [
+        "fund"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Sell",
+      "prefix_topics": [
+        "sell"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "trader",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "side",
+          "type_": {
+            "udt": {
+              "name": "Side"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "refund",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "qy",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "qn",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "InvalidParams",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InsufficientShares",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "AlreadyResolved",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "NotResolved",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "Undersolvent",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "MarketClosed",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "TooEarlyToResolve",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "ResolverLocked",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "ConfigurationLocked",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "AlreadySettled",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "StaleState",
+          "value": 14
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Batch",
+      "prefix_topics": [
+        "batch"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "batcher",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "dqyes",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "dqno",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "qy",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "qn",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "net",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Buy `shares` (fixed-point) of `side` for `trader`. Charges `quote_buy` collateral,\\ncredits the shares, and moves the market quantities. Returns the amount charged.",
+      "name": "buy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "trader",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "side",
+          "type_": {
+            "udt": {
+              "name": "Side"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Redeem",
+      "prefix_topics": [
+        "redeem"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "trader",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "side",
+          "type_": {
+            "udt": {
+              "name": "Side"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "payout",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Voided",
+      "prefix_topics": [
+        "voided"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "pool_refund",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "sponsor_refund",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Outcome",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Yes"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "No"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Void"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Current LMSR cost function value (fixed-point, value * 2^32).",
+      "name": "cost",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Add collateral subsidy/liquidity to the pool. Fund at least `b * ln 2`\\n(the LMSR worst-case loss) so winning redemptions are always solvent.",
+      "name": "fund",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sell `shares` (fixed-point) of `side` held by `trader`. Debits the shares,\\nmoves the market quantities, and pays `quote_sell` collateral back. Returns the refund.",
+      "name": "sell",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "trader",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "side",
+          "type_": {
+            "udt": {
+              "name": "Side"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "void",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Created",
+      "prefix_topics": [
+        "created"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "finalize_after",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "b",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FeeState",
+      "fields": [
+        {
+          "doc": "",
+          "name": "conditional_lp_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "conditional_protocol_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "escrow",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "rounding_receivable",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "vested",
+          "type_": "bool"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Resolved",
+      "prefix_topics": [
+        "resolved"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Redeem `trader`'s `side` shares after resolution. Winning shares pay 1\\ncollateral each; losing shares pay 0. Shares are burned either way.",
+      "name": "redeem",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "trader",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "side",
+          "type_": {
+            "udt": {
+              "name": "Side"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "status",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "MarketStatus"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BatchQuote",
+      "fields": [
+        {
+          "doc": "",
+          "name": "aggregate_market_charge",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "batch_size",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "conditional_lp_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "conditional_protocol_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee_escrow",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee_per_position",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "no_charge_per_position",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "no_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "no_market_cost",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "no_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "post_yes_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "pre_yes_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "rounding_contribution",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "state_version",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "yes_charge_per_position",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "yes_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "yes_market_cost",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "yes_price",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Resolution parameters: the market resolves YES iff the Reflector price of\\n`asset` at/after `expiry` is >= `threshold` (threshold in the oracle's decimals).",
+      "lib": "",
+      "name": "MarketInfo",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "finalize_after",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "batcher",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "outcome",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "Outcome"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "resolve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FeesVested",
+      "prefix_topics": [
+        "fees_vested"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "lp_fee",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "protocol_fee",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "rounding_reimbursement",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "state_version",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "resolver",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Open"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Closed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Resolved"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Voided"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "fee_state",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "FeeState"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "(q_yes, q_no, b), the current market quantities in fixed-point form.",
+      "name": "get_state",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": [
+                  "i128",
+                  "i128",
+                  "i128"
+                ]
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Current YES price (fixed-point in (0,1), value * 2^32).",
+      "name": "price_yes",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Collateral cost to buy `shares` (fixed-point) of `side`.\\nRounded UP by one unit (pool-favoring) so per-trade truncation never undercharges.",
+      "name": "quote_buy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "side",
+          "type_": {
+            "udt": {
+              "name": "Side"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Shares (fixed-point) held by `trader` on `side`.",
+      "name": "shares_of",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "trader",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "side",
+          "type_": {
+            "udt": {
+              "name": "Side"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PrivateBatch",
+      "prefix_topics": [
+        "private_batch"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "state_version",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "yes_count",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "no_count",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "yes_price",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "no_price",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "yes_charge_per_position",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "no_charge_per_position",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "market_charge",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "rounding_contribution",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "fee_escrow",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ScenarioState",
+      "fields": [
+        {
+          "doc": "",
+          "name": "conditional_lp_fees",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "equity_if_no",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "equity_if_yes",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "market_assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "payout_if_no",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "payout_if_yes",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "state_version",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "collateral",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "extend_ttl",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Collateral refunded to sell `shares` (fixed-point) of `side`.\\nRounded DOWN by one unit (pool-favoring). Errors if it would drive q negative.",
+      "name": "quote_sell",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "side",
+          "type_": {
+            "udt": {
+              "name": "Side"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "apply_batch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "batcher",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "dqyes",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "dqno",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Resolution parameters (asset / threshold / expiry).",
+      "name": "market_info",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "MarketInfo"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "quote_batch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dqyes",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "dqno",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_batcher",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "batcher",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_resolver",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "resolver",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LiquidityOutcome",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Yes"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "No"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Void"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Constructor (runs atomically at deploy and cannot be front-run). Sets the\\n`admin`, `collateral` token (SEP-41), liquidity parameter `b` (fixed-point,\\nvalue * 2^32), and resolution parameters (`asset` / `threshold` / `expiry`).\\nWorst-case operator loss is `b * ln 2`.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "collateral",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "b",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "batch_grace",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "state_version",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LiquiditySettled",
+      "prefix_topics": [
+        "liquidity_settled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "liquidity_vault",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "assets",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PrivateActivated",
+      "prefix_topics": [
+        "private_activated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "batcher",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "liquidity_vault",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "resolver",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "funding",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "lp_fee_share_bps",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "lot_size",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "maximum_batch_size",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "minimum_side_count",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "maximum_price_movement",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "private_config",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "PrivateMarketConfig"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "scenario_state",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "ScenarioState"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PrivateMarketConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "batcher",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "funding",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "liquidity_vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "lot_size",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "lp_fee_share_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "maximum_batch_size",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "maximum_price_movement",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "minimum_side_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "resolver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "rules_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "activate_private",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "factory",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "config",
+          "type_": {
+            "udt": {
+              "name": "PrivateMarketConfig"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "required_funding",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "settle_liquidity",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "record_vested_fees",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "batcher",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "lp_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "prior_unallocated_balance",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expected_version",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "FeeState"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "apply_private_batch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "batcher",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "expected_version",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "yes_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "no_count",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "BatchQuote"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "quote_private_batch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "expected_version",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "yes_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "no_count",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "BatchQuote"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unallocated_balance",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "apply_private_batch_received",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "batcher",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "expected_version",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "yes_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "no_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "prior_unallocated_balance",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "BatchQuote"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

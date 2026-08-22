@@ -1,0 +1,449 @@
+[
+  {
+    "function_v0": {
+      "doc": "Casts a vote for a specific option in an active poll.\\n\\n# Arguments\\n* `poll_id` - ID of the poll.\\n* `voter` - Address of the voter (must authorize).\\n* `option_id` - Zero-indexed option ID being voted for.",
+      "name": "vote",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "poll_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "voter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "option_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Retrieves poll metadata by ID.",
+      "name": "get_poll",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "poll_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Poll"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Retrieves details of a vote cast by a voter.",
+      "name": "get_vote",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "poll_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "voter",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Vote"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Checks if a voter has already cast a vote in a specific poll.",
+      "name": "has_voted",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "poll_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "voter",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Closes a poll manually before or after its end time. Only creator can close.\\n\\n# Arguments\\n* `poll_id` - ID of the poll to close.\\n* `caller` - Address of caller (must authorize and match poll creator).",
+      "name": "close_poll",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "poll_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Creates a new poll with a hashed question, number of options, and active timeframe.\\n\\n# Arguments\\n* `creator` - Address of the poll creator (must authorize).\\n* `question_hash` - 32-byte hash representing the poll question.\\n* `option_count` - Number of voting options (must be between 2 and 100).\\n* `start_time` - Unix timestamp when voting opens.\\n* `end_time` - Unix timestamp when voting closes.",
+      "name": "create_poll",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "question_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "option_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "start_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "end_time",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Retrieves current vote tallies for all options in a poll.",
+      "name": "get_results",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "poll_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "vec": {
+                "element_type": "u32"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Poll data structure representing a voting proposal.",
+      "lib": "",
+      "name": "Poll",
+      "fields": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "end_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "option_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "question_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "start_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "PollStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "total_votes",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Record of a vote cast by a voter.",
+      "lib": "",
+      "name": "Vote",
+      "fields": [
+        {
+          "doc": "",
+          "name": "option_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "poll_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "voter",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Contract storage keys for Instance and Persistent storage.",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Instance storage: global poll counter (u64)",
+            "name": "PollCount"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Persistent storage: Poll metadata (u64 -> Poll)",
+            "name": "Poll",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Persistent storage: Vote record (VoteKey -> Vote)",
+            "name": "Vote",
+            "type_": [
+              {
+                "udt": {
+                  "name": "VoteKey"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Persistent storage: Option vote count vector (u64 -> Vec<u32>)",
+            "name": "PollResults",
+            "type_": [
+              "u64"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Composite storage key to ensure duplicate vote prevention per (poll_id, voter).",
+      "lib": "",
+      "name": "VoteKey",
+      "fields": [
+        {
+          "doc": "",
+          "name": "poll_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "voter",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Status of a poll: Active when open for voting, Closed when terminated by creator.",
+      "lib": "",
+      "name": "PollStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Active"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Closed"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Custom error codes for the StellarVote contract.",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "Start time must be before end time, and end time must be in the future",
+          "name": "InvalidTimeWindow",
+          "value": 1
+        },
+        {
+          "doc": "Option count must be at least 2 and at most 100",
+          "name": "InvalidOptionCount",
+          "value": 2
+        },
+        {
+          "doc": "Poll with specified ID was not found",
+          "name": "PollNotFound",
+          "value": 3
+        },
+        {
+          "doc": "Poll is not active (closed)",
+          "name": "PollNotActive",
+          "value": 4
+        },
+        {
+          "doc": "Poll has not started yet",
+          "name": "PollNotStarted",
+          "value": 5
+        },
+        {
+          "doc": "Poll has already ended",
+          "name": "PollEnded",
+          "value": 6
+        },
+        {
+          "doc": "Option ID is out of bounds for this poll",
+          "name": "InvalidOption",
+          "value": 7
+        },
+        {
+          "doc": "Voter has already cast a vote for this poll",
+          "name": "AlreadyVoted",
+          "value": 8
+        },
+        {
+          "doc": "Only poll creator is authorized to perform this operation",
+          "name": "Unauthorized",
+          "value": 9
+        },
+        {
+          "doc": "Vote record for voter on specified poll was not found",
+          "name": "VoteNotFound",
+          "value": 10
+        },
+        {
+          "doc": "Poll is already closed",
+          "name": "PollAlreadyClosed",
+          "value": 11
+        }
+      ]
+    }
+  }
+]

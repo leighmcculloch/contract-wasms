@@ -1,0 +1,553 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Token"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Deployer"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Counter"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Stats"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Remittance",
+            "type_": [
+              "u64"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Remittance",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "created_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "memo",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "RemittanceStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "updated_at",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RemittanceError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "SameParty",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidExpiry",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "RemittanceNotFound",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "NotReceiver",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "NotSender",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "AlreadyClosed",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "Expired",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "NotExpired",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "InvalidLimit",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "ArithmeticOverflow",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "MemoTooLong",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "UnsupportedNetwork",
+          "value": 13
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RemittanceStats",
+      "fields": [
+        {
+          "doc": "",
+          "name": "active_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "claimed_remittances",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "pending_remittances",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "refunded_remittances",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "total_amount_claimed",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_amount_created",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_amount_refunded",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_remittances",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RemittanceStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Pending"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Claimed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Refunded"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_stats",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "RemittanceStats"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_token",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_counter",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RemittanceClaimedEvent",
+      "prefix_topics": [
+        "REMIT",
+        "claimed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RemittanceCreatedEvent",
+      "prefix_topics": [
+        "REMIT",
+        "created"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_deployer",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RemittanceRefundedEvent",
+      "prefix_topics": [
+        "REMIT",
+        "refunded"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "deployer",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_remittance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "remittance_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Remittance"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "claim_remittance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "remittance_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Remittance"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "list_remittances",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "start_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "limit",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "Remittance"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_remittance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "memo",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "refund_remittance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "remittance_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Remittance"
+          }
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,736 @@
+[
+  {
+    "function_v0": {
+      "doc": "Mint credits into `user`'s wallet. Called by the backend's relayer\\nonly, on a confirmed UPI top-up (1 INR top-up -> 1 credit).\\nRaises `total_supply` to keep `total_supply == sum(balances)`.",
+      "name": "mint",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Burn credits from `host`'s earned balance. Called by the backend's\\nrelayer only, on a confirmed off-chain payout (weekly host payout).\\nLowers `total_supply` so credits cannot be paid out twice.",
+      "name": "redeem",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "host",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unpause",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "balance_of",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "One-time bootstrap. Sets the three privileged roles and the treasury\\n(platform-fee sink). Idempotent-guarded: re-init reverts.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "relayer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "upgrader",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_session",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "session_id",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "SessionData"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_relayer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_relayer",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Register session metadata. Optional pre-step; `lock_deposit` will\\nalso create the record if absent. Safe to call multiple times before\\nlocking (idempotent on identical terms).",
+      "name": "init_session",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "session_id",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "rider",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "host",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "outlet",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "deposit",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "price_per_kwh_raw",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "service_fee_bps",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Lock `deposit` credits from the rider's wallet balance into this\\nsession and transition Created -> Locked. Idempotent: re-locking an\\nalready locked/settled session returns the stored record without moving\\nfunds again. Reverts with `InsufficientBalance` if the rider cannot\\ncover `deposit`.",
+      "name": "lock_deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "session_id",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "rider",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "host",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "outlet",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "deposit",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "price_per_kwh_raw",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "service_fee_bps",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_treasury",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_treasury",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_upgrader",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_upgrader",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_supply",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel_upgrade",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Full refund to rider's wallet balance. Only valid from Locked.\\nMarks Refunded before the balance move (checks-effects-interactions).",
+      "name": "refund_deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "session_id",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "reason",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Settle a locked session: recompute the split on-chain from the\\nrelayer-submitted energy reading, then distribute. The relayer may\\nNOT specify the split \\xe2\\x80\\x94 only the energy; the contract owns the math.",
+      "name": "settle_session",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "session_id",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "energy_wh",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "telemetry_hash",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "reason",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execute_upgrade",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Propose a new WASM hash. Execution is blocked until the timelock\\n(14 days) elapses. ADMIN can veto at any time by calling `pause()`.",
+      "name": "propose_upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Full session record persisted per session.",
+      "lib": "",
+      "name": "SessionData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "created_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "deposit",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "host",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "last_settlement",
+          "type_": {
+            "udt": {
+              "name": "SettlementOpt"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "locked_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "oracle_commitment",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "outlet",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "price_per_kwh_raw",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "refunded_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "rider",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "service_fee_bps",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "settled_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "SessionStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "stop_reason",
+          "type_": "symbol"
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "Strict state machine. `Created` is the only initial state; transitions\\nmay only advance forward and may never revisit a prior state.",
+      "lib": "",
+      "name": "SessionStatus",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Created",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Locked",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Settled",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Refunded",
+          "value": 3
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Wrapper to work around soroban-sdk 21.x `Option<contracttype>` test-build bug.\\nUse `has_settlement` flag instead of Option.",
+      "lib": "",
+      "name": "SettlementOpt",
+      "fields": [
+        {
+          "doc": "",
+          "name": "has_settlement",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "settlement",
+          "type_": {
+            "udt": {
+              "name": "SettlementResult"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Result of a settlement, recomputed *on-chain* from telemetry so a\\ncompromised relayer cannot lie about the fee split.",
+      "lib": "",
+      "name": "SettlementResult",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount_due",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "energy_wh",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "host_share",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "price_per_kwh_raw",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "refund",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "service_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "service_fee_bps",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "EscrowError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 1001
+        },
+        {
+          "doc": "",
+          "name": "UnauthorizedRelayer",
+          "value": 1002
+        },
+        {
+          "doc": "",
+          "name": "UnauthorizedAdmin",
+          "value": 1003
+        },
+        {
+          "doc": "",
+          "name": "UnauthorizedUpgrader",
+          "value": 1004
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1005
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 2001
+        },
+        {
+          "doc": "",
+          "name": "InvalidFeeBps",
+          "value": 2002
+        },
+        {
+          "doc": "",
+          "name": "InvalidAddress",
+          "value": 2003
+        },
+        {
+          "doc": "",
+          "name": "InvalidSessionId",
+          "value": 2004
+        },
+        {
+          "doc": "",
+          "name": "EmptyCommitment",
+          "value": 2005
+        },
+        {
+          "doc": "",
+          "name": "SessionAlreadyExists",
+          "value": 3001
+        },
+        {
+          "doc": "",
+          "name": "SessionNotFound",
+          "value": 3002
+        },
+        {
+          "doc": "",
+          "name": "InvalidStateTransition",
+          "value": 3003
+        },
+        {
+          "doc": "",
+          "name": "AlreadyLocked",
+          "value": 3004
+        },
+        {
+          "doc": "",
+          "name": "AlreadySettled",
+          "value": 3005
+        },
+        {
+          "doc": "",
+          "name": "AlreadyRefunded",
+          "value": 3006
+        },
+        {
+          "doc": "",
+          "name": "NotLockable",
+          "value": 3007
+        },
+        {
+          "doc": "",
+          "name": "NotSettleable",
+          "value": 3008
+        },
+        {
+          "doc": "",
+          "name": "NotRefundable",
+          "value": 3009
+        },
+        {
+          "doc": "",
+          "name": "MathOverflow",
+          "value": 4001
+        },
+        {
+          "doc": "",
+          "name": "ConservationViolated",
+          "value": 4002
+        },
+        {
+          "doc": "",
+          "name": "AmountExceedsDeposit",
+          "value": 4003
+        },
+        {
+          "doc": "",
+          "name": "NegativeRefund",
+          "value": 4004
+        },
+        {
+          "doc": "",
+          "name": "OracleCommitmentMismatch",
+          "value": 5001
+        },
+        {
+          "doc": "",
+          "name": "TelemetryHashMismatch",
+          "value": 5002
+        },
+        {
+          "doc": "",
+          "name": "ContractPaused",
+          "value": 6001
+        },
+        {
+          "doc": "",
+          "name": "UpgradeTimelockActive",
+          "value": 6002
+        },
+        {
+          "doc": "",
+          "name": "InsufficientBalance",
+          "value": 6003
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Role",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Admin",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Relayer",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Upgrader",
+          "value": 2
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UpgradeProposal",
+      "fields": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "proposed_at",
+          "type_": "u64"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,666 @@
+[
+  {
+    "function_v0": {
+      "doc": "Full refund of all funded milestones. Admin only.",
+      "name": "refund",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "deal_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "EscrowError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Deal",
+      "fields": [
+        {
+          "doc": "",
+          "name": "client",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "connector",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "connector_share_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "funded_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "milestones",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Milestone"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "platform_fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "protocol_wallet",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "DealStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_amount",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deposit funds for a specific milestone.\\nClient transfers tokens from their wallet to this contract.",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "deal_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "milestone_idx",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "EscrowError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Raise a dispute on a funded milestone. Freezes funds.\\nCan be called by either client or provider.",
+      "name": "dispute",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "deal_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "milestone_idx",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "EscrowError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get deal details by ID.",
+      "name": "get_deal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "deal_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Deal"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "EscrowError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Fund all currently pending milestones in a single client payment.\\nReleases, disputes, and refunds still operate per milestone.",
+      "name": "fund_deal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "deal_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "EscrowError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Deal",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "DealCount"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ProtocolWallet"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Reputation",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initialize the contract with admin and protocol wallet addresses.\\nMust be called once before any other function.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "protocol_wallet",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "EscrowError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Create a new deal with defined participants, splits, and milestones.\\n\\n- `platform_fee_bps`: platform fee in basis points (1000 = 10%)\\n- `connector_share_bps`: connector's share of the platform fee in bps (4000 = 40%)\\n- `milestone_amounts`: vector of amounts for each milestone (in token units)",
+      "name": "create_deal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "client",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "connector",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_addr",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "platform_fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "connector_share_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "milestone_amounts",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": {
+              "udt": {
+                "name": "EscrowError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Milestone",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "MilestoneStatus"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DealStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Created"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Active"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Completed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cancelled"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Disputed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Resolved"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "EscrowError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "DealNotFound",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidMilestone",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "MilestoneNotPending",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "MilestoneNotFunded",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "DealNotActive",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "InvalidSplit",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "AlreadyFunded",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "TooManyMilestones",
+          "value": 12
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get total number of deals created.",
+      "name": "get_deal_count",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": {
+              "udt": {
+                "name": "EscrowError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get provider's on-chain reputation (completed deal count).",
+      "name": "get_reputation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Resolve a dispute. Admin splits funds between client and provider.\\n`refund_bps`: percentage to refund client (5000 = 50%)",
+      "name": "resolve_dispute",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "deal_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "milestone_idx",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "refund_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "EscrowError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Release a funded milestone with atomic 3-way split.\\n\\nSplit logic (mirrors The Signal's approveMilestone):\\n- platform_fee = amount * platform_fee_bps / 10000\\n- connector_cut = platform_fee * connector_share_bps / 10000\\n- protocol_cut = platform_fee - connector_cut\\n- provider_cut = amount - platform_fee",
+      "name": "release_milestone",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "deal_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "milestone_idx",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "EscrowError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MilestoneStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Pending"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Funded"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Released"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Disputed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Resolved"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Refunded"
+          }
+        }
+      ]
+    }
+  }
+]

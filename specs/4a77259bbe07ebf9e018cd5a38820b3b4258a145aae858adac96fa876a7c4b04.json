@@ -1,0 +1,292 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "FactoryNotSet",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "NotAuthorized",
+          "value": 4
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Factory"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Whether `circle` is allowed to write reputation.",
+            "name": "Authorized",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "A member's accumulated score.",
+            "name": "Score",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Recorded",
+      "prefix_topics": [
+        "recorded"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "delta",
+          "type_": "i64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "score",
+          "type_": "i64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AdminChanged",
+      "prefix_topics": [
+        "admin_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Record a reputation change for `member`. Callable only by an authorized\\ncircle; `reporter` is the calling circle (verified via auth).",
+      "name": "record",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "reporter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "delta",
+          "type_": "i64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Replace this contract's code. Reputation holds scores rather than funds,\\nso an upgrade can fix bugs without putting anyone's money at risk.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_score",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Hand the admin role to another account \\xe2\\x80\\x94 the route to a multisig or a\\ntimelock once the protocol is live.",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set the admin account that may configure the Factory.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Point reputation at the Factory contract that will authorize circles.",
+      "name": "set_factory",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "factory",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_authorized",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "circle",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Authorize a circle to write reputation. Callable only by the Factory.",
+      "name": "authorize_circle",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "circle",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

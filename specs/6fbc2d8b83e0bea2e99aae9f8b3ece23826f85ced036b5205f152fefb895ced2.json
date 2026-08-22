@@ -1,0 +1,248 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "EscrowStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Funded"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Approved"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Released"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Refunded"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Escrow",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "Ledger timestamp (unix seconds) at which `approve` was called. 0 until approved.",
+          "name": "approved_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "buyer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "seller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "EscrowStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "An escrow with this id already exists.",
+          "name": "AlreadyExists",
+          "value": 1
+        },
+        {
+          "doc": "No escrow found for this id.",
+          "name": "NotFound",
+          "value": 2
+        },
+        {
+          "doc": "The escrow is not in the required state for this operation.",
+          "name": "InvalidStatus",
+          "value": 3
+        },
+        {
+          "doc": "`amount` must be a positive value.",
+          "name": "InvalidAmount",
+          "value": 4
+        },
+        {
+          "doc": "The 48h release delay has not elapsed yet.",
+          "name": "TooEarly",
+          "value": 5
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Buyer deposits `amount` of `token` into escrow for `seller`, tracked\\nunder `escrow_id`. Transfers the funds from the buyer's wallet into\\nthis contract. Requires the buyer's authorization.",
+      "name": "create_escrow",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "escrow_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "buyer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "seller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Escrow"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Buyer approves the deal. Starts the 48h countdown to auto-release.\\nRequires the buyer's authorization.",
+      "name": "approve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "escrow_id",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Escrow"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Permissionless: releases escrowed funds to the seller once the\\nbuyer has approved AND at least `RELEASE_DELAY_SECS` have passed\\nsince approval. No signature is required from either party for this\\ncall \\xe2\\x80\\x94 only the on-chain time condition is enforced \\xe2\\x80\\x94 so the seller\\n(or anyone) can always claim once eligible.",
+      "name": "release",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "escrow_id",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Escrow"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Buyer reclaims funds, only allowed before approval (i.e. before the\\ncountdown has started). Requires the buyer's authorization.",
+      "name": "cancel_escrow",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "escrow_id",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Escrow"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Read-only lookup of an escrow's current state.",
+      "name": "get_escrow",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "escrow_id",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Escrow"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Seconds remaining before `release` becomes callable. 0 if already\\neligible or not yet approved/found in a releasable state.",
+      "name": "seconds_until_release",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "escrow_id",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  }
+]

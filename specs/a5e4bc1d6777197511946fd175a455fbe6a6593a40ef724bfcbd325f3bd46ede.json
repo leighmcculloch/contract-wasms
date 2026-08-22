@@ -1,0 +1,284 @@
+[
+  {
+    "function_v0": {
+      "doc": "Lock funds for a cross-chain atomic swap.\\n\\n- `initiator`: party locking funds (must auth)\\n- `counterparty`: party who can release with the secret\\n- `token`: SAC token address\\n- `amount`: amount to lock\\n- `secret_hash`: sha256(secret) \\xe2\\x80\\x94 preimage is the unlock key\\n- `timeout_ledgers`: ledgers from now until initiator can refund\\n\\nReturns the swap_id (sha256 of secret_hash for determinism).",
+      "name": "lock",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "initiator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "counterparty",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "secret_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "timeout_ledgers",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Refund initiator after timeout. Anyone can call this.",
+      "name": "refund",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "swap_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Release funds to counterparty by revealing the secret.\\n\\nThe secret is emitted in the event \\xe2\\x80\\x94 this is intentional.\\nThe counterparty's agent on chain B watches for this event\\nand uses the revealed secret to claim funds there.",
+      "name": "release",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "swap_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "secret",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get full swap data \\xe2\\x80\\x94 view function.",
+      "name": "get_swap",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "swap_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "AtomicSwap"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Swap",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get swap status \\xe2\\x80\\x94 view function.",
+      "name": "get_status",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "swap_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "SwapStatus"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AtomicSwap",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "counterparty",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "initiator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "secret_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "SwapStatus"
+            }
+          }
+        },
+        {
+          "doc": "Absolute ledger when initiator can reclaim funds",
+          "name": "timeout_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LockParams",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "counterparty",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "initiator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "secret_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "timeout_ledgers",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SwapStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Locked"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Released"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Refunded"
+          }
+        }
+      ]
+    }
+  }
+]

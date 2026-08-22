@@ -1,0 +1,77 @@
+[
+  {
+    "function_v0": {
+      "doc": "Grants the achievement to `to`.\\n\\nDesign choice (CosmosX): we require `to.require_auth()`, NOT the\\nadmin's. This means the *player's own connected wallet* must sign\\ntheir own claim \\xe2\\x80\\x94 the on-stage demo flow where the player presses\\n\"Claim\" and approves it in Freighter. Nobody can mint an achievement\\nto an address that didn't itself authorize the call.",
+      "name": "mint",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Read-only: who is the admin (deployer/owner) of this contract?",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Achievements"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Runs once, right after deployment, to record who deployed/owns this\\ncontract. Panics if called a second time so the admin can't be\\nsilently reassigned after setup.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Read-only: does `who` have the achievement?",
+      "name": "has_achievement",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "who",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  }
+]

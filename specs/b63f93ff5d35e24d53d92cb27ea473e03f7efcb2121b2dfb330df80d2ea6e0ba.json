@@ -1,0 +1,437 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "QuoteExists",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "QuoteNotFound",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "RateNotFound",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidExpiry",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidRate",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "InvalidStatus",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "QuoteExpired",
+          "value": 10
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Quote",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount_minor",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "currency",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "expires_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "merchant",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "payer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "QuoteStatus"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FxRate",
+      "fields": [
+        {
+          "doc": "",
+          "name": "denominator",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "numerator",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "valid_until",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "QuotePaid",
+      "prefix_topics": [
+        "quote_paid"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "quote_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "QuoteStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Open"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paid"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cancelled"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "QuoteCreated",
+      "prefix_topics": [
+        "quote_created"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "quote_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RatePublished",
+      "prefix_topics": [
+        "rate_published"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "pair",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "numerator",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "denominator",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "QuoteRegistryInitialized",
+      "prefix_topics": [
+        "quote_registry_initialized"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_rate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pair",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "FxRate"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_quote",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "quote_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Quote"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "mark_paid",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "quote_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_quote",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "quote_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "merchant",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "payer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount_minor",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "currency",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "expires_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "publish_rate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pair",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "numerator",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "denominator",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "valid_until",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

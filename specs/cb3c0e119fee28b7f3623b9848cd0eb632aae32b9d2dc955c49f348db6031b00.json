@@ -1,0 +1,459 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "Every failure mode is an explicit, contiguous `u32` so the TypeScript client\\ncan map a contract error straight to a user-facing message without guessing.",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "NotAuthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 4
+        },
+        {
+          "doc": "Amount must be strictly positive.",
+          "name": "InvalidAmount",
+          "value": 5
+        },
+        {
+          "doc": "A negative allowance was requested.",
+          "name": "InvalidAllowance",
+          "value": 6
+        },
+        {
+          "doc": "No vault has been opened for this parent yet.",
+          "name": "VaultNotFound",
+          "value": 7
+        },
+        {
+          "doc": "Allocating this allowance would exceed the parent's deposited balance.",
+          "name": "InsufficientUnallocated",
+          "value": 8
+        },
+        {
+          "doc": "The recipient tried to claim more than their current allowance.",
+          "name": "InsufficientAllowance",
+          "value": 9
+        },
+        {
+          "doc": "The parent tried to withdraw more than the unallocated balance.",
+          "name": "InsufficientBalance",
+          "value": 10
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys.\\n\\n`Admin`, `Token` and `Paused` are configuration and live in *instance*\\nstorage so they share the contract instance's TTL. `Vault` and `Allowance`\\nhold user funds/claims and live in *persistent* storage so they outlive the\\ninstance and are never garbage-collected out from under a pending claim.",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Token"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "parent -> Vault",
+            "name": "Vault",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "(parent, recipient) -> i128 claimable allowance",
+            "name": "Allowance",
+            "type_": [
+              "address",
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "The on-chain state of one parent's family vault.\\n\\n`balance` is the total XLM the parent has deposited and the contract still\\ncustodies for them. `allocated` is the sum of all outstanding per-recipient\\nallowances. The parent may freely withdraw `balance - allocated` (the\\n*unallocated* remainder); the allocated portion is reserved for recipients\\nto claim.",
+      "lib": "",
+      "name": "Vault",
+      "fields": [
+        {
+          "doc": "Sum of all live per-recipient allowances under this parent.",
+          "name": "allocated",
+          "type_": "i128"
+        },
+        {
+          "doc": "Total deposited XLM still held in escrow for this parent (minor units).",
+          "name": "balance",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "One-time setup. Records the admin and the escrowed token (the native XLM\\nSAC on Tabungan), and unpauses the contract.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Parent deposits `amount` of the vault token into their family vault.\\nReturns the new total vault balance.\\n\\nAuth: the parent's signature, which also covers the inner SAC\\n`transfer(parent -> contract)`.",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "parent",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Parent sets the **absolute** allowance a `recipient` can claim. Passing a\\nsmaller value lowers it; passing `0` clears it. The total of all\\nallowances may never exceed the parent's deposited balance.\\nReturns the parent's unallocated (still-withdrawable) balance.\\n\\nAuth: the parent's signature.",
+      "name": "set_allowance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "parent",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Recipient claims `amount` from the allowance `parent` set for them. The\\ncontract pays out from its own balance. Returns the recipient's remaining\\nallowance.\\n\\nAuth: the recipient's signature \\xe2\\x80\\x94 binds the payout to them.",
+      "name": "claim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "parent",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Parent withdraws `amount` of the **unallocated** balance back to their\\nwallet. Allocated allowances stay reserved for recipients. Returns the\\nnew total vault balance.\\n\\nAuth: the parent's signature.",
+      "name": "withdraw_unallocated",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "parent",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The parent's vault (balance + allocated). Returns a zeroed vault if the\\nparent has never deposited, so the UI can render an empty state.",
+      "name": "get_vault",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "parent",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Vault"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The unallocated (withdrawable) portion of a parent's vault.",
+      "name": "unallocated",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "parent",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The current claimable allowance for a (parent, recipient) pair.",
+      "name": "get_allowance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "parent",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_token",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unpause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Replace the contract's own Wasm (admin-gated). Lets us ship fixes without\\nmigrating vault state \\xe2\\x80\\x94 important for a future mainnet deploy.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

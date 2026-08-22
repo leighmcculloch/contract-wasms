@@ -1,0 +1,540 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "token",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "settle",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "payer",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "IC-08 (DD-1): admin-gated in-place upgrade. Lets a discovered bug in the\\nmoney-moving flows be patched without a full redeploy + state migration.\\nThe admin SHOULD be a multisig/timelock account on mainnet (see DD-2).",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "list_open",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "Invoice"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "IC-09: expose the wired reputation/token addresses so a deploy script can\\nassert the marketplace is correctly configured (reputation != token) and\\nthe frontend can read them without a hardcoded config.",
+      "name": "reputation",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "IC-08 (DD-3): admin-gated circuit breaker. Only blocks NEW activity\\n(create_invoice / buy_invoice); settle, mark_default and cancel remain\\navailable while paused so no funded invoice can ever be locked.",
+      "name": "set_paused",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "_sale_price",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "face_value",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "discount_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "buy_invoice",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "investor",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_invoice",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Invoice"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "mark_default",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "reputation",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "list_by_owner",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "Invoice"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel_invoice",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_invoice",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "seller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "debtor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "debtor_name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "face_value",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "due_ledger",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "discount_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "list_by_seller",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "seller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "Invoice"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_reputation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "reputation",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Status",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Listed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Funded"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Settled"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Defaulted"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cancelled"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Token"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Reputation"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "NextId"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "IC-08: circuit-breaker flag. When true, create_invoice/buy_invoice are\\nblocked; settle/mark_default/cancel are always allowed so funds cannot\\nbe locked.",
+            "name": "Paused"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Invoice",
+            "type_": [
+              "u64"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Invoice",
+      "fields": [
+        {
+          "doc": "IC-02: on-chain address of the real debtor. settle() requires the payer\\nto equal this address, so reputation reflects \"paid by the debtor\" and\\ncannot be forged by a third party paying on the seller's behalf.",
+          "name": "debtor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "debtor_name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "discount_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "due_ledger",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "face_value",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "seller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "Status"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "ZeroAmount",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidDiscount",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "DueInPast",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "NotFound",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "NotListed",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "NotFunded",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "NotSeller",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "NotDueYet",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "NotDebtor",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "DueTooFar",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "NameTooLong",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "FaceTooLarge",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 14
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,1426 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Config"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Stats"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Role",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Passport",
+            "type_": [
+              "string"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "AuditCount",
+            "type_": [
+              "string"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Audit",
+            "type_": [
+              "string",
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "RecyclingApproval",
+            "type_": [
+              "string"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AuditRecord",
+      "fields": [
+        {
+          "doc": "",
+          "name": "action",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "actor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "note",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "score",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "serial",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PassportError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "SerialAlreadyExists",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "PassportNotFound",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "AlreadyRecycled",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidScore",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "ApprovalNotFound",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "ApprovalAlreadyExecuted",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "ApprovalMissing",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "SameCounterparty",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "InvalidRole",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "InvalidInput",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "InvalidState",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "InspectionRequired",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "HealthScoreTooLow",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "AlreadyVerified",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "AlreadyRecalled",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "RecyclerNotAuthorized",
+          "value": 19
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RegistryStats",
+      "fields": [
+        {
+          "doc": "",
+          "name": "circulating_passports",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "recalled_passports",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "recycled_passports",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "total_inspections",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "total_passports",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "verified_passports",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PlatformConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BatteryPassport",
+      "fields": [
+        {
+          "doc": "",
+          "name": "batch_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "capacity_wh",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "carbon_kg",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "chemistry",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "created_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "health_score",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "inspections",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "manufacturer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "recycler",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "serial",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "updated_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "verified_by",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RoleUpdatedEvent",
+      "prefix_topics": [
+        "battery_passport",
+        "role_updated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "granted",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LifecycleApproval",
+      "fields": [
+        {
+          "doc": "",
+          "name": "created_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "executed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "owner_approved",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "recycler",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "recycler_approved",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "serial",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "updated_at",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RecallFlaggedEvent",
+      "prefix_topics": [
+        "battery_passport",
+        "recall_flagged"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "serial",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "authority",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BatteryRecycledEvent",
+      "prefix_topics": [
+        "battery_passport",
+        "recycled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "serial",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "recycler",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "InspectionAddedEvent",
+      "prefix_topics": [
+        "battery_passport",
+        "inspection_added"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "serial",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "inspector",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "score",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PassportCreatedEvent",
+      "prefix_topics": [
+        "battery_passport",
+        "created"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "serial",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "manufacturer",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AdminTransferredEvent",
+      "prefix_topics": [
+        "battery_passport",
+        "admin_transferred"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "previous_admin",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PassportVerifiedEvent",
+      "prefix_topics": [
+        "battery_passport",
+        "verified"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "serial",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RecyclingApprovedEvent",
+      "prefix_topics": [
+        "battery_passport",
+        "recycling_approved"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "serial",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "recycler",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RecyclingRequestedEvent",
+      "prefix_topics": [
+        "battery_passport",
+        "recycling_requested"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "serial",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "recycler",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "has_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RegistryInitializedEvent",
+      "prefix_topics": [
+        "battery_passport",
+        "initialized"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_audit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "serial",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "AuditRecord"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "PassportError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_roles",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_stats",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "RegistryStats"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OwnershipTransferredEvent",
+      "prefix_topics": [
+        "battery_passport",
+        "ownership_transferred"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "serial",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "previous_owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_config",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "PlatformConfig"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "PassportError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "grant_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": {
+              "udt": {
+                "name": "PassportError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "flag_recall",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "authority",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "serial",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "reason",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "BatteryPassport"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "PassportError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "revoke_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": {
+              "udt": {
+                "name": "PassportError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_passport",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "serial",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "BatteryPassport"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "PassportError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "add_inspection",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "inspector",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "serial",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "score",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "note",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "BatteryPassport"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "PassportError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "current_admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "PlatformConfig"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "PassportError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer_owner",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "current_owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "serial",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "BatteryPassport"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "PassportError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_passport",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "manufacturer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "serial",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "chemistry",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "capacity_wh",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "carbon_kg",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "batch_id",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "BatteryPassport"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "PassportError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_audit_count",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "serial",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "verify_passport",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "serial",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "BatteryPassport"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "PassportError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "refresh_role_ttl",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "bool",
+            "error_type": {
+              "udt": {
+                "name": "PassportError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "approve_recycling",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "recycler",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "serial",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "LifecycleApproval"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "PassportError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execute_recycling",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "serial",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "BatteryPassport"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "PassportError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_recent_audits",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "serial",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "limit",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "vec": {
+                "element_type": {
+                  "udt": {
+                    "name": "AuditRecord"
+                  }
+                }
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "PassportError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "request_recycling",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "serial",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "recycler",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "LifecycleApproval"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "PassportError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "refresh_passport_ttl",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "serial",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "audit_from",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "audit_limit",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": {
+              "udt": {
+                "name": "PassportError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_recycling_approval",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "serial",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "LifecycleApproval"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "PassportError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

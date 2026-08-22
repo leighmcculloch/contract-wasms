@@ -1,0 +1,449 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidMaturity",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "AmountMismatch",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "Matured",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "MathOverflow",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "LiveMarket",
+          "value": 8
+        },
+        {
+          "doc": "Retired: no entrypoint gates on escrow coverage anymore (shortfalls are\\npriced pro-rata at redemption instead). Kept so code 9 stays reserved.",
+          "name": "Insolvent",
+          "value": 9
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Config",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "maturity",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "pt_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sy_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "yt_token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A holder's PT and YT balances, read from the real token contracts.",
+      "lib": "",
+      "name": "Position",
+      "fields": [
+        {
+          "doc": "",
+          "name": "pt_balance",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "yt_balance",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pulls `sy_amount` SY from `from` into escrow and mints equal PT and YT,\\ndenominated in asset units: `face = sy_amount * rate / WAD`. At rate 1.00\\nthis equals `sy_amount`. PT is the fixed principal claim; YT is the yield\\nclaim. The escrow holds the SY shares; their asset value at the current\\nrate equals the PT face exactly at mint, which is the coverage invariant.",
+      "name": "split",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sy_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": [
+                  "i128",
+                  "i128"
+                ]
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "config",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Config"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "maturity",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "PT and YT balances the holder currently owns, read from the token\\ncontracts.",
+      "name": "position",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Position"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Burns equal PT and YT (asset units) from `from` and returns principal in SY\\nshares: `pt_amount * WAD / rate`, capped to the holder's pro-rata share of\\nescrow under a shortfall (identical cap to `redeem_at_maturity`). Burning the\\nYT settles the holder's accrued yield first (the YT burn hook banks it into\\nthe holder's claim ledger), so recombine returns only principal and the\\nbanked yield stays owed and covered by the remaining escrow. Never reverts on\\ncollateralization: a shortfall is priced as a haircut, matching Pendle.",
+      "name": "recombine",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pt_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "yt_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sy_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pt_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "yt_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "maturity",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_matured",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "bool",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pays `holder` their accrued YT yield in SY out of escrow, capped so PT\\nprincipal is always senior to banked YT yield, and returns the SY amount\\npaid. Allowed any time, including after maturity, so a holder can always\\ncollect yield earned over the term.\\n\\nPT-senior surplus cap. The YT contract settles the holder and reports the\\nbanked total `owed` WITHOUT zeroing it (`settle`). The tokenizer then pays\\nonly `min(owed, surplus)`, where\\n`surplus = max(0, escrow_shares - pt_face_reservation)`\\nand `pt_face_reservation = ceil(pt_supply * WAD / rate)` is the SY escrow\\nneeded to redeem every outstanding PT at its face at `rate`. The\\nreservation is rounded UP, so PT is never shorted by a rounding notch and\\nthe surplus is the conservative (smaller) amount. It then `consume`s\\nexactly `pay` from the YT ledger and pushes `pay` SY. Anything owed beyond\\n`pay` stays banked in the YT ledger, claimable later once the rate\\nrecovers (a transient sub-stroop dip) or, under a permanent slash, capped\\nthere forever by the short escrow:",
+      "name": "claim_yield",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "SY the tokenizer custodies, equal to the outstanding PT (and YT) supply.",
+      "name": "escrowed_sy",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Permissionless: before maturity, read the live SY rate and record it as\\nthe latest observation the maturity freeze may use. Every mutating\\noperation records one as a side effect; this poke exists so anyone (a\\nkeeper, or a YT holder who wants the freeze to credit yield accrued\\nright up to maturity) can refresh the observation on an otherwise idle\\nmarket without moving tokens. Returns the observed rate.",
+      "name": "observe_rate",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The frozen maturity rate, or 0 if not yet snapshotted.",
+      "name": "maturity_rate",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "PT and YT minted for `sy_amount` SY at the current rate, in asset units.",
+      "name": "preview_split",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sy_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": [
+                  "i128",
+                  "i128"
+                ]
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "SY shares returned for recombining equal PT and YT (asset units) at the\\ncurrent rate. This is the principal only; any accrued YT yield is settled\\nseparately into the holder's claim ledger. Mirrors `recombine` exactly,\\nincluding the pro-rata escrow cap, so the preview never overquotes\\nduring a rate-regression shortfall.\\n\\nPoint-in-time read of the live Blend SY rate: if the rate moves between\\nthis quote and submission, the executed `recombine` share count can\\ndiffer. The underlying value redeemed does not \\xe2\\x80\\x94 `recombine` always\\nreturns `pt_face` worth of principal regardless of rate, so a moved rate\\nchanges the SY share count, not what it's worth. `recombine` has no\\non-chain `min_sy_out` floor by design; a caller needing an exact share\\ncount should compare this preview to its bound client-side before\\nsubmitting.",
+      "name": "preview_recombine",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pt_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "yt_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "After maturity, burns `pt_amount` PT (asset units) from `from` and returns\\nprincipal in SY shares: `pt_amount * WAD / rate`, capped to the holder's\\npro-rata share of escrow.\\n\\nInsolvency guard: if a rate regression (negative yield, a slash) has left\\nthe escrow unable to cover all PT principal, the payout is capped to\\n`escrow_shares * pt_amount / pt_supply`, so PT holders share the shortfall\\npro-rata rather than letting the first redeemers drain the escrow at the\\nexpense of the last. When solvent, the ideal payout is the smaller of the\\ntwo, so this pays principal in full. Capping preserves the escrow/PT ratio,\\nkeeping every later redeemer's share fair.\\n\\nThe rate read here is the current SY rate; Phase 3 step 9 snapshots a\\nmaturity rate so post-maturity rate moves do not change redemption.",
+      "name": "redeem_at_maturity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pt_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Permissionless: after maturity, snapshot and return the SY rate used for\\nall redemption. Any caller may poke this so the maturity rate is captured\\npromptly; redemption also snapshots it lazily on first use. Idempotent\\nonce set. The snapshot is the last rate observed at or before maturity,\\nnever a live post-maturity read (see `effective_rate`), so the timing of\\nthis call cannot move value between PT and YT.",
+      "name": "freeze_maturity_rate",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

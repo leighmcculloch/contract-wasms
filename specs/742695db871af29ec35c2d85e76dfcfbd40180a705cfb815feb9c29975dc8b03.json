@@ -1,0 +1,1328 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidConfiguration",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "WrongController",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "WrongFactory",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "WrongMarket",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidPhase",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "StaleState",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "DeadlinePassed",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "TooEarly",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "FullyFunded",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "DuplicateCommitment",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "InsufficientShares",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "TransferMismatch",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "DuplicateExit",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "ExitNotFound",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "InvalidExit",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "MarketStateMismatch",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "StaleMarketState",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "InvalidTerminalAssets",
+          "value": 19
+        },
+        {
+          "doc": "",
+          "name": "Arithmetic",
+          "value": 20
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Phase",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Funding"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Ready"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Active"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cancelled"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Settled"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ExitFill",
+      "fields": [
+        {
+          "doc": "",
+          "name": "seller_payment",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "shares_remaining",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "shares_transferred",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LpFunded",
+      "prefix_topics": [
+        "lp_funded"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "assets",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "state_version",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VaultInfo",
+      "fields": [
+        {
+          "doc": "",
+          "name": "activation_cutoff",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "decimals",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "factory",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "funded_assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "funding_deadline",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "locked_shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "market",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "phase",
+          "type_": {
+            "udt": {
+              "name": "Phase"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "share_controller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "state_version",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "target_assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "terminal_assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_shares",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ExitIntent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "destination",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "minimum_payment_remaining",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "payment_destination",
+          "type_": {
+            "udt": {
+              "name": "PaymentDestination"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "shares_remaining",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "ExitStatus"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ExitStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Open"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Matched"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cancelled"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LpTerminal",
+      "prefix_topics": [
+        "lp_terminal"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": {
+            "udt": {
+              "name": "TerminalOutcome"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "assets",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "state_version",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LpActivated",
+      "prefix_topics": [
+        "lp_activated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "market",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "assets",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "state_version",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FundingResult",
+      "fields": [
+        {
+          "doc": "",
+          "name": "accepted_assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "shares_minted",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "state_version",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "unused_assets",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LpExitUpdated",
+      "prefix_topics": [
+        "lp_exit"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "exit_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "shares_remaining",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "ExitStatus"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "state_version",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketSnapshot",
+      "fields": [
+        {
+          "doc": "",
+          "name": "conditional_lp_fees",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "equity_if_no",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "equity_if_yes",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "state_version",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "updated_at",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TerminalOutcome",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Yes"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "No"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Void"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "exit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "exit_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "ExitIntent"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "fund",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "controller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "share_commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expected_version",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "FundingResult"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "info",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "VaultInfo"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PaymentDestination",
+      "fields": [
+        {
+          "doc": "",
+          "name": "blinding",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "note_id",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "spend_public_key",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "viewing_public_key_x",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "viewing_public_key_y",
+          "type_": "u256"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "expected_version",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unfund",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "controller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expected_version",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "activate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "factory",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "expected_version",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "extend_ttl",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "match_exit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "controller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "exit_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "payment",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "market_state_version",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "equity_if_yes",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "equity_if_no",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "conditional_lp_fees",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "state_updated_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "maximum_state_age",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "expected_version",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "ExitFill"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel_exit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "controller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "exit_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "expected_version",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "exit_intent",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "exit_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "ExitIntent"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "request_exit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "controller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "exit_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "minimum_payment",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "destination",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payment_destination",
+          "type_": {
+            "udt": {
+              "name": "PaymentDestination"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "expected_version",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "factory",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "share_controller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "target_assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "funding_deadline",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "activation_cutoff",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "expected_decimals",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "fund_received",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "controller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "share_commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "prior_unallocated_balance",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expected_version",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "FundingResult"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "state_version",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "market_snapshot",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "MarketSnapshot"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "record_terminal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "returned_assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": {
+            "udt": {
+              "name": "TerminalOutcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "prior_unallocated_balance",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expected_version",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "redeem_terminal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "controller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expected_version",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "sync_market_state",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_state_version",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "equity_if_yes",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "equity_if_no",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "conditional_lp_fees",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "updated_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "expected_version",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unallocated_balance",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

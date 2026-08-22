@@ -1,0 +1,1024 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Bout",
+      "fields": [
+        {
+          "doc": "",
+          "name": "bet_amount",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "challenger",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "challenger_score",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "created_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "opponent",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "opponent_score",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "BoutStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "winner",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BotBout",
+      "fields": [
+        {
+          "doc": "",
+          "name": "bet_amount",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "completion_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "created_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "payout",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "player",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "player_score",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "BotBoutStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "time_limit",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Player",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "GameState"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Bout",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "BotBout",
+            "type_": [
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "GameError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "PlayerNotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InsufficientReputation",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidAction",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "LevelLocked",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "ItemAlreadyOwned",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InventoryFull",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "InvalidLevel",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "BoutNotFound",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "BoutNotOpen",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "CannotFightSelf",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "AlreadyAccepted",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "InvalidScore",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "BoutAlreadyResolved",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "TreasuryNotSet",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "InsufficientTreasury",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "BetTooLow",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "BetTooHigh",
+          "value": 19
+        },
+        {
+          "doc": "",
+          "name": "TimeLimitExceeded",
+          "value": 20
+        },
+        {
+          "doc": "",
+          "name": "InvalidCompletionTime",
+          "value": 21
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "GameState",
+      "fields": [
+        {
+          "doc": "",
+          "name": "contract_version",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "total_bouts",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "total_players",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "total_transactions",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BoutStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Open"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Accepted"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "InProgress"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Resolved"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PlayerState",
+      "fields": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "has_firewall_pass",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "has_keycard",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "level",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "losses",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "reputation",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "total_earnings",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "total_transactions",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "wins",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BotBoutStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Active"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Completed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Expired"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_bout",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "bout_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Bout"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "GameError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_player",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "player",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "PlayerState"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "GameError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "GameError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accept_bout",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "opponent",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "bout_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Bout"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "GameError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_bout",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "challenger",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "bet_amount",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Bout"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "GameError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "init_player",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "player",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "PlayerState"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "GameError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_bot_bout",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "bout_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "BotBout"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "GameError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_treasury",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "reset_player",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "player",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "PlayerState"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "GameError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_treasury",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "GameState"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "GameError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "submit_score",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "player",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "bout_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "score",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Bout"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "GameError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "advance_level",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "player",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "PlayerState"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "GameError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "approve_action",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "player",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "action",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "PlayerState"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "GameError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_game_state",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "GameState"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_open_bouts",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "Bout"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_reputation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "player",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "score",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "PlayerState"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "GameError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_bot_bout",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "player",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "bet_amount",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "time_limit",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "BotBout"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "GameError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "can_access_level",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "player",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "required_level",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "bool",
+            "error_type": {
+              "udt": {
+                "name": "GameError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "resolve_bot_bout",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "player",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "bout_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "player_score",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "completion_time",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "BotBout"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "GameError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,697 @@
+[
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Upgraded",
+      "prefix_topics": [
+        "upgraded"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProviderAdded",
+      "prefix_topics": [
+        "provider_added"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProviderRemoved",
+      "prefix_topics": [
+        "provider_removed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ChannelStateChanged",
+      "prefix_topics": [
+        "channel_state_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "channel",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "enabled",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ContractInitialized",
+      "prefix_topics": [
+        "contract_initialized"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initiate a two-step transfer of the admin (owner) role to `new_admin`.\\n\\n`live_until_ledger` is the ledger up to which `new_admin` may `accept_admin`. Pass\\n`current_ledger + N`, where `N` is the acceptance window in ledgers. The standard window\\nfor a real ownership handover is **3 days** = `current_ledger + 3 * DAY_IN_LEDGERS`\\n(51_840 ledgers); the sensible range is 24h (17_280) to 7d (120_960). There is deliberately\\nno default \\xe2\\x80\\x94 every call states its window explicitly.\\n\\nA non-zero window beyond the in-contract ceiling of 7 days (`MAX_ACCEPTANCE_WINDOW` =\\n120_960 ledgers past the current ledger) panics [`MoonlightError::AcceptanceWindowTooLong`].\\n`live_until_ledger == 0` is exempt from the ceiling and cancels a pending transfer (the\\nlibrary requires the cancel call to name the current pending address).",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_provider",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__check_auth",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "payload",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signatures",
+          "type_": {
+            "udt": {
+              "name": "Signatures"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "contexts",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Context"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "MoonlightError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accept_admin",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Registers a provider. Only an Ed25519 account address can be registered: the provider\\ncheck in `require_provider` matches exclusively addresses derived from `SignerKey::\\nProvider` Ed25519 keys, so any other address kind (e.g. a contract address) would be\\nregistered \\xe2\\x80\\x94 and reported registered by `is_provider` \\xe2\\x80\\x94 yet could never authorize\\nanything (RV audit B7).\\n\\n### Panics\\n- Panics `NotEd25519AccountAddress` if `provider` is a contract address.\\n- Panics if the provider is already registered.",
+      "name": "add_provider",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Enable an asset `channel` for service. Also used to RE-ENABLE a previously disabled\\nchannel \\xe2\\x80\\x94 both resume full service, so both emit `ChannelStateChanged { enabled: true }`.\\n\\n# Advisory lifecycle \\xe2\\x80\\x94 event-only, no on-chain enforcement (RV audit B12)\\n\\nThe channel lifecycle is **advisory**. This function only emits\\n`ChannelStateChanged`, signalling the council's *intended* channel state; the\\ncontract intentionally stores no channel/asset state, and no on-chain code path\\nreads the event. Enforcement lives provider-side: providers treat a disabled\\nchannel as withdraw-only (new deposits and sends rejected, withdrawals served).\\nThe sole on-chain way to stop a channel is a contract `upgrade`.\\n\\nAn on-chain enabled-flag with `transact` gating (e.g. block new deposits while\\nstill allowing withdrawals) is deferred future work.",
+      "name": "enable_channel",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "channel",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Disable an asset `channel`. The channel becomes withdraw-only (new deposits/sends rejected);\\nthat enforcement lives provider-side. Emits `ChannelStateChanged { enabled: false }`.\\n\\n# Advisory lifecycle \\xe2\\x80\\x94 event-only, no on-chain enforcement (RV audit B12)\\n\\nThe channel lifecycle is **advisory**. This function does NOT stop the channel\\non-chain: it only emits `ChannelStateChanged`, signalling the council's\\n*intended* channel state. The contract intentionally stores no channel/asset\\nstate, and `transact` on the privacy channel remains fully functional after this\\ncall. Enforcement lives provider-side: providers treat a disabled channel as\\nwithdraw-only. The sole on-chain way to stop a channel is a contract `upgrade`.\\n\\nAn on-chain enabled-flag with `transact` gating (e.g. block new deposits while\\nstill allowing withdrawals) is deferred future work.",
+      "name": "disable_channel",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "channel",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "remove_provider",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MoonlightError",
+      "cases": [
+        {
+          "doc": "An authorization payload or contract argument could not be decoded into the expected shape.",
+          "name": "BadArg",
+          "value": 1000
+        },
+        {
+          "doc": "A value used during authorization matched a type family but not one of the supported variants.",
+          "name": "UnexpectedVariant",
+          "value": 1001
+        },
+        {
+          "doc": "A required signature for an authorization signer was not provided.",
+          "name": "MissingSignature",
+          "value": 1002
+        },
+        {
+          "doc": "More signatures were provided than the authorization context accepts.",
+          "name": "ExtraSignature",
+          "value": 1003
+        },
+        {
+          "doc": "A signature entry could not be parsed as a supported authorization signature shape.",
+          "name": "InvalidSignatureFormat",
+          "value": 1004
+        },
+        {
+          "doc": "A signature entry was well-formed but used a signature format this protocol does not support.",
+          "name": "UnsupportedSignatureFormat",
+          "value": 1005
+        },
+        {
+          "doc": "A signature or authorization context was produced for a different contract than the one being checked.",
+          "name": "MismatchedContract",
+          "value": 1006
+        },
+        {
+          "doc": "A signer kind is not supported by this authorization path.",
+          "name": "UnsupportedSigner",
+          "value": 1007
+        },
+        {
+          "doc": "Authorization was requested without any conditions to evaluate.",
+          "name": "NoConditions",
+          "value": 1008
+        },
+        {
+          "doc": "The authorization context did not match the invocation shape expected by the checker.",
+          "name": "UnexpectedContext",
+          "value": 1009
+        },
+        {
+          "doc": "A signature was valid structurally but expired before the current ledger.",
+          "name": "SignatureExpired",
+          "value": 1010
+        },
+        {
+          "doc": "The configured provider-signature threshold was not met.",
+          "name": "ProviderThresholdNotMet",
+          "value": 1011
+        },
+        {
+          "doc": "The provider account is already registered.",
+          "name": "ProviderAlreadyRegistered",
+          "value": 1012
+        },
+        {
+          "doc": "The provider account is not registered.",
+          "name": "ProviderNotRegistered",
+          "value": 1013
+        },
+        {
+          "doc": "A `set_admin` acceptance window exceeded the in-contract ceiling (7 days) for a\\npending ownership transfer.",
+          "name": "AcceptanceWindowTooLong",
+          "value": 1014
+        },
+        {
+          "doc": "A UTXO creation attempted to write an output identifier that already exists.",
+          "name": "UtxoAlreadyExists",
+          "value": 2000
+        },
+        {
+          "doc": "A UTXO spend referenced an output identifier that does not exist.",
+          "name": "UtxoDoesNotExist",
+          "value": 2001
+        },
+        {
+          "doc": "A UTXO spend referenced an output that has already been spent.",
+          "name": "UtxoAlreadySpent",
+          "value": 2002
+        },
+        {
+          "doc": "The transaction bundle does not balance its inputs, deposits, creates, spends, and withdrawals.",
+          "name": "UnbalancedBundle",
+          "value": 2003
+        },
+        {
+          "doc": "A UTXO creation amount must be greater than zero.",
+          "name": "InvalidCreateAmount",
+          "value": 2004
+        },
+        {
+          "doc": "The same UTXO identifier appears more than once in the create set.",
+          "name": "RepeatedCreateUtxo",
+          "value": 2005
+        },
+        {
+          "doc": "The same UTXO identifier appears more than once in the spend set.",
+          "name": "RepeatedSpendUtxo",
+          "value": 2006
+        },
+        {
+          "doc": "A requested UTXO could not be found in storage.",
+          "name": "UtxoNotFound",
+          "value": 2007
+        },
+        {
+          "doc": "The UTXO module cannot authorize transactions because no authorization contract is configured.",
+          "name": "AuthContractNotSet",
+          "value": 2008
+        },
+        {
+          "doc": "A UTXO create supplied a key that is not a well-formed SEC1 uncompressed\\nP-256 point encoding (its leading marker byte is not `0x04`).",
+          "name": "InvalidUtxoKey",
+          "value": 2009
+        },
+        {
+          "doc": "The same account appears more than once in the deposit list.",
+          "name": "RepeatedAccountForDeposit",
+          "value": 3000
+        },
+        {
+          "doc": "The same account appears more than once in the withdraw list.",
+          "name": "RepeatedAccountForWithdraw",
+          "value": 3001
+        },
+        {
+          "doc": "A single account has conflicting deposit, withdraw, or condition requirements in the bundle.",
+          "name": "ConflictingConditionsForAccount",
+          "value": 3002
+        },
+        {
+          "doc": "An amount calculation exceeded the maximum supported integer value.",
+          "name": "AmountOverflow",
+          "value": 3003
+        },
+        {
+          "doc": "The bundle contains conditions that cannot all be satisfied together.",
+          "name": "BundleHasConflictingConditions",
+          "value": 3004
+        },
+        {
+          "doc": "An amount calculation went below the minimum supported integer value.",
+          "name": "AmountUnderflow",
+          "value": 3005
+        },
+        {
+          "doc": "An executed create/withdraw effect is not covered by an owner-signed condition,\\nor an owner-signed create/withdraw condition is not executed by the bundle.",
+          "name": "UnauthorizedOperation",
+          "value": 3006
+        },
+        {
+          "doc": "A deposit or withdraw amount was not strictly positive.",
+          "name": "InvalidExternalAmount",
+          "value": 3007
+        },
+        {
+          "doc": "A withdrawal names the channel's own address as its recipient.",
+          "name": "WithdrawToChannelAddress",
+          "value": 3009
+        },
+        {
+          "doc": "An address payload was expected to be an Ed25519 account address but was not.",
+          "name": "NotEd25519AccountAddress",
+          "value": 4000
+        },
+        {
+          "doc": "The address payload type is not supported by this helper.",
+          "name": "UnsupportedAddressPayload",
+          "value": 4001
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Signature",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "P256",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 64
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Ed25519",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 64
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Secp256k1",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 65
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "BLS12_381",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 96
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SignerKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "P256",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 65
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Ed25519",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Provider",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Signatures",
+      "fields": [
+        {
+          "doc": "",
+          "name": "0",
+          "type_": {
+            "map": {
+              "key_type": {
+                "udt": {
+                  "name": "SignerKey"
+                }
+              },
+              "value_type": {
+                "tuple": {
+                  "value_types": [
+                    {
+                      "udt": {
+                        "name": "Signature"
+                      }
+                    },
+                    "u32"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an ownership transfer is initiated.",
+      "lib": "",
+      "name": "OwnershipTransfer",
+      "prefix_topics": [
+        "ownership_transfer"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an ownership transfer is completed.",
+      "lib": "",
+      "name": "OwnershipTransferCompleted",
+      "prefix_topics": [
+        "ownership_transfer_completed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  }
+]

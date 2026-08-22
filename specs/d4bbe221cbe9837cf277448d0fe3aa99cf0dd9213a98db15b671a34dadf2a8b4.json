@@ -1,0 +1,525 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "A project with this id is already registered.",
+          "name": "ProjectExists",
+          "value": 1
+        },
+        {
+          "doc": "No project is registered under this id.",
+          "name": "ProjectNotFound",
+          "value": 2
+        },
+        {
+          "doc": "No milestone record exists for this project/milestone pair.",
+          "name": "MilestoneNotFound",
+          "value": 3
+        },
+        {
+          "doc": "Caller is authenticated but is not the project owner.",
+          "name": "NotAuthorized",
+          "value": 4
+        },
+        {
+          "doc": "The milestone is not in a status that permits this transition.",
+          "name": "InvalidStatus",
+          "value": 5
+        },
+        {
+          "doc": "An identifier exceeds [`MAX_ID_LEN`].",
+          "name": "IdTooLong",
+          "value": 6
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Persistent storage keys.",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "`project_id -> Address` (the project owner).",
+            "name": "Project",
+            "type_": [
+              "string"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "`(project_id, milestone_id) -> MilestoneRecord`.",
+            "name": "Milestone",
+            "type_": [
+              "string",
+              "string"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProofSubmitted",
+      "prefix_topics": [
+        "qdit",
+        "submit"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "string",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "milestone_id",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "submitter",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "proof_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "The full on-chain record for one milestone of one project.",
+      "lib": "",
+      "name": "MilestoneRecord",
+      "fields": [
+        {
+          "doc": "",
+          "name": "milestone_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "string"
+        },
+        {
+          "doc": "Hash of the off-chain proof artifact.",
+          "name": "proof_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "MilestoneStatus"
+            }
+          }
+        },
+        {
+          "doc": "Address that submitted the proof hash.",
+          "name": "submitter",
+          "type_": "address"
+        },
+        {
+          "doc": "Ledger timestamp at the moment the proof was submitted.",
+          "name": "timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "Submissions so far, starting at 1. Monotonic.\\n\\nA re-submission overwrites `proof_hash`, so without this the ledger\\nwould show the latest hash with no evidence an earlier one existed.\\nApprove and reject preserve the counter \\xe2\\x80\\x94 they attest to a submission\\nrather than making one.",
+          "name": "version",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Lifecycle of a single milestone.",
+      "lib": "",
+      "name": "MilestoneStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Registered but no proof submitted yet.",
+            "name": "Proposed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Proof hash submitted, awaiting the project owner's decision.",
+            "name": "Submitted"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Accepted by the project owner. Terminal.",
+            "name": "Approved"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Rejected by the project owner. Terminal.",
+            "name": "Rejected"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MilestoneApproved",
+      "prefix_topics": [
+        "qdit",
+        "approve"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "string",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "milestone_id",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "approver",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MilestoneRejected",
+      "prefix_topics": [
+        "qdit",
+        "reject"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "string",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "milestone_id",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "approver",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProjectRegistered",
+      "prefix_topics": [
+        "qdit",
+        "register"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "string",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when a project changes hands.\\n\\nBoth parties are in the data rather than as topics: a consumer watching one\\nproject already has `project_id` indexed, and indexing the addresses would\\ninvite treating this as a queryable ownership log, which it is not \\xe2\\x80\\x94 the\\ncurrent owner is whatever the latest transfer left in storage.",
+      "lib": "",
+      "name": "ProjectOwnerTransferred",
+      "prefix_topics": [
+        "qdit",
+        "transfer"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "string",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "previous_owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Reject a submitted milestone. Only the project owner may call this.",
+      "name": "reject_milestone",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "milestone_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "approver",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Approve a submitted milestone. Only the project owner may call this.",
+      "name": "approve_milestone",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "milestone_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "approver",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Register a project reference owned by `owner`.\\n\\nRequires `owner` auth. Errors with [`Error::ProjectExists`] if the id is\\ntaken \\xe2\\x80\\x94 deliberately, rather than upserting, so a client can treat that\\nerror as \"already registered\" and carry on.",
+      "name": "create_project_ref",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Read the current record for a milestone.\\n\\nUnauthenticated: an anchored hash is public by design, and that is what\\nmakes it evidence a third party can check.",
+      "name": "get_milestone_status",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "milestone_id",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "MilestoneRecord"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Attach a proof hash to a milestone and move it to [`MilestoneStatus::Submitted`].\\n\\nRequires `submitter` auth. The milestone does not need to exist beforehand;\\nan unseen milestone is implicitly `Proposed`. A milestone that has already\\nbeen approved is terminal and cannot be re-submitted.",
+      "name": "submit_milestone_proof",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "milestone_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "submitter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "proof_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Hand a registered project to a new owner.\\n\\n**Both parties must sign.** `current_owner` proves the right to give the\\nproject away; `new_owner` proves the destination is an address someone\\nactually controls. Requiring only the first would let this function\\nrecreate the exact problem it exists to solve \\xe2\\x80\\x94 a project pinned to an\\naddress nobody can sign for \\xe2\\x80\\x94 and there is no admin path to undo that.\\n\\nWhat this does and does not fix: it recovers a project registered to the\\n**wrong but still controlled** address, and it makes planned handovers\\nand key rotation possible. It cannot recover a **lost** key, because a\\nlost key cannot sign as `current_owner`. Nothing in this contract can;\\nthat is the cost of having no admin address, and it is deliberate.\\n\\nMilestone records are untouched. `submitter` is a historical fact about\\nwho submitted, and approve/reject read the owner from storage at call\\ntime, so they follow the new owner without any migration.",
+      "name": "transfer_project_owner",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "current_owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

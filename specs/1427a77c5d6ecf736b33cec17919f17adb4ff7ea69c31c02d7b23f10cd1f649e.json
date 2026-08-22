@@ -1,0 +1,516 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_bet",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "round_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "bettor",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Bet"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_round",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "round_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Round"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "place_bet",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "round_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "bettor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "predicted_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "stake_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_reward",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "round_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "bettor",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel_round",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "round_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "claim_reward",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "round_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "claimer",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_round",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "end_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "min_stake",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "settle_round",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "round_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "actual_price",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_current_round",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_participant_count",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "round_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Bet",
+      "fields": [
+        {
+          "doc": "",
+          "name": "bettor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "predicted_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "stake_amount",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "RoundNotFound",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "RoundLocked",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "RoundNotOpen",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "StakeTooLow",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidPrediction",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "RoundFull",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "AlreadyBet",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "TooEarly",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "AlreadySettled",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "NotSettled",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "NoReward",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "NoBet",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "InvalidTime",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "NotEnoughParticipants",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "EnoughParticipants",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 17
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Round",
+      "fields": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "end_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "lock_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "min_stake",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "settle_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "start_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "RoundStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "total_pool",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RoundStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Open"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Settled"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cancelled"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Token"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "RoundCounter"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Round",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Bet",
+            "type_": [
+              "u32",
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Reward",
+            "type_": [
+              "u32",
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "ParticipantCount",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "BettorList",
+            "type_": [
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

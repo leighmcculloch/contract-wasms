@@ -1,0 +1,439 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "metadata",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "TokenizerMetadata"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireTokenizerError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Redeems PT for guaranteed principal physical underlying assets.\\n\\nRequires Epoch State: `Settled`. (Post-maturity, post-settlement).",
+      "name": "redeem_pt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pt_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "NovaireTokenizerError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Vault"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PtToken"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "YtToken"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SyWrapper"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MaturityLedger"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "EpochId"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "EpochStartIndex"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalPtMinted"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SettlementExchangeRate"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initializes the Tokenizer with its critical dependencies.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pt_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "yt_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sy_wrapper",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "maturity_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireTokenizerError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Mints PT and YT tokens identically in exchange for Vault Shares.\\n\\nRequires Epoch State: `Open`",
+      "name": "mint_pt_yt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sy_shares",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": [
+                  "i128",
+                  "i128"
+                ]
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireTokenizerError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Claims accrued yield for a user by withdrawing the physical underlying asset.\\n\\nRequires Epoch State: `Open`, `Matured`, or `Settled`.",
+      "name": "claim_yield",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "NovaireTokenizerError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Settles the epoch, permanently locking the settlement exchange rate.\\n\\nRequires Epoch State: `Matured`",
+      "name": "settle_epoch",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireTokenizerError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Checks the exact state of the epoch.",
+      "name": "get_epoch_state",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": {
+              "udt": {
+                "name": "NovaireTokenizerError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TokenizerMetadata",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "epoch_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "epoch_start_index",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "epoch_state",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "maturity_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "pt_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "settlement_exchange_rate",
+          "type_": {
+            "option": {
+              "value_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "sy_wrapper",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_pt_minted",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "yt_token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "NovaireTokenizerError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "EpochNotOpen",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "EpochNotMatured",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "EpochNotSettled",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "AlreadySettled",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InsufficientBalance",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "InvariantViolated",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "MathOverflow",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "MathUnderflow",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "StorageMissing",
+          "value": 13
+        }
+      ]
+    }
+  }
+]

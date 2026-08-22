@@ -1,0 +1,494 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Side",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Yes"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "No"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Asset",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Stellar",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Other",
+            "type_": [
+              "symbol"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotYetExpired",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NoQuorum",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidConfig",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "OracleDisagreement",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidPythPayload",
+          "value": 6
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Config",
+      "fields": [
+        {
+          "doc": "",
+          "name": "max_age",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "max_confidence_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_deviation_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "oracles",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "pyth_feeds",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "PythFeed"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "pyth_verifier",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "quorum",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "resolution_timeout",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Voided",
+      "prefix_topics": [
+        "voided"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "market",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "config",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Config"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PythFeed",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "feed_id",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Resolved",
+      "prefix_topics": [
+        "resolved"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "market",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": {
+            "udt": {
+              "name": "Side"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "median_price",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "agreeing_sources",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PriceData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketInfo",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "finalize_after",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "extend_ttl",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketOutcome",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Yes"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "No"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Void"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "oracles",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "quorum",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_age",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "resolution_timeout",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "max_deviation_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_confidence_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "pyth_verifier",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "pyth_feeds",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "PythFeed"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "resolve_market",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pyth_payload",
+          "type_": {
+            "option": {
+              "value_type": "bytes"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Side"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "void_stale_market",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Errors returned by [`crate::parse_payload`] when decoding a verified Lazer\\npayload. Declared as a `#[contracterror]` so consumers can propagate it\\ndirectly from their own contract entrypoints.",
+      "lib": "",
+      "name": "ParseError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "TruncatedData",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "InvalidPayloadLength",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidPayloadMagic",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidChannel",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidProperty",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidMarketSession",
+          "value": 6
+        }
+      ]
+    }
+  }
+]

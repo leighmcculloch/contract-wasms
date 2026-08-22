@@ -1,0 +1,1038 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "Error codes live at 100+ **on purpose**.\\n\\n`claim`, `deposit` and `execute_reclaim` all invoke a token\\ncontract, and a Stellar Asset Contract raises its own `contracterror`\\ncodes in the low single/double digits \\xe2\\x80\\x94 notably `BalanceError = 10`\\n(\"insufficient balance\"). When such a sub-invocation trap surfaces to a\\ncaller that only sees `Error(Contract, #N)`, an SAC code is\\nindistinguishable from a vesting code of the same value: an underfunded\\ncampaign reported `#10`, which the vesting ABI called `NotInitialized`,\\nso a recipient hitting an empty campaign was told \"campaign not\\ninitialized\". Moving the whole enum above every SAC code makes the\\norigin of a numeric code unambiguous.\\n\\nThe mapping from the pre-100 numbering is exactly `new = old + 100`, so\\nold decoders migrate by adding 100. `112` is deliberately left unused:\\nit was `MerkleRootFunded`, removed as dead code (see `set_merkle_root`).",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidProof",
+          "value": 101
+        },
+        {
+          "doc": "",
+          "name": "InvalidMerkleRoot",
+          "value": 102
+        },
+        {
+          "doc": "",
+          "name": "InvalidRecipient",
+          "value": 103
+        },
+        {
+          "doc": "",
+          "name": "InvalidPubkey",
+          "value": 104
+        },
+        {
+          "doc": "",
+          "name": "AlreadyClaimed",
+          "value": 105
+        },
+        {
+          "doc": "",
+          "name": "EpochLocked",
+          "value": 106
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 107
+        },
+        {
+          "doc": "",
+          "name": "InvalidPublicInputs",
+          "value": 108
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 109
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 110
+        },
+        {
+          "doc": "",
+          "name": "MerkleRootAlreadySet",
+          "value": 111
+        },
+        {
+          "doc": "",
+          "name": "InvalidAudience",
+          "value": 113
+        },
+        {
+          "doc": "",
+          "name": "JwtExpired",
+          "value": 114
+        },
+        {
+          "doc": "",
+          "name": "TokenTransferMismatch",
+          "value": 115
+        },
+        {
+          "doc": "",
+          "name": "TooManyCommitments",
+          "value": 116
+        },
+        {
+          "doc": "",
+          "name": "NotYetReclaimable",
+          "value": 117
+        },
+        {
+          "doc": "",
+          "name": "NothingToReclaim",
+          "value": 118
+        },
+        {
+          "doc": "",
+          "name": "InvalidDeadline",
+          "value": 119
+        },
+        {
+          "doc": "",
+          "name": "PendingOwnerNotSet",
+          "value": 120
+        },
+        {
+          "doc": "",
+          "name": "ReclaimNotPending",
+          "value": 121
+        },
+        {
+          "doc": "",
+          "name": "ReclaimNotReady",
+          "value": 122
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Owner"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Nominated successor in a two-step ownership handover. Set by\\n`propose_owner`, cleared on `accept_ownership` /\\n`cancel_ownership_transfer`.",
+            "name": "PendingOwner"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Token"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Verifier"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "JwkRegistry"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Name"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Description"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MerkleRoot"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AudienceHash"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MetadataCid"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ReclaimInfo"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Announced two-step sweep: `(destination, earliest_execute_timestamp)`.\\nSet by `initiate_reclaim`, cleared by `execute_reclaim` and by\\n`accept_ownership`.",
+            "name": "PendingReclaim"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Claimed",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Claimed",
+      "prefix_topics": [
+        "claimed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "epoch_commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Deposited",
+      "prefix_topics": [
+        "deposited"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Reclaimed",
+      "prefix_topics": [
+        "reclaimed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Trust matrix for the post-deadline escape hatch. The owner may sweep any\\nUNCLAIMED remainder strictly after `claim_deadline`, via the two-step\\n`initiate_reclaim`/`execute_reclaim`. Both fields are fixed at creation and\\ncannot be moved later (no setter exists).\\n\\n`max_unlock_time` is the last unlock the creator DECLARES for the schedule\\nhidden in the merkle leaves. The contract cannot verify it \\xe2\\x80\\x94 unlock times\\nonly ever arrive one epoch at a time as public input 19 \\xe2\\x80\\x94 so it is a\\npublished claim, not a proof. Storing it makes a creator whose declaration\\ncontradicts the pinned IPFS schedule detectable off chain; `MIN_CAMPAIGN_LIFETIME`\\nis what bounds the damage on chain.",
+      "lib": "",
+      "name": "ReclaimInfo",
+      "fields": [
+        {
+          "doc": "",
+          "name": "claim_deadline",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "max_unlock_time",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MerkleRootSet",
+      "prefix_topics": [
+        "merkle_root_set"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "merkle_root",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OwnerProposed",
+      "prefix_topics": [
+        "owner_proposed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VestingSummary",
+      "fields": [
+        {
+          "doc": "",
+          "name": "audience_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "description",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "jwk_registry",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "merkle_root",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "metadata_cid",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ReclaimInitiated",
+      "prefix_topics": [
+        "reclaim_initiated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "ready_at",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "name",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "string",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "claim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "public_inputs",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "owner",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "token",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "summary",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "VestingSummary"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OwnershipTransferred",
+      "prefix_topics": [
+        "owner_set"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "previous_owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "verifier",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_claimed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "epoch_commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Permissionless TTL maintenance for a dormant email distribution.\\nCallers page the canonical public distribution commitment keys in\\nbatches of at most `MAX_CLAIMED_BATCH`; existing claimed guards in the\\nsupplied page are renewed, while absent (unclaimed) keys cost no write.\\nEvery page also renews the contract instance and code.",
+      "name": "keep_alive",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "epoch_commitments",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "description",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "string",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "merkle_root",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "bytes_n": {
+                "n": 32
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "jwk_registry",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "metadata_cid",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "string",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "recipient_id",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Readback for the declared schedule end alongside the deadline, so the\\ncreator's `max_unlock_time` can be checked against the pinned IPFS\\nclaim list by anyone.",
+      "name": "reclaim_info",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "ReclaimInfo"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "jwk_registry",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "description",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "merkle_root",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "audience_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "metadata_cid",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "claim_deadline",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "max_unlock_time",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "audience_hash",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "bytes_n": {
+                "n": 32
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pending_owner",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Step 1 of a two-step ownership handover: the current owner nominates a\\nsuccessor. Nothing moves until the nominee calls `accept_ownership`.\\n\\nThis mirrors `jwk-registry`'s `propose_owner`/`accept_ownership` and\\nexists for the same reason: the owner is the only principal that can\\nfinalize the merkle root and \\xe2\\x80\\x94 after `claim_deadline` \\xe2\\x80\\x94 sweep the\\nremaining balance via `initiate_reclaim` /\\n`execute_reclaim`. A one-step transfer to a typo'd or otherwise\\nuncontrolled address handed those rights to nobody, irreversibly, in a\\nsingle transaction. Requiring the nominee to prove control of its\\naddress first makes that unreachable.\\n\\nRe-proposing overwrites the pending nominee; the owner can abort with\\n`cancel_ownership_transfer`.",
+      "name": "propose_owner",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "claim_deadline",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Step 2: sweep the remaining balance to the destination announced in\\nstep 1, once the notice period has elapsed. Recipient claims stay\\nunaffected until this lands; valid claims are paid from deposit first,\\nso only the unclaimed remainder is ever swept.\\n\\nThe deadline is deliberately NOT re-checked: `ready_at` is by\\nconstruction strictly greater than `claim_deadline`, and\\n`claim_deadline` is immutable (no setter exists).\\n\\nKNOWN, ACCEPTED: the notice is served once per ANNOUNCEMENT, not once\\nper sweep. A `NothingToReclaim` revert rolls back the `PendingReclaim`\\nremoval below, so an elapsed `ready_at` stays armed and any balance that\\narrives later can be swept in a single transaction with no fresh\\nnotice. It is not fixed here because the only fix is to expire the\\nannouncement, and that adds a new way for the escape hatch itself to\\nfail \\xe2\\x80\\x94 an owner assembling a multisig or hardware signature for a\\nbroken-verifier recovery can easily need more than a week, and a\\nrecovery path that times out is a worse defect than a",
+      "name": "execute_reclaim",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pending_reclaim",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "tuple": {
+                "value_types": [
+                  "address",
+                  "u64"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "One-time finalization of the distribution root for campaigns deployed\\nwith a zero root. Deliberately gated on the *root* being unset, not on\\nthe balance being zero: an is-it-funded check would let anyone brick a\\ncampaign forever by sending it 1 stroop before the creator finalizes\\n(see `set_merkle_root_allows_unsolicited_dust_before_root_finalization`).\\n`deposit` already refuses to run against a zero root, so the ordering\\nthe funding check was meant to enforce is enforced from that side.",
+      "name": "set_merkle_root",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "merkle_root",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Step 2: the nominated successor accepts, proving it controls the\\naddress. Only then does ownership actually move.\\n\\nAny announced sweep is dropped: an incoming owner must not inherit an\\nalready-elapsed notice window and execute in the same ledger it takes\\ncontrol. It has to re-announce and serve the window itself.",
+      "name": "accept_ownership",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Batch view over the claim guards so callers resolve a recipient's\\nwhole epoch chain in one simulation instead of one per epoch.\\n\\nOn an archived (expired-TTL) guard this does NOT read `false`: the\\nguards are *persistent* entries, so an archived one is not treated as\\nabsent. Touching it makes the invocation fail with a restore\\nrequirement \\xe2\\x80\\x94 a simulation comes back with a restore preamble, and a\\nsubmitted transaction fails until the entry is restored (or, on\\nautomatic restore, is charged for and then read at its stored value,\\n`true`). Either way an already-claimed guard can never silently\\ndegrade into \"unclaimed\": both this view and the on-chain `claim`\\nstill reject after the restore. The Zarf indexer reads guard entries\\ndirectly via getLedgerEntries; this bounded view is available to\\nindependent integrators.",
+      "name": "claimed_statuses",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "epoch_commitments",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "vec": {
+                "element_type": "bool"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Step 1 of the post-deadline sweep. Nothing moves until step 2, and the\\ndestination is fixed here so the announcement names where the funds go.\\n\\nThe deadline is checked HERE, not in `execute_reclaim`, so the notice\\nwindow runs strictly *after* `claim_deadline`. Were initiation allowed\\nearlier, the owner would pre-arm at `deadline - RECLAIM_NOTICE_PERIOD`\\nand sweep at `deadline + 1`, and the notice would protect nobody.\\n\\nRe-initiating overwrites the pending record and restarts the clock.\\n`ready_at` is always `now + RECLAIM_NOTICE_PERIOD`, so re-initiating can\\nonly push the window out, never pull it in.",
+      "name": "initiate_reclaim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The current owner aborts a pending handover before it is accepted.",
+      "name": "cancel_ownership_transfer",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

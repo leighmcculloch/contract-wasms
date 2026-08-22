@@ -1,0 +1,510 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidExpiry",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "NoPrice",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "StalePrice",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "OrderNotFound",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "NotActive",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "RateNotReached",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "Expired",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "NotExpired",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "InvalidConfig",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "InvalidTargetRate",
+          "value": 14
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A rate-lock order. All customer conditions are snapshotted at lock time and\\nare never re-supplied by later calls.",
+      "lib": "",
+      "name": "Order",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "customer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "payout_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "settled_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "OrderStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "target_rate",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Opens a rate-lock order. Escrows `amount` from `customer` and snapshots\\nthe customer's settlement conditions. Does NOT read or freeze the oracle\\nrate \\xe2\\x80\\x94 `target_rate` is the customer's condition, not today's price.",
+      "name": "lock",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "customer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "target_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "payout_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Config",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "max_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_duration",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "max_staleness",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "min_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "oracle",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Cancels an active order at any time before settlement, returning the\\nescrow to the customer. Customer auth only.",
+      "name": "cancel",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Settles an active order to its snapshotted recipient once the oracle rate\\nmeets the target. Admin/operator only. Never accepts a settle-time\\nrecipient \\xe2\\x80\\x94 funds always go to `order.recipient`.",
+      "name": "settle",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin-only in-place code upgrade. new_wasm_hash must reference bytecode\\nalready uploaded to the network; the contract address and all stored\\nstate (config, orders) are preserved.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Mirror of the rate_oracle contract's PriceData. The field names/order must\\nmatch so the cross-contract `lastprice` return decodes correctly.",
+      "lib": "",
+      "name": "PriceData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_order",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Order"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OrderStatus",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Active",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Settled",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Cancelled",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Refunded",
+          "value": 3
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_config",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Config"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "oracle",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "max_staleness",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "max_duration",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "min_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_paused",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Extends an order's persistent-storage TTL. Callable by anyone so orders\\ncan be kept alive through their lifetime without privileged access.",
+      "name": "bump_order_ttl",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Refunds an expired, still-active order back to the customer. Callable by\\nanyone (no auth) \\xe2\\x80\\x94 the funds can only ever go to the snapshotted customer.",
+      "name": "refund_expired",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

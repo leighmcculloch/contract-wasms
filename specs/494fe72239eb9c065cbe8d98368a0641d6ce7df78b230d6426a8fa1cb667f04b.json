@@ -1,0 +1,634 @@
+[
+  {
+    "function_v0": {
+      "doc": "Burns PT tokens from the designated address.\\n\\n**Strictly restricted to the Tokenizer contract.**\\nCalled when users redeem their PT for underlying assets at maturity.\\n\\n# Arguments\\n* `from` - The address burning the tokens.\\n* `amount` - The amount of tokens to burn.\\n\\n# Errors\\nReturns `Unauthorized`, `Paused`, `InvalidAmount`, `InsufficientBalance`, or `MathUnderflow`.",
+      "name": "burn",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovairePtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Mints new PT tokens to the designated address.\\n\\n**Strictly restricted to the Tokenizer contract.**\\nThis ensures PT is only issued when underlying yield-bearing assets are securely locked.\\n\\n# Arguments\\n* `to` - The address receiving the minted tokens.\\n* `amount` - The amount of tokens to mint.\\n\\n# Errors\\nReturns `Unauthorized`, `Paused`, `InvalidAmount`, or `MathOverflow`.",
+      "name": "mint",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovairePtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Hardcoded to save storage gas costs.",
+      "name": "name",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pauses Tokenizer integrations (mint/burn), freezing core issuance.",
+      "name": "pause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovairePtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Hardcoded to save storage gas costs.",
+      "name": "symbol",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Approves a spender to transfer up to `amount` of the caller's tokens.\\n\\n# Arguments\\n* `from` - The token owner (requires auth).\\n* `spender` - The address granted allowance.\\n* `amount` - The maximum amount the spender can transfer.\\n* `expiration_ledger` - Unused parameter to maintain standard token interface compatibility.",
+      "name": "approve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "_expiration_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovairePtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the exact balance of a specific user.",
+      "name": "balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Unpauses Tokenizer integrations.",
+      "name": "unpause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovairePtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the protocol version.",
+      "name": "version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Hardcoded to 7 decimals, consistent with Stellar assets.",
+      "name": "decimals",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns a comprehensive struct containing the PT Token's configuration and health metadata.",
+      "name": "metadata",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "PtMetadata"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovairePtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Transfers tokens from the caller to a recipient.\\n\\nNote: Transfers intentionally bypass the `pause` mechanism to preserve\\nsecondary market liquidity as an escape valve during protocol emergencies.\\n\\n# Arguments\\n* `from` - The caller sending the tokens (requires auth).\\n* `to` - The recipient of the tokens.\\n* `amount` - The amount to transfer.\\n\\n# Errors\\nReturns `InvalidAmount`, `InsufficientBalance`, `MathOverflow`, or `MathUnderflow`.",
+      "name": "transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovairePtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the approved allowance for a spender.",
+      "name": "allowance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns true if issuance/redemption is paused.",
+      "name": "is_paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PendingAdmin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Tokenizer"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalSupply"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Balance",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Allowance",
+            "type_": [
+              "address",
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initializes the Novaire Principal Token (PT).\\n\\n# Arguments\\n* `admin` - Protocol administrator responsible for pausing and upgrades.\\n* `tokenizer` - The exclusive authority allowed to mint and burn PT tokens.\\n\\n# Errors\\nReturns `AlreadyInitialized` if called more than once.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tokenizer",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovairePtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Accepts a pending admin transfer, finalizing the change of administration.",
+      "name": "accept_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovairePtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the total supply of PT tokens in circulation.",
+      "name": "total_supply",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PtMetadata",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "is_paused",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "tokenizer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_supply",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Updates the trusted Tokenizer contract address.",
+      "name": "set_tokenizer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_tokenizer",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovairePtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Transfers tokens from one address to another using an allowance.\\n\\n# Arguments\\n* `spender` - The address initiating the transfer (requires auth).\\n* `from` - The owner of the tokens.\\n* `to` - The recipient of the tokens.\\n* `amount` - The amount to transfer.",
+      "name": "transfer_from",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovairePtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initiates a two-step admin transfer to a new address.",
+      "name": "transfer_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovairePtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "NovairePtError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InsufficientBalance",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InsufficientAllowance",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "MathOverflow",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "MathUnderflow",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "StorageMissing",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "InvalidAdminTransfer",
+          "value": 11
+        }
+      ]
+    }
+  }
+]

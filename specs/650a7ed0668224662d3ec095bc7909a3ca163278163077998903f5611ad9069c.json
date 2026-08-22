@@ -1,0 +1,75 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "User account registration data\\n\\nUsed for registering a user's public key to enable encrypted communication\\nfor receiving transfers.\\nNot required to interact with the pool. But facilitates in-pool transfers\\nvia events. As parties can learn about each other public key.",
+      "lib": "",
+      "name": "Account",
+      "fields": [
+        {
+          "doc": "X25519 encryption public key for encrypting note data (32 bytes)",
+          "name": "encryption_key",
+          "type_": "bytes"
+        },
+        {
+          "doc": "BN254 note public key for creating commitments (32 bytes)",
+          "name": "note_key",
+          "type_": "bytes"
+        },
+        {
+          "doc": "Owner address of the account",
+          "name": "owner",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a user registers their public keys\\n\\nThis event allows other users to discover keys for sending private\\ntransfers. Two key types are required:\\n- encryption_key: X25519 key for encrypting note data (amount, blinding)\\n- note_key: BN254 key for creating commitments in the ZK circuit",
+      "lib": "",
+      "name": "PublicKeyEvent",
+      "prefix_topics": [
+        "public_key_event"
+      ],
+      "params": [
+        {
+          "doc": "Address of the account owner",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "X25519 encryption public key",
+          "name": "encryption_key",
+          "type_": "bytes",
+          "location": "data"
+        },
+        {
+          "doc": "BN254 note public key",
+          "name": "note_key",
+          "type_": "bytes",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Register a user's public encryption and note keys.",
+      "name": "register",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": {
+            "udt": {
+              "name": "Account"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

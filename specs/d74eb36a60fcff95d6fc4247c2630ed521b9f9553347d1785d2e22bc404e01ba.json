@@ -1,0 +1,882 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Partner",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "PartnerByOwner",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "PartnerAsset",
+            "type_": [
+              "symbol"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "PartnerAssets",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "EpochRevenue",
+            "type_": [
+              "u32",
+              "u64"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalProtocolRevenue"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Partner",
+      "fields": [
+        {
+          "doc": "Partner is active (DAO can deactivate for violations)",
+          "name": "active",
+          "type_": "bool"
+        },
+        {
+          "doc": "Assets submitted by this partner (list of synth symbols)",
+          "name": "deployed_assets",
+          "type_": {
+            "vec": {
+              "element_type": "symbol"
+            }
+          }
+        },
+        {
+          "doc": "Unique sequential ID \\xe2\\x80\\x94 used as referral tag in transactions",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "Human-readable name for display in analytics",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "Partner's controller wallet (only this can claim revenue)",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "Accumulated revenue not yet claimed (in USDC, 7dp)",
+          "name": "pending_revenue",
+          "type_": "i128"
+        },
+        {
+          "doc": "Unix timestamp of registration",
+          "name": "registered_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "Revenue share in bps (default 5_000 = 50%)",
+          "name": "revenue_share",
+          "type_": "i128"
+        },
+        {
+          "doc": "Total revenue ever earned (for analytics)",
+          "name": "total_earned",
+          "type_": "i128"
+        },
+        {
+          "doc": "Volume generated (for analytics)",
+          "name": "total_volume",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Config for a synth asset deployed by a partner",
+      "lib": "",
+      "name": "PartnerAsset",
+      "fields": [
+        {
+          "doc": "Max debt ceiling (cannot exceed global per-asset ceiling)",
+          "name": "debt_ceiling",
+          "type_": "i128"
+        },
+        {
+          "doc": "Timestamp when deployed",
+          "name": "deployed_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "Whether it's live on the engine",
+          "name": "live",
+          "type_": "bool"
+        },
+        {
+          "doc": "Oracle symbol for price feed",
+          "name": "oracle_symbol",
+          "type_": "symbol"
+        },
+        {
+          "doc": "Which partner deployed this",
+          "name": "partner_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "The synth symbol (must be prefixed: \"p{PARTNER_ID}_{SYMBOL}\")",
+          "name": "symbol",
+          "type_": "symbol"
+        },
+        {
+          "doc": "The SEP-41 token contract address",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AssetDeployed",
+      "prefix_topics": [
+        "preg_asset"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "partner_owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "symbol",
+          "type_": "symbol",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AssetActivated",
+      "prefix_topics": [
+        "preg_live"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "symbol",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "partner_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RevenueClaimed",
+      "prefix_topics": [
+        "preg_claim"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "partner_owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "claimable",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Point `dao` at the address authorised to call DAO-gated functions.\\nMust match the executor `execute_multisig_tx` passes through (protocol\\nmulti-sig G-address) or, after a DAO upgrade, the DAO contract itself.",
+      "name": "set_dao",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Replace this contract's Wasm in place. Instance and persistent\\nstorage are preserved. Authorised by the stored DAO address.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RevenueForwarded",
+      "prefix_topics": [
+        "preg_fwd"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "partner_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "epoch",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PartnerRegistered",
+      "prefix_topics": [
+        "preg_reg"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "engine",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "earnings",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Check if an address is a registered active partner.",
+      "name": "is_partner",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "addr",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PartnerDeactivated",
+      "prefix_topics": [
+        "preg_off"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "partner_id",
+          "type_": "u32",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get full partner record by ID.",
+      "name": "get_partner",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "Partner"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Partner claims their accumulated revenue.\\nOnly the partner's registered owner wallet can call this.\\n\\n# Arguments\\n* `partner_owner` \\xe2\\x80\\x94 must match the partner's registered owner",
+      "name": "claim_revenue",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "partner_owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Total number of registered partners.",
+      "name": "partner_count",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Self-serve registration \\xe2\\x80\\x94 partner pays a fee in USDC.\\nDAO must enable this first via set_open_registration(true).",
+      "name": "self_register",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get partner ID for a given owner address.",
+      "name": "get_partner_id",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "u32"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Kept for ABI compatibility. KYC bypass was removed \\xe2\\x80\\x94 all users\\ngo through ComplianceRegistry regardless of partner.",
+      "name": "has_kyc_bypass",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "partner_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Register a new partner \\xe2\\x80\\x94 called by DAO to approve an integrator.\\nAll partners have the same rights: referral swaps, 50% fee share,\\nand the ability to submit assets for DAO activation.",
+      "name": "register_partner",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Revenue earned by a partner in a specific epoch.",
+      "name": "get_epoch_revenue",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "partner_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "epoch",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get a partner asset record.",
+      "name": "get_partner_asset",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "symbol",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "PartnerAsset"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Owner wallet for a partner id (None if unknown).",
+      "name": "get_partner_owner",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "partner_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Revenue share in bps for an active partner (0 if missing/inactive).",
+      "name": "get_revenue_share",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "partner_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Update a partner's revenue share (DAO only).\\nUse to reward high-volume partners or penalise bad actors.",
+      "name": "set_partner_share",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "partner_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "new_share",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deactivate a partner (DAO only). Blocks future revenue crediting\\nbut does NOT touch already-accumulated pending_revenue \\xe2\\x80\\x94 the\\npartner can still claim what they've already earned.",
+      "name": "deactivate_partner",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "partner_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get all asset symbols deployed by a partner.",
+      "name": "get_partner_assets",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "partner_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "symbol"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Reactivate a previously deactivated partner.",
+      "name": "reactivate_partner",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "partner_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Alias for `register_partner` used by DAO call-data execution.",
+      "name": "dao_register_partner",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Whether wallets may call `self_register` without a DAO proposal.",
+      "name": "is_open_registration",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Enable or disable self-serve partner registration.",
+      "name": "set_open_registration",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "open",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "DAO activates a partner asset on the SyntheticEngine.\\nThis is the final step before users can mint the asset.\\n\\n# Arguments\\n* `dao`    \\xe2\\x80\\x94 DAO address\\n* `symbol` \\xe2\\x80\\x94 asset symbol registered by the partner",
+      "name": "activate_partner_asset",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "symbol",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Called by EarningsDistributor every epoch with the revenue\\nattributable to a specific partner (based on their referral tag).\\n\\n# Arguments\\n* `earnings_contract` \\xe2\\x80\\x94 must be the registered earnings address\\n* `partner_id`        \\xe2\\x80\\x94 which partner generated this revenue\\n* `amount`            \\xe2\\x80\\x94 partner's share in USDC (7dp)\\n* `epoch`             \\xe2\\x80\\x94 epoch number for record-keeping",
+      "name": "credit_partner_revenue",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "earnings_contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "partner_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "epoch",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deploy a new synthetic asset under the partner's namespace.\\nThe asset will be registered on the SyntheticEngine with\\nthe partner as the deployer.\\n\\nSymbol naming rule: must start with \"P\" to distinguish\\npartner assets from core protocol assets.\\nExamples: \"PSGOLD\" (partner synth gold), \"PSTSLA\"\\n\\n# Arguments\\n* `partner_owner`   \\xe2\\x80\\x94 must be the partner's registered owner wallet\\n* `symbol`          \\xe2\\x80\\x94 unique synth symbol (max 9 chars, starts with \"P\")\\n* `token`           \\xe2\\x80\\x94 pre-deployed SEP-41 contract address\\n* `oracle_symbol`   \\xe2\\x80\\x94 price feed symbol (e.g. \"GOLDUSD\")\\n* `min_cr`          \\xe2\\x80\\x94 minimum collateral ratio in bps (e.g. 15_000 = 150%)\\n* `liq_cr`          \\xe2\\x80\\x94 liquidation CR in bps\\n* `liq_penalty`     \\xe2\\x80\\x94 liquidation bonus in bps\\n* `stab_fee_bps`    \\xe2\\x80\\x94 annual stability fee in bps\\n* `debt_ceiling`    \\xe2\\x80\\x94 max outstanding synth (7dp); cannot exceed global limit",
+      "name": "register_partner_asset",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "partner_owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "symbol",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "oracle_symbol",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "coll_oracle",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "min_cr",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "liq_cr",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "liq_penalty",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "stab_fee_bps",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "debt_ceiling",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

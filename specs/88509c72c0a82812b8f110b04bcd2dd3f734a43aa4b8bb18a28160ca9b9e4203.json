@@ -1,0 +1,345 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DistributeError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "EmptyBatch",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "BatchTooLarge",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "Overflow",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "MismatchedArrays",
+          "value": 5
+        },
+        {
+          "doc": "Fee exceeds 70% of total payout \\xe2\\x80\\x94 safety cap",
+          "name": "FeeTooHigh",
+          "value": 6
+        },
+        {
+          "doc": "Contract already initialized",
+          "name": "AlreadyInitialized",
+          "value": 7
+        },
+        {
+          "doc": "Contract not yet initialized",
+          "name": "NotInitialized",
+          "value": 8
+        },
+        {
+          "doc": "Contract is paused",
+          "name": "ContractPaused",
+          "value": 9
+        },
+        {
+          "doc": "Duplicate recipient in the batch",
+          "name": "DuplicateRecipient",
+          "value": 10
+        },
+        {
+          "doc": "Payer cannot be a recipient (self-transfer)",
+          "name": "SelfTransfer",
+          "value": 11
+        },
+        {
+          "doc": "v3: accept_admin() called but no propose_admin() is pending",
+          "name": "NoPendingAdmin",
+          "value": 12
+        },
+        {
+          "doc": "v4 (F-SOR-001): supplied token is not the canonical USDC SAC for this network.",
+          "name": "UnauthorizedToken",
+          "value": 13
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "v4 (F-SOR-011) \\xe2\\x80\\x94 Contract constructor. Runs exactly once, atomically, as\\npart of the deploy operation. This closes the front-run / unauthorized-init\\ngap a separate `initialize()` had: there is no window in which an attacker\\ncan set the admin before the deployer does.\\n\\n`admin.require_auth()` ensures the admin address consents to being set\\n(prevents installing an admin the deployer does not control). The deploy\\ntransaction must therefore carry the admin's authorization.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Upgrade contract WASM. Admin only (high-privilege).",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "DistributeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pause the contract. Admin only. Blocks all distribute() calls.",
+      "name": "pause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "DistributeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Resume the contract. Admin only. Unblocks distribute() calls.",
+      "name": "resume",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "DistributeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Transfer admin role in one step. Current admin must authorize.\\n\\n**Deprecated** in v3 \\xe2\\x80\\x94 prefer the 2-step `propose_admin` + `accept_admin`\\nflow which requires the new admin to prove they hold the keypair\\n(prevents transfer-to-typo'd-address footgun).",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "DistributeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "v3 \\xe2\\x80\\x94 Step 1 of admin rotation. Current admin proposes a new admin.\\nThe new admin must call accept_admin() to take ownership.\\nOverwrites any prior pending proposal.",
+      "name": "propose_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "DistributeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "v3 \\xe2\\x80\\x94 Step 2 of admin rotation. Pending admin accepts ownership.\\nThe pending admin must sign \\xe2\\x80\\x94 proves they hold the keypair.",
+      "name": "accept_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "DistributeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Extend contract instance TTL. Anyone can call (allows cron jobs).",
+      "name": "extend_ttl",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Distribute USDC from `payer` to multiple `recipients` in a single transaction.\\n\\n**Stateful-minimal**: stores admin + paused flag only.\\nThe contract's primary purpose is to batch SAC.transfer() calls under one\\nrequire_auth(payer) invocation tree \\xe2\\x80\\x94 enabling one passkey prompt\\nfor N investor payments.\\n\\n```text\\nCompany Wallet (payer)\\n\\xe2\\x94\\x82\\n\\xe2\\x94\\x9c\\xe2\\x94\\x80\\xe2\\x94\\x80\\xe2\\x96\\xba Investor 1  (amounts[0])\\n\\xe2\\x94\\x9c\\xe2\\x94\\x80\\xe2\\x94\\x80\\xe2\\x96\\xba Investor 2  (amounts[1])\\n\\xe2\\x94\\x9c\\xe2\\x94\\x80\\xe2\\x94\\x80\\xe2\\x96\\xba ...\\n\\xe2\\x94\\x9c\\xe2\\x94\\x80\\xe2\\x94\\x80\\xe2\\x96\\xba Investor N  (amounts[N-1])\\n\\xe2\\x94\\x82\\n\\xe2\\x94\\x94\\xe2\\x94\\x80\\xe2\\x94\\x80\\xe2\\x96\\xba Treasury    (fee_amount)  \\xe2\\x86\\x90 skipped if fee == 0\\n```\\n\\nAuth model:\\n- `payer.require_auth()` is called once at the top.\\n- Each `token.transfer(payer, recipient, amount)` creates a\\nsub-invocation automatically included in the auth tree.\\n- Simulation builds the full tree; passkey signs the root.\\n\\n# Arguments\\n- `payer`: Company smart wallet (C... address). Signs via passkey.\\n- `token`: USDC SAC contract address.\\n- `recipients`: Investor addresses (C... or G...).\\n- `amounts`: Per-investor USDC amounts in stroops (i128).\\n- `fee_recipien",
+      "name": "distribute",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "payer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "recipients",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amounts",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fee_recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "DistributeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the contract version.",
+      "name": "version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the admin address.",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": {
+              "udt": {
+                "name": "DistributeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns whether the contract is paused.",
+      "name": "get_paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "v3 \\xe2\\x80\\x94 Returns the pending admin if propose_admin() was called and not yet accepted.",
+      "name": "get_pending_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  }
+]

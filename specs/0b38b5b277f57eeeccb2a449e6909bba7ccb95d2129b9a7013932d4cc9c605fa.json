@@ -1,0 +1,952 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PoolState",
+      "fields": [
+        {
+          "doc": "",
+          "name": "automation_balance",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "cumulative_claims",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "cumulative_protocol_revenue",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "cumulative_underwriting",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "locked_liabilities",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "reserved_claims",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "safety_balance",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "unearned_premiums",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ClaimRecord",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "position_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "withdrawn",
+          "type_": "bool"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ReserveError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "NotAuthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InsufficientLiquidity",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InsufficientShares",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "Slippage",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "RequestNotReady",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "RequestClosed",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "NotOwner",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "TokenMismatch",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "PositionNotLocked",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "ClaimNotFound",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "AlreadyWithdrawn",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "RewardAlreadyPaid",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "UnsafeUtilization",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "ConcentrationLimit",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "PositionAlreadyLocked",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "InvalidProtocolFee",
+          "value": 19
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WithdrawalRequest",
+      "fields": [
+        {
+          "doc": "",
+          "name": "cancelled",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "completed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "executable_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_pool",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "PoolState"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_claim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "position_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "ClaimRecord"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "extend_ttl",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pay_keeper",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "keeper",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "action",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "action_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_partner",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "partner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "approved",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accept_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pending_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "claim_payout",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "engine",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "position_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_treasury",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "quote_shares",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_treasury",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "propose_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pending_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_withdrawal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "WithdrawalRequest"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel_withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "deposit_reserve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_shares",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "fund_automation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "funder",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "settle_position",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "engine",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "position_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "payout",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execute_withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "min_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_provider_nav",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "request_withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "configure_protocol",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "engine",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "oracle",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_provider_shares",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_utilization_bps",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "collect_premium_from",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "engine",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "risk_premium",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "automation_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "position_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "partner",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_protocol_fee_bps",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "lock_payout_capacity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "engine",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "protected_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "payout_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "position_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_protocol_fee_bps",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_available_liquidity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_locked_for_position",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "position_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_market_concentration_bps",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "protected_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "payout_token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_projected_utilization_bps",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "additional",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_projected_concentration_bps",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "protected_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "payout_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "additional",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  }
+]

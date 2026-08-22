@@ -1,0 +1,694 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_epoch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "epoch_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "EpochRecord"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireFactoryError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ProtocolVersion"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "EpochCount"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Epoch",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Maturity",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "NextEpoch",
+            "type_": [
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "protocol_version",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireFactoryError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "epoch_count",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "link_epochs",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "current_epoch_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "next_epoch_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireFactoryError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "deploy_epoch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "params",
+          "type_": {
+            "udt": {
+              "name": "DeployEpochParams"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": {
+              "udt": {
+                "name": "NovaireFactoryError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "latest_epoch",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "EpochRecord"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireFactoryError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PtMetadata",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "is_paused",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "tokenizer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_supply",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "YtMetadata",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "is_expired",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "is_paused",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "maturity_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "tokenizer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_supply",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "yield_index",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "EpochRecord",
+      "fields": [
+        {
+          "doc": "",
+          "name": "deployment_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "epoch_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "intent_engine",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "is_active",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "marketplace",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "maturity_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "pt_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "rollover_engine",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sy_wrapper",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tokenizer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "yt_token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_next_epoch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "current_epoch_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "EpochRecord"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireFactoryError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VaultMetadata",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "is_paused",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "pending_admin",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "sy_wrapper",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_vault_shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "underlying",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "protocol_version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DeployEpochParams",
+      "fields": [
+        {
+          "doc": "",
+          "name": "grace_period_ledgers",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "intent_engine",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "keeper",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "marketplace",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "maturity_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "pt_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "rollover_engine",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sy_wrapper",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tokenizer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "underlying_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "yt_token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TokenizerMetadata",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "epoch_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "epoch_start_index",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "epoch_state",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "maturity_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "pt_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "settlement_exchange_rate",
+          "type_": {
+            "option": {
+              "value_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "sy_wrapper",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_pt_minted",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "yt_token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_epoch_by_maturity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "maturity_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "EpochRecord"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireFactoryError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "NovaireFactoryError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "EpochAlreadyExists",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidEpoch",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "MathOverflow",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "StorageMissing",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "MaturityInPast",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "DuplicateAddress",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "EpochNotLinked",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "WiringMismatch",
+          "value": 11
+        }
+      ]
+    }
+  }
+]

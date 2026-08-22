@@ -1,0 +1,753 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "enforce",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context",
+          "type_": {
+            "udt": {
+              "name": "Context"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "authenticated_signers",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Signer"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "context_rule",
+          "type_": {
+            "udt": {
+              "name": "ContextRule"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "install",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "install_params",
+          "type_": {
+            "udt": {
+              "name": "PolicyInstallParams"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "context_rule",
+          "type_": {
+            "udt": {
+              "name": "ContextRule"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "uninstall",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_rule",
+          "type_": {
+            "udt": {
+              "name": "ContextRule"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "grammar_version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Master-gated circuit breaker: while paused, every `oracle_price` leaf\\nfor this asset denies on every rule of this account. Keyed on the\\naccount rather than a rule so one call covers the whole account.",
+      "name": "pause_oracle_policies",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_rule",
+          "type_": {
+            "udt": {
+              "name": "ContextRule"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unpause_oracle_policies",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_rule",
+          "type_": {
+            "udt": {
+              "name": "ContextRule"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "rotate_master_signer_set",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "rule_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "new_set",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Signer"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pause every oracle-referencing policy on the account, whatever asset.",
+      "name": "pause_oracle_policies_all",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_rule",
+          "type_": {
+            "udt": {
+              "name": "ContextRule"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unpause_oracle_policies_all",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_rule",
+          "type_": {
+            "udt": {
+              "name": "ContextRule"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "An authorised identity for a context rule.",
+      "lib": "",
+      "name": "Signer",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Delegated",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "External",
+            "type_": [
+              "address",
+              "bytes"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "OZ's `ContextRule`, in full.\\n\\nEvery field is declared even though the interpreter only reads `id`,\\n`signers` and (via the caller) `valid_until`. A `#[contracttype]` struct\\ndecodes from a host map keyed by field name and requires an EXACT field\\nset - a subset raises `Error(Object, UnexpectedSize)` and the call traps\\nbefore any policy logic runs. This type is the wire shape the smart\\naccount sends, not a convenience view of it, so it has to match OZ's\\ndefinition field for field.\\n\\nPinned against `packages/accounts/src/smart_account/storage.rs` via\\n`OZ_POLICY_TRAIT.md`. `tests/oz_abi.rs` decodes a hand-built map into this\\nstruct so a drift here fails a test rather than only failing on chain.",
+      "lib": "",
+      "name": "ContextRule",
+      "fields": [
+        {
+          "doc": "",
+          "name": "context_type",
+          "type_": {
+            "udt": {
+              "name": "ContextRuleType"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "policies",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "policy_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signer_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signers",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Signer"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "valid_until",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Oracle parameter overrides attached to a policy document.",
+      "lib": "",
+      "name": "OracleParams",
+      "fields": [
+        {
+          "doc": "",
+          "name": "max_deviation_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_staleness_seconds",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "What a context rule is scoped to. Mirrors OZ's\\n`smart_account::storage::ContextRuleType`.",
+      "lib": "",
+      "name": "ContextRuleType",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Default"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "CallContract",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "CreateContract",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Frozen wire ABI for `Policy::install`'s `AccountParams`.\\n\\n`predicate` is the raw canonical ScVal XDR \\xe2\\x80\\x94 `ScVal::Vec([symbol, ...])`\\nfor the root \\xe2\\x80\\x94 that the encoder emits. The host parses it on receipt; the\\ncontract never touches `stellar-xdr`.",
+      "lib": "",
+      "name": "PolicyInstallParams",
+      "fields": [
+        {
+          "doc": "",
+          "name": "grammar_version",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "install_nonce",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "oracle_max_deviation_bps",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "Per-policy oracle bounds. `None` on any field uses the wasm default.\\nOverrides may only TIGHTEN - a widening value is refused at install.\\n\\nCarried as scalars rather than the `Option<OracleParams>` the ABI\\nnote describes: soroban-sdk 27 cannot derive the ScVal conversion for\\nan `Option<T>` where T is a `#[contracttype]` struct, so that shape\\ncompiles for wasm but breaks every test build. The wire content is\\nthe same set of values.",
+          "name": "oracle_max_staleness_seconds",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "Cross-feed divergence bound override (Track B). Tighten-only against\\n`oracle::DEFAULT_MAX_CROSS_FEED_DEVIATION_BPS`. Field name kept\\nunder 30 chars for the soroban-sdk contracttype limit.",
+          "name": "oracle_max_xfeed_dev_bps",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "predicate",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "predicate_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Reflector's asset argument. A `contracttype` enum encodes as the\\n2-element vec `[Symbol(\"Stellar\"), Address]` the feed expects - a bare\\naddress does not bind.",
+      "lib": "",
+      "name": "Asset",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Stellar",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Other",
+            "type_": [
+              "symbol"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PriceData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StoredDoc",
+      "fields": [
+        {
+          "doc": "",
+          "name": "oracle_max_deviation_bps",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "oracle_max_staleness_seconds",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "Per-policy override on the cross-feed deviation bound. Same shape as\\nthe other two: `None` means the wasm default, an override may only\\nTIGHTEN against `oracle::DEFAULT_MAX_CROSS_FEED_DEVIATION_BPS`.\\nField name kept under 30 chars for the soroban-sdk contracttype limit.",
+          "name": "oracle_max_xfeed_dev_bps",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "predicate_bytes",
+          "type_": "bytes"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PolicyError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "ArgMismatch",
+          "value": 100
+        },
+        {
+          "doc": "",
+          "name": "ContractScope",
+          "value": 101
+        },
+        {
+          "doc": "",
+          "name": "ArithmeticOverflow",
+          "value": 102
+        },
+        {
+          "doc": "",
+          "name": "UnsupportedNode",
+          "value": 103
+        },
+        {
+          "doc": "",
+          "name": "StatefulBound",
+          "value": 104
+        },
+        {
+          "doc": "",
+          "name": "NotInAllowlist",
+          "value": 105
+        },
+        {
+          "doc": "",
+          "name": "Frequency",
+          "value": 106
+        },
+        {
+          "doc": "",
+          "name": "SlippageFloor",
+          "value": 107
+        },
+        {
+          "doc": "",
+          "name": "VersionMismatch",
+          "value": 200
+        },
+        {
+          "doc": "",
+          "name": "MalformedPredicate",
+          "value": 201
+        },
+        {
+          "doc": "",
+          "name": "NonceReplay",
+          "value": 202
+        },
+        {
+          "doc": "",
+          "name": "MasterAuthRequired",
+          "value": 203
+        },
+        {
+          "doc": "",
+          "name": "RuleSignersChanged",
+          "value": 204
+        },
+        {
+          "doc": "",
+          "name": "PredicateFalse",
+          "value": 205
+        },
+        {
+          "doc": "",
+          "name": "MissingState",
+          "value": 206
+        },
+        {
+          "doc": "",
+          "name": "PredicateTooLarge",
+          "value": 207
+        },
+        {
+          "doc": "",
+          "name": "PredicateHashMismatch",
+          "value": 208
+        },
+        {
+          "doc": "",
+          "name": "EmptySignerSet",
+          "value": 209
+        },
+        {
+          "doc": "",
+          "name": "NoAuthenticatedSigners",
+          "value": 210
+        },
+        {
+          "doc": "",
+          "name": "TooManyInvocationWindows",
+          "value": 211
+        },
+        {
+          "doc": "",
+          "name": "ExternalSignerNotSupported",
+          "value": 212
+        },
+        {
+          "doc": "",
+          "name": "ValidUntilNotSupported",
+          "value": 213
+        },
+        {
+          "doc": "",
+          "name": "InvalidScaledRatio",
+          "value": 214
+        },
+        {
+          "doc": "",
+          "name": "OracleLeafInvalidPosition",
+          "value": 300
+        },
+        {
+          "doc": "",
+          "name": "OracleReadLimit",
+          "value": 301
+        },
+        {
+          "doc": "",
+          "name": "OracleEnvelopeRequired",
+          "value": 302
+        },
+        {
+          "doc": "",
+          "name": "OracleParamsOutOfRange",
+          "value": 303
+        },
+        {
+          "doc": "",
+          "name": "OracleStale",
+          "value": 304
+        },
+        {
+          "doc": "",
+          "name": "OracleMissing",
+          "value": 305
+        },
+        {
+          "doc": "",
+          "name": "OracleDeviationExceeded",
+          "value": 306
+        },
+        {
+          "doc": "",
+          "name": "OraclePaused",
+          "value": 307
+        },
+        {
+          "doc": "",
+          "name": "OracleDecimalsMismatch",
+          "value": 308
+        },
+        {
+          "doc": "",
+          "name": "OracleFingerprintDrift",
+          "value": 309
+        },
+        {
+          "doc": "",
+          "name": "OracleNoConfirmation",
+          "value": 310
+        },
+        {
+          "doc": "",
+          "name": "OracleMalformedHistory",
+          "value": 311
+        },
+        {
+          "doc": "",
+          "name": "OracleCrossFeedDivergence",
+          "value": 312
+        },
+        {
+          "doc": "An oracle comparison's threshold did not declare its decimal basis.\\nRefused at install: without the basis the contract cannot tell a\\ncorrectly scaled threshold from one that is 10^5 too large, and the\\nlatter permits everything.",
+          "name": "OracleThresholdBasisRequired",
+          "value": 215
+        },
+        {
+          "doc": "The declared basis exceeded `MAX_ORACLE_THRESHOLD_DECIMALS`.",
+          "name": "OracleThresholdDecimalsOutOfRange",
+          "value": 313
+        }
+      ]
+    }
+  }
+]

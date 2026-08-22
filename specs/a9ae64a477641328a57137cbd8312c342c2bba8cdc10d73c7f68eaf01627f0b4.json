@@ -1,0 +1,136 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_score",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "party",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Score"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "marketplace",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "record_settled",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "party",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "record_defaulted",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "party",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Score",
+      "fields": [
+        {
+          "doc": "",
+          "name": "defaulted_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "settled_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "volume",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Marketplace"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Score",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RepError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 2
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,355 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidSplit",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InsufficientBuffer",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InsufficientYieldPrincipal",
+          "value": 6
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Config",
+      "fields": [
+        {
+          "doc": "",
+          "name": "buffer_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "employer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "streaming_contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "withdrawal_controller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "yield_bps",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VaultState",
+      "fields": [
+        {
+          "doc": "",
+          "name": "buffer_balance",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_deposited",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_released",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "yield_principal",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VaultStats",
+      "fields": [
+        {
+          "doc": "",
+          "name": "buffer_balance",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "buffer_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "buffer_healthy",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_deposited",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_pool",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_released",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "yield_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "yield_principal",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "init",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "employer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "withdrawal_controller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "streaming_contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "buffer_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "yield_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Config"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "stats",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "VaultStats"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "config",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Config"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BalanceSnapshot",
+      "fields": [
+        {
+          "doc": "",
+          "name": "employee",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "end_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "rate_per_second",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "start_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "total_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "unlocked_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "updated_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "withdrawable_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "withdrawn_amount",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "release_buffer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "VaultStats"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "deposit_payroll",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "VaultStats"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "rebalance_to_buffer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "VaultStats"
+          }
+        }
+      ]
+    }
+  }
+]

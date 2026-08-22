@@ -1,0 +1,349 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "InsufficientTier",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "BadgeAlreadyMinted",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "NotOwner",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "NonTransferable",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "NotAdmin",
+          "value": 6
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SaasContract"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TokenCount"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "TokenOwner",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "TokenUri",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "UserBadge",
+            "type_": [
+              "address",
+              {
+                "udt": {
+                  "name": "BadgeType"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BadgeType",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Genesis",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Vector",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Nexus",
+          "value": 3
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "owner_of",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Soulbound: non-transferable",
+      "name": "transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "has_badge",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "badge_type",
+          "type_": {
+            "udt": {
+              "name": "BadgeType"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "token_uri",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "string",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin-only: award any badge type to any user (for airdrops / rewarding early adopters)",
+      "name": "admin_mint",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "badge_type",
+          "type_": {
+            "udt": {
+              "name": "BadgeType"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "uri",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Mint a Nexus badge \\xe2\\x80\\x94 requires Nexus subscription",
+      "name": "mint_nexus",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Mint a Vector badge \\xe2\\x80\\x94 requires Vector or Nexus subscription",
+      "name": "mint_vector",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Mint a Genesis (entry-level) badge \\xe2\\x80\\x94 FREE for all users, no tier required",
+      "name": "mint_genesis",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_supply",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "saas_contract",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

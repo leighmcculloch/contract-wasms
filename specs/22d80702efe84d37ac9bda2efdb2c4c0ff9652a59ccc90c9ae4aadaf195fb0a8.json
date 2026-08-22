@@ -1,0 +1,794 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "NoPendingAdmin",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "TokenNotAllowed",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidEventCount",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidMissThreshold",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "PositionExists",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "PositionNotFound",
+          "value": 10
+        },
+        {
+          "doc": "The splitter has no usable on-chain schedule, so there is nothing\\nobjective to measure a missed payment against.",
+          "name": "ScheduleNotUsable",
+          "value": 11
+        },
+        {
+          "doc": "Reserved. Snapshot pools were refused at deposit while the payout had\\nno path through them; they are supported now (`push_to_pool` delivers\\nthe collateral, `push_to_pool_snapshot` opens the round), so nothing\\nreturns this any more. The number stays taken so the ones below it do\\nnot shift under integrations that already read them.",
+          "name": "SnapshotPoolUnsupported",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "NotLiquidatable",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "NothingToSeize",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "AllEventsExecuted",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "NothingToPush",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "WithdrawNotAnnounced",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "WithdrawNoticeActive",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "PoolInDefault",
+          "value": 19
+        },
+        {
+          "doc": "",
+          "name": "NothingToWithdraw",
+          "value": 20
+        },
+        {
+          "doc": "",
+          "name": "Overflow",
+          "value": 21
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PendingAdmin"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Allow-list entry. Mirrors the accepted-token list managed from\\nadmin.dobprotocol.com, but the on-chain copy is the one that binds.",
+            "name": "AllowedToken",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "One collateral position per pool, keyed by the splitter address.",
+            "name": "Position",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A collateral position, and the promise it backs.\\n\\nEverything from `first_distribution_time` down is a *snapshot*, taken when\\nthe collateral was posted. It is deliberately not re-read from the splitter:\\nthe pool admin can rewrite their own schedule, and if the vault followed\\nalong, missing a payment could be undone by editing the calendar.",
+      "lib": "",
+      "name": "Position",
+      "fields": [
+        {
+          "doc": "Slots the pool had already paid for when the collateral was posted, so\\nthat only payments promised *after* the deposit are measured.",
+          "name": "covered_at_deposit",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "created_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "Everything ever put in, including top-ups. Informational.",
+          "name": "deposited",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "depositor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "events_executed",
+          "type_": "u32"
+        },
+        {
+          "doc": "How many slices the collateral is cut into (1..=3).",
+          "name": "events_total",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "first_distribution_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "interval_seconds",
+          "type_": "u64"
+        },
+        {
+          "doc": "Missed payments needed to unlock each liquidation event.",
+          "name": "miss_threshold",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        },
+        {
+          "doc": "Still backing the promise. The depositor can take this back, on notice.",
+          "name": "remaining",
+          "type_": "i128"
+        },
+        {
+          "doc": "Taken from the operator and owed to the pool's shareholders. Never\\nwithdrawable, whatever happens to the pool afterwards.",
+          "name": "seized",
+          "type_": "i128"
+        },
+        {
+          "doc": "Slots already due when the collateral was posted. The collateral backs\\nthe schedule *from here forward*; it is not a retroactive fine.",
+          "name": "slots_due_at_deposit",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_distributions",
+          "type_": "u32"
+        },
+        {
+          "doc": "0 when no exit is pending.",
+          "name": "withdraw_announced_at",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "top_up",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "liquidate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_missed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accept_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_position",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "Position"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "push_to_pool",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "option": {
+                "value_type": "u64"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "propose_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_next_slice",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel_withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_liquidatable",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "bool",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_token_allowed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "announce_withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_token_allowed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "allowed",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "deposit_collateral",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "depositor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "miss_threshold",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "events_total",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "push_to_pool_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "withdraw_collateral",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_misses_until_next",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "push_to_pool_snapshot",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "merkle_root",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ScheduleConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "completed_distributions",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "enabled",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "first_distribution_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "interval_seconds",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "total_distributions",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "`last_distribution_time` is the field the vault measures compliance with.\\nEvery door that opens a round updates it \\xe2\\x80\\x94 the admin's `create_distribution`,\\nthe snapshot round, and the permissionless scheduled trigger alike.",
+      "lib": "",
+      "name": "DistributionConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "claim_delay_seconds",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "last_distribution_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "min_interval_seconds",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "round_expiry_seconds",
+          "type_": "u64"
+        }
+      ]
+    }
+  }
+]

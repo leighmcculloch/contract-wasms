@@ -1,0 +1,391 @@
+[
+  {
+    "function_v0": {
+      "doc": "Trader cancels their own active order and reclaims funds.",
+      "name": "cancel",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "trader",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "nullifier",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Anyone can expire an order that has passed its deadline, returning funds to trader.",
+      "name": "expire",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "nullifier",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Lock trader funds alongside order submission.\\nCalled by OrderBook (which the trader authorizes as part of their Soroban tx).\\nTransfers `amount` of `asset` from the trader's wallet into this vault.",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "trader",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "nullifier",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Called ONLY by the Settlement contract.\\nReleases `amount` of the matched deposit to `recipient` (the counterparty)\\nand refunds any surplus (`deposit \\xe2\\x88\\x92 amount`) to the original depositor.\\n\\nThe surplus arises in a uniform-price batch auction: a buyer escrows USDC\\nat their *limit* price but the batch clears at a (better) uniform price, so\\nonly `amount` is owed to the seller \\xe2\\x80\\x94 the price-improvement difference must\\nreturn to the buyer, not leak to the counterparty.\\nThe Settlement auth check is non-negotiable \\xe2\\x80\\x94 no other caller can release funds.",
+      "name": "release",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "nullifier",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "One-time initialization.\\nmatching_engine and settlement are the only addresses allowed to\\ncall lock_for_settlement() and release() respectively. xlm_token/\\nusdc_token are the only assets deposit() will accept \\xe2\\x80\\x94 see deposit()\\nfor why.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "matching_engine",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "settlement",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "xlm_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc_token",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin-only emergency switch. Pausing blocks new deposits only \\xe2\\x80\\x94\\ncancel/expire/release always remain callable so traders can never be\\nlocked out of funds already in the vault.",
+      "name": "set_paused",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "nullifier",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "DepositRecord"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Called by MatchingEngine when a match is found.\\nTransitions deposit from Active \\xe2\\x86\\x92 Matched so it cannot be cancelled.",
+      "name": "lock_for_settlement",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "nullifier",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "DepositRecord"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MatchingEngineAddr"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SettlementAddr"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "XlmToken"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "UsdcToken"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "nullifier -> DepositRecord",
+            "name": "Deposit",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DepositRecord",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "created_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "nullifier",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "DepositStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "trader",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DepositStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Active"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Matched"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Settled"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Expired"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cancelled"
+          }
+        }
+      ]
+    }
+  }
+]

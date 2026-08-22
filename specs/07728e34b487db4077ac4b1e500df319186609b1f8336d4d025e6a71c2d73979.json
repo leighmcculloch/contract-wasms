@@ -1,0 +1,920 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "InvalidKeyLength",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "KeyNotFound",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "OperatorNotSet",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "PendingNotFound",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "ActivationDelayNotElapsed",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidModulus",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidActivationDelay",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "PendingOwnerNotSet",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "MinActiveKeys",
+          "value": 10
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Owner"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Nominated successor in a two-step ownership handover. Set by\\n`propose_owner`, cleared on `accept_ownership`/`cancel_ownership_transfer`.",
+            "name": "PendingOwner"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Key",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Kid",
+            "type_": [
+              "string"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "KeyCount"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "How many enumerated keys are currently VALID. `KeyCount` counts every\\nhash ever enumerated (revoked ones keep their slot), so it cannot be\\nused for the `MIN_ACTIVE_KEYS` floor. Maintained incrementally rather\\nthan derived by scanning the enumeration: a scan is O(KeyCount)\\npersistent reads inside `revoke`, and KeyCount grows by one on every\\nGoogle key rotation, so it would eventually blow the per-transaction\\nfootprint limit and disable the fail-safe revocation path outright.",
+            "name": "ActiveKeyCount"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "KeyAt",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Reverse lookup hash -> enumeration index, so re-registering or\\nrevoking a key can re-extend its `KeyAt` entry's TTL without scanning.\\nPresence also marks \"this hash has an enumeration slot\", which keeps\\nrevoke -> re-register cycles from appending duplicate slots.",
+            "name": "KeyIndex",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Hot-path service account: may only *propose* keys (timelocked) and\\nrevoke them (fail-safe direction). Set by the owner.",
+            "name": "Operator"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Seconds a proposed key must wait before `activate_key` succeeds.",
+            "name": "ActivationDelay"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Pending",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PendingCount"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "PendingAt",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "PendingIndex",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PendingKey",
+      "fields": [
+        {
+          "doc": "Ledger timestamp after which `activate_key` succeeds.",
+          "name": "activate_after",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "kid",
+          "type_": "string"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "KeyRevoked",
+      "prefix_topics": [
+        "key_revoked"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "key_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "KeyProposed",
+      "prefix_topics": [
+        "key_proposed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "key_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "kid",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "activate_after",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OperatorSet",
+      "prefix_topics": [
+        "operator_set"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "KeyActivated",
+      "prefix_topics": [
+        "key_activated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "key_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "KeyRegistered",
+      "prefix_topics": [
+        "key_registered"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "key_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "kid",
+          "type_": "string",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OwnerProposed",
+      "prefix_topics": [
+        "owner_proposed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PendingCancelled",
+      "prefix_topics": [
+        "pending_cancelled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "key_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "owner",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OwnershipTransferred",
+      "prefix_topics": [
+        "owner_set"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "previous_owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Owner revocation (immediate).",
+      "name": "revoke_key",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_pending",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "PendingKey"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Operator path: stage a key for activation after the delay. Proposing\\nan already-active key just refreshes its TTLs via `activate_key`\\nbeing unnecessary \\xe2\\x80\\x94 the proposal is recorded regardless so the\\nrotation worker's flow stays simple.",
+      "name": "propose_key",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "kid",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "pubkey_limbs",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "bytes_n": {
+                "n": 32
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Permissionless: once the delay has elapsed, anyone may flip the\\npending key active. The delay \\xe2\\x80\\x94 not the caller \\xe2\\x80\\x94 is the control.",
+      "name": "activate_key",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_operator",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_valid_key",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pubkey_limbs",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "bool",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Owner-only immediate registration. This is the emergency path and it\\nsits behind the owner's full signature threshold by design.",
+      "name": "register_key",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "kid",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "pubkey_limbs",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "bytes_n": {
+                "n": 32
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_operator",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "activation_delay_secs",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pending_owner",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Step 1 of a two-step ownership handover: the current owner nominates a\\nsuccessor. Nothing changes until the nominee calls `accept_ownership`,\\nso a fat-fingered or uncontrolled address can never brick the registry\\n\\xe2\\x80\\x94 the trust root for every campaign. Re-proposing overwrites the\\npending nominee; the owner can abort via `cancel_ownership_transfer`.",
+      "name": "propose_owner",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Owner veto for the monitoring window.",
+      "name": "cancel_pending",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_pending_at",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "bytes_n": {
+                "n": 32
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Step 2: the nominated successor accepts, proving it controls the\\naddress. Only then does ownership actually move.",
+      "name": "accept_ownership",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "compute_key_hash",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pubkey_limbs",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "bytes_n": {
+                "n": 32
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_pending_count",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_kid_registered",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "kid",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_valid_key_hash",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_registered_key",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "bytes_n": {
+                "n": 32
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Operator revocation (immediate). Fail-safe direction: the hot key can\\nonly ever disable keys, never enable them ahead of the delay.\\n\\nBounded by `MIN_ACTIVE_KEYS`: \"fail-safe\" only holds while at least a\\nworking keyset survives. Revoking the last keys is not a safe\\ndirection, it is a protocol-wide claim outage, so the operator is\\nstopped at the floor and the owner multisig must take over.",
+      "name": "operator_revoke_key",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_activation_delay",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Number of enumerated keys currently valid. Backs the `MIN_ACTIVE_KEYS`\\nfloor and lets the rotation worker read the same number the contract\\nenforces instead of recomputing it from `get_registered_key*`.",
+      "name": "get_active_key_count",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_registered_key_count",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The current owner aborts a pending handover before it is accepted.",
+      "name": "cancel_ownership_transfer",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

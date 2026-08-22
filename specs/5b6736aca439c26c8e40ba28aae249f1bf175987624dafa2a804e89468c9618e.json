@@ -1,0 +1,1383 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "Error codes live at 200+ **on purpose**, for the same reason `vesting` moved\\nto 100+.\\n\\n`create_campaign` reaches `fund_deployment` \\xe2\\x86\\x92 `token_client.transfer_from`,\\nand a Stellar Asset Contract raises its own `contracterror` codes across\\n1\\xe2\\x80\\x9313 \\xe2\\x80\\x94 including `AllowanceError = 9` and `BalanceError = 10`. Under the old\\n1..=10 numbering EVERY factory code collided with that range, and the two\\nmost common real failures of an atomic create (no allowance, no balance)\\nsurfaced as `#9`/`#10`, which the factory ABI decoded as `InvalidDeadline`\\nand `InvalidCampaignMode`. A caller seeing a bare `Error(Contract, #N)`\\ncould not tell \"you forgot to approve\" from \"your campaign shape is wrong\",\\nand the mislabel got sharper with `InvalidCampaignMode` becoming exactly\\nwhat a stale client hits when it calls this factory with the old campaign\\nshape \\xe2\\x80\\x94 rendered to the user as \"insufficient balance\".\\n\\n200+ rather than 100+ because the deployed contracts already own their own\\nblocks. All four ranges are disjoint by construction ",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 201
+        },
+        {
+          "doc": "",
+          "name": "InvalidRecipientCount",
+          "value": 202
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 203
+        },
+        {
+          "doc": "",
+          "name": "InvalidLimit",
+          "value": 204
+        },
+        {
+          "doc": "",
+          "name": "InvalidMerkleRoot",
+          "value": 205
+        },
+        {
+          "doc": "",
+          "name": "InvalidAudience",
+          "value": 206
+        },
+        {
+          "doc": "",
+          "name": "TokenTransferMismatch",
+          "value": 207
+        },
+        {
+          "doc": "",
+          "name": "MerkleRootAlreadyUsed",
+          "value": 208
+        },
+        {
+          "doc": "",
+          "name": "InvalidDeadline",
+          "value": 209
+        },
+        {
+          "doc": "",
+          "name": "InvalidCampaignMode",
+          "value": 210
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Verifier"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "JwkRegistry"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "VestingWasmHash"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AirdropWasmHash"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "DeploymentCount"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Holds a full `DeploymentInfo` so range reads cost one ledger entry.",
+            "name": "DeploymentAt",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "OwnerDeploymentCount",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Same `DeploymentInfo` layout as `DeploymentAt`.",
+            "name": "OwnerDeploymentAt",
+            "type_": [
+              "address",
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Private O(1) keeper index: `(global_index, owner_index)`.",
+            "name": "DeploymentPosition",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "MetadataCid",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Marks a merkle root already consumed by a factory-created campaign, so\\ntwo campaigns can never share one. A proof is bound to (merkle_root,\\naudience_hash) but NOT to a vesting contract address, so identically\\nrooted siblings would each accept the same proof.",
+            "name": "UsedRoot",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Unified campaign registry. Vesting-specific discovery uses\\n`DeploymentAt`, so wallet campaigns never enter the email/ZK index.",
+            "name": "CampaignCount"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "CampaignAt",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Direct campaign-address lookup. Stores the same full `CampaignInfo` as\\nthe global and owner registries so discovery never needs an O(N) scan.",
+            "name": "CampaignByAddress",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Private O(1) keeper index: `(global_index, owner_index)`.",
+            "name": "CampaignPosition",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "OwnerCampaignCount",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "OwnerCampaignAt",
+            "type_": [
+              "address",
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Wallet/immediate campaigns only. Keeping this separate from the mixed\\nowner campaign registry makes owner airdrop discovery bounded and\\nprevents email/ZK campaigns from consuming page slots.",
+            "name": "OwnerAirdropCount",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "OwnerAirdropAt",
+            "type_": [
+              "address",
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Private O(1) keeper index into `OwnerAirdropAt`.",
+            "name": "OwnerAirdropPosition",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CampaignInfo",
+      "fields": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "claim_authorization",
+          "type_": {
+            "udt": {
+              "name": "ClaimAuthorization"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "claim_deadline",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "claim_schedule",
+          "type_": {
+            "udt": {
+              "name": "ClaimSchedule"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "merkle_root",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "metadata_cid",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "recipient_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "reclaim_policy",
+          "type_": {
+            "udt": {
+              "name": "ReclaimPolicy"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_amount",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ClaimSchedule",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Epochs"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Immediate"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ReclaimPolicy",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "None"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AfterDeadline"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Anytime"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DeploymentInfo",
+      "fields": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "metadata_cid",
+          "type_": "string"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CampaignCreated",
+      "prefix_topics": [
+        "campaign_created"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "campaign",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "claim_authorization",
+          "type_": {
+            "udt": {
+              "name": "ClaimAuthorization"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "claim_schedule",
+          "type_": {
+            "udt": {
+              "name": "ClaimSchedule"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "reclaim_policy",
+          "type_": {
+            "udt": {
+              "name": "ReclaimPolicy"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "claim_deadline",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "total_amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "recipient_count",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "merkle_root",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "metadata_cid",
+          "type_": "string",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ClaimAuthorization",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "EmailZk"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Wallet"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "verifier",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_campaign",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "jwk_registry",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "recipient_id",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "jwk_registry",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "vesting_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "airdrop_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_deployment",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_campaign",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "claim_authorization",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "claim_schedule",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "reclaim_policy",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "description",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "merkle_root",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "audience_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "recipient_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "total_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "claim_deadline",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "metadata_cid",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "funding_mode",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_unlock_time",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_deployments",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "start",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "limit",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "vec": {
+                "element_type": "address"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "protocol_version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "airdrop_wasm_hash",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "bytes_n": {
+                "n": 32
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_campaign_info",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "CampaignInfo"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "vesting_wasm_hash",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "bytes_n": {
+                "n": 32
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_campaign_count",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_campaign_infos",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "start",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "limit",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "vec": {
+                "element_type": {
+                  "udt": {
+                    "name": "CampaignInfo"
+                  }
+                }
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_owner_campaign",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_deployment_info",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "DeploymentInfo"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Permissionless TTL maintenance for the canonical direct campaign\\nrecord and the root reservation that prevents cross-campaign replay.",
+      "name": "keep_alive_campaign",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_deployment_count",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_deployment_infos",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "start",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "limit",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "vec": {
+                "element_type": {
+                  "udt": {
+                    "name": "DeploymentInfo"
+                  }
+                }
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_owner_deployment",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "vesting_metadata_cid",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vesting",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "string",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_owner_deployments",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "start",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "limit",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "vec": {
+                "element_type": "address"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_owner_airdrop_count",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_owner_airdrop_infos",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "start",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "limit",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "vec": {
+                "element_type": {
+                  "udt": {
+                    "name": "CampaignInfo"
+                  }
+                }
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_owner_campaign_info",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "CampaignInfo"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "predict_airdrop_address",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "predict_vesting_address",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_owner_campaign_count",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_owner_campaign_infos",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "start",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "limit",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "vec": {
+                "element_type": {
+                  "udt": {
+                    "name": "CampaignInfo"
+                  }
+                }
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_owner_deployment_info",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "DeploymentInfo"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_owner_deployment_count",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_owner_deployment_infos",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "start",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "limit",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "vec": {
+                "element_type": {
+                  "udt": {
+                    "name": "DeploymentInfo"
+                  }
+                }
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_campaign_info_by_address",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "CampaignInfo"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

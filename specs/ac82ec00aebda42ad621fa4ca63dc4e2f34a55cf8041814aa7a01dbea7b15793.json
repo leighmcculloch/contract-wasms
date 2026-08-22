@@ -1,0 +1,752 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Pool",
+      "fields": [
+        {
+          "doc": "",
+          "name": "cumulative_vol_a",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "cumulative_vol_b",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee_a_accum",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee_b_accum",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee_tier",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "reserve_a",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "reserve_b",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "token_a",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_b",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_shares",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Pool",
+            "type_": [
+              "symbol"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "LpPos",
+            "type_": [
+              "symbol",
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "LpShares",
+            "type_": [
+              "symbol",
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "PoolList",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PoolCount"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SwapEvent",
+      "prefix_topics": [
+        "swap"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "trader",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount_out",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "a_to_b",
+          "type_": "bool",
+          "location": "data"
+        },
+        {
+          "doc": "0 = direct / B2C (full protocol earnings); >0 = partner referral tag",
+          "name": "partner_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Per-LP position tracking",
+      "lib": "",
+      "name": "LpPosition",
+      "fields": [
+        {
+          "doc": "",
+          "name": "deposited_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "fee_a_debt",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee_b_debt",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "pending_a",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "pending_b",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "quote",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "a_to_b",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Replace this contract's Wasm in place. Instance and persistent\\nstorage are preserved. Authorised by the stored DAO address.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_pool",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Pool"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ClaimFeesEvent",
+      "prefix_topics": [
+        "claim"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "claim_a",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "claim_b",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_price",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "a_to_b",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "claim_fees",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "i128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "earnings",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "compliance",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_paused",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_pool",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "token_a",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_b",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_tier",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "symbol"
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AddLiquidityEvent",
+      "prefix_topics": [
+        "addliq"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount_a",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount_b",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "add_liquidity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "amount_a",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "amount_b",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_shares",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Exact-in swap. Pass `partner_id = 0` for untagged / B2C swaps\\n(Uruk keeps the full protocol fee). Pass a registered partner id\\nso earnings are split with that partner.",
+      "name": "swap_exact_in",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "trader",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "a_to_b",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "partner_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "claimable_fees",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "i128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Allow the DAO to point at a new compliance registry deployment.",
+      "name": "set_compliance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "compliance",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RemoveLiquidityEvent",
+      "prefix_topics": [
+        "remliq"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "out_a",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "out_b",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_lp_position",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "LpPosition"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "remove_liquidity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_a",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_b",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "i128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_protocol_fee",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

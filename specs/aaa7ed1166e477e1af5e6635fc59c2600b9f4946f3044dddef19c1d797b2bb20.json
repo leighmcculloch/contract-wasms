@@ -1,0 +1,428 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CampaignData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "allow_overfunding",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "beneficiary",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "current_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "funding_model",
+          "type_": {
+            "udt": {
+              "name": "FundingModel"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "goal_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "initialized",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "CampaignStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "withdrawn",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "withdrawn_amount",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Contribution",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "contributor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FundingModel",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Flexible",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "AllOrNothing",
+          "value": 1
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CampaignStatus",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Draft",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Active",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Completed",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Cancelled",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "Refunded",
+          "value": 4
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "refund",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "contributor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "beneficiary",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "contribute",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "contributor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_status",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "CampaignStatus"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "beneficiary",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "goal_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "allow_overfunding",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "funding_model",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "token_address",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "batch_refund",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "contributors",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_campaign",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "CampaignData"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_withdrawn",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_goal_reached",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_funding_model",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_current_amount",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_deadline_passed",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_withdrawn_amount",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_contributor_total",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "contributor",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_contributor_contributions",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "contributor",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "Contribution"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

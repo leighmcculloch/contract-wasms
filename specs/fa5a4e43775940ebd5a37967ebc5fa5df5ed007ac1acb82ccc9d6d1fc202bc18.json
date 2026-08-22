@@ -1,0 +1,780 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "rate",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "asset",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "share",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "digest",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns true if the contract is paused, and false otherwise.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.",
+      "name": "paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unpause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_rate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_rate",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "verifier",
+      "inputs": [],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "claimable",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u128"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "custodian",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns `Some(Address)` if ownership is set, or `None` if ownership has\\nbeen renounced.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.",
+      "name": "get_owner",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_request",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u128"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Request"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_verifier",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_verifier",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_queued",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "share",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "custodian",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "claim_request",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "verifier_signature",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_custodian",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_custodian",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_claimed",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "verify_request",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "signature",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "next_request_id",
+      "inputs": [],
+      "outputs": [
+        "u128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Accepts a pending ownership transfer.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n\\n# Errors\\n\\n* [`crate::role_transfer::RoleTransferError::NoPendingTransfer`] - If\\nthere is no pending transfer to accept.\\n\\n# Events\\n\\n* topics - `[\"ownership_transfer_completed\"]`\\n* data - `[new_owner: Address]`",
+      "name": "accept_ownership",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "domain_separator",
+      "inputs": [],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Renounces ownership of the contract.\\n\\nPermanently removes the owner, disabling all functions gated by\\n`#[only_owner]`.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n\\n# Errors\\n\\n* [`OwnableError::TransferInProgress`] - If there is a pending ownership\\ntransfer.\\n* [`OwnableError::OwnerNotSet`] - If the owner is not set.\\n\\n# Notes\\n\\n* Authorization for the current owner is required.",
+      "name": "renounce_ownership",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "request_withdrawal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "u128",
+              "i128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initiates a 2-step ownership transfer to a new address.\\n\\nRequires authorization from the current owner. The new owner must later\\ncall `accept_ownership()` to complete the transfer.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `new_owner` - The proposed new owner.\\n* `live_until_ledger` - Ledger number until which the new owner can\\naccept. A value of `0` cancels any pending transfer.\\n\\n# Errors\\n\\n* [`OwnableError::OwnerNotSet`] - If the owner is not set.\\n* [`crate::role_transfer::RoleTransferError::NoPendingTransfer`] - If\\ntrying to cancel a transfer that doesn't exist.\\n* [`crate::role_transfer::RoleTransferError::InvalidLiveUntilLedger`] -\\nIf the specified ledger is in the past.\\n* [`crate::role_transfer::RoleTransferError::InvalidPendingAccount`] -\\nIf the specified pending account is not the same as the provided `new`\\naddress.\\n\\n# Notes\\n\\n* Authorization for the current owner is required.",
+      "name": "transfer_ownership",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "withdrawal_request",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u128"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Request"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "withdrawal_request_queued",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RateSet",
+      "prefix_topics": [
+        "rate_set"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_rate",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VerifierSet",
+      "prefix_topics": [
+        "verifier_set"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_verifier",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CustodianSet",
+      "prefix_topics": [
+        "custodian_set"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_custodian",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WithdrawalRequested",
+      "prefix_topics": [
+        "withdrawal_requested"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "withdrawer",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u128",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "queued",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RequestClaimed",
+      "prefix_topics": [
+        "request_claimed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u128",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RequestEnqueued",
+      "prefix_topics": [
+        "request_enqueued"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u128",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Request",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "claimed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an ownership transfer is initiated.",
+      "lib": "",
+      "name": "OwnershipTransfer",
+      "prefix_topics": [
+        "ownership_transfer"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when ownership is renounced.",
+      "lib": "",
+      "name": "OwnershipRenounced",
+      "prefix_topics": [
+        "ownership_renounced"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an ownership transfer is completed.",
+      "lib": "",
+      "name": "OwnershipTransferCompleted",
+      "prefix_topics": [
+        "ownership_transfer_completed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the contract is paused.",
+      "lib": "",
+      "name": "Paused",
+      "prefix_topics": [
+        "paused"
+      ],
+      "params": [],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the contract is unpaused.",
+      "lib": "",
+      "name": "Unpaused",
+      "prefix_topics": [
+        "unpaused"
+      ],
+      "params": [],
+      "data_format": "map"
+    }
+  }
+]

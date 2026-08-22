@@ -1,0 +1,435 @@
+[
+  {
+    "function_v0": {
+      "doc": "Simple single-venue swap. Backend picks the best venue.",
+      "name": "swap",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_amount_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "venue_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "RouterError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "FeeVault"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Map of venue_id -> adapter contract address",
+            "name": "Venue",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "List of all registered venue IDs",
+            "name": "VenueIds"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Address of the SwapBook contract",
+            "name": "SwapBook"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get the contract address for a venue.",
+      "name": "get_venue",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "venue_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": {
+              "udt": {
+                "name": "RouterError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get all registered venue IDs.",
+      "name": "get_venues",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "u32"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RouterError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "VenueNotFound",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "VenueAlreadyRegistered",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidRoute",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InsufficientOutput",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "RouteMismatch",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "SameToken",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "SwapBookNotSet",
+          "value": 11
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Remove a venue. Admin only.",
+      "name": "remove_venue",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "venue_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "RouterError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Mirror of SwapBook's ClaimedOrder (identical field names \\xe2\\x86\\x92 identical XDR).",
+      "lib": "",
+      "name": "ClaimedOrder",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "maker",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "min_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RouteSegment",
+      "fields": [
+        {
+          "doc": "Amount of token_in for this leg",
+          "name": "amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "Minimum token_out expected from this leg",
+          "name": "min_amount_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "Which venue to route through (ID from venue registry)",
+          "name": "venue_id",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deploy-time constructor \\xe2\\x80\\x94 atomic with deployment, cannot be front-run.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "swap_book",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Execute a multi-venue routed swap for `user`.\\n\\nVerifies: segments are positive and sum to total_amount_in; every\\nvenue exists; net output (after the 0.5 bps protocol fee on the\\nTOTAL output) meets min_total_out \\xe2\\x80\\x94 otherwise the whole tx reverts.",
+      "name": "execute_route",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_total_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "segments",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "RouteSegment"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "RouterError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Register a new DEX venue adapter. Admin only.",
+      "name": "register_venue",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "venue_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "contract_address",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "RouterError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "PERMISSIONLESS keeper entry point: route a timer-expired SwapBook\\norder through DEX venues and settle the maker \\xe2\\x80\\x94 all in one invocation.\\n\\n1. Claims the order from SwapBook (escrow moves to this contract;\\nSwapBook authorizes us via invoker auth and returns the maker's\\non-chain price floor `min_out`).\\n2. Executes the provided route segments.\\n3. Deducts the protocol fee, enforces net proceeds >= min_out,\\nand pays the maker.\\n\\nAnyone may call this \\xe2\\x80\\x94 a caller gains nothing (proceeds always go to\\nthe maker) and a bad route simply reverts, leaving the order claimable\\nagain... (revert restores the order's Open state too).",
+      "name": "route_expired_order",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "segments",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "RouteSegment"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "RouterError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

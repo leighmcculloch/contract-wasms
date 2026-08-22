@@ -1,0 +1,229 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "Struct `Deal` ch\\xe1\\xbb\\xa9a th\\xc3\\xb4ng tin chi ti\\xe1\\xba\\xbft c\\xe1\\xbb\\xa7a t\\xe1\\xbb\\xabng th\\xe1\\xbb\\x8fa thu\\xe1\\xba\\xadn Escrow.",
+      "lib": "",
+      "name": "Deal",
+      "fields": [
+        {
+          "doc": "S\\xe1\\xbb\\x91 ti\\xe1\\xbb\\x81n \\xc4\\x91\\xc6\\xb0\\xe1\\xbb\\xa3c kh\\xc3\\xb3a trong Escrow",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "Ng\\xc6\\xb0\\xe1\\xbb\\x9di kh\\xc3\\xb3a ti\\xe1\\xbb\\x81n (Client/T\\xc3\\xa1c gi\\xe1\\xba\\xa3 d\\xe1\\xbb\\xb1 \\xc3\\xa1n)",
+          "name": "client",
+          "type_": "address"
+        },
+        {
+          "doc": "Ng\\xc6\\xb0\\xe1\\xbb\\x9di nh\\xe1\\xba\\xadn ti\\xe1\\xbb\\x81n (Freelancer/Ng\\xc6\\xb0\\xe1\\xbb\\x9di th\\xe1\\xbb\\xb1c hi\\xe1\\xbb\\x87n)",
+          "name": "freelancer",
+          "type_": "address"
+        },
+        {
+          "doc": "Tr\\xe1\\xba\\xa1ng th\\xc3\\xa1i n\\xe1\\xbb\\x99p b\\xc3\\xa0i / b\\xe1\\xba\\xb1ng ch\\xe1\\xbb\\xa9ng ho\\xc3\\xa0n th\\xc3\\xa0nh c\\xc3\\xb4ng vi\\xe1\\xbb\\x87c",
+          "name": "is_submitted",
+          "type_": "bool"
+        },
+        {
+          "doc": "\\xc4\\x90\\xe1\\xbb\\x8ba ch\\xe1\\xbb\\x89 Stellar Asset Contract - SAC (v\\xc3\\xad d\\xe1\\xbb\\xa5 XLM, USDC, ...)",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "-----------------------------------------------------------------------------\\nENUM L\\xe1\\xbb\\x96I T\\xc3\\x99Y CH\\xe1\\xbb\\x88NH (CUSTOM ERRORS)\\n-----------------------------------------------------------------------------",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "DealNotFound",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "AlreadySubmitted",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "NotSubmitted",
+          "value": 5
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "H\\xc3\\xa0m h\\xe1\\xbb\\x97 tr\\xe1\\xbb\\xa3 xem th\\xc3\\xb4ng tin m\\xe1\\xbb\\x99t Deal (Read-only query).",
+      "name": "get_deal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "deal_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "Deal"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "H\\xc3\\xa0m h\\xe1\\xbb\\x97 tr\\xe1\\xbb\\xa3 l\\xe1\\xba\\xa5y t\\xe1\\xbb\\x95ng s\\xe1\\xbb\\x91 Deal \\xc4\\x91\\xc3\\xa3 t\\xe1\\xba\\xa1o.",
+      "name": "get_count",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "-----------------------------------------------------------------------------\\n1. C\\xe1\\xba\\xa4U TR\\xc3\\x9aC D\\xe1\\xbb\\xae LI\\xe1\\xbb\\x86U (DATA STRUCTURES)\\n-----------------------------------------------------------------------------\\nEnum `DataKey` d\\xc3\\xb9ng \\xc4\\x91\\xe1\\xbb\\x83 qu\\xe1\\xba\\xa3n l\\xc3\\xbd Key-Value trong Storage c\\xe1\\xbb\\xa7a Soroban.",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "L\\xc6\\xb0u th\\xc3\\xb4ng tin h\\xe1\\xbb\\xa3p \\xc4\\x91\\xe1\\xbb\\x93ng Escrow theo ID: `Deal(u64)`",
+            "name": "Deal",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Bi\\xe1\\xba\\xbfn \\xc4\\x91\\xe1\\xba\\xbfm t\\xe1\\xbb\\xb1 t\\xc4\\x83ng cho ID c\\xe1\\xbb\\xa7a Deal: `Count`",
+            "name": "Count"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "T\\xe1\\xba\\xa1o m\\xe1\\xbb\\x99t h\\xe1\\xbb\\xa3p \\xc4\\x91\\xe1\\xbb\\x93ng Escrow m\\xe1\\xbb\\x9bi (Micro-Escrow Deal).\\n\\n- `client`: V\\xc3\\xad ng\\xc6\\xb0\\xe1\\xbb\\x9di n\\xe1\\xba\\xa1p/kh\\xc3\\xb3a ti\\xe1\\xbb\\x81n (b\\xe1\\xba\\xaft bu\\xe1\\xbb\\x99c x\\xc3\\xa1c th\\xe1\\xbb\\xb1c `require_auth()`).\\n- `freelancer`: V\\xc3\\xad ng\\xc6\\xb0\\xe1\\xbb\\x9di nh\\xe1\\xba\\xadn thanh to\\xc3\\xa1n khi c\\xc3\\xb4ng vi\\xe1\\xbb\\x87c ho\\xc3\\xa0n th\\xc3\\xa0nh.\\n- `token`: \\xc4\\x90\\xe1\\xbb\\x8ba ch\\xe1\\xbb\\x89 h\\xe1\\xbb\\xa3p \\xc4\\x91\\xe1\\xbb\\x93ng SAC (Stellar Asset Contract).\\n- `amount`: S\\xe1\\xbb\\x91 ti\\xe1\\xbb\\x81n n\\xe1\\xba\\xa1p v\\xc3\\xa0o h\\xe1\\xbb\\xa3p \\xc4\\x91\\xe1\\xbb\\x93ng (ph\\xe1\\xba\\xa3i > 0).\\n\\nTr\\xe1\\xba\\xa3 v\\xe1\\xbb\\x81: `deal_id` (u64) duy nh\\xe1\\xba\\xa5t c\\xe1\\xbb\\xa7a h\\xe1\\xbb\\xa3p \\xc4\\x91\\xe1\\xbb\\x93ng v\\xe1\\xbb\\xaba t\\xe1\\xba\\xa1o.",
+      "name": "create_deal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "client",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "freelancer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Freelancer n\\xe1\\xbb\\x99p b\\xe1\\xba\\xb1ng ch\\xe1\\xbb\\xa9ng c\\xc3\\xb4ng vi\\xe1\\xbb\\x87c (Submit Work).\\n\\n- `freelancer`: V\\xc3\\xad c\\xe1\\xbb\\xa7a freelancer (b\\xe1\\xba\\xaft bu\\xe1\\xbb\\x99c x\\xc3\\xa1c th\\xe1\\xbb\\xb1c `require_auth()`).\\n- `deal_id`: ID c\\xe1\\xbb\\xa7a h\\xe1\\xbb\\xa3p \\xc4\\x91\\xe1\\xbb\\x93ng Escrow.\\n- `proof_url`: \\xc4\\x90\\xc6\\xb0\\xe1\\xbb\\x9dng d\\xe1\\xba\\xabn ch\\xe1\\xbb\\xa9a b\\xe1\\xba\\xb1ng ch\\xe1\\xbb\\xa9ng (IPFS, GitHub, URL,...).",
+      "name": "submit_work",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "freelancer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "deal_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "proof_url",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Client ph\\xc3\\xaa duy\\xe1\\xbb\\x87t v\\xc3\\xa0 gi\\xe1\\xba\\xa3i ng\\xc3\\xa2n ti\\xe1\\xbb\\x81n cho Freelancer (Release Payment).\\n\\n- `client`: V\\xc3\\xad c\\xe1\\xbb\\xa7a client (b\\xe1\\xba\\xaft bu\\xe1\\xbb\\x99c x\\xc3\\xa1c th\\xe1\\xbb\\xb1c `require_auth()`).\\n- `deal_id`: ID c\\xe1\\xbb\\xa7a h\\xe1\\xbb\\xa3p \\xc4\\x91\\xe1\\xbb\\x93ng Escrow.",
+      "name": "release_payment",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "client",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "deal_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

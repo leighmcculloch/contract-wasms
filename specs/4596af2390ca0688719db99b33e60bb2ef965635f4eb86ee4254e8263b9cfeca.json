@@ -1,0 +1,414 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireIntentError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unpause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireIntentError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Vault"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Tokenizer"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Marketplace"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SyWrapper"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Underlying"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PtToken"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "YtToken"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "UserIntents",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tokenizer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "marketplace",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sy_wrapper",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "underlying",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pt_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "yt_token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireIntentError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_user_intent",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "CumulativeIntentRecord"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireIntentError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "NovaireIntentError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "ZeroAmount",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "RateTooLow",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "IntentFailed",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "StorageMissing",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvariantViolated",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "InvalidPercentage",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "MarketplaceNotBootstrapped",
+          "value": 10
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_current_best_rate",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "NovaireIntentError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CumulativeIntentRecord",
+      "fields": [
+        {
+          "doc": "",
+          "name": "total_deposited_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_pt_held",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_underlying_received",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_yt_sold",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execute_fixed_yield_intent",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_implied_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_underlying_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "_maturity_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "yt_sale_percentage",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "CumulativeIntentRecord"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireIntentError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execute_yield_speculation_intent",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_yt_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_underlying_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "NovaireIntentError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

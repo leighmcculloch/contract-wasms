@@ -1,0 +1,393 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "A single escrow agreement between a client and a freelancer.",
+      "lib": "",
+      "name": "Deal",
+      "fields": [
+        {
+          "doc": "Locked amount, in the token's smallest unit.",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "The paying party; the only address allowed to settle the deal.",
+          "name": "client",
+          "type_": "address"
+        },
+        {
+          "doc": "The working party; receives the funds on `release`.",
+          "name": "freelancer",
+          "type_": "address"
+        },
+        {
+          "doc": "Current lifecycle state of the deal.",
+          "name": "state",
+          "type_": {
+            "udt": {
+              "name": "DealState"
+            }
+          }
+        },
+        {
+          "doc": "SEP-41 token contract used for payment (XLM or USDC SAC).",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "`init` was called with a `deal_id` that already holds a deal.",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "The deal was queried or settled before `init`.",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "The escrow amount must be strictly positive.",
+          "name": "InvalidAmount",
+          "value": 3
+        },
+        {
+          "doc": "The deal was already released or refunded.",
+          "name": "AlreadySettled",
+          "value": 4
+        },
+        {
+          "doc": "`anchor` was called with a `record_id` that is already taken.",
+          "name": "AlreadyAnchored",
+          "value": 5
+        },
+        {
+          "doc": "The record was queried before it was anchored.",
+          "name": "NotFound",
+          "value": 6
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A single anchored commitment.",
+      "lib": "",
+      "name": "Record",
+      "fields": [
+        {
+          "doc": "Ledger timestamp when the record was anchored.",
+          "name": "anchored_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "The wallet that authored \\xe2\\x80\\x94 and signed for \\xe2\\x80\\x94 the record.",
+          "name": "author",
+          "type_": "address"
+        },
+        {
+          "doc": "`sha256` of the canonical content, computed off-chain.",
+          "name": "commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "Whether the record commits to a job post or a deal agreement.",
+          "name": "kind",
+          "type_": {
+            "udt": {
+              "name": "RecordKind"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Lifecycle of a deal. Funds may leave the contract exactly once.",
+      "lib": "",
+      "name": "DealState",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Funded"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Released"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Refunded"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "What a registry record commits to.",
+      "lib": "",
+      "name": "RecordKind",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "A public job post.",
+            "name": "Job"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "A direct-deal (order) agreement between a client and a freelancer.",
+            "name": "Deal"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Locks `amount` of `token` from `client` into the contract under\\n`deal_id`. Requires the client's signature. Fails if `deal_id` is taken.",
+      "name": "init",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "deal_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "client",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "freelancer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The address allowed to upgrade the contract.",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Anchors `commitment` under `record_id`, authored by `author`. Requires\\nthe author's signature; records are write-once.",
+      "name": "anchor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "author",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "record_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "kind",
+          "type_": {
+            "udt": {
+              "name": "RecordKind"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the locked funds to the client (client cancels before delivery).",
+      "name": "refund",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "deal_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pays the locked funds out to the freelancer (client confirms delivery).",
+      "name": "release",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "deal_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Swaps the contract's Wasm for a new build, keeping the same contract id\\nand all stored deals and records. Only the admin may upgrade.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The deployed contract version \\xe2\\x80\\x94 changes when a new build is upgraded in.",
+      "name": "version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns a deal, for status displays and CLI inspection.",
+      "name": "get_deal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "deal_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Deal"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns an anchored record, for verification and CLI inspection.",
+      "name": "get_record",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "record_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Record"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sets the upgrade admin. Runs once, at deployment.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

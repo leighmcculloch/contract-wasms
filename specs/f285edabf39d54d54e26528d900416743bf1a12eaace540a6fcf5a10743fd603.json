@@ -1,0 +1,101 @@
+[
+  {
+    "function_v0": {
+      "doc": "Atomically execute a multi-hop arbitrage path.\\n\\nSafety: snapshots `token_in` balance of `caller` before swaps and panics\\n(reverts the transaction) if `final_balance < initial_balance + min_profit`.",
+      "name": "execute_arb",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_profit",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "hops",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Hop"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Hop",
+      "fields": [
+        {
+          "doc": "",
+          "name": "dex",
+          "type_": {
+            "udt": {
+              "name": "DexKind"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "min_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DexKind",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Soroswap",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Phoenix",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Aquarius",
+          "value": 2
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,1433 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "Public view of an operation, returned by `operations` / `get_operation`.\\nAssembled on read from [`OpData`] + the operation name.",
+      "lib": "",
+      "name": "Operation",
+      "fields": [
+        {
+          "doc": "",
+          "name": "eur_per_shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "op_name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "op_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_shares",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "OperationNotFound",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "OperationFinished",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "OperationNotStarted",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "OperationAlreadyStarted",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "OperationCanceled",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "OperationPaused",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "PredepositsClosed",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "TooManyShares",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "InvalidShares",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "Blacklisted",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "NonceAlreadyUsed",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "BatchTooLarge",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "InvalidBatchLen",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "OperationNotFinished",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "AlreadyWithdrawn",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "NoParticipation",
+          "value": 19
+        },
+        {
+          "doc": "",
+          "name": "NoOpLendBalance",
+          "value": 20
+        },
+        {
+          "doc": "",
+          "name": "SelfTargetNotAllowed",
+          "value": 21
+        },
+        {
+          "doc": "",
+          "name": "OracleNoPrice",
+          "value": 22
+        },
+        {
+          "doc": "",
+          "name": "OracleInvalidPrice",
+          "value": 23
+        },
+        {
+          "doc": "",
+          "name": "OracleStalePrice",
+          "value": 24
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Gifted",
+      "prefix_topics": [
+        "gifted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "investor",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "operation_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "usdc_amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "shares_bought",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Invested",
+      "prefix_topics": [
+        "invested"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "investor",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "operation_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "usdc_amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "shares_bought",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Refunded",
+      "prefix_topics": [
+        "refunded"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "investor",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "operation_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "usdc_amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "shares_refunded",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Predeposit",
+      "prefix_topics": [
+        "predeposit"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "investor",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "operation_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "usdc_amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "shares_bought",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "InvestedFiat",
+      "prefix_topics": [
+        "invested_fiat"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "investor",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "oplend_destination",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "operation_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "shares_bought",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ClaimedOpToken",
+      "prefix_topics": [
+        "claimed_op_token"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "investor",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "operation_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OperationPaused",
+      "prefix_topics": [
+        "operation_paused"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "operation_id",
+          "type_": "u32",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PredepositsOpen",
+      "prefix_topics": [
+        "predeposits_open"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "operation_id",
+          "type_": "u32",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OperationCreated",
+      "prefix_topics": [
+        "operation_created"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "op_token",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "operation_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "total_shares",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OperationResumed",
+      "prefix_topics": [
+        "operation_resumed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "operation_id",
+          "type_": "u32",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OperationStarted",
+      "prefix_topics": [
+        "operation_started"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "operation_id",
+          "type_": "u32",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OperationCanceled",
+      "prefix_topics": [
+        "operation_canceled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "operation_id",
+          "type_": "u32",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OperationFinished",
+      "prefix_topics": [
+        "operation_finished"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "operation_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount_raised_euro",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PredepositsClosed",
+      "prefix_topics": [
+        "predeposits_closed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "operation_id",
+          "type_": "u32",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "usdc",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "gifted",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "invest",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "shares_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "nonce",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "signature",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Swap the factory's own code, keeping the contract id and all state.\\nAdmin-only. Note that instance storage survives, so a new wasm must be\\nable to read what the old one wrote (or migrate it itself) \\xe2\\x80\\x94 see the\\n`UsdcDecimals` fallback in `storage::usdc_decimals`.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "blacklist",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "state",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "oracle",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "backend_signer",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "oplend_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "operations",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Operation"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "predeposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "shares_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "nonce",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "signature",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "blacklisted",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "fiat_invest",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "shares_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "oplend_holder",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "nonce",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "signature",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "predeposits",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "refund_user",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "usdc_raised",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_amount_in",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "shares_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_operation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Operation"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause_funding",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "state",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "withdraw_usdc",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "destination",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "funding_paused",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_amount_out",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "usdc_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "gift_op_tokens",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "shares_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "usdc_withdrawn",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "claim_op_tokens",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "claimable_total",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "operation_count",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_predeposits",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "state",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "start_operation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel_operation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_operation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "op_name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "total_shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "eur_per_shares",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "funding_progress",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "predeposits_open",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "operation_started",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "oplend_admin_burn",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "op_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "value",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "batch_refund_users",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "users",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "len",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "operation_canceled",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer_ownership",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_oplend_wasm_hash",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "oplend_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "claim_op_tokens_batch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "users",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_operation_finished",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "oplend_whitelist_user",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "op_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "state",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "update_backend_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_signer",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "update_oracle_address",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_oracle",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "usdc_raised_per_client",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "oplend_update_backend_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "op_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "new_signer",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

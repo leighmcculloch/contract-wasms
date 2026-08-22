@@ -1,0 +1,767 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unpause",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Caveat",
+      "fields": [
+        {
+          "doc": "",
+          "name": "enforcer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "terms",
+          "type_": "bytes"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_nonce",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "delegator",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Disabled",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Nonce",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Owner"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Locked"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "WalletDelegation",
+            "type_": [
+              "address",
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Policy",
+            "type_": [
+              "address",
+              "u64"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PendingUpgrade"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PoliciesContract"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_policy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "delegator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "bytes"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_policy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "delegator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "terms",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Execution",
+      "fields": [
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_policies",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "delegator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "policy_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u64"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "terms_list",
+          "type_": {
+            "vec": {
+              "element_type": "bytes"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Delegation",
+      "fields": [
+        {
+          "doc": "",
+          "name": "authority",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "caveats",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Caveat"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "delegate",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "delegator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "nonce",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "signature",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel_upgrade",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ManagerError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotAuthorized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AlreadyDisabled",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "AlreadyEnabled",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "BatchLengthMismatch",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidDelegate",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidSignature",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "CannotUseDisabled",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidAuthority",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "ExecutionFailed",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "InvalidNonce",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "Locked",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "WalletAlreadyDelegated",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "NoActiveDelegation",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "EmptyChain",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "NoPendingUpgrade",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "TimelockNotElapsed",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "NoCaveats",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "InvalidEnforcer",
+          "value": 19
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "propose_upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "revoke_by_wallet",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "delegator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "delegate",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "enable_delegation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "delegator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "delegation",
+          "type_": {
+            "udt": {
+              "name": "Delegation"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "disable_delegation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "delegator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "delegation",
+          "type_": {
+            "udt": {
+              "name": "Delegation"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "redeem_delegations",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "redeemer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "permission_contexts",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "vec": {
+                  "element_type": {
+                    "udt": {
+                      "name": "Delegation"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "executions",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Execution"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer_ownership",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ExecutionContext",
+      "fields": [
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "delegate",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "delegator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "ledger_sequence",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "redeemer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_delegation_hash",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "delegation",
+          "type_": {
+            "udt": {
+              "name": "Delegation"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "register_delegation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "delegator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "delegation",
+          "type_": {
+            "udt": {
+              "name": "Delegation"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_policies_contract",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_wallet_delegation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "delegator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "delegate",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "bytes_n": {
+                "n": 32
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_policies_contract",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "policies",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_delegation_disabled",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "delegation_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "update_current_contract_wasm",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

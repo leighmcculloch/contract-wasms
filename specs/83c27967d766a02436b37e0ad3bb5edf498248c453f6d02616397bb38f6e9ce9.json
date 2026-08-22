@@ -1,0 +1,899 @@
+[
+  {
+    "function_v0": {
+      "doc": "Burns YT tokens from the designated address.\\n\\n**Strictly restricted to the Tokenizer contract.**\\n\\n# Arguments\\n* `from` - The address burning the tokens.\\n* `amount` - The amount of tokens to burn.\\n\\n# Errors\\nReturns `Unauthorized`, `Paused`, `InvalidAmount`, `InsufficientBalance`, or `MathUnderflow`.",
+      "name": "burn",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireYtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Mints new YT tokens to the designated address.\\n\\n**Strictly restricted to the Tokenizer contract.**\\n\\n# Arguments\\n* `to` - The address receiving the minted tokens.\\n* `amount` - The amount of tokens to mint.\\n\\n# Errors\\nReturns `Unauthorized`, `Paused`, `InvalidAmount`, or `MathOverflow`.",
+      "name": "mint",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireYtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "name",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pauses Tokenizer integrations (mint/burn/index updates), freezing core issuance.",
+      "name": "pause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireYtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "symbol",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Approves a spender to transfer up to `amount` of the caller's tokens.",
+      "name": "approve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "_expiration_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireYtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Unpauses Tokenizer integrations.",
+      "name": "unpause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireYtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "decimals",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "metadata",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "YtMetadata"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireYtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Transfers tokens from the caller to a recipient.\\nCheckpoints both sender and recipient before transferring balances.\\n\\nNote: Transfers intentionally bypass the `pause` mechanism to preserve\\nsecondary market liquidity as an escape valve during protocol emergencies.\\n\\n# Arguments\\n* `from` - The caller sending the tokens (requires auth).\\n* `to` - The recipient of the tokens.\\n* `amount` - The amount to transfer.\\n\\n# Errors\\nReturns `InvalidAmount`, `InsufficientBalance`, `MathOverflow`, or `MathUnderflow`.",
+      "name": "transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireYtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "allowance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PendingAdmin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Tokenizer"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SyWrapper"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalSupply"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "YieldIndex"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MaturityLedger"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Balance",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Allowance",
+            "type_": [
+              "address",
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "UserYieldIndex",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "AccruedYield",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initializes the Novaire Yield Token (YT).\\n\\n# Arguments\\n* `admin` - Protocol administrator responsible for pausing and upgrades.\\n* `tokenizer` - The exclusive authority allowed to mint, burn, and update yield indices.\\n* `maturity_ledger` - The exact ledger sequence when yield accrual permanently stops.\\n\\n# Errors\\nReturns `AlreadyInitialized` if called more than once.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tokenizer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "maturity_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "sy_wrapper",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireYtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_expired",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "bool",
+            "error_type": {
+              "udt": {
+                "name": "NovaireYtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Accepts a pending admin transfer, finalizing the change of administration.",
+      "name": "accept_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireYtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_supply",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "YtMetadata",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "is_expired",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "is_paused",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "maturity_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "tokenizer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_supply",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "yield_index",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Updates the trusted Tokenizer contract address.",
+      "name": "set_tokenizer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_tokenizer",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireYtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Transfers tokens from one address to another using an allowance.\\nCheckpoints both sender and recipient.",
+      "name": "transfer_from",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireYtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sets the SY Wrapper address for live yield index refresh.\\nThis is the upgrade-compatible entry point for H4: existing deployed\\nYT Token contracts can call this without re-initialization.",
+      "name": "set_sy_wrapper",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sy_wrapper",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireYtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initiates a two-step admin transfer to a new address.",
+      "name": "transfer_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireYtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Checkpoints a user, safely locking in their accrued yield before a balance mutation.\\n\\nThis function performs the core math: `(current_index - user_index) * balance / 1e9`\\n\\n# Arguments\\n* `user` - The address to checkpoint.\\n\\n# Errors\\nReturns `MathOverflow` or `MathUnderflow` if calculation fails.",
+      "name": "checkpoint_user",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireYtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Simulates what a user is currently owed based on their balance and the live index.\\nH4 fix: Uses the live SY exchange rate (if available) to provide an accurate\\nreal-time view of pending yield, even when the stored global index is stale.",
+      "name": "claimable_yield",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "NovaireYtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Resets the claimable yield for a user to zero after they successfully claim.\\n\\n**Strictly restricted to the Tokenizer contract.**\\n\\n# Arguments\\n* `user` - The address whose claimable yield is reset.\\n\\n# Errors\\nReturns `Unauthorized`.",
+      "name": "reset_claimable",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireYtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "NovaireYtError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InsufficientBalance",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InsufficientAllowance",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "MathOverflow",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "MathUnderflow",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "StorageMissing",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "InvalidAdminTransfer",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "PastMaturity",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "IndexCannotDecrease",
+          "value": 13
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Credits historical yield directly to a user's accrued yield balance.\\n\\n**Strictly restricted to the Tokenizer contract.**\\nUsed during late minting to restore economic identity by crediting the\\nhistorically backed yield that has accumulated since epoch genesis.\\n\\n# Arguments\\n* `user` - The address receiving the credit.\\n* `amount` - The amount of yield to credit.\\n\\n# Errors\\nReturns `Unauthorized` or `InvalidAmount` if negative.",
+      "name": "add_accrued_yield",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireYtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Updates the global yield index.\\n\\n**Strictly restricted to the Tokenizer contract.**\\n\\n# Arguments\\n* `new_index` - The new global yield index.\\n\\n# Errors\\nReturns `Unauthorized`, `Paused`, `PastMaturity`, or `IndexCannotDecrease`.",
+      "name": "update_yield_index",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_index",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireYtError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

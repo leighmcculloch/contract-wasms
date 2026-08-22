@@ -1,0 +1,1065 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Shipment",
+      "fields": [
+        {
+          "doc": "",
+          "name": "breach_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "category",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "current_custodian",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "destination",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "max_milli_c",
+          "type_": "i32"
+        },
+        {
+          "doc": "",
+          "name": "max_transit_seconds",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "min_milli_c",
+          "type_": "i32"
+        },
+        {
+          "doc": "",
+          "name": "origin",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "registered_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "tracking_code",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "updated_at",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "HistoryEntry",
+      "fields": [
+        {
+          "doc": "",
+          "name": "action",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "actor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "has_temperature",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "recorded_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "sequence",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "temperature_milli_c",
+          "type_": "i32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MonitorError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "ShipmentNotFound",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "ReadingNotFound",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidStatus",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "SameCustodian",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidTemperature",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "NoTemperatureReadings",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "TransitWindowExceeded",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "Overflow",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "ReadingLimitReached",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "DuplicateTrackingCode",
+          "value": 13
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ColdChainStats",
+      "fields": [
+        {
+          "doc": "",
+          "name": "active_flagged",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "total_breaches",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "total_closed",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "total_delivered",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "total_readings",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "total_registered",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TemperatureReading",
+      "fields": [
+        {
+          "doc": "",
+          "name": "compliant",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "reading_index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "recorded_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "recorded_by",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "shipment_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "temperature_milli_c",
+          "type_": "i32"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_stats",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "ColdChainStats"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OracleChangedEvent",
+      "prefix_topics": [
+        "oracle_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "previous_oracle",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_oracle",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_oracle",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "oracle",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "policy_contract",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_oracle",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_oracle",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BreachResolvedEvent",
+      "prefix_topics": [
+        "resolved"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "shipment_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ShipmentClosedEvent",
+      "prefix_topics": [
+        "closed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "shipment_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_reading",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "shipment_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "reading_index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "TemperatureReading"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ShipmentFlaggedEvent",
+      "prefix_topics": [
+        "flagged"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "shipment_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "actor",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "reason",
+          "type_": "symbol",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_shipment",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "shipment_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Shipment"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "shipments_of",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "map": {
+            "key_type": "u64",
+            "value_type": "bool"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "flag_shipment",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "shipment_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "reason",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ShipmentDeliveredEvent",
+      "prefix_topics": [
+        "delivered"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "shipment_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "custodian",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "close_shipment",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "shipment_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "mark_delivered",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "current_custodian",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "shipment_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "resolve_breach",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "shipment_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "current_admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CustodyTransferredEvent",
+      "prefix_topics": [
+        "custody"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "shipment_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "previous_custodian",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_custodian",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MonitorInitializedEvent",
+      "prefix_topics": [
+        "initialized"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "oracle",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "policy_contract",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ShipmentRegisteredEvent",
+      "prefix_topics": [
+        "registered"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "shipment_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "tracking_code",
+          "type_": "symbol",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "category",
+          "type_": "symbol",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MonitorAdminChangedEvent",
+      "prefix_topics": [
+        "admin_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "previous_admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TemperatureRecordedEvent",
+      "prefix_topics": [
+        "temperature"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "shipment_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "reading_index",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "temperature_milli_c",
+          "type_": "i32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "compliant",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer_custody",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "current_custodian",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "shipment_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "new_custodian",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_reading_count",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "shipment_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "register_shipment",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tracking_code",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "category",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "origin",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "destination",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PolicyContractChangedEvent",
+      "prefix_topics": [
+        "policy_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "previous_policy_contract",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_policy_contract",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_transit_overdue",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "shipment_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "record_temperature",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "oracle",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "shipment_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "temperature_milli_c",
+          "type_": "i32"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_policy_contract",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_policy_contract",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_policy_contract",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_shipment_history",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "shipment_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "HistoryEntry"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_shipment_id_by_tracking",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tracking_code",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TemperaturePolicy",
+      "fields": [
+        {
+          "doc": "",
+          "name": "category",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "max_milli_c",
+          "type_": "i32"
+        },
+        {
+          "doc": "",
+          "name": "max_transit_seconds",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "min_milli_c",
+          "type_": "i32"
+        }
+      ]
+    }
+  }
+]

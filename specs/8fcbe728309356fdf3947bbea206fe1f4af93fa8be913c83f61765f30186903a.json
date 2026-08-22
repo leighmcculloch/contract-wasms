@@ -1,0 +1,497 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "All failure modes are explicit, contiguous `u32` codes so the TypeScript\\nclient can map them to user-facing messages without guessing.",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidSchedule",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "StreamNotFound",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "StreamNotActive",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "NothingToWithdraw",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "NothingToReclaim",
+          "value": 9
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys. `Stream` entries live in *persistent* storage (they must\\noutlive the contract instance); `Admin`/`Token`/`Paused`/`Counter` live in\\n*instance* storage so they share the instance's TTL.",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Token"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Counter"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "stream id -> Stream",
+            "name": "Stream",
+            "type_": [
+              "u64"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "Lifecycle of a stream. Created `Active`; becomes `Completed` once the\\nrecipient has withdrawn the entire deposit, or `Stopped` if the payer\\nhalts it early (vested portion settled to the recipient, the unvested\\nremainder reclaimed by the payer).",
+      "lib": "",
+      "name": "StreamStatus",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Active",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Completed",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Stopped",
+          "value": 2
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A single linear-vesting salary/grant stream. The contract custodies\\n`total_amount - withdrawn_amount` of `token` until it is fully withdrawn\\nor stopped. Vesting is computed purely from on-chain ledger time, so the\\namount available is always trustlessly derivable with no off-chain timer.",
+      "lib": "",
+      "name": "Stream",
+      "fields": [
+        {
+          "doc": "Ledger unix timestamp (seconds) when the stream is fully vested.",
+          "name": "end_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "Funder; the only address allowed to stop the stream and reclaim the\\nunvested remainder.",
+          "name": "payer",
+          "type_": "address"
+        },
+        {
+          "doc": "Beneficiary; every withdrawal is paid to exactly this address.",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "Ledger unix timestamp (seconds) when vesting begins.",
+          "name": "start_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "StreamStatus"
+            }
+          }
+        },
+        {
+          "doc": "Stellar Asset Contract (SAC) address of the streamed asset (XLM SAC).",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "Total deposit locked at creation, in the token's raw units (stroops for\\nthe native XLM SAC = 7 decimals).",
+          "name": "total_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "Cumulative amount already paid out to the recipient.",
+          "name": "withdrawn_amount",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "One-time setup. Records the admin and the streamed token (XLM SAC) and\\nunpauses the contract.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Lock `total_amount` of the configured token into a new stream and return\\nits id. Vesting runs linearly from `start_time` to `end_time`.\\n\\nAuth: requires the payer's signature. The same authorization covers the\\ninner SAC `transfer(payer -> contract)`.",
+      "name": "create_stream",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "payer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "start_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "end_time",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Withdraw everything that has vested but not yet been paid out. Funds are\\nalways sent to the stream's fixed `recipient`, so this is intentionally\\npermissionless (anyone may poke it; nobody but the recipient can be paid).\\nReturns the amount transferred.",
+      "name": "withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Stop a stream early. The payer settles whatever has vested so far to the\\nrecipient and reclaims the unvested remainder. Returns the reclaimed\\namount.\\n\\nAuth: requires the payer's signature.",
+      "name": "stop",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_stream",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Stream"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Total amount vested so far for a stream (independent of withdrawals).",
+      "name": "vested_amount",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Amount the recipient could withdraw right now (`vested - withdrawn`).",
+      "name": "withdrawable",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_streams",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_token",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unpause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Replace the contract's own code (admin-gated). Enables shipping fixes\\nwithout migrating stream state \\xe2\\x80\\x94 important for a mainnet (L6) deploy.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

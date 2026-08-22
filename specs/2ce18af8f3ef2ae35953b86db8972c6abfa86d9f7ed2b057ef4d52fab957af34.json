@@ -1,0 +1,626 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "InvalidMaxWinners",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "BountyAlreadyExists",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "BountyNotFound",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "BountyNotFunded",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "MaxWinnersReached",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InsufficientRemainingBalance",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "WinnerAlreadySelected",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "WinnerAwardNotFound",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "AlreadyClaimed",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "AlreadyCancelled",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "CreatorCannotBeWinner",
+          "value": 13
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Bounty",
+      "fields": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "max_winners",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "remaining",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "BountyStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "winners_selected",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "NativeToken"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Bounty",
+            "type_": [
+              "string"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "WinnerAward",
+            "type_": [
+              "string",
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WinnerAward",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "claimed",
+          "type_": "bool"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BountyStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Funded"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cancelled"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BountyCreated",
+      "prefix_topics": [
+        "bounty_created"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "bounty_id",
+          "type_": "string",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "max_winners",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RewardClaimed",
+      "prefix_topics": [
+        "reward_claimed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "bounty_id",
+          "type_": "string",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "winner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WinnerSelected",
+      "prefix_topics": [
+        "winner_selected"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "bounty_id",
+          "type_": "string",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "winner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BountyCancelled",
+      "prefix_topics": [
+        "bounty_cancelled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "bounty_id",
+          "type_": "string",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "refunded_amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Upgrade the contract to a new WASM version.\\nOnly admin can call this. The contract keeps the same address and all data.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the current contract version.",
+      "name": "version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_bounty",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "bounty_id",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Bounty"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Winner pulls their committed award.",
+      "name": "claim_reward",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "bounty_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "winner",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "native_token",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Creator cancels the bounty, reclaiming any unassigned escrow.",
+      "name": "cancel_bounty",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "bounty_id",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Creator deposits `amount` of `token` into escrow.\\nThe `bounty_id` is the DB-generated UUID passed from off-chain.\\nOnly the creator needs to authorize this call.",
+      "name": "create_bounty",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "bounty_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_winners",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Creator commits `amount` of the remaining escrow to `winner`.",
+      "name": "select_winner",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "bounty_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "winner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_winner_award",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "bounty_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "winner",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "WinnerAward"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admin_extend_bounty_ttl",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "bounty_id",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admin_extend_instance_ttl",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admin_extend_winner_award_ttl",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "bounty_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "winner",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,323 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "Unreachable in practice \\xe2\\x80\\x94 the constructor always sets config \\xe2\\x80\\x94 but kept so a storage\\nread never silently unwraps.",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "MessageTooShort",
+          "value": 4
+        },
+        {
+          "doc": "The hook carried no trailing payload \\xe2\\x80\\x94 i.e. no beneficiary. If this fires on mainnet,\\nthe burn side built the hook wrong (or the forwarder stripped it).",
+          "name": "NoBeneficiaryPayload",
+          "value": 5
+        },
+        {
+          "doc": "Payload present but not a 56-char strkey.",
+          "name": "BadBeneficiary",
+          "value": 6
+        },
+        {
+          "doc": "mint_and_forward produced no USDC at this contract.",
+          "name": "NothingMinted",
+          "value": 7
+        },
+        {
+          "doc": "Swap output below the caller's floor. Reverts the whole invocation, which leaves the\\nCCTP nonce unconsumed \\xe2\\x80\\x94 the message stays claimable and can be retried at a better price.",
+          "name": "SlippageExceeded",
+          "value": 8
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Config",
+      "fields": [
+        {
+          "doc": "",
+          "name": "aggregator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "cctp_forwarder",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "native",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Config"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Protocol",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Soroswap",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Phoenix",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Aqua",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Comet",
+          "value": 3
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DexDistribution",
+      "fields": [
+        {
+          "doc": "",
+          "name": "bytes",
+          "type_": {
+            "option": {
+              "value_type": {
+                "vec": {
+                  "element_type": {
+                    "bytes_n": {
+                      "n": 32
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "parts",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "path",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "protocol_id",
+          "type_": {
+            "udt": {
+              "name": "Protocol"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "config",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Config"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "PoC escape hatch: recover tokens stranded by a failed mainnet run. Admin only.",
+      "name": "rescue",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Claim `message`, swap the minted USDC to XLM, send it to the beneficiary encoded in the\\nmessage's hook payload. Returns the XLM delivered (stroops).\\n\\nPermissionless: the caller picks the route and the slippage floor but cannot influence\\nwhere the funds go. Same shape as the EVM-side `sweep` escape hatch.\\n\\nIf the beneficiary account does not exist yet, the native SAC transfer creates it \\xe2\\x80\\x94\\nwhich requires delivering at least 1 XLM (2 x 0.5 base reserve).",
+      "name": "deliver",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "message",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "attestation",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "distribution",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "DexDistribution"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "min_xlm_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Runs once, at deploy time \\xe2\\x80\\x94 arguments are passed to `stellar contract deploy` after `--`.\\nThere is no separate init call and no re-initialization window.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "cctp_forwarder",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "aggregator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "native",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Read the beneficiary a message would pay out to, without claiming it. Use this to\\nsanity-check hook framing before spending anything.",
+      "name": "preview_beneficiary",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "message",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

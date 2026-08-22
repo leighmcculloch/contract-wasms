@@ -1,0 +1,392 @@
+[
+  {
+    "function_v0": {
+      "doc": "Constructor for the executor contract.\\n\\nRuns only during deployment. Sets up the guardian set, chain ID, and\\nemitter configuration.\\n\\nTwo emitters are configured separately:\\n- `owner_emitter_*` authorizes governance actions executed against\\ntarget contracts via [`Self::execute_governance_action`].\\n- `gs_upgrade_emitter_*` (the *guardian-set-upgrade* emitter)\\nauthorizes guardian set upgrade VAAs handled by\\n[`Self::update_guardian_set`]. In production this is the Wormhole\\ncore bridge governance emitter, which is distinct from the Pyth\\ngovernance emitter used to issue PTGM actions.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "chain_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "owner_emitter_chain",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "owner_emitter_address",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "gs_upgrade_emitter_chain",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "gs_upgrade_emitter_address",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "initial_guardian_set",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 20
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "guardian_set_index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Process a guardian set upgrade VAA.\\n\\nThis is a self-governance mechanism: the current guardian set signs a VAA\\nthat authorizes a new guardian set. The VAA payload follows the Wormhole\\ncore governance format:\\n\\n```text\\n[32 bytes] module (\"Core\" right-padded)\\n[1 byte]   action (2 = guardian set upgrade)\\n[2 bytes]  target chain (0 = all chains)\\n[4 bytes]  new guardian set index (BE u32)\\n[1 byte]   num guardians\\nFor each guardian:\\n[20 bytes] Ethereum address\\n```\\n\\nGuardian set upgrades are governance actions and require the *current*\\nguardian set: the VAA's `guardian_set_index` must equal the stored\\nindex, otherwise it is rejected with `InvalidGuardianSetIndex`. The\\n24-hour grace window in `verify_vaa` \\xe2\\x80\\x94 during which a retired set's VAAs\\nare still accepted \\xe2\\x80\\x94 applies to non-governance message VAAs only and\\ndoes not extend to this function.",
+      "name": "update_guardian_set",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vaa_bytes",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Execute a governance action from a Wormhole VAA containing a PTGM payload.\\n\\nThis verifies the VAA, validates the emitter matches the stored owner,\\nenforces replay protection via strictly increasing sequence numbers,\\nparses the PTGM governance instruction, and dispatches a cross-contract\\ncall to the target contract.\\n\\nLike Pyth's other governance receivers, this relies on the generic\\n`verify_vaa` path and so accepts a retired guardian set within its\\n24-hour grace window \\xe2\\x80\\x94 it does *not* additionally require the current\\nset. (The self-referential `update_guardian_set` upgrade path does\\nrequire the current set; see its docs.)\\n\\nThis entry point is permissionless and never calls `require_auth` on the\\nsubmitter, so an authorization that a `Call` target requires cannot be\\nnested under the governance action \\xe2\\x80\\x94 it must be submitted as its own\\ntop-level authorization entry, which anyone observing the transaction\\ncan lift into a transaction of their own and consume independently. The\\nonly current target, `PythLazerCont",
+      "name": "execute_governance_action",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vaa_bytes",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ContractError",
+      "cases": [
+        {
+          "doc": "VAA version is not 1.",
+          "name": "InvalidVaaVersion",
+          "value": 1
+        },
+        {
+          "doc": "Input data is truncated or too short.",
+          "name": "TruncatedData",
+          "value": 2
+        },
+        {
+          "doc": "A guardian index in a signature exceeds the guardian set size.",
+          "name": "InvalidGuardianIndex",
+          "value": 3
+        },
+        {
+          "doc": "Not enough guardian signatures to meet quorum.",
+          "name": "NoQuorum",
+          "value": 4
+        },
+        {
+          "doc": "A recovered guardian address does not match the stored guardian set.",
+          "name": "GuardianSignatureMismatch",
+          "value": 5
+        },
+        {
+          "doc": "The emitter chain ID does not match the expected governance source.",
+          "name": "InvalidEmitterChain",
+          "value": 6
+        },
+        {
+          "doc": "The emitter address does not match the expected governance source.",
+          "name": "InvalidEmitterAddress",
+          "value": 7
+        },
+        {
+          "doc": "The VAA sequence number has already been processed (replay).",
+          "name": "StaleSequence",
+          "value": 8
+        },
+        {
+          "doc": "The contract has already been initialized.",
+          "name": "AlreadyInitialized",
+          "value": 9
+        },
+        {
+          "doc": "The contract has not been initialized.",
+          "name": "NotInitialized",
+          "value": 10
+        },
+        {
+          "doc": "Duplicate guardian signature index in the VAA.",
+          "name": "DuplicateGuardianSignature",
+          "value": 11
+        },
+        {
+          "doc": "The VAA's guardian_set_index does not match the stored index.",
+          "name": "InvalidGuardianSetIndex",
+          "value": 12
+        },
+        {
+          "doc": "The new guardian set index is not current + 1.",
+          "name": "InvalidGuardianSetUpgrade",
+          "value": 13
+        },
+        {
+          "doc": "The new guardian set is empty.",
+          "name": "EmptyGuardianSet",
+          "value": 14
+        },
+        {
+          "doc": "The PTGM magic bytes are not \"PTGM\" (0x5054474d).",
+          "name": "InvalidPtgmMagic",
+          "value": 15
+        },
+        {
+          "doc": "The PTGM module is not Lazer (3).",
+          "name": "InvalidPtgmModule",
+          "value": 16
+        },
+        {
+          "doc": "The PTGM target chain ID does not match this chain.",
+          "name": "InvalidTargetChain",
+          "value": 17
+        },
+        {
+          "doc": "The PTGM action is not recognized.",
+          "name": "InvalidGovernanceAction",
+          "value": 18
+        },
+        {
+          "doc": "The PTGM executor contract does not match this contract.",
+          "name": "InvalidExecutorAddress",
+          "value": 19
+        },
+        {
+          "doc": "A signature recovery_id is not in the valid [0, 3] range.",
+          "name": "InvalidRecoveryId",
+          "value": 20
+        },
+        {
+          "doc": "The governance payload's module identifier does not match the expected module.",
+          "name": "InvalidGovernanceModule",
+          "value": 21
+        },
+        {
+          "doc": "The PTGM target contract does not match the executor for a self-upgrade action.",
+          "name": "InvalidTargetContract",
+          "value": 22
+        },
+        {
+          "doc": "The guardian set for the given index was not found in storage.",
+          "name": "GuardianSetNotFound",
+          "value": 23
+        },
+        {
+          "doc": "The guardian set has expired (past the 24-hour grace window after upgrade).",
+          "name": "GuardianSetExpired",
+          "value": 24
+        },
+        {
+          "doc": "The PTGM generic-call function name is empty, too long, or not a valid Symbol.",
+          "name": "InvalidFunctionName",
+          "value": 25
+        },
+        {
+          "doc": "The PTGM generic-call args XDR did not decode into a vector of values.",
+          "name": "InvalidArgsEncoding",
+          "value": 26
+        },
+        {
+          "doc": "The last-executed-sequence entry is missing from persistent storage\\n(its TTL expired). Replay protection cannot be enforced, so the action\\nis rejected rather than defaulting the sequence to 0.",
+          "name": "SequenceNotFound",
+          "value": 27
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A parsed Wormhole VAA guardian signature.",
+      "lib": "",
+      "name": "GuardianSignature",
+      "fields": [
+        {
+          "doc": "",
+          "name": "guardian_index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "recovery_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "signature",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys for the executor contract.",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Whether the contract has been initialized.",
+            "name": "Initialized"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "The current guardian set index (u32).",
+            "name": "GuardianSetIndex"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "The Wormhole chain ID for this chain (u16 stored as u32).",
+            "name": "ChainId"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "The authorized governance emitter chain ID (u16 stored as u32).",
+            "name": "OwnerEmitterChain"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "The authorized governance emitter address (32 bytes).",
+            "name": "OwnerEmitterAddress"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "The authorized guardian-set-upgrade emitter chain ID (u16 stored as u32).\\nDistinct from the governance owner emitter \\xe2\\x80\\x94 this emitter is only\\nauthorized to upgrade the guardian set, not to execute governance\\nactions against target contracts.",
+            "name": "GsUpgradeEmitterChain"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "The authorized guardian-set-upgrade emitter address (32 bytes).",
+            "name": "GsUpgradeEmitterAddress"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "The last executed governance sequence number (u64).",
+            "name": "LastExecutedSequence"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "A guardian set stored by its index: StoredGuardianSet.",
+            "name": "GuardianSetByIndex",
+            "type_": [
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A guardian set stored with an optional expiration timestamp.\\n\\nWhen `expiration_time` is `None`, the set never expires (it is the current set).\\nWhen `Some(t)`, the set is rejected once the ledger timestamp reaches `t`.",
+      "lib": "",
+      "name": "StoredGuardianSet",
+      "fields": [
+        {
+          "doc": "",
+          "name": "expiration_time",
+          "type_": {
+            "option": {
+              "value_type": "u64"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "keys",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 20
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

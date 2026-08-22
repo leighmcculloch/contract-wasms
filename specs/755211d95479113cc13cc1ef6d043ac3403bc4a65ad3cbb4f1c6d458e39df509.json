@@ -1,0 +1,551 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidMaturity",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidExchangeRate",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "ExchangeRateRegression",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InsufficientBalance",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InsufficientAllowance",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "MathOverflow",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "InvalidExpiration",
+          "value": 10
+        },
+        {
+          "doc": "`consume` was asked to remove more than the holder's banked balance. This\\nis a tokenizer-side invariant violation (it only consumes what a prior\\n`settle` reported as banked), surfaced as an error rather than a silent\\nunderflow.",
+          "name": "ConsumeExceedsBanked",
+          "value": 11
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Burns `amount` YT from `from`, on a holder's own direct call. The\\nholder is settled first so their accrued yield is banked before the\\nbalance shrinks, at a rate observed through the tokenizer. The\\ntokenizer's recombine burns through `burn_settled` instead, passing the\\nrate down, because it is on the call stack here and cannot be called\\nback into.\\n\\nThis can drop YT total_supply below PT total_supply by design \\xe2\\x80\\x94 not a\\nbug. No economic path reads YT total_supply; the tokenizer's escrow,\\nPT-senior cap, and pro-rata math read only `pt_total_supply`.",
+      "name": "burn",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Mints `amount` YT to `to`. Restricted to the tokenizer recorded at\\ninitialization, which mints YT when a holder splits SY. The recipient is\\nsettled first, so a fresh holder's checkpoint starts at the current rate\\nand an existing holder's prior yield is banked before the balance grows.",
+      "name": "mint",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "name",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Config",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "maturity",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "sy_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tokenizer",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "config",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Config"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Settles `holder` at the `rate` supplied by the tokenizer and returns their\\ncurrent banked total in SY shares WITHOUT zeroing it. Restricted to the\\ntokenizer. Moves no tokens; it is the first half of a claim.\\n\\nThis is deliberately split from `consume` (they used to be one\\n`settle_and_consume` that zeroed the whole ledger). All-or-nothing consume\\ncould not express a partial payment, but the tokenizer now caps a claim to\\nthe escrow surplus over the senior PT reservation. So it `settle`s to learn\\nthe owed total, decides how much the surplus can cover, and `consume`s only\\nthat. Whatever it does not consume stays banked and is claimable later.\\n\\nThe rate is passed in, not read here, on purpose. The tokenizer is already\\non the call stack when it invokes this (claim_yield -> here), so yt cannot\\ncall back into the tokenizer to fetch the canonical maturity rate: Soroban\\nprohibits re-entering a contract already on the stack. The tokenizer instead\\ncomputes its single canonical rate (live before maturity, its frozen\\nsnapsh",
+      "name": "settle",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "rate",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "symbol",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "approve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expiration_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Subtracts exactly `amount` SY shares from `holder`'s banked ledger.\\nRestricted to the tokenizer, which calls this after `settle` and pushes the\\nsame `amount` of SY out of escrow itself. Moves no tokens. `amount == 0` is\\na no-op; `amount` must be `<= banked` (the tokenizer only ever consumes what\\na prior `settle` reported), enforced so the ledger can never go negative.\\nThe remainder stays banked and claimable later once escrow can cover it.",
+      "name": "consume",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "decimals",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "maturity",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "allowance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "burn_from",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The SY rate the holder's yield was last settled at. Zero means the\\nholder has never been settled (no YT minted to them yet).",
+      "name": "checkpoint",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tokenizer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sy_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "maturity",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Burns `amount` YT from `from`, settling them first at the `rate`\\nsupplied by the tokenizer. Restricted to the tokenizer, which calls\\nthis from `recombine` while it is on the call stack: yt cannot call\\nback into it to observe a rate, so the tokenizer hands down the same\\nrate it observed in that transaction. Trusting the argument is safe\\nbecause of the auth gate, the same model as `settle` and `consume`.\\nThe holder's own authorization is enforced by `recombine` itself.",
+      "name": "burn_settled",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "rate",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_supply",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AllowanceValue",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expiration_ledger",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "SY shares already banked to the holder but not yet claimed.",
+      "name": "accrued_yield",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer_from",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Total SY shares claimable by `holder` right now: already-banked yield\\nplus what a settle at the current SY rate would add. The contract reads\\nthe rate from the SY contract itself, so no caller can supply a fake one.\\n\\nBefore maturity this is a point-in-time read of the live rate, so the\\nexecuted `claim_yield` amount may differ if the rate moves between this\\nquote and submission. After maturity it uses the tokenizer's frozen\\nmaturity rate (see `preview_rate`), so it no longer tracks live accrual.",
+      "name": "preview_claim_yield",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

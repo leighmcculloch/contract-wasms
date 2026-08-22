@@ -1,0 +1,195 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "Errors surfaced to callers as typed contract errors.",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "The principal amount must be greater than zero.",
+          "name": "InvalidAmount",
+          "value": 1
+        },
+        {
+          "doc": "The escrow has not been initialized with a note.",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "The note is not in the `Active` state (already released or defaulted).",
+          "name": "NotActive",
+          "value": 3
+        },
+        {
+          "doc": "The caller is not the party authorized for this action.",
+          "name": "Unauthorized",
+          "value": 4
+        },
+        {
+          "doc": "The note has not yet reached its maturity date.",
+          "name": "NotMatured",
+          "value": 5
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "The note's economic and party terms, set at initialization.",
+      "lib": "",
+      "name": "Terms",
+      "fields": [
+        {
+          "doc": "Principal amount, in the note's currency (minor units).",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "The payee/lender the note is payable to.",
+          "name": "lender",
+          "type_": "address"
+        },
+        {
+          "doc": "The maker (promisor) who unconditionally promises to pay.",
+          "name": "maker",
+          "type_": "address"
+        },
+        {
+          "doc": "Maturity as a Unix timestamp (seconds).",
+          "name": "maturity",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Lifecycle state of the note.",
+      "lib": "",
+      "name": "Status",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Issued and outstanding.",
+            "name": "Active"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Endorsed to and settled by the lender.",
+            "name": "Released"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Reclaimed by the maker after maturity passed unpaid.",
+            "name": "Defaulted"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initialize the escrow for one ePN.\\n\\nRecords the note's terms, anchors the ISET public key, and sets the note\\n`Active`. Must be authorized by the `maker`.\\n\\n# Panics\\n[`Error::InvalidAmount`] if `amount <= 0`.",
+      "name": "init",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "maker",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "lender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "maturity",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "iset_pubkey",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Read the note's terms.",
+      "name": "terms",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Terms"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Read the current settlement status.",
+      "name": "status",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Status"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Reclaim the note after maturity if it was never settled.\\n\\nOnly the maker may call this, only while the note is `Active`, and only\\nonce the maturity timestamp has passed. Transitions to `Defaulted`.\\n\\n# Panics\\n[`Error::Unauthorized`] if the caller is not the maker;\\n[`Error::NotActive`] if the note is not `Active`;\\n[`Error::NotMatured`] if maturity has not yet passed.",
+      "name": "claim_default",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Endorse and settle the note to the lender.\\n\\nOnly the registered lender may call this, and only while the note is\\n`Active`. The `iset_signature` \\xe2\\x80\\x94 ISET's proof that the off-chain legal\\nendorsement is valid \\xe2\\x80\\x94 is recorded in the `released` event as an audit\\nanchor. Transitions the note to `Released`.\\n\\n# Panics\\n[`Error::Unauthorized`] if the caller is not the lender;\\n[`Error::NotActive`] if the note is not `Active`.",
+      "name": "release_funds",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "iset_signature",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

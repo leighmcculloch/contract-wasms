@@ -1,0 +1,1336 @@
+[
+  {
+    "function_v0": {
+      "doc": "Repays assets to a market.",
+      "name": "repay",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Borrows assets from a market.",
+      "name": "borrow",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Supplies assets to a market.",
+      "name": "supply",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Withdraws assets from a market.",
+      "name": "withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Executes a flash loan.",
+      "name": "flash_loan",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "_user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "_market_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initializes core pool admin and dependency addresses.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the position state for a user in a market.",
+      "name": "get_position",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "PositionState"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pauses a market.",
+      "name": "pause_market",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Creates a market configuration.",
+      "name": "create_market",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "pool_type",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "collateral_factor",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "liquidation_threshold",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "emode_category",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "debt_ceiling",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Resumes a market.",
+      "name": "resume_market",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Gets dependency address.",
+      "name": "get_dependency",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_irm_params",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "IRMParams"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sets dependency address.",
+      "name": "set_dependency",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "simulate_repay",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "SimulationResult"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Delegates credit.",
+      "name": "delegate_credit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "_delegator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "_delegatee",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "_market_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "_allowance",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_all_markets",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "vec": {
+                "element_type": {
+                  "udt": {
+                    "name": "MarketStats"
+                  }
+                }
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "simulate_borrow",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "SimulationResult"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "simulate_supply",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "SimulationResult"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_market_stats",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "MarketStats"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pure helper returning health factor represented in basis points where 10_000 equals 1.0.",
+      "name": "get_health_factor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "collateral_value",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "debt_value",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_user_position",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "UserPosition"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "simulate_withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "SimulationResult"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Settles a liquidated position. Callable only by the Liquidation Engine.",
+      "name": "liquidate_position",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "liquidator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "borrower",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "debt_market",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "collateral_market",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "repay_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "collateral_reward",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Claws back a position under compliance directive.",
+      "name": "compliance_clawback",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns delegated allowance limit.",
+      "name": "get_credit_allowance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "_market_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "_delegator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "_delegatee",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the active health factor for an account position based on oracle prices.",
+      "name": "get_user_health_factor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "use_liquidation_threshold",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_current_utilization",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_user_debt_with_interest",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "MarketNotFound",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "MarketPaused",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "HealthFactorTooLow",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "FlashLoanNotRepaid",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "MarketAlreadyExists",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InsufficientLiquidity",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "InsufficientCollateral",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "DebtCeilingExceeded",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "OracleCircuitBreakerActive",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "Unsupported",
+          "value": 99
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Market",
+            "type_": [
+              "symbol"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Position",
+            "type_": [
+              "symbol",
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Dependency",
+            "type_": [
+              "symbol"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "CreditAllowance",
+            "type_": [
+              "symbol",
+              "address",
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MarketsList"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "IRMParams",
+      "fields": [
+        {
+          "doc": "",
+          "name": "base_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_utilization",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "slope",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "target_utilization",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketStats",
+      "fields": [
+        {
+          "doc": "",
+          "name": "available_liquidity",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "borrow_apy",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "collateral_factor",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "liability_factor",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "market_type",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "permissioned",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "supply_apy",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_borrowed",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_supplied",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "utilization_rate",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "active",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "collateral_factor",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "debt_ceiling",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "emode_category",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "liquidation_threshold",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "permissioned",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "pool_type",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "total_borrowed",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_supplied",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UserPosition",
+      "fields": [
+        {
+          "doc": "",
+          "name": "borrow_capacity_usd",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "health_factor",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "markets",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "UserMarketPosition"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "net_apy",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "positions_used",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PositionState",
+      "fields": [
+        {
+          "doc": "",
+          "name": "borrowed",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "delegated",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "supplied",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SimulationResult",
+      "fields": [
+        {
+          "doc": "",
+          "name": "borrow_capacity_after",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "borrow_capacity_before",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "borrow_limit_pct_after",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "borrow_limit_pct_before",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "gas_estimate",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "hf_after",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "hf_before",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "position_after",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "position_before",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UserMarketPosition",
+      "fields": [
+        {
+          "doc": "",
+          "name": "borrowed",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "supplied",
+          "type_": "i128"
+        }
+      ]
+    }
+  }
+]

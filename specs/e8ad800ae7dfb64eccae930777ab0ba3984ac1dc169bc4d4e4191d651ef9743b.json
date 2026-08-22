@@ -1,0 +1,250 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SignerKind",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Ed25519"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Secp256k1"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "WebAuthn"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_verifier",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signer_kind",
+          "type_": {
+            "udt": {
+              "name": "SignerKind"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "smart_account_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "ed25519_verifier",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "secp256k1_verifier",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "webauthn_verifier",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "threshold_policy",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccountCreated",
+      "prefix_topics": [
+        "account_created"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_account",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "params",
+          "type_": {
+            "udt": {
+              "name": "AccountInitParams"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccountInitParams",
+      "fields": [
+        {
+          "doc": "",
+          "name": "account_salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signers",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "AccountSignerInit"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccountSignerInit",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Delegated",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "External",
+            "type_": [
+              {
+                "udt": {
+                  "name": "ExternalSignerInit"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ExternalSignerInit",
+      "fields": [
+        {
+          "doc": "",
+          "name": "key_data",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "signer_kind",
+          "type_": {
+            "udt": {
+              "name": "SignerKind"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_account_address",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "params",
+          "type_": {
+            "udt": {
+              "name": "AccountInitParams"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_threshold_policy",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  }
+]

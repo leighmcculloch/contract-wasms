@@ -1,0 +1,447 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "debt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vendor",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Vendor draws working capital. Gated by `available_to` \\xe2\\x80\\x94 the lesser of the\\nvendor's remaining credit headroom and the pool's free liquidity.",
+      "name": "draw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vendor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Vendor repays principal. Overpayment is clamped to the outstanding debt,\\nso only what is owed is pulled.",
+      "name": "repay",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vendor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "token",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Permissionless \\xe2\\x80\\x94 anyone (our cron relayer) can trigger this. No vendor\\nauth is required: funds only move up to what the vendor already\\napproved on the token contract, and the on-chain cadence gate below\\nstops it being called early to drain the whole allowance at once.",
+      "name": "collect",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vendor",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "LP funds the pool with USDC. Liquidity is custodied by the contract and\\nlent out to score-qualified vendors.",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "registry",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "schedule",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vendor",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "ScheduleConfig"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "min_score",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Token"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Registry"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MinScore"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Debt",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Schedule",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "registry",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DrawEvent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "new_debt",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "score",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "vendor",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "What the vendor can actually draw right now: remaining credit headroom,\\ncapped by available pool liquidity.",
+      "name": "available_to",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vendor",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Total credit line a vendor qualifies for, from their on-chain score.\\n0 when below the minimum score.",
+      "name": "credit_limit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vendor",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pool_balance",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Vendor opts in to scheduled auto-repay. Requires a matching\\n`token.approve(vendor, pool, cap, expiration_ledger)` set up\\nseparately (frontend calls the token contract directly) \\xe2\\x80\\x94 this call\\nonly sets cadence/amount, it never touches the allowance.",
+      "name": "set_schedule",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vendor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "interval_seconds",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "amount_per_period",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RepayEvent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "new_debt",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "vendor",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_min_score",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_min",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CollectEvent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "new_debt",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "next_due",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "vendor",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Vendor cancels auto-repay. Does NOT revoke the token allowance \\xe2\\x80\\x94\\nvendor should also `token.approve(vendor, pool, 0, ledger)` to kill\\nthe pull right entirely (works even if this app is unreachable).",
+      "name": "cancel_schedule",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vendor",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Vendor-configured auto-repay cadence. Actual fund movement on `collect`\\nrelies on a standing `token.approve(vendor, pool, cap, expiration_ledger)`\\nset up separately by the vendor \\xe2\\x80\\x94 this struct only tracks *when* and\\n*how much*, never custodies an allowance itself.",
+      "lib": "",
+      "name": "ScheduleConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount_per_period",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "interval_seconds",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "next_due",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PoolFundedEvent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "balance",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        }
+      ]
+    }
+  }
+]

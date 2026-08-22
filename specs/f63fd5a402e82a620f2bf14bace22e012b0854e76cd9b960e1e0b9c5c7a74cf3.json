@@ -1,0 +1,396 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "DealNotFound",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "DeadlineNotReached",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "DeadlinePassed",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidMilestone",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "MilestoneAlreadyReleased",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "ProtocolAlreadyCompleted",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "InvalidDeadline",
+          "value": 11
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DealStatus",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Created",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Funded",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Completed",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Refunded",
+          "value": 3
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Milestone",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "is_released",
+          "type_": "bool"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Deal",
+      "fields": [
+        {
+          "doc": "",
+          "name": "buyer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "milestones",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Milestone"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "remaining_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "seller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "DealStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "total_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Token"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Deal",
+            "type_": [
+              "symbol"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initialize the contract with management and the target asset (XLM/USDC)",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Create a new deal and lock funds into escrow",
+      "name": "create_deal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "deal_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "buyer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "seller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "milestones",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Milestone"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Authorized release of a specific milestone by the Verifier Agent",
+      "name": "release_milestone",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "deal_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "milestone_idx",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Complete the deal and release all remaining funds",
+      "name": "complete_deal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "deal_id",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Request a refund if the deadline has passed without completion",
+      "name": "request_refund",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "deal_id",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Retrieve the current status of a specific deal",
+      "name": "get_deal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "deal_id",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "Deal"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

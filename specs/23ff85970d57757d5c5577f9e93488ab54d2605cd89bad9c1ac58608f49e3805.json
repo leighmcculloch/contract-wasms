@@ -1,0 +1,842 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "Numbered from 100 so the range never overlaps the Stellar Asset Contract's\\nown codes (1-10). `create_batch` cross-invokes the token, so a caller reading\\n`Error(Contract, #N)` off a failed Lockup call cannot otherwise tell whose\\nerror it is \\xe2\\x80\\x94 and rendering a token's `BalanceError` as a Lockup schedule\\ncomplaint sends the user to fix a field that was never wrong.",
+      "lib": "",
+      "name": "ContractError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 100
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 101
+        },
+        {
+          "doc": "",
+          "name": "CreationPaused",
+          "value": 102
+        },
+        {
+          "doc": "",
+          "name": "InvalidArrayLengths",
+          "value": 103
+        },
+        {
+          "doc": "",
+          "name": "BatchTooLarge",
+          "value": 104
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 105
+        },
+        {
+          "doc": "",
+          "name": "InvalidFeeAmount",
+          "value": 106
+        },
+        {
+          "doc": "",
+          "name": "InvalidSchedule",
+          "value": 107
+        },
+        {
+          "doc": "",
+          "name": "InvalidCliff",
+          "value": 108
+        },
+        {
+          "doc": "",
+          "name": "StartTooFarInPast",
+          "value": 109
+        },
+        {
+          "doc": "",
+          "name": "InvalidUnlockBps",
+          "value": 110
+        },
+        {
+          "doc": "",
+          "name": "InvalidGranularity",
+          "value": 111
+        },
+        {
+          "doc": "",
+          "name": "LockupNotFound",
+          "value": 112
+        },
+        {
+          "doc": "",
+          "name": "NothingToClaim",
+          "value": 113
+        },
+        {
+          "doc": "",
+          "name": "NotCancelable",
+          "value": 114
+        },
+        {
+          "doc": "",
+          "name": "AlreadyCanceled",
+          "value": 115
+        },
+        {
+          "doc": "",
+          "name": "NothingToRefund",
+          "value": 116
+        },
+        {
+          "doc": "",
+          "name": "Overflow",
+          "value": 117
+        },
+        {
+          "doc": "",
+          "name": "PageOutOfRange",
+          "value": 118
+        },
+        {
+          "doc": "",
+          "name": "EscrowShortfall",
+          "value": 119
+        },
+        {
+          "doc": "",
+          "name": "StartTooFarInFuture",
+          "value": 120
+        },
+        {
+          "doc": "",
+          "name": "DurationTooLong",
+          "value": 121
+        },
+        {
+          "doc": "",
+          "name": "ReleaseTooSmall",
+          "value": 122
+        },
+        {
+          "doc": "",
+          "name": "InvalidRecipient",
+          "value": 123
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Withdraws the currently releasable amount to the recipient, on the\\nrecipient's own authorization. Partial and repeatable; the cumulative\\nwithdrawal can never exceed the amount vested to date.",
+      "name": "claim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Refunds exactly the unvested remainder to the sender, on the sender's\\nauthorization and only if the Lockup was created cancelable. Everything\\nvested at this instant stays claimable by the recipient forever.",
+      "name": "cancel",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pushes the currently releasable amount to the recipient without the\\nrecipient's signature, so a treasurer can drive payouts. Funds can only\\never move to the recipient, so this path grants no extra power over escrow.\\n\\nBecause anyone may call it, a payout must clear `MIN_RELEASE_BPS` of the\\ndeposit \\xe2\\x80\\x94 the floor stops a third party forcing a dust transfer every\\nledger, which would bleed the recipient on a token that charges per\\ntransfer. It lifts as soon as nothing more can accrue, so the final\\nremainder is always sweepable however the Lockup ended, and `claim` never\\napplies it.",
+      "name": "release",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Reads a Lockup by id, with its status, vested total, and claimable amount\\nresolved at the current ledger timestamp.",
+      "name": "get_lockup",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "LockupView"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sets the administrator, whose only power is the creation kill-switch \\xe2\\x80\\x94 it\\ncan never touch escrowed funds, pause claims, or upgrade the contract.\\n\\nRequiring the admin's own authorization stops an address being named\\nadministrator without its consent. It does not stop a third party\\ninitializing the instance with an address they control before the\\ndeployer gets there \\xe2\\x80\\x94 only a deploy-time constructor closes that, which\\nthe workspace's SDK predates.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Creates one Lockup per (recipient, amount) pair under a shared schedule and\\nbatch id, pulling the total deposit into escrow with a single\\n`transfer_from` (approve-then-act) and returning the new ids in recipient\\norder. The service fee moves before the escrow pull; a zero `fee_amount`\\nskips it.\\n\\n`batch_ref` is the sender's own name for the batch, which is what lets a\\nrecipient list too large for one transaction land as a single batch: every\\ncall under the same reference joins the batch the first one opened, and\\n`None` always opens a fresh one. References live in the sender's own\\nnamespace, so one caller can never join another's batch.",
+      "name": "create_batch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "recipients",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amounts",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "schedule",
+          "type_": {
+            "udt": {
+              "name": "Schedule"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "cancelable",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "batch_ref",
+          "type_": {
+            "option": {
+              "value_type": "u64"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fee_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "u64"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the amount of a Lockup claimable at the current ledger timestamp.",
+      "name": "get_releasable",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns one page of the Lockup ids belonging to `batch_id`, alongside how\\nmany pages exist.",
+      "name": "get_batch_index",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "batch_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "page",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "IndexPage"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns one page of the Lockup ids created by `creator`, alongside how many\\npages exist. Page 0 is always readable \\xe2\\x80\\x94 an address with no Lockups reports\\na page count of 0 and no ids \\xe2\\x80\\x94 and any later page past the count panics\\nwith `PageOutOfRange`. Every paged read below follows the same rule.",
+      "name": "get_creator_index",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "page",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "IndexPage"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_creation_paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns one page of the Lockup ids vesting to `recipient`, alongside how\\nmany pages exist.",
+      "name": "get_recipient_index",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "page",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "IndexPage"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Engages or lifts the creation kill-switch, which blocks `create_batch`\\nonly. Claims, releases, and cancellations remain callable in every state.",
+      "name": "set_creation_paused",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Hydrates one page of a batch's index into full Lockups. Reading a batch\\nthis way costs pages proportional to the batch, not to the creator's whole\\nhistory, which is what keeps a batch addressable for a creator who has made\\nmany.",
+      "name": "get_lockups_by_batch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "batch_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "page",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "LockupPage"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Hydrates one page of a creator's index into full Lockups, carrying the page\\ncount so a client walking pages learns where to stop from this same call.",
+      "name": "get_lockups_by_creator",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "page",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "LockupPage"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Hydrates one page of a recipient's index into full Lockups.",
+      "name": "get_lockups_by_recipient",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "page",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "LockupPage"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "An escrowed deposit of one token for one recipient, released over a\\nsix-scalar schedule. Status is derived from these fields, never stored.",
+      "lib": "",
+      "name": "Lockup",
+      "fields": [
+        {
+          "doc": "",
+          "name": "batch_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "cancelable",
+          "type_": "bool"
+        },
+        {
+          "doc": "When the Lockup was canceled, if it ever was. Vesting freezes at this\\ninstant. An `Option` rather than a zero sentinel so a cancel can never be\\nmistaken for \"never canceled\", whatever the ledger clock reads.",
+          "name": "canceled_at",
+          "type_": {
+            "option": {
+              "value_type": "u64"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "deposited",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "refunded",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "schedule",
+          "type_": {
+            "udt": {
+              "name": "Schedule"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "withdrawn",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "CreationPaused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "NextLockupId"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "NextBatchId"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Lockup",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Page 0 of an address's index, carrying the page count. Held apart from\\nthe later pages so an address with few Lockups \\xe2\\x80\\x94 the common case for a\\nrecipient \\xe2\\x80\\x94 costs exactly one entry.",
+            "name": "Index",
+            "type_": [
+              {
+                "udt": {
+                  "name": "IndexKind"
+                }
+              },
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "IndexPage",
+            "type_": [
+              {
+                "udt": {
+                  "name": "IndexKind"
+                }
+              },
+              "address",
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "A creator's own name for a batch, mapped to the id this contract gave it.\\nKeyed by the creator so one caller's reference can never address another's\\nbatch.",
+            "name": "BatchRef",
+            "type_": [
+              "address",
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "BatchIndex",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "BatchIndexPage",
+            "type_": [
+              "u64",
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "The six scalars that describe how a deposit is released. Shared verbatim by\\nevery Lockup of a batch.",
+      "lib": "",
+      "name": "Schedule",
+      "fields": [
+        {
+          "doc": "",
+          "name": "cliff",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "cliff_unlock_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "end",
+          "type_": "u64"
+        },
+        {
+          "doc": "Step size in seconds for the streaming portion; 0 or 1 streams per second.",
+          "name": "granularity",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "start",
+          "type_": "u64"
+        },
+        {
+          "doc": "Share of the deposit unlocked at `start`, in basis points. Basis points\\nrather than an absolute amount so one schedule fits every recipient of a\\nbatch regardless of their individual amounts.",
+          "name": "start_unlock_bps",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "IndexKind",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Creator"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Recipient"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "One page of an address's Lockup ids, alongside how many pages exist in total\\nso a caller learns the range from any single read.",
+      "lib": "",
+      "name": "IndexPage",
+      "fields": [
+        {
+          "doc": "",
+          "name": "ids",
+          "type_": {
+            "vec": {
+              "element_type": "u64"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "page_count",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LockupPage",
+      "fields": [
+        {
+          "doc": "",
+          "name": "lockups",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "LockupView"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "page_count",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A Lockup with the values a caller would otherwise have to recompute, resolved\\nat the current ledger timestamp.",
+      "lib": "",
+      "name": "LockupView",
+      "fields": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "lockup",
+          "type_": {
+            "udt": {
+              "name": "Lockup"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "releasable",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "LockupStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vested",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Where a Lockup stands at a point in time. Always derived from the Lockup's\\nfields, never stored, so it cannot drift from the release math.",
+      "lib": "",
+      "name": "LockupStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Pending"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Streaming"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Fully vested, with something still to claim.",
+            "name": "Settled"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Canceled; the unvested remainder went back to the sender and what had\\nvested is still claimable.",
+            "name": "Canceled"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Nothing is left in escrow \\xe2\\x80\\x94 every unit was withdrawn or refunded.",
+            "name": "Depleted"
+          }
+        }
+      ]
+    }
+  }
+]

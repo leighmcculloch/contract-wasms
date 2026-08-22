@@ -1,0 +1,140 @@
+[
+  {
+    "function_v0": {
+      "doc": "Upgrades the current contract to a new WASM hash.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Withdraws tokens from the treasury to a target address.",
+      "name": "withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initializes the treasury and stores the initial fee split.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "dao_fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "referral_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the DAO fee in basis points.",
+      "name": "get_dao_fee_bps",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Updates the DAO share of the total fee split.",
+      "name": "set_dao_fee_bps",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "value",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the referral fee in basis points.",
+      "name": "get_referral_bps",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Updates the referral share of the fee split.",
+      "name": "set_referral_bps",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "value",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Errors returned by the DAO treasury contract.",
+      "lib": "",
+      "name": "DaoTreasuryError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidFee",
+          "value": 3
+        }
+      ]
+    }
+  }
+]

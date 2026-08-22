@@ -1,0 +1,1120 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unpause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "View: whether `account` currently holds `role`.",
+      "name": "has_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Grant `role` to `account`. `caller` must be the contract admin or hold\\nthe admin-role of `role`. Auth + admin checks are enforced by\\n`access_control::grant_role`.",
+      "name": "grant_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "hash_order",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "order",
+          "type_": {
+            "udt": {
+              "name": "Order"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "1. validate + update statuses (no pricing, no max_taking)\\n2. pull taker_input_token (caller pre-stages)\\n3. pull maker funds + convert to IBT + price (fused single loop \\xe2\\x80\\x94\\npricing uses *realized* IBT from the conversion, not a preview)\\n4. taker-side tokenisation (IBT\\xe2\\x86\\x94PT+YT) if needed\\n5. settle makers (denomination-aware on payout-side), pay fees,\\nsweep residuals to receiver",
+      "name": "fill_orders",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "params",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "FillOrderParams"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "taker_input_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "taker_input_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "OrderResult"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Revoke `role` from `account`. Same auth model as `grant_role`.",
+      "name": "revoke_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel_order",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "order",
+          "type_": {
+            "udt": {
+              "name": "Order"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_fee_rate",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_registry",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Decoded view of an order's status.",
+      "name": "order_status",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "order",
+          "type_": {
+            "udt": {
+              "name": "Order"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "OrderStatus"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_fee_rate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_rate",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_registry",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "registry",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "`fee_rate` is 18-decimal (1e16 = 1%). Admin holds PAUSER + FEE_SETTER +\\nUPGRADE + REGISTRY. `registry` gates `register_order` / `fill_orders` on\\n`is_registered_pt`. The `fee_rate` range check is retained here.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_collector",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "registry",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "order_statuses",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "orders",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Order"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "OrderStatus"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "register_order",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "order",
+          "type_": {
+            "udt": {
+              "name": "Order"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "order_status_raw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "OrderStatus"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_fee_collector",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_fee_collector",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_collector",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "order_statuses_raw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "order_ids",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "option": {
+                "value_type": {
+                  "udt": {
+                    "name": "OrderStatus"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Batch-cancel orders for a single maker. All orders must share the same\\nmaker; the maker authorises once. See README for design rationale.",
+      "name": "cancel_orders_batch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "orders",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Order"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_secs_per_ledger",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_secs_per_ledger",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "secs",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer_admin_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accept_admin_transfer",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "register_orders_batch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "orders",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Order"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OrderFilled",
+      "prefix_topics": [
+        "order_filled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "actual_making",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OrderCancelled",
+      "prefix_topics": [
+        "order_cancelled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "maker",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RegistryChange",
+      "prefix_topics": [
+        "registry_change"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "previous",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OrderRegistered",
+      "prefix_topics": [
+        "order_registered"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "maker",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "making_amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FeeCollectorChange",
+      "prefix_topics": [
+        "fee_collector_change"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "previous",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LimitOrderFeeChange",
+      "prefix_topics": [
+        "limit_order_fee_change"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "previous",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new",
+          "type_": "i128",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LimitOrderEngineInitialized",
+      "prefix_topics": [
+        "limit_order_engine_initialized"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "fee_collector",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "fee_rate",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "registry",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Order",
+      "fields": [
+        {
+          "doc": "Order expiry \\xe2\\x80\\x94 unix seconds. Must satisfy `now < expiry <= pt.maturity`.",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "Slippage floor for the wrapper conversions, expressed as **output per\\ninput**: the minimum raw output-token amount per `1e18` raw input-token\\nunits. `0` disables the floor.\\n\\nThe engine applies it as `floor = amount * fail_safe_rate / 1e18` against\\nthe realized output of `deposit` / `redeem` (Underlying path), or passes\\nit natively as `min_shares` / `min_vault_shares` to `wrap_with_min_shares`\\n/ `unwrap_with_min_vault_shares` (VaultShare path).\\n\\nBeing raw-output-per-raw-input it carries the output token's decimals and\\nso implicitly encodes the underlying\\xe2\\x86\\x94IBT decimal gap \\xe2\\x80\\x94 set it to\\n`previewConversion(1e18)` of the order's conversion (`previewDeposit`\\nfunding, `previewRedeem` payout, wrap/unwrap preview for VaultShare). It\\nis *not* a decimal-agnostic value ratio: a gapped market holds a large\\nmarket-specific value (e.g. ~`1e30` for a value-preserving\\n6-dec-underlying / 18-dec-IBT deposit), not `~1e18`, and no decimal\\nrescaling is applied on-chain.",
+          "name": "fail_safe_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "Implied APY, 18-decimal fixed-point (1e18 = 100%). Used by the pricing\\nlibrary to compute spot + fee-adjusted prices.",
+          "name": "implied_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "maker",
+          "type_": "address"
+        },
+        {
+          "doc": "Denomination of the IBT leg. For IBT-funding order types (`IbtForPt`,\\n`IbtForYt`) governs what the maker deposits. For IBT-payout types\\n(`PtForIbt`, `YtForIbt`) governs what the maker receives. `Ibt` is the\\npassthrough; `Underlying` and `VaultShare` route through the IBT's\\n`SpectraFungibleVaultWrapper` surface and require `pt.get_ibt()` to\\nhost that wrapper.",
+          "name": "maker_token_type",
+          "type_": {
+            "udt": {
+              "name": "MakerTokenType"
+            }
+          }
+        },
+        {
+          "doc": "Total amount of the making token offered (token-decimals of the making side).",
+          "name": "making_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "order_type",
+          "type_": {
+            "udt": {
+              "name": "OrderType"
+            }
+          }
+        },
+        {
+          "doc": "PrincipalToken contract for which this order is placed.",
+          "name": "pt",
+          "type_": "address"
+        },
+        {
+          "doc": "Where the maker receives the taker's payment.",
+          "name": "receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "Disambiguates otherwise-identical orders (same maker/pt/amount/rate)",
+          "name": "salt",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Order direction. Solidity `OrderType` enum (ILimitOrderEngine.sol).\\n`#[contracttype]` unit-variant enums serialize as the variant name\\n(`Symbol`), so off-chain consumers see `\"IbtForPt\"` on the wire \\xe2\\x80\\x94 not a\\nnumeric discriminant. Cross-chain consumers must therefore match on the\\nvariant name, not on a numeric value shared with the Solidity enum.",
+      "lib": "",
+      "name": "OrderType",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "maker sells IBT, taker pays PT",
+            "name": "IbtForPt"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "maker sells PT, taker pays IBT",
+            "name": "PtForIbt"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "maker sells IBT, taker pays YT",
+            "name": "IbtForYt"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "maker sells YT, taker pays IBT",
+            "name": "YtForIbt"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Per-order fill outcome. `actual_taking` excludes the fee",
+      "lib": "",
+      "name": "OrderResult",
+      "fields": [
+        {
+          "doc": "",
+          "name": "actual_making",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "actual_taking",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Recorded state of a registered order. Existence in persistent storage\\nimplies \"registered\"; `remaining == 0` post-registration means cancelled\\nor fully filled.\\n**Raw encoding (Solidity-compatible sentinel)**: `remaining == 0` \\xe2\\x87\\x92 never\\nregistered (Solidity `_ORDER_DOES_NOT_EXIST`); `remaining == 1` \\xe2\\x87\\x92 cancelled\\nor fully filled (Solidity `_ORDER_FILLED`); `remaining > 1` \\xe2\\x87\\x92\\n`actual_remaining = remaining - 1`. Returned as-is by `order_status_raw`.\\n**Decoded encoding**: `order_status` / `order_statuses` apply `- 1` so\\n`remaining` is already the actual figure (0 = filled or cancelled).",
+      "lib": "",
+      "name": "OrderStatus",
+      "fields": [
+        {
+          "doc": "",
+          "name": "filled_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "remaining",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Denomination the maker funds (or receives, on payout-side) the IBT leg\\nin. Mirrors Solidity `MakerTokenType` from PR #22. `Ibt` is the no-conversion\\npath and equals `pt.get_ibt()` (whether or not that IBT is a Spectra wrapper).",
+      "lib": "",
+      "name": "MakerTokenType",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Ibt"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "VaultShare"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Underlying"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FillOrderParams",
+      "fields": [
+        {
+          "doc": "Amount of the making side the caller wants this order to provide.\\nEngine fills `min(making_amount, status.remaining)`.",
+          "name": "making_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_taking",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "order",
+          "type_": {
+            "udt": {
+              "name": "Order"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a role is granted.",
+      "lib": "",
+      "name": "RoleGranted",
+      "prefix_topics": [
+        "role_granted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a role is revoked.",
+      "lib": "",
+      "name": "RoleRevoked",
+      "prefix_topics": [
+        "role_revoked"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an admin transfer is completed.",
+      "lib": "",
+      "name": "AdminTransferCompleted",
+      "prefix_topics": [
+        "admin_transfer_completed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "previous_admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an admin transfer is initiated.",
+      "lib": "",
+      "name": "AdminTransferInitiated",
+      "prefix_topics": [
+        "admin_transfer_initiated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "current_admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the contract is paused.",
+      "lib": "",
+      "name": "Paused",
+      "prefix_topics": [
+        "paused"
+      ],
+      "params": [],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the contract is unpaused.",
+      "lib": "",
+      "name": "Unpaused",
+      "prefix_topics": [
+        "unpaused"
+      ],
+      "params": [],
+      "data_format": "map"
+    }
+  }
+]

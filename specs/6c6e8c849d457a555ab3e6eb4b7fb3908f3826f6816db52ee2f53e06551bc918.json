@@ -1,0 +1,57 @@
+[
+  {
+    "function_v0": {
+      "doc": "Read-only check to verify if `viewer` has purchased `article_id`.",
+      "name": "has_access",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "viewer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "article_id",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Unlocks content by transferring `price` XLM/token from `viewer` to `creator`\\nand saving the access record in persistent storage.",
+      "name": "unlock_content",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "viewer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "article_id",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

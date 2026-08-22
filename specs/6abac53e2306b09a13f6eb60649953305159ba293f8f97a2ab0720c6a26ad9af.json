@@ -1,0 +1,327 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "DocumentAlreadyExists",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "DocumentNotFound",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "NodeNotFound",
+          "value": 3
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Fetch a node's build-status record.",
+      "name": "get_node",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "doc_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "node_id",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "NodeRecord"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Doc",
+            "type_": [
+              "string"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Node",
+            "type_": [
+              "string",
+              "string"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "An anchored document: who owns it, its latest content hash, and version.",
+      "lib": "",
+      "name": "Document",
+      "fields": [
+        {
+          "doc": "",
+          "name": "content_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "node_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "updated_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Fetch a document's anchored state.",
+      "name": "get_document",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "doc_id",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Document"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Build-status record for a single mindmap node.",
+      "lib": "",
+      "name": "NodeRecord",
+      "fields": [
+        {
+          "doc": "",
+          "name": "artifact_ref",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "NodeStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "tool",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "updated_at",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Lifecycle of a mindmap node, from plan to verified deployment.",
+      "lib": "",
+      "name": "NodeStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Planned"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Building"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Built"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Verified"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Record or update the build status of a mindmap node.\\n`tool` is the builder used (e.g. \"n8n\"); `artifact_ref` points to the\\nbuilt artifact (workflow ID, URL, or hash). Owner-only.",
+      "name": "set_node_status",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "doc_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "node_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "NodeStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "tool",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "artifact_ref",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Anchor a new content hash after a semantic change in the source doc.\\nOnly the document owner may call. Returns the new version number.",
+      "name": "update_document",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "doc_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "new_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Anchor a new document. Fails if `doc_id` is already registered.\\nReturns the initial version (always 1).",
+      "name": "register_document",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "doc_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "content_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

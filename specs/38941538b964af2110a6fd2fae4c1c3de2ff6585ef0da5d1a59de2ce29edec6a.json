@@ -1,0 +1,960 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Drop",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "claimed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Pool",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount_per",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "claimed",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "remaining",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "slots",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyExists",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NothingHere",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "AlreadyClaimed",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "NotExpired",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "NotSender",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "BadInput",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "DropEmpty",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "AlreadyClaimedThis",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "Expired",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "Overflow",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "BadExpiry",
+          "value": 12
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Claim a one-to-one drop to the chosen `payout`. Submittable by ANYONE (a relayer paying\\nthe fee): the funds go ONLY to `payout`, and only if the link key signed exactly this\\n(contract, network, link, payout). No `require_auth` \\xe2\\x80\\x94 the Ed25519 signature IS the\\nauthorization, which is what makes it walletless + gasless.",
+      "name": "claim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "link",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payout",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sig",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Emergency brake: stops NEW escrow only (deposit/create_drop). Exits never pause.",
+      "name": "pause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sender locks `amount` USDC for whoever holds the link secret for `link` (its Ed25519\\npublic key). `expiry` is a unix timestamp; after it, an unclaimed drop is reclaimable.\\n\\nPause gates ONLY the two escrow-creating entrypoints (`deposit` + `create_drop`) \\xe2\\x80\\x94\\n`claim`/`claim_share`/`reclaim`/`reclaim_pool` are NEVER pausable, so every escrowed\\ndollar can always exit to its rightful owner in any state (invariant 14).",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "link",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "After expiry, the original sender reclaims an unclaimed drop (the 7-day safety net).",
+      "name": "reclaim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "link",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unpause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Swap the contract's wasm (storage is preserved; `DropEntry`/`PoolEntry` versioned enums\\nguarantee old records stay readable). Owner-gated; on mainnet the owner is a\\ntimelock+multisig, and this entrypoint is deleted entirely in the post-audit\\nimmutability upgrade.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_drop",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "link",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "Drop"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_pool",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "link",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "Pool"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ClaimEvent",
+      "prefix_topics": [
+        "claim"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "link",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "payout",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ShareEvent",
+      "prefix_topics": [
+        "share"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "link",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "payout",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "claimed",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_owner",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RepoolEvent",
+      "prefix_topics": [
+        "repool"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "link",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DepositEvent",
+      "prefix_topics": [
+        "deposit"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "link",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "NewPoolEvent",
+      "prefix_topics": [
+        "newpool"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "link",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "slots",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ReclaimEvent",
+      "prefix_topics": [
+        "reclaim"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "link",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Claim one share of a group pool to `payout`. Submittable by anyone (relayer). Each\\ndistinct payout may claim at most once; funds go only to the link-signed payout.",
+      "name": "claim_share",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "link",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payout",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sig",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Fund a pool of `slots` equal shares behind `link`. `amount` USDC is pulled from `from`;\\neach of the first `slots` distinct payouts claims `amount / slots`. Pause-gated like\\n`deposit` (new escrow only \\xe2\\x80\\x94 exits are never pausable, invariant 14).",
+      "name": "create_drop",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "link",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "slots",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "After expiry, the sender reclaims any unclaimed shares (and dust) of a pool.",
+      "name": "reclaim_pool",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "link",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deploy-time init: pin the ONE USDC SAC token this escrow escrows, and set the owner\\n(the upgrade/pause authority \\xe2\\x80\\x94 a timelock/multisig on mainnet; renounced to immutable\\nafter audit). The owner has NO path that moves escrowed funds (invariant 13).",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The EXACT bytes the link key must sign for a claim. Exposed as a view so the client can\\nbuild the identical message (or simulate this) \\xe2\\x80\\x94 signature parity is critical. Layout:\\ntag(1) ++ network_id(32) ++ contract_address_xdr ++ link_pubkey(32) ++ payout_xdr\\nBinding contract + network blocks cross-contract / cross-network replay.",
+      "name": "claim_message",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "kind",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "link",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payout",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bytes"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accept_ownership",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "renounce_ownership",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer_ownership",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RoleTransferError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NoPendingTransfer",
+          "value": 2200
+        },
+        {
+          "doc": "",
+          "name": "InvalidLiveUntilLedger",
+          "value": 2201
+        },
+        {
+          "doc": "",
+          "name": "InvalidPendingAccount",
+          "value": 2202
+        },
+        {
+          "doc": "",
+          "name": "TransferExpired",
+          "value": 2203
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OwnableError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "OwnerNotSet",
+          "value": 2100
+        },
+        {
+          "doc": "",
+          "name": "TransferInProgress",
+          "value": 2101
+        },
+        {
+          "doc": "",
+          "name": "OwnerAlreadySet",
+          "value": 2102
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an ownership transfer is initiated.",
+      "lib": "",
+      "name": "OwnershipTransfer",
+      "prefix_topics": [
+        "ownership_transfer"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when ownership is renounced.",
+      "lib": "",
+      "name": "OwnershipRenounced",
+      "prefix_topics": [
+        "ownership_renounced"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an ownership transfer is completed.",
+      "lib": "",
+      "name": "OwnershipTransferCompleted",
+      "prefix_topics": [
+        "ownership_transfer_completed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the contract is paused.",
+      "lib": "",
+      "name": "Paused",
+      "prefix_topics": [
+        "paused"
+      ],
+      "params": [],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the contract is unpaused.",
+      "lib": "",
+      "name": "Unpaused",
+      "prefix_topics": [
+        "unpaused"
+      ],
+      "params": [],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PausableError",
+      "cases": [
+        {
+          "doc": "The operation failed because the contract is paused.",
+          "name": "EnforcedPause",
+          "value": 1000
+        },
+        {
+          "doc": "The operation failed because the contract is not paused.",
+          "name": "ExpectedPause",
+          "value": 1001
+        }
+      ]
+    }
+  }
+]

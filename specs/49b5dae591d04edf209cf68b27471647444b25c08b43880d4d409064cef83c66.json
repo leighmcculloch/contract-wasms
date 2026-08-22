@@ -1,0 +1,688 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Car",
+      "fields": [
+        {
+          "doc": "",
+          "name": "daily_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "model",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "vin",
+          "type_": "string"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Lease",
+      "fields": [
+        {
+          "doc": "",
+          "name": "car_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "end_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "lessee",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "quoted_total",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "start_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "NextCarId"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "NextLeaseId"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalCars"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalLeases"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Car",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Lease",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "CurrentLeaseForCar",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "VinToCar",
+            "type_": [
+              "string"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CarAdded",
+      "prefix_topics": [
+        "car_added"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "car_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LeaseClosed",
+      "prefix_topics": [
+        "lease_closed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "lease_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CarLeaseError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "CarNotFound",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "LeaseNotFound",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "CarNotAvailable",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidLeasePeriod",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidDailyRate",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "NotCarOwner",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "NotLessee",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "LeaseNotRequested",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "LeaseNotApproved",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "LeaseCannotFinalizeYet",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "DuplicateVin",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "InvalidCarDetails",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "OwnerCannotLeaseOwnCar",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "ArithmeticOverflow",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "RequestExpired",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "InvalidPagination",
+          "value": 16
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LeaseApproved",
+      "prefix_topics": [
+        "lease_approved"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "lease_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "stats",
+      "inputs": [],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "u32",
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LeaseRequested",
+      "prefix_topics": [
+        "lease_requested"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "lease_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "car_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "lessee",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "quoted_total",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "List a vehicle that can be requested for a lease agreement.",
+      "name": "add_car",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "vin",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "model",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "daily_rate",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Car"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_car",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "car_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Car"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_lease",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "lease_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Lease"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Return a bounded page of cars. IDs are contiguous because cars are never deleted.",
+      "name": "list_cars",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "start_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "limit",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "Car"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "list_leases",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "start_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "limit",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "Lease"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Request a lease. This records mutually reviewable terms; it does not move funds.\\nThe owner must explicitly approve before the agreement becomes approved.",
+      "name": "request_lease",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "lessee",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "car_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "start_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "end_time",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Lease"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The requester can cancel their own pending request.",
+      "name": "cancel_request",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "lessee",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "lease_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Lease"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Permissionless cleanup after a request or approved lease reaches its time boundary.\\nPending requests become expired at start_time; approved leases complete at end_time.",
+      "name": "finalize_lease",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "lease_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Lease"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The owner can decline a pending request before it starts.",
+      "name": "reject_request",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "lease_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Lease"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The vehicle owner explicitly accepts the recorded lease terms.",
+      "name": "approve_request",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "lease_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Lease"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "car_status_label",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "status",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "lease_status_label",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "status",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "current_lease_for_car",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "car_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  }
+]

@@ -1,0 +1,106 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "VkParseError",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "ProofParseError",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "VerificationFailed",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "VkNotSet",
+          "value": 4
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Return the hash of the parsed verification key.",
+      "name": "vk_hash",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "bytes_n": {
+                "n": 32
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Verify an UltraHonk proof using the stored VK.",
+      "name": "verify_proof",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "public_inputs",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "proof_bytes",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initialize the on-chain VK once at deploy time.\\n\\n`vk_hash` is bb's own verification-key hash (it feeds the Fiat-Shamir\\ntranscript's first challenge). It is NOT a keccak of `vk_bytes` \\xe2\\x80\\x94 bb\\nderives it internally from the VK fields \\xe2\\x80\\x94 so it cannot be recomputed\\nhere. A mismatched pair fails closed (no proof verifies), but a\\ndeployer-supplied *consistent* pair for a different circuit would\\nverify that other circuit: deployment tooling MUST validate the pair\\nby verifying a known-good fixture proof against the freshly deployed\\ninstance before wiring it into the factory.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vk_bytes",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "vk_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

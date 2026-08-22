@@ -1,0 +1,957 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "NotAuthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "MarketNotFound",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidTimes",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "TradingLocked",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "TradingNotLocked",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "WrongState",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "TooEarlyToPropose",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "AlreadyProposed",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "NothingProposed",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "DisputeWindowOpen",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "DisputeWindowClosed",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "AlreadyDisputed",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "NotDisputed",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "NotResolved",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "NothingToClaim",
+          "value": 19
+        },
+        {
+          "doc": "",
+          "name": "SlippageExceeded",
+          "value": 20
+        },
+        {
+          "doc": "",
+          "name": "PositionCapExceeded",
+          "value": 21
+        },
+        {
+          "doc": "",
+          "name": "InsufficientShares",
+          "value": 22
+        },
+        {
+          "doc": "",
+          "name": "InsufficientLiquidity",
+          "value": 23
+        },
+        {
+          "doc": "",
+          "name": "BondTooSmall",
+          "value": 24
+        },
+        {
+          "doc": "",
+          "name": "FeeTooHigh",
+          "value": 25
+        },
+        {
+          "doc": "",
+          "name": "Overflow",
+          "value": 26
+        },
+        {
+          "doc": "",
+          "name": "SelfDispute",
+          "value": 27
+        },
+        {
+          "doc": "",
+          "name": "InvalidOutcome",
+          "value": 28
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Outcome",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Yes",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "No",
+          "value": 1
+        },
+        {
+          "doc": "Match cancelled / question unresolvable. Every share pays 0.5.",
+          "name": "Void",
+          "value": 2
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketState",
+      "cases": [
+        {
+          "doc": "Trading allowed until `lock_time` (enforced by time, not this flag).",
+          "name": "Open",
+          "value": 0
+        },
+        {
+          "doc": "An outcome has been proposed and its bond escrowed.",
+          "name": "Proposed",
+          "value": 1
+        },
+        {
+          "doc": "Proposal was disputed; only the arbiter can settle now.",
+          "name": "Disputed",
+          "value": 2
+        },
+        {
+          "doc": "Outcome is final. Claims are enabled.",
+          "name": "Resolved",
+          "value": 3
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Market",
+      "fields": [
+        {
+          "doc": "Required bond for propose() and dispute().",
+          "name": "bond",
+          "type_": "i128"
+        },
+        {
+          "doc": "Category tag, e.g. \"football\", \"cricket\", \"f1\". Sport-agnostic.",
+          "name": "category",
+          "type_": "symbol"
+        },
+        {
+          "doc": "Total collateral locked backing outstanding complete sets.",
+          "name": "collateral_locked",
+          "type_": "i128"
+        },
+        {
+          "doc": "Off-chain pointer (IPFS CID / URL hash) to full resolution criteria +\\nthe NAMED official data source. Judges will ask; put it on-chain.",
+          "name": "criteria_ref",
+          "type_": "string"
+        },
+        {
+          "doc": "Seconds after a proposal during which it can be disputed.",
+          "name": "dispute_window",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "disputer",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "Trading halts at this unix time (set BEFORE event start / info release).",
+          "name": "lock_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "Collateral owed to LPs from trading fees.",
+          "name": "lp_fees_accrued",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "no_reserve",
+          "type_": "i128"
+        },
+        {
+          "doc": "Encoded final Outcome; None until Resolved.",
+          "name": "outcome",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "Pool payout per LP-share numerator, fixed at resolution.",
+          "name": "pool_payout_total",
+          "type_": "i128"
+        },
+        {
+          "doc": "Max cumulative collateral a single address may spend buying into this\\nmarket. Part of the insider-trading mitigation. 0 = no cap.",
+          "name": "position_cap",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "proposal_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "Encoded Outcome (0=Yes,1=No,2=Void); None until proposed.\\nStored as u32 because Option<enum> lacks infallible ScVal conversion.",
+          "name": "proposed_outcome",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "proposer",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "Human-readable question, e.g. \"Will Team A beat Team B on 2026-07-10?\"",
+          "name": "question",
+          "type_": "string"
+        },
+        {
+          "doc": "Earliest time an outcome may be proposed (event end estimate).",
+          "name": "resolve_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "state",
+          "type_": {
+            "udt": {
+              "name": "MarketState"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "total_lp_shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "yes_reserve",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Position",
+      "fields": [
+        {
+          "doc": "",
+          "name": "no",
+          "type_": "i128"
+        },
+        {
+          "doc": "Cumulative collateral spent on buys (for position_cap enforcement).",
+          "name": "spent",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "yes",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Arbiter address. MUST be a Stellar account configured as a real\\nmultisig (e.g. 2-of-3 med_threshold) \\xe2\\x80\\x94 the contract only sees one\\nAddress and calls require_auth() on it; the M-of-N logic lives in\\nStellar's native signer weights.",
+            "name": "Arbiter"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "SEP-41 collateral token (USDC SAC).",
+            "name": "Token"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ProtocolFeeBps"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LpFeeBps"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MinBond"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MarketCount"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ProtocolFees"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Market",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Position",
+            "type_": [
+              "u64",
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "LpShares",
+            "type_": [
+              "u64",
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "arbiter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "protocol_fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "lp_fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "min_bond",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Emergency stop. Blocks NEW risk only \\xe2\\x80\\x94 never blocks exits (I6).",
+      "name": "set_paused",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Rotate the arbiter (e.g. new multisig account). Admin-gated.\\nNOTE (accepted risk, see review M-2): no timelock in hackathon scope.",
+      "name": "set_arbiter",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_arbiter",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_fees",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "protocol_fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "lp_fee_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "withdraw_protocol_fees",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Create a market and seed its AMM. Admin-gated in hackathon scope\\n(permissionless creation = spam + malicious-question risk; see L-1).\\nThe creator's `initial_liquidity` is split into equal YES/NO reserves\\n(starting price 0.50) and the creator receives LP shares, minus a\\nsmall permanently-locked amount (prevents full-drain / div-by-zero).",
+      "name": "create_market",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "question",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "category",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "criteria_ref",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "lock_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "resolve_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "dispute_window",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "position_cap",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "bond",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "initial_liquidity",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Add liquidity proportional to current reserves (Gnosis FPMM style):\\ndeposit `amount` collateral -> mint `amount` complete sets -> add the\\nproportional amounts to reserves -> refund the surplus outcome shares\\nto the LP as a position. LP shares minted pro-rata on the larger reserve.",
+      "name": "add_liquidity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Remove liquidity BEFORE resolution: burn LP shares, receive pro-rata\\nYES/NO shares from the reserves (NOT collateral \\xe2\\x80\\x94 the pool cannot know\\nfinal value yet). After resolution use `claim_lp` instead.",
+      "name": "remove_liquidity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "lp_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Buy YES (buy_yes=true) or NO shares with `amount_in` collateral.\\nFees are taken from the input. Reverts if output < `min_shares_out`\\n(caller-side slippage protection) or the position cap is exceeded.",
+      "name": "buy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "buy_yes",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_shares_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sell `shares_in` YES/NO shares back to the pool for collateral.\\nUses the closed-form FPMM sell: solve (y + s - x)(n - x) = y*n for x\\n(selling YES), pay x minus fees. Rounding favors the pool.",
+      "name": "sell",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sell_yes",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "shares_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_amount_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Propose an outcome after `resolve_time`, escrowing the market's bond.\\nAnyone can propose (permissionless) \\xe2\\x80\\x94 in practice Orakel's AI Result\\nAgent proposes first, but nothing on-chain privileges it.",
+      "name": "propose",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "proposer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Dispute an active proposal within the dispute window, escrowing an\\nequal bond. Escalates settlement to the arbiter multisig.",
+      "name": "dispute",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "disputer",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Permissionless finalize after an undisputed window. Returns the\\nproposer's bond and freezes the outcome. Callable even when paused (I6).",
+      "name": "finalize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Arbiter (2-of-3 multisig Stellar account) settles a disputed market.\\nWinner of the bond game gets their bond back + half the loser's bond;\\nthe other half accrues to the protocol (anti-collusion: disputing your\\nown proposal from a second wallet always loses you half a bond).\\nCallable even when paused (I6).",
+      "name": "arbiter_resolve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Redeem a resolved position. Yes/No pay 1 per winning share; Void pays\\n0.5 per share on BOTH sides (floor \\xe2\\x80\\x94 dust stays in the contract).\\nCallable even when paused (I6).",
+      "name": "claim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "LP redemption after resolution: pro-rata share of the pool's final\\nvalue (winning reserves valued at 1, plus accrued fees).\\nCallable even when paused (I6).",
+      "name": "claim_lp",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_market",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Market"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_user_position",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Position"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_user_lp",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Current implied YES probability in bps (0..10_000).",
+      "name": "yes_price_bps",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "market_count",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  }
+]

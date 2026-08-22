@@ -1,0 +1,183 @@
+[
+  {
+    "function_v0": {
+      "doc": "Execute one atomic cyclic arbitrage.\\n\\n* `profit_token` - the anchor asset that opens and closes the cycle\\n(normally native XLM's SAC). Principal is pulled from the admin and the\\nfull closing balance is returned to the admin.\\n* `amount_in`    - principal to pull from the admin.\\n* `min_profit`   - required surplus; the tx reverts unless the closing\\nbalance >= amount_in + min_profit.\\n* `hops`         - ordered venue swaps; each pulls its input from this\\ncontract and leaves its output here for the next hop.",
+      "name": "run",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "profit_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_profit",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "hops",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Hop"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "One-time: set the admin (the bot's Stellar account).",
+      "name": "init",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Recover stranded dust (drift surplus of any token) to the admin.",
+      "name": "sweep",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_addr",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Hop",
+      "fields": [
+        {
+          "doc": "Fully-formed swap arguments, built off-chain with THIS contract as the\\nfrom/to/recipient and the predicted amounts.",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        },
+        {
+          "doc": "Method to call on `target`, e.g. \"swap\" / \"swap_exact_tokens_for_tokens\".",
+          "name": "fn_name",
+          "type_": "symbol"
+        },
+        {
+          "doc": "Amount of `in_token` to pre-authorize for the pull (predicted).",
+          "name": "in_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "Token the venue will pull from this contract for this hop.",
+          "name": "in_token",
+          "type_": "address"
+        },
+        {
+          "doc": "Address the venue transfers `in_token` TO (the pool/pair) - the exact\\ndestination we must pre-authorize.",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "Venue contract to invoke (a router or a pool).",
+          "name": "target",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Unprofitable",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "NoHops",
+          "value": 4
+        }
+      ]
+    }
+  }
+]

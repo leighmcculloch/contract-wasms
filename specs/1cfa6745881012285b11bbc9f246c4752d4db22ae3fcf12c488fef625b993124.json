@@ -1,0 +1,353 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidPrice",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InsufficientInventory",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 4
+        },
+        {
+          "doc": "`buyback_price` is 0: the buyback window is closed.",
+          "name": "BuybackClosed",
+          "value": 5
+        },
+        {
+          "doc": "The contract does not hold enough of the payment asset to honour this\\nbuyback. Not a failure of the seller \\xe2\\x80\\x94 the window is simply underfunded.",
+          "name": "InsufficientBuybackFunds",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidFee",
+          "value": 7
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Buy `tres_amount` (share base units) at the current price. Returns the\\npayment cost in stroops. The buyer authorizes both this call and the\\npayment transfer out of their account.\\n\\nThe payment stays in this contract rather than going straight to the\\ntreasury: that balance is what the buyback draws on.",
+      "name": "buy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "buyer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tres_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sell `tres_amount` (share base units) back to the contract. Returns the\\npayment received, net of the fee. The seller authorizes both this call\\nand the share transfer out of their account.\\n\\nShares return to inventory and become sellable again. The fee goes to\\nthe treasury; the rest goes to the seller.",
+      "name": "sell",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "seller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tres_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "price",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Payment cost (stroops) to buy `tres_amount` share base units.",
+      "name": "quote",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "tres_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "fee_bps",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "treasury",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Shares still available for sale (contract balance, in base units).",
+      "name": "available",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin: update the sale price (payment-asset stroops per whole share).",
+      "name": "set_price",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "auto_allow",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Payment received (stroops) for selling `tres_amount` back, fee deducted.\\nThis is the authoritative number to show a seller.",
+      "name": "quote_sell",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "tres_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Payment asset held by the contract \\xe2\\x80\\x94 the buyback float.",
+      "name": "pay_balance",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin: update the buyback fee, in basis points (500 = 5%).",
+      "name": "set_fee_bps",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin: change where fees are sent.",
+      "name": "set_treasury",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin: withdraw sale proceeds. Whatever is left behind is what remains\\navailable for buybacks, so this is the lever that decides how much\\nliquidity the window offers.",
+      "name": "withdraw_pay",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Runs once at deploy.\\n\\n* `price` \\xe2\\x80\\x94 payment-asset stroops per one whole share.\\n* `buyback_price` \\xe2\\x80\\x94 same unit; `0` closes the buyback window.\\n* `fee_bps` \\xe2\\x80\\x94 fee taken on buybacks only, in basis points (500 = 5%).\\n* `auto_allow` \\xe2\\x80\\x94 whether to allowlist buyers on the token before\\ndelivering shares. Requires this contract to hold the token's `admin`\\nrole. Set it to `false` for a plain SAC, which has no allowlist.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tres_sac",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pay_sac",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "buyback_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "auto_allow",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "buyback_price",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin: recover unsold shares from the contract.",
+      "name": "withdraw_tres",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "How many share base units the contract can currently buy back, given its\\npayment-asset balance. `0` when the window is closed or unfunded.",
+      "name": "buyback_available",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin: update the buyback price. `0` closes the buyback window.",
+      "name": "set_buyback_price",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "buyback_price",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

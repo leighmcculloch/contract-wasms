@@ -1,0 +1,543 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_status",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Status"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "One-time setup. Zero category = block; zero band floor is allowed.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "max_per_call",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_per_day",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "category_daily",
+          "type_": {
+            "udt": {
+              "name": "CategoryLimits"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "liquid_low",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "liquid_high",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "auto_yield",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_limits",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "max_per_call",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_per_day",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Blocks `check_spend` only \\xe2\\x80\\x94 `set_paused` still works while paused.",
+      "name": "set_paused",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Enforce + record USDC spend (Hub converts XLM before calling).",
+      "name": "check_spend",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "category",
+          "type_": {
+            "udt": {
+              "name": "SpendCategory"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Liquid band + auto-yield (published for Hub; not enforced here).",
+      "name": "set_treasury_band",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "liquid_low",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "liquid_high",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "auto_yield",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Zero = block that category.",
+      "name": "set_category_limits",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "category_daily",
+          "type_": {
+            "udt": {
+              "name": "CategoryLimits"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 2
+        },
+        {
+          "doc": "Unused \\xe2\\x80\\x94 auth failures come from host `require_auth`. Kept for ABI.",
+          "name": "Unauthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidLimit",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "PerCallLimitExceeded",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "DailyLimitExceeded",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "NegativeAmount",
+          "value": 7
+        },
+        {
+          "doc": "Unused. Kept for ABI.",
+          "name": "NotAllowed",
+          "value": 8
+        },
+        {
+          "doc": "Legacy ring-buffer overflow. Kept for ABI.",
+          "name": "HistoryCapacityExceeded",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "CategoryDailyLimitExceeded",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "InvalidTreasuryBand",
+          "value": 11
+        },
+        {
+          "doc": "Legacy admin/subject experiment. Kept for ABI.",
+          "name": "InvalidRoles",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 13
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Status",
+      "fields": [
+        {
+          "doc": "",
+          "name": "auto_yield",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "daily_remaining",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "daily_spent",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "liquid_high",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "liquid_low",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_per_call",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_per_day",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "mpp",
+          "type_": {
+            "udt": {
+              "name": "CategoryStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "period_ledgers",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "transfer",
+          "type_": {
+            "udt": {
+              "name": "CategoryStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "x402",
+          "type_": {
+            "udt": {
+              "name": "CategoryStatus"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Policy",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PolicyState",
+      "fields": [
+        {
+          "doc": "",
+          "name": "auto_yield",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "buckets",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "SpendBucket"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "category_daily",
+          "type_": {
+            "udt": {
+              "name": "CategoryLimits"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "liquid_high",
+          "type_": "i128"
+        },
+        {
+          "doc": "Published Hub config (USDC stroops); not enforced on-chain.",
+          "name": "liquid_low",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_per_call",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_per_day",
+          "type_": "i128"
+        },
+        {
+          "doc": "Agent address (slot key); signs initialize, set_*, pause, check_spend.",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "period_ledgers",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SpendBucket",
+      "fields": [
+        {
+          "doc": "Absolute index = ledger_sequence / BUCKET_LEDGERS.",
+          "name": "index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "mpp",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "transfer",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "x402",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "Outbound agent spend (Hub Policy UI). Blend deposits are not capped here.",
+      "lib": "",
+      "name": "SpendCategory",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Transfer",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "X402",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Mpp",
+          "value": 2
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CategoryLimits",
+      "fields": [
+        {
+          "doc": "",
+          "name": "mpp",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "transfer",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "x402",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CategoryStatus",
+      "fields": [
+        {
+          "doc": "",
+          "name": "limit",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "remaining",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "spent",
+          "type_": "i128"
+        }
+      ]
+    }
+  }
+]

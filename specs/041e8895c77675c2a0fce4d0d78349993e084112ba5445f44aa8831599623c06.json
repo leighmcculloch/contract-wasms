@@ -1,0 +1,805 @@
+[
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Left",
+      "prefix_topics": [
+        "left"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidParams",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "CircleFull",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "AlreadyMember",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "NotMember",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "NotStarted",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "AlreadyStarted",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "AlreadyContributed",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "RoundIncomplete",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "NotRecipient",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "NotDefaulted",
+          "value": 12
+        },
+        {
+          "doc": "This round's recipient is exempt \\xe2\\x80\\x94 they receive the pot, so they don't\\ncontribute (and can't be slashed) this round.",
+          "name": "IsRecipient",
+          "value": 13
+        },
+        {
+          "doc": "The member's remaining collateral can't cover another missed\\ncontribution, so slashing would pay the pot out of *other* members'\\ncollateral. The circle is stuck and must be wound down instead.",
+          "name": "InsufficientCollateral",
+          "value": 14
+        },
+        {
+          "doc": "The circle is still running, so collateral is still at stake.",
+          "name": "NotWithdrawable",
+          "value": 15
+        },
+        {
+          "doc": "No collateral left to return (already withdrawn, or fully slashed).",
+          "name": "NothingToWithdraw",
+          "value": 16
+        },
+        {
+          "doc": "The round hasn't stalled long enough for a non-admin to wind the circle\\ndown.",
+          "name": "TimeoutNotReached",
+          "value": 17
+        },
+        {
+          "doc": "The circle is already Finished or Cancelled.",
+          "name": "AlreadyEnded",
+          "value": 18
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Joined",
+      "prefix_topics": [
+        "joined"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Config"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Members"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Round"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Pot"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Ledger at which the current round began, for the stall timeout.",
+            "name": "RoundStartedAt"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Whether `member` has contributed in a given `round`.",
+            "name": "Contributed",
+            "type_": [
+              "u32",
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Collateral still held for `member`. Posted on join, drawn down by\\n`slash`, and returned when the member exits.",
+            "name": "Collateral",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PaidOut",
+      "prefix_topics": [
+        "paid_out"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "round",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Slashed",
+      "prefix_topics": [
+        "slashed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "round",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Started",
+      "prefix_topics": [
+        "started"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "round",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Finished",
+      "prefix_topics": [
+        "finished"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "rounds",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Cancelled",
+      "prefix_topics": [
+        "cancelled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "round",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "True when a stalled round let a non-admin wind the circle down.",
+          "name": "by_timeout",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Join the circle (before it starts), posting collateral.",
+      "name": "join",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Contributed",
+      "prefix_topics": [
+        "contributed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "round",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CircleConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "collateral_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "contribution_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_members",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "reputation",
+          "type_": "address"
+        },
+        {
+          "doc": "How long a round may stall before anyone can wind the circle down. This\\nis the escape hatch: without it an absent admin, or a defaulter whose\\ncollateral is spent, would strand everyone's funds permanently.",
+          "name": "round_timeout_ledgers",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "CircleStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Where the circle is in its lifecycle. Collateral is only withdrawable once\\nthe circle has come to rest (`Finished` or `Cancelled`).",
+      "lib": "",
+      "name": "CircleStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Accepting members; nobody is committed yet, so joining is reversible.",
+            "name": "Open"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Rounds are running.",
+            "name": "Active"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Every member has received a payout.",
+            "name": "Finished"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Wound down before completing.",
+            "name": "Cancelled"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Leave a circle that hasn't started yet, taking the collateral back.\\nNothing is at stake before the first round, so this is unconditional \\xe2\\x80\\x94\\nmembers are never locked in by an admin who doesn't press start.",
+      "name": "leave",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin slashes a member who didn't contribute this round: their collateral\\ncovers the missed contribution and their reputation drops.",
+      "name": "slash",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Lock membership and begin round 1. Admin only.",
+      "name": "start",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Wind the circle down and release everyone's collateral.\\n\\nThe admin may do this at any time before the circle finishes. Anyone may\\ndo it once the current round has stalled past `round_timeout_ledgers` \\xe2\\x80\\x94\\nso an absent admin, or a defaulter whose collateral is spent and who can\\ntherefore no longer be slashed, can never strand the members' funds.\\n\\nThe current round is unwound: it never paid out, so contributions\\n(including those covered by a slash) go back to the contributors'\\ncollateral balances, ready to withdraw.",
+      "name": "cancel",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_pot",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_round",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Contribute the fixed amount for the current round. Rewards reputation.",
+      "name": "contribute",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_config",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "CircleConfig"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Create the circle. Called once (by the admin, or by the Factory on the\\nadmin's behalf).",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "reputation",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "contribution_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "collateral_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_members",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "round_timeout_ledgers",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Whether anyone (not just the admin) may now `cancel` this circle.",
+      "name": "is_stalled",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "bool",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_members",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The current round's recipient claims the pot, rotating to the next round.",
+      "name": "claim_payout",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CollateralWithdrawn",
+      "prefix_topics": [
+        "collateral_withdrawn"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The member who receives the pot in the given round.",
+      "name": "get_recipient",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "round",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Collateral still held for a member (posted on join, reduced by slashes).",
+      "name": "get_collateral",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "has_contributed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "round",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Take back whatever collateral is left once the circle has come to rest.",
+      "name": "withdraw_collateral",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Ledger at which the current round began, once the circle has started.",
+      "name": "get_round_started_at",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "u32"
+          }
+        }
+      ]
+    }
+  }
+]

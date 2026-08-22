@@ -1,0 +1,445 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotFound",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "AlreadyExists",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "Inactive",
+          "value": 8
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Agent",
+            "type_": [
+              "symbol"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Ids"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "View \\xe2\\x80\\x94 full agent record.",
+      "name": "get",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Agent"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "View \\xe2\\x80\\x94 admin that deployed / holds emergency control.",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "View \\xe2\\x80\\x94 all registered ids (capped: workspace agrees to bound registrations).",
+      "name": "list_ids",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "symbol"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "View \\xe2\\x80\\x94 owner address (used by PaymentEscrow.charge to resolve payout).",
+      "name": "owner_of",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Register a new agent. Owner-signed. Fails if id already exists.",
+      "name": "register",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "skills",
+          "type_": {
+            "vec": {
+              "element_type": "symbol"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Activate / deactivate. Owner-signed.",
+      "name": "set_active",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "active",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Update per-call price. Must be signed by the current owner.",
+      "name": "update_price",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "new_price",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "One-shot constructor set by Soroban at deploy time.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Registered agent in AgentRegistry.",
+      "lib": "",
+      "name": "Agent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "active",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "USDC price-per-call, stroops (7 decimals, Stellar convention).",
+          "name": "price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "registered_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "skills",
+          "type_": {
+            "vec": {
+              "element_type": "symbol"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Rating aggregate per agent in ReputationLedger.",
+      "lib": "",
+      "name": "Score",
+      "fields": [
+        {
+          "doc": "",
+          "name": "count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "sum",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Payment receipt produced by a successful `charge`.",
+      "lib": "",
+      "name": "Receipt",
+      "fields": [
+        {
+          "doc": "",
+          "name": "agent_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "auth_id",
+          "type_": {
+            "bytes_n": {
+              "n": 16
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "job_id",
+          "type_": {
+            "bytes_n": {
+              "n": 16
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "settled_at",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Write-once attestation per job in AttestationRegistry.",
+      "lib": "",
+      "name": "Attestation",
+      "fields": [
+        {
+          "doc": "",
+          "name": "agents",
+          "type_": {
+            "vec": {
+              "element_type": "symbol"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "intent_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "orchestrator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "receipts",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 16
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "sealed_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "total_spent",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Pre-authorization created by a payer; consumed by `charge`.",
+      "lib": "",
+      "name": "Authorization",
+      "fields": [
+        {
+          "doc": "",
+          "name": "agent_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "max_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "payer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "revoked",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "spent",
+          "type_": "i128"
+        }
+      ]
+    }
+  }
+]

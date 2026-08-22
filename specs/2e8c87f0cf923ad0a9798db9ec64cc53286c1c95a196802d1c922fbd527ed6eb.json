@@ -1,0 +1,1077 @@
+[
+  {
+    "function_v0": {
+      "doc": "Mints a new course certificate token and transfers it to the specified recipient.\\n\\nOnly addresses with the \"minter\" role can call this function. The minter creates\\na new sequential NFT token and assigns it to the provided address.\\n\\n# Arguments\\n* `e` - The Soroban environment\\n* `to` - The address that will receive the certificate token\\n* `caller` - The address attempting to mint (validated by #[only_role] macro)\\n\\n# Panics\\n- If the caller does not have the \"minter\" role\\n- If the mint operation fails in the underlying NFT implementation\\n```",
+      "name": "mint",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the token collection name.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.",
+      "name": "name",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the token collection symbol.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.",
+      "name": "symbol",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Gives permission to `approved` to transfer the token with `token_id` to\\nanother account. The approval is cleared when the token is\\ntransferred.\\n\\nOnly a single account can be approved at a time for a `token_id`.\\nTo remove an approval, the approver can approve their own address,\\neffectively removing the previous approved address. Alternatively,\\nsetting the `live_until_ledger` to `0` will also revoke the approval.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n* `approver` - The address of the approver (should be `owner` or\\n`operator`).\\n* `approved` - The address receiving the approval.\\n* `token_id` - Token ID as a number.\\n* `live_until_ledger` - The ledger number at which the allowance\\nexpires. If `live_until_ledger` is `0`, the approval is revoked.\\n\\n# Errors\\n\\n* [`NonFungibleTokenError::NonExistentToken`] - If the token does not\\nexist.\\n* [`NonFungibleTokenError::InvalidApprover`] - If the owner address is\\nnot the actual owner of the token.\\n* [`NonFungibleTokenError::InvalidLiveUntilLedger`] - If the ledge",
+      "name": "approve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "approver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "approved",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the number of tokens owned by `account`.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `account` - The address for which the balance is being queried.",
+      "name": "balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns `Some(index)` if the account has the specified role,\\nwhere `index` is the position of the account for that role,\\nand can be used to query [`AccessControl::get_role_member()`].\\nReturns `None` if the account does not have the specified role.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n* `account` - The account to check.\\n* `role` - The role to check for.",
+      "name": "has_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "u32"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the owner of the token with `token_id`.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `token_id` - Token ID as a number.\\n\\n# Errors\\n\\n* [`NonFungibleTokenError::NonExistentToken`] - If the token does not\\nexist.",
+      "name": "owner_of",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Transfers the token with `token_id` from `from` to `to`.\\n\\nWARNING: Confirmation that the recipient is capable of receiving the\\n`Non-Fungible` is the caller's responsibility; otherwise the NFT may be\\npermanently lost.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `from` - Account of the sender.\\n* `to` - Account of the recipient.\\n* `token_id` - Token ID as a number.\\n\\n# Errors\\n\\n* [`NonFungibleTokenError::IncorrectOwner`] - If the current owner\\n(before calling this function) is not `from`.\\n* [`NonFungibleTokenError::NonExistentToken`] - If the token does not\\nexist.\\n\\n# Events\\n\\n* topics - `[\"transfer\", from: Address, to: Address]`\\n* data - `[token_id: u32]`",
+      "name": "transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the admin account.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "token_uri",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Grants a role to an account.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n* `account` - The account to grant the role to.\\n* `role` - The role to grant.\\n* `caller` - The address of the caller, must be the admin or have the\\n`RoleAdmin` for the `role`.\\n\\n# Errors\\n\\n* [`AccessControlError::Unauthorized`] - If the caller does not have\\nenough privileges.\\n* [`AccessControlError::MaxRolesExceeded`] - If adding a new role would\\nexceed the maximum allowed number of roles.\\n\\n# Events\\n\\n* topics - `[\"role_granted\", role: Symbol, account: Address]`\\n* data - `[caller: Address]`",
+      "name": "grant_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Grants or updates the \"minter\" role to a new address.\\n\\nOnly the admin address can call this function. This allows the admin to\\nauthorize additional addresses to mint certificate tokens.\\n\\n# Arguments\\n* `e` - The Soroban environment\\n* `new_minter` - The address that will gain the \"minter\" role\\n* `caller` - The address attempting to set minter (validated by #[only_role] macro)\\n\\n# Panics\\nIf the caller does not have the \"admin\" role",
+      "name": "set_minter",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_minter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Revokes a role from an account.\\nTo revoke the caller's own role, use\\n[`AccessControl::renounce_role()`] instead.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n* `account` - The account to revoke the role from.\\n* `role` - The role to revoke.\\n* `caller` - The address of the caller, must be the admin or has the\\n`RoleAdmin` for the `role`.\\n\\n# Errors\\n\\n* [`AccessControlError::Unauthorized`] - If the `caller` does not have\\nenough privileges.\\n* [`AccessControlError::RoleNotHeld`] - If the `account` doesn't have\\nthe role.\\n* [`AccessControlError::RoleIsEmpty`] - If the role has no members.\\n\\n# Events\\n\\n* topics - `[\"role_revoked\", role: Symbol, account: Address]`\\n* data - `[caller: Address]`",
+      "name": "revoke_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Called by the pending new admin to accept the transfer and become admin.",
+      "name": "accept_admin",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the account approved for the token with `token_id`.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `token_id` - Token ID as a number.\\n\\n# Errors\\n\\n* [`NonFungibleTokenError::NonExistentToken`] - If the token does not\\nexist.",
+      "name": "get_approved",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the `token_id` at a given `index` in the global token list.\\nUse along with [`NonFungibleEnumerable::total_supply`] to enumerate\\nall the tokens in the contract.\\n\\nA function to get all tokens of a contract is not provided because that\\nwould be unbounded. To enumerate all tokens of a contract, use\\n[`NonFungibleEnumerable::total_supply`] to get the total number of\\ntokens and then use [`NonFungibleEnumerable::get_token_id`] to retrieve\\neach token one by one.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `index` - Index of the token in the global list.\\n\\n# Errors\\n\\n* [`crate::non_fungible::NonFungibleTokenError::TokenNotFoundInGlobalList`] - When the token\\nID is not found in the global enumeration.",
+      "name": "get_token_id",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the total amount of tokens stored by the contract.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.",
+      "name": "total_supply",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initializes the course certificate contract with admin and minter roles.\\n\\n# Arguments\\n* `e` - The Soroban environment\\n* `admin` - Address with administrative privileges (can manage roles and metadata)\\n* `minter` - Address authorized to mint new certificate tokens\\n\\n# Panics\\nThis function will panic if `admin` or `minter` addresses are invalid\\n```",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "minter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "uri",
+          "type_": "string"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Allows an account to renounce a role assigned to itself.\\nUsers can only renounce roles for their own account.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n* `role` - The role to renounce.\\n* `caller` - The address of the caller, must be the account that has the\\nrole.\\n\\n# Errors\\n\\n* [`AccessControlError::RoleNotHeld`] - If the `caller` doesn't have the\\nrole.\\n* [`AccessControlError::RoleIsEmpty`] - If the role has no members.\\n\\n# Events\\n\\n* topics - `[\"role_revoked\", role: Symbol, account: Address]`\\n* data - `[caller: Address]`",
+      "name": "renounce_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Updates the token URI (metadata location) for all tokens in the contract.\\n\\nOnly the admin address can call this function. The URI typically points to\\na JSON metadata file describing the certificate.\\n\\n# Arguments\\n* `e` - The Soroban environment\\n* `new_uri` - The new URI string (typically HTTPS URL)\\n* `caller` - The address attempting to update (validated by #[only_role] macro)\\n\\n# Panics\\nIf the caller does not have the \"admin\" role\\n\\n```\\n",
+      "name": "set_token_uri",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "uri",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Transfers the token with `token_id` from `from` to `to` by using\\n`spender`s approval.\\n\\nUnlike `transfer()`, which is used when the token owner initiates the\\ntransfer, `transfer_from()` allows an approved third party\\n(`spender`) to transfer the token on behalf of the owner. This\\nfunction verifies that `spender` has the necessary approval.\\n\\nWARNING: Confirmation that the recipient is capable of receiving the\\n`Non-Fungible` is the caller's responsibility; otherwise the NFT may be\\npermanently lost.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `spender` - The address authorizing the transfer.\\n* `from` - Account of the sender.\\n* `to` - Account of the recipient.\\n* `token_id` - Token ID as a number.\\n\\n# Errors\\n\\n* [`NonFungibleTokenError::IncorrectOwner`] - If the current owner\\n(before calling this function) is not `from`.\\n* [`NonFungibleTokenError::InsufficientApproval`] - If the spender does\\nnot have a valid approval.\\n* [`NonFungibleTokenError::NonExistentToken`] - If the token does not\\nexist.\\n\\n# Events",
+      "name": "transfer_from",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the admin role for a specific role.\\nIf no admin role is explicitly set, returns `None`.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n* `role` - The role to query the admin role for.",
+      "name": "get_role_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "symbol"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Allows the current admin to renounce their role, making the contract\\npermanently admin-less. This is useful for decentralization purposes\\nor when the admin role is no longer needed. Once the admin is\\nrenounced, it cannot be reinstated.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n\\n# Errors\\n\\n* [`AccessControlError::AdminNotSet`] - If no admin account is set.\\n\\n# Events\\n\\n* topics - `[\"admin_renounced\", admin: Address]`\\n* data - `[]`\\n\\n# Notes\\n\\n* Authorization for the current admin is required.",
+      "name": "renounce_admin",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sets `admin_role` as the admin role of `role`.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n* `role` - The role to set the admin for.\\n* `admin_role` - The new admin role.\\n\\n# Events\\n\\n* topics - `[\"role_admin_changed\", role: Symbol]`\\n* data - `[previous_admin_role: Symbol, new_admin_role: Symbol]`\\n\\n# Errors\\n\\n* [`AccessControlError::AdminNotSet`] - If admin account is not set.\\n\\n# Notes\\n\\n* Authorization for the current admin is required.",
+      "name": "set_role_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "admin_role",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin initiates a transfer of admin rights to `new_admin`.\\n`new_admin` must call `accept_admin` to complete the transfer.",
+      "name": "transfer_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Approve or remove `operator` as an operator for the owner.\\n\\nOperators can call `transfer_from()` for any token held by `owner`,\\nand call `approve()` on behalf of `owner`.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n* `owner` - The address holding the tokens.\\n* `operator` - Account to add to the set of authorized operators.\\n* `live_until_ledger` - The ledger number at which the allowance\\nexpires. If `live_until_ledger` is `0`, the approval is revoked.\\n\\n# Errors\\n\\n* [`NonFungibleTokenError::InvalidLiveUntilLedger`] - If the ledger\\nnumber is less than the current ledger number.\\n\\n# Events\\n\\n* topics - `[\"approve_for_all\", from: Address]`\\n* data - `[operator: Address, live_until_ledger: u32]`",
+      "name": "approve_for_all",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the account at the specified index for a given role.\\n\\nA function to get all members of a role is not provided because that\\nwould be unbounded. To enumerate all members of a role, use\\n[`AccessControl::get_role_member_count()`] to get the total number of\\nmembers and then use [`AccessControl::get_role_member()`] to retrieve\\neach member one by one.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n* `role` - The role to query.\\n* `index` - The index of the account to retrieve.\\n\\n# Errors\\n\\n* [`AccessControlError::IndexOutOfBounds`] - If the index is out of\\nbounds for the role's member list.",
+      "name": "get_role_member",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns a vector containing all existing roles.\\nDefaults to empty vector if no roles exist.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n\\n# Notes\\n\\nThis function returns all roles that currently have at least one member.\\nThe maximum number of roles is limited by [`MAX_ROLES`].",
+      "name": "get_existing_roles",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "symbol"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the `token_id` owned by `owner` at a given `index` in the\\nowner's local list. Use along with\\n[`crate::non_fungible::NonFungibleToken::balance`] to enumerate all of\\n`owner`'s tokens.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `owner` - Account of the token's owner.\\n* `index` - Index of the token in the owner's local list.\\n\\n# Errors\\n\\n* [`crate::non_fungible::NonFungibleTokenError::TokenNotFoundInOwnerList`] - When the token\\nID is not found in the owner's enumeration.",
+      "name": "get_owner_token_id",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns whether the `operator` is allowed to manage all the assets of\\n`owner`.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `owner` - Account of the token's owner.\\n* `operator` - Account to be checked.",
+      "name": "is_approved_for_all",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initiates the admin role transfer.\\nAdmin privileges for the current admin are not revoked until the\\nrecipient accepts the transfer.\\nOverrides the previous pending transfer if there is one.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n* `new_admin` - The account to transfer the admin privileges to.\\n* `live_until_ledger` - The ledger number at which the pending transfer\\nexpires. If `live_until_ledger` is `0`, the pending transfer is\\ncancelled. `live_until_ledger` argument is implicitly bounded by the\\nmaximum allowed TTL extension for a temporary storage entry and\\nspecifying a higher value will cause the code to panic.\\n\\n# Errors\\n\\n* [`crate::role_transfer::RoleTransferError::NoPendingTransfer`] - If\\ntrying to cancel a transfer that doesn't exist.\\n* [`crate::role_transfer::RoleTransferError::InvalidLiveUntilLedger`] -\\nIf the specified ledger is in the past.\\n* [`crate::role_transfer::RoleTransferError::InvalidPendingAccount`] -\\nIf the specified pending account is not the same as the provided `new`\\naddress.\\n",
+      "name": "transfer_admin_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Completes the 2-step admin transfer.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n\\n# Events\\n\\n* topics - `[\"admin_transfer_completed\", new_admin: Address]`\\n* data - `[previous_admin: Address]`\\n\\n# Errors\\n\\n* [`crate::role_transfer::RoleTransferError::NoPendingTransfer`] - If\\nthere is no pending transfer to accept.\\n* [`AccessControlError::AdminNotSet`] - If admin account is not set.",
+      "name": "accept_admin_transfer",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the total number of accounts that have the specified role.\\nIf the role does not exist, returns 0.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n* `role` - The role to get the count for.",
+      "name": "get_role_member_count",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RoleTransferError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NoPendingTransfer",
+          "value": 2200
+        },
+        {
+          "doc": "",
+          "name": "InvalidLiveUntilLedger",
+          "value": 2201
+        },
+        {
+          "doc": "",
+          "name": "InvalidPendingAccount",
+          "value": 2202
+        },
+        {
+          "doc": "",
+          "name": "TransferExpired",
+          "value": 2203
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a role is granted.",
+      "lib": "",
+      "name": "RoleGranted",
+      "prefix_topics": [
+        "role_granted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a role is revoked.",
+      "lib": "",
+      "name": "RoleRevoked",
+      "prefix_topics": [
+        "role_revoked"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the admin role is renounced.",
+      "lib": "",
+      "name": "AdminRenounced",
+      "prefix_topics": [
+        "admin_renounced"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a role admin is changed.",
+      "lib": "",
+      "name": "RoleAdminChanged",
+      "prefix_topics": [
+        "role_admin_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "previous_admin_role",
+          "type_": "symbol",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_admin_role",
+          "type_": "symbol",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccessControlError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 2000
+        },
+        {
+          "doc": "",
+          "name": "AdminNotSet",
+          "value": 2001
+        },
+        {
+          "doc": "",
+          "name": "IndexOutOfBounds",
+          "value": 2002
+        },
+        {
+          "doc": "",
+          "name": "AdminRoleNotFound",
+          "value": 2003
+        },
+        {
+          "doc": "",
+          "name": "RoleCountIsNotZero",
+          "value": 2004
+        },
+        {
+          "doc": "",
+          "name": "RoleNotFound",
+          "value": 2005
+        },
+        {
+          "doc": "",
+          "name": "AdminAlreadySet",
+          "value": 2006
+        },
+        {
+          "doc": "",
+          "name": "RoleNotHeld",
+          "value": 2007
+        },
+        {
+          "doc": "",
+          "name": "RoleIsEmpty",
+          "value": 2008
+        },
+        {
+          "doc": "",
+          "name": "TransferInProgress",
+          "value": 2009
+        },
+        {
+          "doc": "",
+          "name": "MaxRolesExceeded",
+          "value": 2010
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an admin transfer is completed.",
+      "lib": "",
+      "name": "AdminTransferCompleted",
+      "prefix_topics": [
+        "admin_transfer_completed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "previous_admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an admin transfer is initiated.",
+      "lib": "",
+      "name": "AdminTransferInitiated",
+      "prefix_topics": [
+        "admin_transfer_initiated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "current_admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a token is minted.",
+      "lib": "",
+      "name": "Mint",
+      "prefix_topics": [
+        "mint"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an approval is granted.",
+      "lib": "",
+      "name": "Approve",
+      "prefix_topics": [
+        "approve"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "approver",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "approved",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a token is transferred.",
+      "lib": "",
+      "name": "Transfer",
+      "prefix_topics": [
+        "transfer"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when approval for all tokens is granted.",
+      "lib": "",
+      "name": "ApproveForAll",
+      "prefix_topics": [
+        "approve_for_all"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "NonFungibleTokenError",
+      "cases": [
+        {
+          "doc": "Indicates a non-existent `token_id`.",
+          "name": "NonExistentToken",
+          "value": 200
+        },
+        {
+          "doc": "Indicates an error related to the ownership over a particular token.\\nUsed in transfers.",
+          "name": "IncorrectOwner",
+          "value": 201
+        },
+        {
+          "doc": "Indicates a failure with the `operator`s approval. Used in transfers.",
+          "name": "InsufficientApproval",
+          "value": 202
+        },
+        {
+          "doc": "Indicates a failure with the `approver` of a token to be approved. Used\\nin approvals.",
+          "name": "InvalidApprover",
+          "value": 203
+        },
+        {
+          "doc": "Indicates an invalid value for `live_until_ledger` when setting\\napprovals.",
+          "name": "InvalidLiveUntilLedger",
+          "value": 204
+        },
+        {
+          "doc": "Indicates overflow when adding two values",
+          "name": "MathOverflow",
+          "value": 205
+        },
+        {
+          "doc": "Indicates all possible `token_id`s are already in use.",
+          "name": "TokenIDsAreDepleted",
+          "value": 206
+        },
+        {
+          "doc": "Indicates an invalid amount to batch mint in `consecutive` extension.",
+          "name": "InvalidAmount",
+          "value": 207
+        },
+        {
+          "doc": "Indicates the token does not exist in owner's list.",
+          "name": "TokenNotFoundInOwnerList",
+          "value": 208
+        },
+        {
+          "doc": "Indicates the token does not exist in global list.",
+          "name": "TokenNotFoundInGlobalList",
+          "value": 209
+        },
+        {
+          "doc": "Indicates access to unset metadata.",
+          "name": "UnsetMetadata",
+          "value": 210
+        },
+        {
+          "doc": "Indicates the length of the base URI exceeds the maximum allowed.",
+          "name": "BaseUriMaxLenExceeded",
+          "value": 211
+        },
+        {
+          "doc": "Indicates the royalty amount is higher than 10_000 (100%) basis points.",
+          "name": "InvalidRoyaltyAmount",
+          "value": 212
+        },
+        {
+          "doc": "Indicates the length of the name exceeds the maximum allowed.",
+          "name": "NameMaxLenExceeded",
+          "value": 213
+        },
+        {
+          "doc": "Indicates the length of the symbol exceeds the maximum allowed.",
+          "name": "SymbolMaxLenExceeded",
+          "value": 214
+        }
+      ]
+    }
+  }
+]

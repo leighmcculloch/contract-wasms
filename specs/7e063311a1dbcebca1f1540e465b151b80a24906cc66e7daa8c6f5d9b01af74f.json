@@ -1,0 +1,400 @@
+[
+  {
+    "function_v0": {
+      "doc": "Emit one canary packet.\\n\\n`max_fee` is a hard ceiling in stroops. Passing 0 disables the check, which\\nis deliberately not the default in the runner: an unattended hourly job with\\nno ceiling is an unbounded standing authorisation against the submitter.\\n\\nFEE MECHANICS \\xe2\\x80\\x94 the thing that is not in any Stellar OApp doc.\\n`EndpointV2::send` does NOT pull the fee from the sender. `pay_messaging_fees`\\nreads `native_token.balance(<endpoint>)` \\xe2\\x80\\x94 the ENDPOINT's own balance \\xe2\\x80\\x94 and\\npays each worker out of it, refunding whatever is left to `refund_address`.\\nSo the OApp must PUSH the fee to the endpoint *before* calling `send`;\\nholding the balance itself yields `EndpointError::InsufficientNativeFee` (#6)\\nno matter how rich the OApp is. The endpoint's own source says it in one line\\nand nowhere else: \"OApp sender needs to transfer the fees to the endpoint\\nbefore sending the message\".\\n\\nThe transfer is a direct call from this contract to the native SAC, so\\n`from.require_auth()` inside the token is satisfied by the direct-invo",
+      "name": "ping",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dst_eid",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "payload",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "options",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "max_fee",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "runs",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Quote a loopback packet without sending. Used by the runner to enforce a\\nspend ceiling before committing, so a price-feed excursion cannot silently\\ndrain the submitter.",
+      "name": "quote",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dst_eid",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "payload",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "options",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "MessagingFee"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "p_auth",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "p_noop",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "p_bytes",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "b",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Endpoint"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Runs"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Configure this OApp's own security stack on the endpoint.\\n\\nThis exists because an OApp that cannot configure itself is unusable on\\nStellar. The default send/receive configs point at DVNs with no `dst_config`\\n(and on mainnet, at the zero-address \"Dead DVN\"), so every OApp MUST set a\\ncustom config \\xe2\\x80\\x94 and `endpoint.set_config(caller, oapp, ...)` requires\\n`caller` to be authorised for `oapp`.\\n\\nPassing the contract itself as BOTH `caller` and `oapp` sidesteps the\\ndelegate mechanism entirely: a contract is inherently authorised over its\\nown configuration, so no `set_delegate` round trip is needed. The admin\\ngate here is what stops anyone else driving it.\\n\\n`config_type`: 2 = CONFIG_TYPE_SEND_ULN, 3 = CONFIG_TYPE_RECEIVE_ULN.",
+      "name": "configure",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "lib",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "eid",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "config_type",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "config",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Receiving side. A loopback packet is never executed \\xe2\\x80\\x94 we need `packet_sent`\\nand the resulting attestation, not delivery \\xe2\\x80\\x94 so this exists only so the\\ncontract presents a complete OApp surface if anything ever does deliver.",
+      "name": "lz_receive",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "guid",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "message",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CanaryError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialised",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "FeeAboveCeiling",
+          "value": 2
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "configure() minus require_auth, to test whether the auth call is the fault.",
+      "name": "p_cfg_noauth",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "lib",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "eid",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "config_type",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "config",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MessagingFee",
+      "fields": [
+        {
+          "doc": "",
+          "name": "native_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "zro_fee",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "endpoint",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Endpoint `set_config` parameter. Fields are already alphabetical, which is the\\norder `#[contracttype]` emits regardless of declaration order.",
+      "lib": "",
+      "name": "SetConfigParam",
+      "fields": [
+        {
+          "doc": "",
+          "name": "config",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "config_type",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "eid",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Mirrors the deployed EndpointV2 ABI. `#[contracttype]` sorts fields\\nalphabetically at codegen, and the endpoint's own declaration is already in\\nalphabetical order, so the XDR maps match. Reordering these breaks the call\\nsilently \\xe2\\x80\\x94 the map keys, not the positions, are what bind.",
+      "lib": "",
+      "name": "MessagingParams",
+      "fields": [
+        {
+          "doc": "",
+          "name": "dst_eid",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "message",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "options",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "pay_in_zro",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "endpoint_address",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MessagingReceipt",
+      "fields": [
+        {
+          "doc": "",
+          "name": "fee",
+          "type_": {
+            "udt": {
+              "name": "MessagingFee"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "guid",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "nonce",
+          "type_": "u64"
+        }
+      ]
+    }
+  }
+]

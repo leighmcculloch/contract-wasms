@@ -1,0 +1,522 @@
+[
+  {
+    "function_v0": {
+      "doc": "Public burn (spec-03 \\xc2\\xa73.5). Settles yield via\\n`pt.update_yield(caller, pre_burn_balance)` before burning. Panics with\\nFungibleTokenError::InsufficientBalance if expired and amount != 0.\\n`Base::burn` handles `caller.require_auth()` internally.",
+      "name": "burn",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "PT-only: mint YT to `to` (spec-03 \\xc2\\xa73.4).",
+      "name": "mint",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "name",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_pt",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "symbol",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "approve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns 0 after expiry (YT becomes worthless at maturity).\\nUse [`actual_balance_of`] to query the real stored balance.",
+      "name": "balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unpause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "PT-only: upgrade YT's WASM. Mirrors the `pause`/`unpause` gating\\npattern \\xe2\\x80\\x94 PT is the policy authority for YT, so YT instances roll\\nforward only when PT (whose admin holds UPGRADE_ROLE) drives the\\nupgrade. Uses Soroban's native `update_current_contract_wasm` (no\\nproxy/beacon).\\n\\nIntentionally not `#[when_not_paused]`: a paused YT must remain\\nupgradeable so PT's admin can patch out the bug that caused the\\npause. Trades a small \"upgrade hides a paused state\" surface for\\nbeing able to recover an otherwise wedged contract.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "decimals",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Panics with InsufficientBalance if expired and amount != 0. Reads\\npre-transfer balances and pushes them into\\n`pt.before_yt_transfer(from, to, from_bal, to_bal)` so yield is settled\\non pre-transfer state (spec-04 \\xc2\\xa717.1).",
+      "name": "transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "muxed_address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Panics with InsufficientBalance post-expiry. Mirrors the post-expiry\\nreverts on `transfer`/`transfer_from`/`burn`: once YT is expired the\\nallowance is unspendable, so the query is hardened to fail loudly\\ninstead of returning a stale non-zero value (Solidity returns the\\nraw value but its `transferFrom` reverts, making the allowance\\neffectively dead \\xe2\\x80\\x94 same outcome, surfaced earlier here).",
+      "name": "allowance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "`decimals` and `maturity` are passed by PT (it already has both)\\ninstead of YT calling `pt.decimals()` / `pt.maturity()`. At init time,\\nPT is on the call stack (since PT deploys+inits YT), so a YT\\xe2\\x86\\x92PT\\ncross-call would hit the Soroban host reentrancy guard. Same pattern\\nas `before_yt_transfer` in spec-04 \\xc2\\xa717.1.\\n\\nCaching `maturity` (immutable in PT) also decouples YT's liveness\\nfrom PT's instance TTL \\xe2\\x80\\x94 a YT read no longer requires PT to be\\nalive in storage.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "symbol",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "decimals",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "maturity",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "pt",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns 0 after expiry.",
+      "name": "total_supply",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer_from",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the actual stored balance, ignoring maturity (spec-03 \\xc2\\xa73.6).\\nUsed by PT for yield accounting.",
+      "name": "actual_balance_of",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "PT-only: burn `amount` from `owner` without calling update_yield\\n(spec-03 \\xc2\\xa73.4). PT is responsible for settling yield before calling.\\nIf `spender != owner`, spends spender's allowance from owner.\\n\\n# Auth invariant\\n\\nGated by `pt.require_auth()`. When `owner == spender`, the inner\\n`Base::burn` skips its allowance/auth bookkeeping because PT is\\nexpected to have already obtained `owner`'s consent on the PT\\nside before reaching this branch:\\n\\n- Self-redeem / self-withdraw: PT's entrypoint sees\\n`caller.require_auth()` against `owner` before issuing the YT burn.\\n- Behalf-of via approval: PT consumes a PT-side allowance via\\n`Base::burn_from` on the PT shares before the YT burn.\\n\\nCallers (PT only) MUST preserve this invariant on every code path\\nthat lands here; otherwise PT can burn arbitrary YT balances for\\nany holder.",
+      "name": "burn_without_yield_update",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the contract is paused.",
+      "lib": "",
+      "name": "Paused",
+      "prefix_topics": [
+        "paused"
+      ],
+      "params": [],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the contract is unpaused.",
+      "lib": "",
+      "name": "Unpaused",
+      "prefix_topics": [
+        "unpaused"
+      ],
+      "params": [],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when tokens are burned.",
+      "lib": "",
+      "name": "Burn",
+      "prefix_topics": [
+        "burn"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when tokens are minted.",
+      "lib": "",
+      "name": "Mint",
+      "prefix_topics": [
+        "mint"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an allowance is approved.",
+      "lib": "",
+      "name": "Approve",
+      "prefix_topics": [
+        "approve"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when tokens are transferred between addresses without a\\nmuxed destination.\\n\\nPer SEP-41, the event data is a bare `i128` when no muxed address is\\ninvolved. The `data_format = \"single-value\"` attribute ensures the\\n`amount` field is serialized as a bare value rather than a map.",
+      "lib": "",
+      "name": "Transfer",
+      "prefix_topics": [
+        "transfer"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when tokens are transferred to a muxed address.\\n\\nPer SEP-41, when the destination is a [`MuxedAddress`] the event data\\ncarries both the amount and the muxed identifier so that off-chain\\nconsumers can attribute the transfer to the correct sub-account.\\n\\nUses `topics = [\"transfer\"]` so that both [`Transfer`] and\\n[`MuxedTransfer`] share the same `\"transfer\"` event symbol, as required\\nby SEP-41.",
+      "lib": "",
+      "name": "MuxedTransfer",
+      "prefix_topics": [
+        "transfer"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "to_muxed_id",
+          "type_": {
+            "option": {
+              "value_type": "u64"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  }
+]

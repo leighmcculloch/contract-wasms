@@ -1,0 +1,737 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidMaturity",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidScalarRoot",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidAnchor",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidFee",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidTwapWindow",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "MarketNotSeeded",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "MarketMatured",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "SlippageExceeded",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "InsufficientLiquidity",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "MathOverflow",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "MarketProportionTooHigh",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "ExchangeRateBelowOne",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "UnsupportedRoute",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "TradeNotFound",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "InputOutOfBounds",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "InvalidSyRate",
+          "value": 19
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "State",
+      "fields": [
+        {
+          "doc": "",
+          "name": "last_ln_implied_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "last_observation",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "total_lp",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_pt",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_sy",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "twap_ln_implied_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "warmup_until",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Config",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "initial_anchor",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "maturity",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "pt_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "scalar_root",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "sy_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tokenizer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "twap_window",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "yt_token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "state",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "State"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "config",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Config"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "bump_ttl",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "maturity",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "spot_apy",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_lp",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "twap_apy",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pt_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sy_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "yt_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tokenizer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "maturity",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "scalar_root",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "initial_anchor",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "twap_window",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "lp_balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "reserve_pt",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "reserve_sy",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "bump_lp_ttl",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "implied_apy",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "add_liquidity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pt_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "sy_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_lp_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "swap_pt_for_sy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pt_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_sy_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "swap_sy_for_pt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sy_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_pt_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "swap_sy_for_yt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sy_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_yt_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "swap_yt_for_sy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "yt_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_sy_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "quote_pt_for_sy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pt_in",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "quote_sy_for_pt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sy_in",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "quote_sy_for_yt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sy_in",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "quote_yt_for_sy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "yt_in",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "twap_warming_up",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "bool",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "remove_liquidity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "lp_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_pt_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_sy_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "i128"
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,198 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Status",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Pending"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paid"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Expired"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PayNote",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "created_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "description",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "paid_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "paid_asset",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "Status"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Mark a PayNote as paid. In production this would be called by the\\nbackend listener after it detects a real Stellar payment, or by a\\ntrusted oracle/auth flow \\xe2\\x80\\x94 for now it's an open function during dev.",
+      "name": "mark_paid",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "paid_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "paid_asset",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "PayNote"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Fetch a PayNote by id. Panics if it doesn't exist.",
+      "name": "get_paynote",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "PayNote"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Explicitly check and update expiry status (useful for a cron-style\\ncall from the backend, separate from the auto-check in get_paynote).",
+      "name": "check_expiry",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "PayNote"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Create a new PayNote. Returns the new PayNote's id.",
+      "name": "create_paynote",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "description",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  }
+]

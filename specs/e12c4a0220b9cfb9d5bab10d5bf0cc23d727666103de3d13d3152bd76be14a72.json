@@ -1,0 +1,463 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "Every failure mode is an explicit, contiguous `u32` so the TypeScript client\\ncan map a contract error straight to a user-facing message without guessing.",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "NotAuthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "EscrowExists",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "EscrowNotFound",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "EscrowNotFunded",
+          "value": 8
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys. `Escrow` rows live in *persistent* storage (they must outlive\\nthe contract instance), while `Admin`/`Paused`/`Counter` share the instance\\nTTL. An escrow is keyed by a 32-byte invoice reference (sha256 of the app's\\ninvoice id) so the app never has to round-trip a contract-assigned id.",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Counter"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "invoice_ref -> Escrow",
+            "name": "Escrow",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "Lifecycle of an invoice escrow. An escrow is created `Funded` when the client\\ndeposits; it becomes `Released` once the freelancer is paid out, or\\n`Refunded` if the client reclaims the deposit before release.",
+      "lib": "",
+      "name": "EscrowStatus",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Funded",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Released",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Refunded",
+          "value": 2
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A single invoice escrow. The contract custodies `amount` of `token` between\\n`deposit` (client funds it) and the terminal `release` (pay the freelancer)\\nor `refund` (return to the client). Funds can only ever move to one of those\\ntwo pre-committed addresses \\xe2\\x80\\x94 the admin can choose *when*, never *where*.",
+      "lib": "",
+      "name": "Escrow",
+      "fields": [
+        {
+          "doc": "Escrowed amount in the token's minor units (stroops for XLM; 7 decimals).",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "Funder; the address the deposit is pulled from and a refund returns to.",
+          "name": "client",
+          "type_": "address"
+        },
+        {
+          "doc": "Beneficiary; the only address a release can pay.",
+          "name": "freelancer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "EscrowStatus"
+            }
+          }
+        },
+        {
+          "doc": "Stellar Asset Contract (SAC) address of the escrowed asset (native XLM by default).",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "One-time setup. Records the admin and unpauses the contract.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Lock `amount` of `token` for an invoice into the contract's custody.\\n\\nAuth: requires the client's signature; the same authorization covers the\\ninner SAC `transfer(client -> contract)`.",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "invoice_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "client",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "freelancer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Release a funded escrow to the freelancer (the instant payout).\\n\\nAuth: the contract admin *or* the escrow's own client may trigger it.\\nEither way, the only possible destination is the freelancer recorded at\\ndeposit time.",
+      "name": "release",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "invoice_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Refund a funded escrow back to the client (cancel before release).\\n\\nAuth: the contract admin *or* the escrow's own client.",
+      "name": "refund",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "invoice_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_escrow",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "invoice_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Escrow"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "has_escrow",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "invoice_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_escrows",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unpause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Replace the contract's own code (admin-gated). Lets PayRosa ship fixes\\nwithout migrating escrow state \\xe2\\x80\\x94 important for a mainnet (L6) deploy.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,618 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "init",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "stable",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "soroswap",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pay_any",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "relayer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "intent",
+          "type_": {
+            "udt": {
+              "name": "PayAnyIntent"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fee_in_token",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "swap_venue",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "min_verified_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInit",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotOwner",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "NotRelayer",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "Reentrant",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "Expired",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "NonceUsed",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "FeeTooHigh",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "BadRecipient",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "AssetNotVerified",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "VenueNotAllowed",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "ProceedsTooLow",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "FeeEatsPayment",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "BelowSweep",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "AlreadyStable",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "ProtocolFeeHigh",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "NoPull",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "ZeroAddress",
+          "value": 17
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_owner",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_owner",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "o",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Owner"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "FeeVault"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Stable"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Soroswap"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ProtocolFeeBps"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MinSweep"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Permissionless"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Lock"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Relayer",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "VerifiedAsset",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "MinVerifiedFee",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "SwapVenue",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "PendingProfit",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Nonce",
+            "type_": [
+              "address",
+              "u64"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_stable",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "s",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_relayer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "relayer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "ok",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_soroswap",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "r",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_nonce_used",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "nonce",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_fee_vault",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "v",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_min_sweep",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "m",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_swap_venue",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "venue",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "ok",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PayAnyIntent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "max_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "nonce",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "verified_asset",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "sweep_to_stable",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "venue",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "min_stable_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_verified_asset",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "a",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_pending_profit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_permissionless",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "on",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_verified_asset",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "ok",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "floor",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_protocol_fee_bps",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,1387 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "M\\xc3\\xa3 l\\xe1\\xbb\\x97i ri\\xc3\\xaang c\\xe1\\xbb\\xa7a wrapper \\xe2\\x80\\x94 b\\xe1\\xba\\xaft \\xc4\\x91\\xe1\\xba\\xa7u 100 \\xc4\\x91\\xe1\\xbb\\x83 kh\\xc3\\xb4ng \\xc4\\x91\\xc3\\xa8 SmartAccountError c\\xe1\\xbb\\xa7a OZ.",
+      "lib": "",
+      "name": "FamilyWalletError",
+      "cases": [
+        {
+          "doc": "`recovery_rotate` khi ch\\xc6\\xb0a c\\xe1\\xba\\xafm registry.",
+          "name": "RecoveryNotConfigured",
+          "value": 100
+        },
+        {
+          "doc": "M\\xe1\\xbb\\x8di ch\\xe1\\xbb\\xaf k\\xc3\\xbd b\\xe1\\xbb\\x8b ch\\xe1\\xbb\\x91i trong c\\xe1\\xbb\\xada s\\xe1\\xbb\\x95 cooldown sau xoay kho\\xc3\\xa1.",
+          "name": "CooldownActive",
+          "value": 101
+        },
+        {
+          "doc": "Map `policies` c\\xe1\\xbb\\xa7a constructor ch\\xe1\\xbb\\x9f nhi\\xe1\\xbb\\x81u h\\xc6\\xa1n M\\xe1\\xbb\\x98T m\\xe1\\xbb\\xa5c registry.",
+          "name": "DuplicateRecoveryEntry",
+          "value": 102
+        },
+        {
+          "doc": "`set_recovery_registry` khi \\xc4\\x90\\xc3\\x83 c\\xc3\\xb3 registry \\xe2\\x80\\x94 \\xc4\\x91\\xe1\\xbb\\x95i ph\\xe1\\xba\\xa3i \\xc4\\x91i \\xc4\\x91\\xc6\\xb0\\xe1\\xbb\\x9dng timelock.",
+          "name": "RegistryAlreadyConfigured",
+          "value": 103
+        },
+        {
+          "doc": "`apply`/`cancel` \\xc4\\x91\\xe1\\xbb\\x95i registry khi kh\\xc3\\xb4ng c\\xc3\\xb3 \\xc4\\x91\\xc6\\xa1n n\\xc3\\xa0o \\xc4\\x91ang ch\\xe1\\xbb\\x9d.",
+          "name": "NoPendingRegistryChange",
+          "value": 104
+        },
+        {
+          "doc": "`apply` khi timelock ch\\xc6\\xb0a h\\xe1\\xba\\xbft.",
+          "name": "RegistryChangeNotDue",
+          "value": 105
+        },
+        {
+          "doc": "`propose` ch\\xe1\\xbb\\x93ng l\\xc3\\xaan \\xc4\\x91\\xc6\\xa1n \\xc4\\x91ang ch\\xe1\\xbb\\x9d \\xe2\\x80\\x94 hu\\xe1\\xbb\\xb7 \\xc4\\x91\\xc6\\xa1n c\\xc5\\xa9 tr\\xc6\\xb0\\xe1\\xbb\\x9bc.",
+          "name": "RegistryChangePending",
+          "value": 106
+        },
+        {
+          "doc": "Hu\\xe1\\xbb\\xb7 \\xc4\\x91\\xc6\\xa1n \\xc4\\x91\\xe1\\xbb\\x95i registry b\\xe1\\xbb\\x9fi ng\\xc6\\xb0\\xe1\\xbb\\x9di kh\\xc3\\xb4ng ph\\xe1\\xba\\xa3i ch\\xe1\\xbb\\xa7 v\\xc3\\xad l\\xe1\\xba\\xabn registry hi\\xe1\\xbb\\x87n t\\xe1\\xba\\xa1i.",
+          "name": "NotAuthorizedToCancel",
+          "value": 107
+        },
+        {
+          "doc": "Cooldown v\\xc6\\xb0\\xe1\\xbb\\xa3t tr\\xe1\\xba\\xa7n `MAX_COOLDOWN_SECS` \\xe2\\x80\\x94 ch\\xe1\\xba\\xb7n qu\\xe1\\xba\\xa3 bom kho\\xc3\\xa1-v\\xc3\\xad-v\\xc4\\xa9nh-vi\\xe1\\xbb\\x85n\\n(audit P0-4).",
+          "name": "CooldownTooLong",
+          "value": 108
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "\\xc4\\x90\\xc6\\xa1n xin \\xc4\\x91\\xe1\\xbb\\x95i registry \\xc4\\x91ang ch\\xe1\\xbb\\x9d h\\xe1\\xba\\xbft timelock.",
+      "lib": "",
+      "name": "PendingRegistry",
+      "fields": [
+        {
+          "doc": "Timestamp s\\xe1\\xbb\\x9bm nh\\xe1\\xba\\xa5t \\xc4\\x91\\xc6\\xb0\\xe1\\xbb\\xa3c `apply`.",
+          "name": "apply_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "cooldown_secs",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "registry",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Executes a function call on a target contract from within the smart\\naccount context.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `target` - The address of the contract to call.\\n* `target_fn` - The function name to invoke on the target contract.\\n* `target_args` - Arguments to pass to the target function.\\n\\n# Notes\\n\\nDefaults to requiring authorization from the smart account itself\\n(`e.current_contract_address().require_auth()`) and then calling\\n`e.invoke_contract()`.",
+      "name": "execute",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "target_fn",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "target_args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Adds a new policy to an existing context rule, installs it, and returns\\nthe assigned policy ID. The policy's `install` method will be called\\nduring this operation.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `context_rule_id` - The ID of the context rule to modify.\\n* `policy` - The address of the policy contract to add.\\n* `install_param` - The installation parameter for the policy.\\n\\n# Errors\\n\\n* [`SmartAccountError::ContextRuleNotFound`] - When no context rule\\nexists with the given ID.\\n* [`SmartAccountError::DuplicatePolicy`] - When the policy already\\nexists in the rule.\\n* [`SmartAccountError::TooManyPolicies`] - When adding would exceed\\nMAX_POLICIES (5).\\n\\n# Events\\n\\n* topics - `[\"policy_added\", context_rule_id: u32]`\\n* data - `[policy_id: u32]`\\n\\n# Notes\\n\\nDefaults to requiring authorization from the smart account itself\\n(`e.current_contract_address().require_auth()`) and then delegating to\\n[`storage::add_policy`].",
+      "name": "add_policy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "policy",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "install_param",
+          "type_": "val"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Adds a new signer to an existing context rule, returning the assigned\\nsigner ID.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `context_rule_id` - The ID of the context rule to modify.\\n* `signer` - The signer to add to the context rule.\\n\\n# Errors\\n\\n* [`SmartAccountError::ContextRuleNotFound`] - When no context rule\\nexists with the given ID.\\n* [`SmartAccountError::DuplicateSigner`] - When the signer already\\nexists in the rule.\\n* [`SmartAccountError::TooManySigners`] - When adding would exceed\\nMAX_SIGNERS (15).\\n\\n# Events\\n\\n* topics - `[\"signer_added\", context_rule_id: u32]`\\n* data - `[signer_id: u32]`\\n\\n# Notes\\n\\nDefaults to requiring authorization from the smart account itself\\n(`e.current_contract_address().require_auth()`) and then delegating to\\n[`storage::add_signer`].",
+      "name": "add_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": {
+            "udt": {
+              "name": "Signer"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "GIA H\\xe1\\xba\\xa0N TTL \\xe2\\x80\\x94 ch\\xe1\\xbb\\x91ng \"v\\xc3\\xad bi\\xe1\\xba\\xbfn m\\xe1\\xba\\xa5t\" sau nhi\\xe1\\xbb\\x81u th\\xc3\\xa1ng n\\xe1\\xba\\xb1m im.\\n\\nSoroban archive entry h\\xe1\\xba\\xbft TTL. OZ t\\xe1\\xbb\\xb1 gia h\\xe1\\xba\\xa1n entry persistent c\\xe1\\xbb\\xa7a n\\xc3\\xb3 M\\xe1\\xbb\\x96I\\nL\\xe1\\xba\\xa6N \\xc4\\x90\\xe1\\xbb\\x8cC (`storage.rs::get_persistent_entry`), n\\xc3\\xaan v\\xc3\\xad \\xc4\\x91ang \\xc4\\x91\\xc6\\xb0\\xe1\\xbb\\xa3c d\\xc3\\xb9ng t\\xe1\\xbb\\xb1\\nl\\xc3\\xa0nh. Nh\\xc6\\xb0ng v\\xc3\\xad th\\xe1\\xbb\\xaba k\\xe1\\xba\\xbf \\xc4\\x91\\xc6\\xb0\\xe1\\xbb\\xa3c thi\\xe1\\xba\\xbft k\\xe1\\xba\\xbf \\xc4\\x91\\xe1\\xbb\\x83 n\\xe1\\xba\\xb1m im nhi\\xe1\\xbb\\x81u th\\xc3\\xa1ng \\xe2\\x80\\x94 kh\\xc3\\xb4ng c\\xc3\\xb3 l\\xe1\\xba\\xa7n\\n\\xc4\\x91\\xe1\\xbb\\x8dc n\\xc3\\xa0o, v\\xc3\\xa0 instance storage (d\\xc3\\xa2y n\\xe1\\xbb\\x91i registry, owner rule id, m\\xe1\\xbb\\x91c xoay\\nkho\\xc3\\xa1) th\\xc3\\xac KH\\xc3\\x94NG ai gia h\\xe1\\xba\\xa1n c\\xe1\\xba\\xa3.\\n\\nQUAN TR\\xe1\\xbb\\x8cNG (B-SEC-2): passkey ch\\xe1\\xbb\\xa7 v\\xc3\\xad KH\\xc3\\x94NG n\\xe1\\xba\\xb1m trong `ContextRuleData` \\xe2\\x80\\x94\\nOZ t\\xc3\\xa1ch n\\xc3\\xb3 ra hai entry persistent RI\\xc3\\x8aNG, `SignerData(id)` (kho\\xc3\\xa1 th\\xe1\\xba\\xadt) v\\xc3\\xa0\\n`SignerLookup(hash)` (b\\xe1\\xba\\xa3ng tra \\xc4\\x91\\xe1\\xbb\\x83 dedup/g\\xe1\\xbb\\xa1). Gia h\\xe1\\xba\\xa1n m\\xe1\\xbb\\x97i `ContextRuleData`\\nth\\xc3\\xac rule c\\xc3\\xb2n s\\xe1\\xbb\\x91ng nh\\xc6\\xb0ng ch\\xe1\\xbb\\xaf k\\xc3\\xbd ch\\xe1\\xba\\xbft: `__check_auth` \\xc4\\x91\\xe1\\xbb\\x8dc signer qua\\n`get_signers` \\xe2\\x86\\x92 `SignerData` \\xc4\\x91\\xc3\\xa3 archive \\xe2\\x86\\x92 panic. V\\xc3\\xac contract n\\xc3\\xa0y KH\\xc3\\x94NG g\\xe1\\xbb\\x8di\\n`get_context_rule` \\xe1\\xbb\\x9f \\xc4\\x91\\xc6\\xb0\\xe1\\xbb\\x9dng extend (ch\\xe1\\xbb\\x89 ch\\xe1\\xba\\xa1m `ContextRuleData` tr\\xe1\\xbb\\xb1c ti\\xe1\\xba\\xbfp),\\nside-effect gia h\\xe1\\xba\\xa1n-khi-\\xc4\\x91\\xe1\\xbb\\x8dc c\\xe1\\xbb\\xa7a OZ KH\\xc3\\x94NG ch",
+      "name": "extend_ttl",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "extend_to",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__check_auth",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signature_payload",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signatures",
+          "type_": {
+            "udt": {
+              "name": "AuthPayload"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "auth_contexts",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Context"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SmartAccountError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Rule m\\xe1\\xba\\xb7c \\xc4\\x91\\xe1\\xbb\\x8bnh v\\xe1\\xbb\\x9bi signers (th\\xc6\\xb0\\xe1\\xbb\\x9dng: External passkey) + policies c\\xe1\\xbb\\xa7a ng\\xc6\\xb0\\xe1\\xbb\\x9di d\\xc3\\xb9ng.\\n\\nN\\xe1\\xba\\xbfu map `policies` ch\\xe1\\xbb\\x9f m\\xe1\\xbb\\xa5c [`FwConstructorEntry::RecoveryRegistry`] th\\xc3\\xac\\nregistry kh\\xc3\\xb4i ph\\xe1\\xbb\\xa5c \\xc4\\x91\\xc6\\xb0\\xe1\\xbb\\xa3c c\\xe1\\xba\\xafm NGAY trong tx n\\xc3\\xa0y \\xe2\\x80\\x94 v\\xc3\\xad sinh ra \\xc4\\x91\\xc3\\xa3 kh\\xc3\\xb4i ph\\xe1\\xbb\\xa5c\\n\\xc4\\x91\\xc6\\xb0\\xe1\\xbb\\xa3c, kh\\xc3\\xb4ng c\\xc3\\xb3 c\\xe1\\xbb\\xada s\\xe1\\xbb\\x95 \"v\\xc3\\xad s\\xe1\\xbb\\x91ng nh\\xc6\\xb0ng ch\\xc6\\xb0a n\\xe1\\xbb\\x91i registry\".",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signers",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Signer"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "policies",
+          "type_": {
+            "map": {
+              "key_type": "address",
+              "value_type": "val"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Retrieves the global registry ID for a policy.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `policy` - The policy address to look up.\\n\\n# Errors\\n\\n* [`SmartAccountError::PolicyNotFound`] - When the policy is not\\nregistered in the global registry.",
+      "name": "get_policy_id",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "policy",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Retrieves the global registry ID for a signer.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `signer` - The signer to look up.\\n\\n# Errors\\n\\n* [`SmartAccountError::SignerNotFound`] - When the signer is not\\nregistered in the global registry.",
+      "name": "get_signer_id",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": {
+            "udt": {
+              "name": "Signer"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Timestamp l\\xe1\\xba\\xa7n xoay kho\\xc3\\xa1 g\\xe1\\xba\\xa7n nh\\xe1\\xba\\xa5t (None = ch\\xc6\\xb0a t\\xe1\\xbb\\xabng xoay).",
+      "name": "last_rotation",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "u64"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Removes a policy from an existing context rule and uninstalls it. The\\npolicy's `uninstall` method will be called during this operation.\\nRemoving the last policy is allowed only if the rule has at least\\none signer.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `context_rule_id` - The ID of the context rule to modify.\\n* `policy_id` - The ID of the policy to remove from the context rule.\\n\\n# Errors\\n\\n* [`SmartAccountError::ContextRuleNotFound`] - When no context rule\\nexists with the given ID.\\n* [`SmartAccountError::PolicyNotFound`] - When the policy doesn't exist\\nin the rule.\\n\\n# Events\\n\\n* topics - `[\"policy_removed\", context_rule_id: u32]`\\n* data - `[policy_id: u32]`\\n\\n# Notes\\n\\nDefaults to requiring authorization from the smart account itself\\n(`e.current_contract_address().require_auth()`) and then delegating to\\n[`storage::remove_policy`].",
+      "name": "remove_policy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Removes a signer from an existing context rule. Removing the last signer\\nis allowed only if the rule has at least one policy.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `context_rule_id` - The ID of the context rule to modify.\\n* `signer_id` - The ID of the signer to remove from the context rule.\\n\\n# Errors\\n\\n* [`SmartAccountError::ContextRuleNotFound`] - When no context rule\\nexists with the given ID.\\n* [`SmartAccountError::SignerNotFound`] - When the signer doesn't exist\\nin the rule.\\n\\n# Events\\n\\n* topics - `[\"signer_removed\", context_rule_id: u32]`\\n* data - `[signer_id: u32]`\\n\\n# Notes\\n\\nDefaults to requiring authorization from the smart account itself\\n(`e.current_contract_address().require_auth()`) and then delegating to\\n[`storage::remove_signer`].",
+      "name": "remove_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "signer_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "XOAY KHO\\xc3\\x81 KH\\xc3\\x94I PH\\xe1\\xbb\\xa4C \\xe2\\x80\\x94 c\\xe1\\xbb\\xada DUY NH\\xe1\\xba\\xa4T registry \\xc4\\x91\\xc6\\xb0\\xe1\\xbb\\xa3c \\xc4\\x91\\xe1\\xbb\\xa5ng signer, v\\xc3\\xa0 l\\xc3\\xa0 vi\\xe1\\xbb\\x87c\\nDUY NH\\xe1\\xba\\xa4T registry l\\xc3\\xa0m \\xc4\\x91\\xc6\\xb0\\xe1\\xbb\\xa3c \\xe1\\xbb\\x9f \\xc4\\x91\\xc3\\xa2y (kh\\xc3\\xb4ng r\\xc3\\xbat ti\\xe1\\xbb\\x81n, kh\\xc3\\xb4ng \\xc4\\x91\\xe1\\xbb\\x95i rule/policy).\\nAuth = invoker: registry (contract) g\\xe1\\xbb\\x8di tr\\xe1\\xbb\\xb1c ti\\xe1\\xba\\xbfp n\\xc3\\xaan `require_auth` c\\xe1\\xbb\\xa7a\\nch\\xc3\\xadnh n\\xc3\\xb3 t\\xe1\\xbb\\xb1 tho\\xe1\\xba\\xa3 \\xe2\\x80\\x94 kh\\xc3\\xb4ng c\\xe1\\xba\\xa7n craft auth entry delegated (skill passkey \\xc2\\xa70\\nc\\xe1\\xba\\xa3nh b\\xc3\\xa1o simulation kh\\xc3\\xb4ng tr\\xe1\\xba\\xa3 entry \\xc4\\x91\\xc3\\xb3).\\n\\nThay TO\\xc3\\x80N B\\xe1\\xbb\\x98 signer c\\xe1\\xbb\\xa7a owner-rule b\\xe1\\xba\\xb1ng `new_signer` (m\\xe1\\xbb\\x8di thi\\xe1\\xba\\xbft b\\xe1\\xbb\\x8b c\\xc5\\xa9 coi\\nnh\\xc6\\xb0 m\\xe1\\xba\\xa5t \\xe2\\x80\\x94 \\xc4\\x91\\xc3\\xbang ng\\xe1\\xbb\\xaf ngh\\xc4\\xa9a social recovery), r\\xe1\\xbb\\x93i \\xc4\\x91\\xc3\\xb3ng d\\xe1\\xba\\xa5u LastRotation \\xc4\\x91\\xe1\\xbb\\x83\\n`__check_auth` m\\xe1\\xbb\\x9f c\\xe1\\xbb\\xada s\\xe1\\xbb\\x95 cooldown. Rule kh\\xc3\\xa1c (vd extension, quy\\xe1\\xbb\\x81n h\\xe1\\xba\\xb9p +\\nvalid_until) kh\\xc3\\xb4ng \\xc4\\x91\\xe1\\xbb\\xa5ng \\xe2\\x80\\x94 ch\\xc3\\xbang t\\xe1\\xbb\\xb1 h\\xe1\\xba\\xbft h\\xe1\\xba\\xa1n; ghi r\\xc3\\xb5 trong threat model.",
+      "name": "recovery_rotate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_signer",
+          "type_": {
+            "udt": {
+              "name": "Signer"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Creates a new context rule with the specified configuration, returning\\nthe newly created `ContextRule` with a unique ID assigned. Installs\\nall specified policies during creation.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `context_type` - The type of context this rule applies to.\\n* `name` - Human-readable name for the context rule.\\n* `valid_until` - Optional expiration ledger sequence.\\n* `signers` - List of signers authorized by this rule.\\n* `policies` - Map of policy addresses to their installation parameters.\\n\\n# Errors\\n\\n* [`SmartAccountError::NoSignersAndPolicies`] - When both signers and\\npolicies are empty.\\n* [`SmartAccountError::TooManySigners`] - When signers exceed\\nMAX_SIGNERS (15).\\n* [`SmartAccountError::TooManyPolicies`] - When policies exceed\\nMAX_POLICIES (5).\\n* [`SmartAccountError::DuplicateSigner`] - When the same signer appears\\nmultiple times.\\n* [`SmartAccountError::PastValidUntil`] - When valid_until is in the\\npast.\\n* [`SmartAccountError::MathOverflow`] - When the context rule, si",
+      "name": "add_context_rule",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_type",
+          "type_": {
+            "udt": {
+              "name": "ContextRuleType"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "valid_until",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signers",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Signer"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "policies",
+          "type_": {
+            "map": {
+              "key_type": "address",
+              "value_type": "val"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "ContextRule"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Th\\xc3\\xaam signer (vd n\\xe1\\xbb\\x91i v\\xe1\\xbb\\x8f m\\xe1\\xbb\\x9bi) \\xe2\\x80\\x94 ch\\xe1\\xbb\\x89 ch\\xc3\\xadnh t\\xc3\\xa0i kho\\xe1\\xba\\xa3n t\\xe1\\xbb\\xb1 k\\xc3\\xbd m\\xe1\\xbb\\x9bi \\xc4\\x91\\xc6\\xb0\\xe1\\xbb\\xa3c \\xc4\\x91\\xe1\\xbb\\x95i.",
+      "name": "batch_add_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "signers",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Signer"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Retrieves a context rule by its unique ID, returning the\\n`ContextRule` containing all metadata, signers, and policies.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `context_rule_id` - The unique identifier of the context rule to\\nretrieve.\\n\\n# Errors\\n\\n* [`SmartAccountError::ContextRuleNotFound`] - When no context rule\\nexists with the given ID.",
+      "name": "get_context_rule",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "ContextRule"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Removes a context rule and cleans up all associated data. This function\\nuninstalls all policies associated with the rule and removes all stored\\ndata including signers, policies, and metadata.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `context_rule_id` - The ID of the context rule to remove.\\n\\n# Errors\\n\\n* [`SmartAccountError::ContextRuleNotFound`] - When no context rule\\nexists with the given ID.\\n\\n# Events\\n\\n* topics - `[\"context_rule_removed\", context_rule_id: u32]`\\n* data - `[]`\\n\\n# Notes\\n\\nDefaults to requiring authorization from the smart account itself\\n(`e.current_contract_address().require_auth()`) and then delegating to\\n[`storage::remove_context_rule`].",
+      "name": "remove_context_rule",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_recovery_registry",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "tuple": {
+                "value_types": [
+                  "address",
+                  "u64"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "C\\xe1\\xba\\xafm registry L\\xe1\\xba\\xa6N \\xc4\\x90\\xe1\\xba\\xa6U cho v\\xc3\\xad ch\\xc6\\xb0a c\\xc3\\xb3 (v\\xc3\\xad deploy tr\\xc6\\xb0\\xe1\\xbb\\x9bc b\\xe1\\xba\\xa3n constructor n\\xc3\\xa0y,\\nho\\xe1\\xba\\xb7c lu\\xe1\\xbb\\x93ng test). Ch\\xe1\\xbb\\x89 t\\xc3\\xa0i kho\\xe1\\xba\\xa3n t\\xe1\\xbb\\xb1 k\\xc3\\xbd (passkey ch\\xe1\\xbb\\xa7 v\\xc3\\xad).\\n\\n\\xc4\\x90\\xe1\\xbb\\x94I registry \\xc4\\x91\\xc3\\xa3 c\\xc3\\xb3 KH\\xc3\\x94NG \\xc4\\x91i c\\xe1\\xbb\\xada n\\xc3\\xa0y \\xe2\\x80\\x94 n\\xc3\\xb3 ph\\xe1\\xba\\xa3i qua timelock + veto\\n(`propose_recovery_registry`), n\\xe1\\xba\\xbfu kh\\xc3\\xb4ng passkey ch\\xe1\\xbb\\xa7 v\\xc3\\xad b\\xe1\\xbb\\x8b chi\\xe1\\xba\\xbfm l\\xc3\\xa0 k\\xe1\\xba\\xbb\\nt\\xe1\\xba\\xa5n c\\xc3\\xb4ng tr\\xe1\\xbb\\x8f v\\xc3\\xad sang registry c\\xe1\\xbb\\xa7a n\\xc3\\xb3 v\\xc3\\xa0 c\\xe1\\xba\\xaft \\xc4\\x91\\xe1\\xbb\\xa9t ng\\xc6\\xb0\\xe1\\xbb\\x9di th\\xc3\\xa2n kh\\xe1\\xbb\\x8fi v\\xc3\\xad.",
+      "name": "set_recovery_registry",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "registry",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "cooldown_secs",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "\\xc3\\x81p \\xc4\\x91\\xc6\\xa1n \\xc4\\x91\\xc3\\xa3 h\\xe1\\xba\\xbft timelock. KH\\xc3\\x94NG \\xc4\\x91\\xc3\\xb2i auth: quy\\xe1\\xba\\xbft \\xc4\\x91\\xe1\\xbb\\x8bnh \\xc4\\x91\\xc3\\xa3 \\xc4\\x91\\xc6\\xb0\\xe1\\xbb\\xa3c ch\\xe1\\xbb\\xa7 v\\xc3\\xad k\\xc3\\xbd \\xe1\\xbb\\x9f\\n`propose`, timelock + veto l\\xc3\\xa0 c\\xe1\\xbb\\x95ng g\\xc3\\xa1c \\xe2\\x80\\x94 c\\xc3\\xb9ng khu\\xc3\\xb4n `finalize_recovery`.",
+      "name": "apply_recovery_registry",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Retrieves the number of all context rules, including expired rules.\\nDefaults to 0.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.",
+      "name": "get_context_rules_count",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Updates the name of an existing context rule, returning the updated\\n`ContextRule` with the new name.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `context_rule_id` - The ID of the context rule to update.\\n* `name` - The new human-readable name for the context rule.\\n\\n# Errors\\n\\n* [`SmartAccountError::ContextRuleNotFound`] - When no context rule\\nexists with the given ID.\\n\\n# Events\\n\\n* topics - `[\"context_rule_meta_updated\", context_rule_id: u32]`\\n* data - `[name: String, context_type: ContextRuleType, valid_until:\\nOption<u32>]`\\n\\n# Notes\\n\\nDefaults to requiring authorization from the smart account itself\\n(`e.current_contract_address().require_auth()`) and then delegating to\\n[`storage::update_context_rule_name`].",
+      "name": "update_context_rule_name",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "ContextRule"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "\\xc4\\x90\\xc6\\xa1n \\xc4\\x91\\xe1\\xbb\\x95i registry \\xc4\\x91ang ch\\xe1\\xbb\\x9d (None = kh\\xc3\\xb4ng c\\xc3\\xb3) \\xe2\\x80\\x94 FE hi\\xe1\\xbb\\x87n c\\xe1\\xba\\xa3nh b\\xc3\\xa1o + \\xc4\\x91\\xe1\\xba\\xbfm ng\\xc6\\xb0\\xe1\\xbb\\xa3c.",
+      "name": "pending_recovery_registry",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "PendingRegistry"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Xin \\xc4\\x90\\xe1\\xbb\\x94I registry \\xe2\\x80\\x94 ch\\xe1\\xbb\\xa7 v\\xc3\\xad t\\xe1\\xbb\\xb1 k\\xc3\\xbd, nh\\xc6\\xb0ng ch\\xe1\\xbb\\x89 c\\xc3\\xb3 hi\\xe1\\xbb\\x87u l\\xe1\\xbb\\xb1c sau timelock v\\xc3\\xa0\\nng\\xc6\\xb0\\xe1\\xbb\\x9di th\\xc3\\xa2n veto \\xc4\\x91\\xc6\\xb0\\xe1\\xbb\\xa3c trong c\\xe1\\xbb\\xada s\\xe1\\xbb\\x95 \\xc4\\x91\\xc3\\xb3 (`RecoveryRegistry::veto_registry_change`).\\nKh\\xc3\\xb4ng c\\xc3\\xb3 timelock th\\xc3\\xac passkey ch\\xe1\\xbb\\xa7 v\\xc3\\xad b\\xe1\\xbb\\x8b chi\\xe1\\xba\\xbfm l\\xc3\\xa0 k\\xe1\\xba\\xbb t\\xe1\\xba\\xa5n c\\xc3\\xb4ng tr\\xe1\\xbb\\x8f v\\xc3\\xad sang\\nregistry c\\xe1\\xbb\\xa7a n\\xc3\\xb3, c\\xe1\\xba\\xaft \\xc4\\x91\\xe1\\xbb\\xa9t \\xc4\\x91\\xc6\\xb0\\xe1\\xbb\\x9dng c\\xe1\\xbb\\xa9u duy nh\\xe1\\xba\\xa5t m\\xc3\\xa0 kh\\xc3\\xb4ng ai k\\xe1\\xbb\\x8bp bi\\xe1\\xba\\xbft.",
+      "name": "propose_recovery_registry",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "registry",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "cooldown_secs",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Hu\\xe1\\xbb\\xb7 \\xc4\\x91\\xc6\\xa1n \\xc4\\x91\\xe1\\xbb\\x95i registry. Hai ng\\xc6\\xb0\\xe1\\xbb\\x9di \\xc4\\x91\\xc6\\xb0\\xe1\\xbb\\xa3c hu\\xe1\\xbb\\xb7: CH\\xc3\\x8dNH V\\xc3\\x8d (ch\\xe1\\xbb\\xa7 \\xc4\\x91\\xe1\\xbb\\x95i \\xc3\\xbd) v\\xc3\\xa0\\nREGISTRY HI\\xe1\\xbb\\x86N T\\xe1\\xba\\xa0I (ng\\xc6\\xb0\\xe1\\xbb\\x9di th\\xc3\\xa2n veto \\xe2\\x80\\x94 registry l\\xc3\\xa0 n\\xc6\\xa1i bi\\xe1\\xba\\xbft ai l\\xc3\\xa0 guardian,\\nv\\xc3\\xad th\\xc3\\xac kh\\xc3\\xb4ng). Registry g\\xe1\\xbb\\x8di tr\\xe1\\xbb\\xb1c ti\\xe1\\xba\\xbfp n\\xc3\\xaan `require_auth` c\\xe1\\xbb\\xa7a n\\xc3\\xb3 l\\xc3\\xa0 invoker\\nauth, c\\xc3\\xb9ng khu\\xc3\\xb4n `recovery_rotate`.",
+      "name": "cancel_recovery_registry_change",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Updates the expiration time of an existing context rule, returning the\\nupdated `ContextRule` with the new expiration time.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `context_rule_id` - The ID of the context rule to update.\\n* `valid_until` - New optional expiration ledger sequence. Use `None`\\nfor no expiration.\\n\\n# Errors\\n\\n* [`SmartAccountError::ContextRuleNotFound`] - When no context rule\\nexists with the given ID.\\n* [`SmartAccountError::PastValidUntil`] - When valid_until is in the\\npast.\\n\\n# Events\\n\\n* topics - `[\"context_rule_meta_updated\", context_rule_id: u32]`\\n* data - `[name: String, context_type: ContextRuleType, valid_until:\\nOption<u32>]`\\n\\n# Notes\\n\\nDefaults to requiring authorization from the smart account itself\\n(`e.current_contract_address().require_auth()`) and then delegating to\\n[`storage::update_context_rule_valid_until`].",
+      "name": "update_context_rule_valid_until",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "valid_until",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "ContextRule"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Context of a single authorized call performed by an address.\\n\\nCustom account contracts that implement `__check_auth` special function\\nreceive a list of `Context` values corresponding to all the calls that\\nneed to be authorized.",
+      "lib": "",
+      "name": "Context",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "Contract invocation.",
+            "name": "Contract",
+            "type_": [
+              {
+                "udt": {
+                  "name": "ContractContext"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Contract that has a constructor with no arguments is created.",
+            "name": "CreateContractHostFn",
+            "type_": [
+              {
+                "udt": {
+                  "name": "CreateContractHostFnContext"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Contract that has a constructor with 1 or more arguments is created.",
+            "name": "CreateContractWithCtorHostFn",
+            "type_": [
+              {
+                "udt": {
+                  "name": "CreateContractWithConstructorHostFnContext"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Authorization context of a single contract call.\\n\\nThis struct corresponds to a `require_auth_for_args` call for an address\\nfrom `contract` function with `fn_name` name and `args` arguments.",
+      "lib": "",
+      "name": "ContractContext",
+      "fields": [
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fn_name",
+          "type_": "symbol"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Contract executable used for creating a new contract and used in\\n`CreateContractHostFnContext`.",
+      "lib": "",
+      "name": "ContractExecutable",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Wasm",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Authorization context for `create_contract` host function that creates a\\nnew contract on behalf of authorizer address.",
+      "lib": "",
+      "name": "CreateContractHostFnContext",
+      "fields": [
+        {
+          "doc": "",
+          "name": "executable",
+          "type_": {
+            "udt": {
+              "name": "ContractExecutable"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Authorization context for `create_contract` host function that creates a\\nnew contract on behalf of authorizer address.\\nThis is the same as `CreateContractHostFnContext`, but also has\\ncontract constructor arguments.",
+      "lib": "",
+      "name": "CreateContractWithConstructorHostFnContext",
+      "fields": [
+        {
+          "doc": "",
+          "name": "constructor_args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "executable",
+          "type_": {
+            "udt": {
+              "name": "ContractExecutable"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a policy is added to a context rule.",
+      "lib": "",
+      "name": "PolicyAdded",
+      "prefix_topics": [
+        "policy_added"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a signer is added to a context rule.",
+      "lib": "",
+      "name": "SignerAdded",
+      "prefix_topics": [
+        "signer_added"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "signer_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a policy is removed from a context rule.",
+      "lib": "",
+      "name": "PolicyRemoved",
+      "prefix_topics": [
+        "policy_removed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a signer is removed from a context rule.",
+      "lib": "",
+      "name": "SignerRemoved",
+      "prefix_topics": [
+        "signer_removed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "signer_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a context rule is added.",
+      "lib": "",
+      "name": "ContextRuleAdded",
+      "prefix_topics": [
+        "context_rule_added"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "context_type",
+          "type_": {
+            "udt": {
+              "name": "ContextRuleType"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "valid_until",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "signer_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "policy_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a policy is registered in the global registry.",
+      "lib": "",
+      "name": "PolicyRegistered",
+      "prefix_topics": [
+        "policy_registered"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "policy",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a signer is registered in the global registry.",
+      "lib": "",
+      "name": "SignerRegistered",
+      "prefix_topics": [
+        "signer_registered"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "signer_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": {
+            "udt": {
+              "name": "Signer"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Error codes for smart account operations.",
+      "lib": "",
+      "name": "SmartAccountError",
+      "cases": [
+        {
+          "doc": "The specified context rule does not exist.",
+          "name": "ContextRuleNotFound",
+          "value": 3000
+        },
+        {
+          "doc": "The provided context cannot be validated against any rule.",
+          "name": "UnvalidatedContext",
+          "value": 3002
+        },
+        {
+          "doc": "External signature verification failed.",
+          "name": "ExternalVerificationFailed",
+          "value": 3003
+        },
+        {
+          "doc": "Context rule must have at least one signer or policy.",
+          "name": "NoSignersAndPolicies",
+          "value": 3004
+        },
+        {
+          "doc": "The valid_until timestamp is in the past.",
+          "name": "PastValidUntil",
+          "value": 3005
+        },
+        {
+          "doc": "The specified signer was not found.",
+          "name": "SignerNotFound",
+          "value": 3006
+        },
+        {
+          "doc": "The signer already exists in the context rule.",
+          "name": "DuplicateSigner",
+          "value": 3007
+        },
+        {
+          "doc": "The specified policy was not found.",
+          "name": "PolicyNotFound",
+          "value": 3008
+        },
+        {
+          "doc": "The policy already exists in the context rule.",
+          "name": "DuplicatePolicy",
+          "value": 3009
+        },
+        {
+          "doc": "Too many signers in the context rule.",
+          "name": "TooManySigners",
+          "value": 3010
+        },
+        {
+          "doc": "Too many policies in the context rule.",
+          "name": "TooManyPolicies",
+          "value": 3011
+        },
+        {
+          "doc": "An internal ID counter (context rule, signer, or policy) has reached\\nits maximum value (`u32::MAX`) and cannot be incremented further.",
+          "name": "MathOverflow",
+          "value": 3012
+        },
+        {
+          "doc": "External signer key data exceeds the maximum allowed size.",
+          "name": "KeyDataTooLarge",
+          "value": 3013
+        },
+        {
+          "doc": "context_rule_ids length does not match auth_contexts length.",
+          "name": "ContextRuleIdsLengthMismatch",
+          "value": 3014
+        },
+        {
+          "doc": "Context rule name exceeds the maximum allowed length.",
+          "name": "NameTooLong",
+          "value": 3015
+        },
+        {
+          "doc": "A signer in `AuthPayload` is not part of any selected context rule.",
+          "name": "UnauthorizedSigner",
+          "value": 3016
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a context rule is removed.",
+      "lib": "",
+      "name": "ContextRuleRemoved",
+      "prefix_topics": [
+        "context_rule_removed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a policy is deregistered from the global registry.",
+      "lib": "",
+      "name": "PolicyDeregistered",
+      "prefix_topics": [
+        "policy_deregistered"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": "u32",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a signer is deregistered from the global registry.",
+      "lib": "",
+      "name": "SignerDeregistered",
+      "prefix_topics": [
+        "signer_deregistered"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "signer_id",
+          "type_": "u32",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a context rule name or valid_until are updated.",
+      "lib": "",
+      "name": "ContextRuleMetaUpdated",
+      "prefix_topics": [
+        "context_rule_meta_updated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "valid_until",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Represents different types of signers in the smart account system.",
+      "lib": "",
+      "name": "Signer",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "A delegated signer that uses built-in signature verification.",
+            "name": "Delegated",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "An external signer with custom verification logic.\\nContains the verifier contract address and the public key data.",
+            "name": "External",
+            "type_": [
+              "address",
+              "bytes"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "The authorization payload passed to `__check_auth`, bundling cryptographic\\nproofs with context rule selection.\\n\\nThis struct carries two distinct pieces of information that are both\\nrequired for authorization but cannot be derived from each other:\\n\\n- `signers` maps each [`Signer`] to its raw signature bytes, providing\\ncryptographic proof that the signer actually signed the transaction\\npayload. A context rule stores which signer *identities* are authorized\\n(via `signer_ids`), but the rule does not contain the signatures\\nthemselves \\xe2\\x80\\x94 those must be supplied here.\\n\\n- `context_rule_ids` tells the system which rule to validate for each auth\\ncontext. Because multiple rules can exist for the same context type, the\\ncaller must explicitly select one per context rather than relying on\\nauto-discovery. Each entry is aligned by index with the `auth_contexts`\\npassed to `__check_auth`.\\n\\nThe length of `context_rule_ids` must equal the number of auth contexts;\\na mismatch is rejected with\\n[`SmartAccountError::ContextRuleIdsLen",
+      "lib": "",
+      "name": "AuthPayload",
+      "fields": [
+        {
+          "doc": "Per-context rule IDs, aligned by index with `auth_contexts`.",
+          "name": "context_rule_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "Signature data mapped to each signer.",
+          "name": "signers",
+          "type_": {
+            "map": {
+              "key_type": {
+                "udt": {
+                  "name": "Signer"
+                }
+              },
+              "value_type": "bytes"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A complete context rule defining authorization requirements.",
+      "lib": "",
+      "name": "ContextRule",
+      "fields": [
+        {
+          "doc": "The type of context this rule applies to.",
+          "name": "context_type",
+          "type_": {
+            "udt": {
+              "name": "ContextRuleType"
+            }
+          }
+        },
+        {
+          "doc": "Unique identifier for the context rule.",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "Human-readable name for the context rule.",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "List of policy contracts that must be satisfied.",
+          "name": "policies",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "Global registry IDs for each policy, positionally aligned with\\n`policies`.",
+          "name": "policy_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "Global registry IDs for each signer, positionally aligned with\\n`signers`.",
+          "name": "signer_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "List of signers authorized by this rule.",
+          "name": "signers",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Signer"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "Optional expiration ledger sequence for the rule.",
+          "name": "valid_until",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Types of contexts that can be authorized by smart account rules.",
+      "lib": "",
+      "name": "ContextRuleType",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Default rules that can authorize any context.",
+            "name": "Default"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Rules specific to calling a particular contract.",
+            "name": "CallContract",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Rules specific to creating a contract with a particular WASM hash.",
+            "name": "CreateContract",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

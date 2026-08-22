@@ -1,0 +1,524 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PtToken"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "YtToken"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Underlying"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SyWrapper"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Tokenizer"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MaturityLedger"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "CreatedLedger"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PtReserves"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "UnderlyingReserves"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "YtReserves"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalLpShares"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ImpliedRateTwap"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LastTwapLedger"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "LpBalance",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pt_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "yt_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "underlying",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sy_wrapper",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tokenizer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "maturity_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireMarketError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_pt_price",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "NovaireMarketError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_reserves",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": [
+                  "i128",
+                  "i128",
+                  "i128"
+                ]
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireMarketError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "add_liquidity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pt_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "underlying_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "NovaireMarketError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_twap_rate",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "NovaireMarketError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "claim_amm_yield",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "NovaireMarketError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "remove_liquidity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "lp_shares",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": [
+                  "i128",
+                  "i128",
+                  "i128"
+                ]
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireMarketError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "NovaireMarketError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "EpochExpired",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InsufficientLiquidity",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "SlippageExceeded",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "ZeroInput",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "BelowMinimumLiquidity",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "StorageMissing",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "InvariantViolated",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "MathOverflow",
+          "value": 11
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "swap_pt_for_underlying",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "seller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pt_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_underlying_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "NovaireMarketError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "swap_underlying_for_pt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "buyer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "underlying_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_pt_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "NovaireMarketError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "swap_underlying_for_yt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "buyer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "underlying_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_yt_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "NovaireMarketError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "swap_yt_for_underlying",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "seller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "yt_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_underlying_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "NovaireMarketError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

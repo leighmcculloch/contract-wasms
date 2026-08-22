@@ -1,0 +1,311 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_sale",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "receivable_id",
+          "type_": "u128"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "SaleListing"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Investor sends stablecoin proportional to their share.\\n`amount_cents` \\xe2\\x80\\x94 how much of the face value they want to buy.\\nInvestor pays `amount_cents * (1 - discount_bps/10000)`.\\n\\nKYC enforcement: The receivable token asset is issued with\\nAUTH_REQUIRED flag on the Stellar issuer account. The Stellar\\nprotocol prevents any non-authorized trustline from receiving\\ntokens \\xe2\\x80\\x94 so KYC is enforced at the protocol layer automatically.",
+      "name": "buy_share",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "investor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "receivable_id",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "amount_cents",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Sale",
+            "type_": [
+              "u128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Closes the sale window and releases discounted proceeds to the exporter.\\nCan be called by the exporter once enough is subscribed, or auto-called\\nwhen face value is fully subscribed.",
+      "name": "close_sale",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "receivable_id",
+          "type_": "u128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SaleStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Open"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Closed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cancelled"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Called by the exporter after their receivable has been attested.\\n`discount_bps` \\xe2\\x80\\x94 discount in basis points (100 bps = 1%).\\nA 500 bps discount on a $10,000 receivable means investors pay $9,500.\\n`min_share_cents` \\xe2\\x80\\x94 smallest tranche an investor can buy (e.g. $100 = 10000).\\n`max_share_cents` \\xe2\\x80\\x94 0 means no upper limit per investor.",
+      "name": "list_for_sale",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "exporter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "receivable_id",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "face_value_cents",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "discount_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "min_share_cents",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_share_cents",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "stablecoin_address",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SaleListing",
+      "fields": [
+        {
+          "doc": "",
+          "name": "closed_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "discount_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "exporter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "face_value_cents",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "investors",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "listed_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "max_share_cents",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_share_cents",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "receivable_id",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "sale_price_cents",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": {
+            "map": {
+              "key_type": "address",
+              "value_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "stablecoin_address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "SaleStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "total_sold_cents",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Called by the exporter (or admin) to adjust the discount rate\\nwhile the sale is still open. Investors who have already bought\\nshares are NOT retroactively affected; only future purchases use\\nthe new rate.\\n\\n`new_discount_bps` \\xe2\\x80\\x94 new discount in basis points (1 to 2000).",
+      "name": "update_discount",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "exporter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "receivable_id",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "new_discount_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_investor_share",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "receivable_id",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "investor",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  }
+]

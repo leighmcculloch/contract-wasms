@@ -1,0 +1,470 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ClaimData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "balance",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "epoch",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "merkle_proof",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Typed contract errors, surfaced to callers as `Error(Contract, #n)`.",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "RootAlreadySet",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidClaimBalance",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "AlreadyClaimed",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidProof",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "RewardTokenNotWithdrawable",
+          "value": 6
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Claimed",
+      "prefix_topics": [
+        "claimed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "op_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "balance",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "EmergencyWithdrawn",
+      "prefix_topics": [
+        "emergency_withdrawn"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RewardsDistributed",
+      "prefix_topics": [
+        "rewards_distributed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "op_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "epoch",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RewardTokenUpdated",
+      "prefix_topics": [
+        "reward_token_updated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_token",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "op_claimed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "op_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "epoch",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "reward_token",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "reward_token",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "claim_op_epoch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "op_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "epoch",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "claimed_balance",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "merkle_proof",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "op_merkle_root",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "op_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "epoch",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "claim_op_epochs",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "op_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "claims",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "ClaimData"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "verify_op_claim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "op_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "epoch",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "claimed_balance",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "merkle_proof",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_reward_token",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_token",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Withdraw the full balance of any non-reward token to the admin.",
+      "name": "emergency_withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_addr",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "distribute_op_rewards",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "op_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "epoch",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "merkle_root",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "total_allocation",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

@@ -1,0 +1,622 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Claim",
+      "fields": [
+        {
+          "doc": "",
+          "name": "deposit_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "landlord_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "reason_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "DepositExists",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "DepositNotFound",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "ClaimNotFound",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidParty",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidAsset",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "InvalidDeadline",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "InvalidStatus",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "ClaimExceedsDeposit",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "DeadlineNotReached",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "ClaimAlreadyExists",
+          "value": 13
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Deposit",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "arbiter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "landlord",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "lease_end_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "renter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "DepositStatus"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ClaimFiled",
+      "prefix_topics": [
+        "claim_filed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "deposit_id",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DepositStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Open"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Funded"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Active"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ClaimPeriod"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Released"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Refunded"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Deducted"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ClaimResolved",
+      "prefix_topics": [
+        "claim_resolved"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "deposit_id",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DepositFunded",
+      "prefix_topics": [
+        "deposit_funded"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "deposit_id",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DepositCreated",
+      "prefix_topics": [
+        "deposit_created"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "deposit_id",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DepositRefunded",
+      "prefix_topics": [
+        "deposit_refunded"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "deposit_id",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DepositReleased",
+      "prefix_topics": [
+        "deposit_released"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "deposit_id",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DepositActivated",
+      "prefix_topics": [
+        "deposit_activated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "deposit_id",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DepositInitialized",
+      "prefix_topics": [
+        "deposit_initialized"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "fund",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "deposit_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "refund",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "deposit_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "release",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "deposit_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "activate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "deposit_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "file_claim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "deposit_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "claim_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "landlord_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "reason_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "deposit_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Deposit"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "resolve_claim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "deposit_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "claim_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "approved",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "deposit_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "renter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "landlord",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "arbiter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "lease_end_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

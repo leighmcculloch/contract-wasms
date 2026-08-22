@@ -1,0 +1,2170 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidConfiguration",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "InvalidProposal",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "UnsupportedAsset",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "UnsupportedLiquidity",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "DuplicateProposal",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "ProposalNotFound",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidPhase",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "DeadlinePassed",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "TooEarly",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "StaleState",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "DeploymentMismatch",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "Arithmetic",
+          "value": 12
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Proposal",
+      "fields": [
+        {
+          "doc": "",
+          "name": "activation_cutoff",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "funding_deadline",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "liquidity_sequence",
+          "type_": {
+            "option": {
+              "value_type": "u64"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "liquidity_target",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "liquidity_vault",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "lot_size",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "market",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "metadata_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "phase",
+          "type_": {
+            "udt": {
+              "name": "ProposalPhase"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "registration_required",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "resolver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "risk_group",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "route_revision",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "rules_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "state_version",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "expected_version",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "liquidity_version",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "config",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "FactoryConfig"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FactoryConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "batch_grace",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "collateral",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "committee_config_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "committee_epoch",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "committee_public_key_x",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "committee_public_key_y",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "epoch_duration",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "governance",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "liquidity_pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "liquidity_tiers",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "liquidity_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "lp_fee_share_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "market_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "maximum_batch_size",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "maximum_fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "maximum_market_duration",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "maximum_price_movement",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "minimum_funding_window",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "minimum_open_window",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "minimum_side_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "network_domain",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "refund_delay",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "resolver_registry",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "shared_vault",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LiquidityInfo",
+      "fields": [
+        {
+          "doc": "",
+          "name": "activation_cutoff",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "decimals",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "factory",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "funded_assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "funding_deadline",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "locked_shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "market",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "phase",
+          "type_": {
+            "udt": {
+              "name": "LiquidityPhase"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "share_controller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "state_version",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "target_assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "terminal_assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_shares",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProposalPhase",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Proposed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Funding"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Ready"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Active"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cancelled"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ResolverRoute",
+      "fields": [
+        {
+          "doc": "",
+          "name": "enabled",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "registration_required",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "resolver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "revision",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "risk_group",
+          "type_": "symbol"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "propose",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "request",
+          "type_": {
+            "udt": {
+              "name": "ProposalRequest"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LiquidityPhase",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Funding"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Ready"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Active"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cancelled"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Settled"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "activate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "expected_version",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "liquidity_version",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "proposal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "Proposal"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketProposed",
+      "prefix_topics": [
+        "market_proposed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "risk_group",
+          "type_": "symbol",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "resolver",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "route_revision",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "liquidity_target",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProposalRequest",
+      "fields": [
+        {
+          "doc": "",
+          "name": "activation_cutoff",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "funding_deadline",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "liquidity_target",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "lot_size",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "metadata_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "nonce",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "rules_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketActivated",
+      "prefix_topics": [
+        "market_activated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "market",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "liquidity_vault",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "liquidity_parameter",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "state_version",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProposalPreimage",
+      "fields": [
+        {
+          "doc": "",
+          "name": "batch_grace",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "collateral",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "committee_config_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "committee_epoch",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "committee_public_key_x",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "committee_public_key_y",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "epoch_duration",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "factory",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "liquidity_pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "liquidity_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "lp_fee_share_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "market_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "maximum_batch_size",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "maximum_price_movement",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "minimum_side_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "network_domain",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "refund_delay",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "registration_required",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "request",
+          "type_": {
+            "udt": {
+              "name": "ProposalRequest"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "resolver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "resolver_registry",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "risk_group",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "route_revision",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "shared_vault",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "extend_ttl",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "proposal_id",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "request",
+          "type_": {
+            "udt": {
+              "name": "ProposalRequest"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LiquidityDeployed",
+      "prefix_topics": [
+        "liquidity_deployed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "liquidity_vault",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "liquidity_sequence",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "state_version",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "sync_funding",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "expected_version",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "ProposalPhase"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PrivateMarketConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "batcher",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "funding",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "liquidity_vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "lot_size",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "lp_fee_share_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "maximum_batch_size",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "maximum_price_movement",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "minimum_side_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "resolver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "rules_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "config",
+          "type_": {
+            "udt": {
+              "name": "FactoryConfig"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "market_address",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProposalPhaseChanged",
+      "prefix_topics": [
+        "proposal_phase"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "phase",
+          "type_": {
+            "udt": {
+              "name": "ProposalPhase"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "state_version",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "deploy_liquidity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "expected_version",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "liquidity_address",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "liquidity_parameter",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "target_assets",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BatchQuote",
+      "fields": [
+        {
+          "doc": "",
+          "name": "aggregate_market_charge",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "batch_size",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "conditional_lp_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "conditional_protocol_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee_escrow",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee_per_position",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "no_charge_per_position",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "no_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "no_market_cost",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "no_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "post_yes_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "pre_yes_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "rounding_contribution",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "state_version",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "yes_charge_per_position",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "yes_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "yes_market_cost",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "yes_price",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CircuitKey",
+      "fields": [
+        {
+          "doc": "",
+          "name": "circuit",
+          "type_": {
+            "udt": {
+              "name": "ProofCircuit"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "schema_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "verification_key",
+          "type_": {
+            "udt": {
+              "name": "VerificationKeyBytes"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BindingKind",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Empty"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Liquidity"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Order"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Refund"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Allocation"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Treasury"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExitRequest"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExitCancel"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExitMatch"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProofAction",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Deposit"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Transfer"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Withdraw"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Order"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Claim"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Refund"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LiquidityFund"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LiquidityExit"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LiquidityRedeem"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExecutionChange"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Treasury"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExitRequest"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExitCancel"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExitMatch"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SignalError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidShape",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NonCanonicalField",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "NegativeBatchValue",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "MalformedProof",
+          "value": 4
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProofCircuit",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Deposit"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Transfer"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Withdraw"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Order"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Claim"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Refund"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LiquidityFund"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LiquidityExit"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LiquidityRedeem"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExecutionChange"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Treasury"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExitRequest"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExitCancel"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExitMatch"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Batch"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "KeyDomainStep",
+      "fields": [
+        {
+          "doc": "",
+          "name": "key",
+          "type_": {
+            "udt": {
+              "name": "CircuitKey"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "prior",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProofStatement",
+      "fields": [
+        {
+          "doc": "",
+          "name": "action",
+          "type_": {
+            "udt": {
+              "name": "ProofAction"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "append_root",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "context_digest",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "first_leaf_index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "input_nullifiers",
+          "type_": {
+            "vec": {
+              "element_type": "u256"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "membership_root",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "new_root",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "output_commitments",
+          "type_": {
+            "vec": {
+              "element_type": "u256"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "output_envelope_hashes",
+          "type_": {
+            "vec": {
+              "element_type": "u256"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "public_amount",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OperationBinding",
+      "fields": [
+        {
+          "doc": "",
+          "name": "fields",
+          "type_": {
+            "vec": {
+              "element_type": "u256"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "kind",
+          "type_": {
+            "udt": {
+              "name": "BindingKind"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OperationContext",
+      "fields": [
+        {
+          "doc": "",
+          "name": "action",
+          "type_": {
+            "udt": {
+              "name": "ProofAction"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "action_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "binding",
+          "type_": {
+            "udt": {
+              "name": "OperationBinding"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "market",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "network_domain",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "public_account",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "public_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "verifier_domain",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BatchProofStatement",
+      "fields": [
+        {
+          "doc": "",
+          "name": "accepted_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "accepted_root",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "aggregate_ciphertext",
+          "type_": {
+            "vec": {
+              "element_type": "u256"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "allocation_root",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "committee_config_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "committee_epoch",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "committee_public_key_x",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "committee_public_key_y",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "committee_statement_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "decryption_proof_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "epoch",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "first_sequence",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "included_root",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "last_sequence",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "lot_size",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "market",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "network_domain",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "quote",
+          "type_": {
+            "udt": {
+              "name": "BatchQuote"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vault",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VerificationKeyBytes",
+      "fields": [
+        {
+          "doc": "",
+          "name": "alpha",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "beta",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "delta",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "gamma",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "ic",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 64
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

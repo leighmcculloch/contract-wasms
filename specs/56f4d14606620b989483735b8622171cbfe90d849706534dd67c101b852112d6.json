@@ -1,0 +1,572 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "All failure modes are explicit, contiguous `u32` codes so the TypeScript\\nclient can map them to user-facing messages without guessing.",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "NotAuthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidShares",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidDeadline",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "BillNotFound",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "BillNotOpen",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "Expired",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "NotYetExpired",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "AlreadyFunded",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "NotFunded",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "NothingToRefund",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "Overfunded",
+          "value": 15
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys. `Bill` and `Contribution` live in *persistent* storage (they\\nmust outlive the contract instance); `Admin`/`Token`/`Paused`/`Counter`\\nlive in *instance* storage so they share the instance's TTL.",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Token"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Counter"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "bill id -> Bill",
+            "name": "Bill",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "(bill id, contributor) -> i128 amount contributed (for refunds)",
+            "name": "Contribution",
+            "type_": [
+              "u32",
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "Lifecycle of a split bill. A bill is created `Open`; it becomes `Settled`\\nonce it is fully funded and the pooled total is released to the creator, or\\n`Cancelled` if the creator/admin abandons it (which opens the refund path\\nso every contributor can reclaim what they put in).",
+      "lib": "",
+      "name": "BillStatus",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Open",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Settled",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Cancelled",
+          "value": 2
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A single split-the-bill escrow. The contract custodies `funded_amount` of\\n`token` until the bill is fully funded (then it is released to `creator`) or\\nabandoned (then each contributor refunds their own share).",
+      "lib": "",
+      "name": "Bill",
+      "fields": [
+        {
+          "doc": "Payout address \\xe2\\x80\\x94 receives the pooled total once fully funded.",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "Unix timestamp (ledger time) after which the bill is abandonable: an\\nunfunded bill past this point can be refunded by its contributors.",
+          "name": "deadline",
+          "type_": "u64"
+        },
+        {
+          "doc": "Sum of all contributions still held in escrow.",
+          "name": "funded_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "Expected number of participant shares (informational).",
+          "name": "num_shares",
+          "type_": "u32"
+        },
+        {
+          "doc": "Shares paid so far.",
+          "name": "paid_shares",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "BillStatus"
+            }
+          }
+        },
+        {
+          "doc": "Stellar Asset Contract (SAC) address of the escrowed asset (native XLM).",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "Target total in the token's minor units (stroops for XLM = 7 decimals).",
+          "name": "total_amount",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "One-time setup. Records the admin and the escrow token (the native XLM\\nSAC on testnet) and unpauses the contract.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Open a new split bill and return its id.\\n\\nAuth: the **admin** signs. The app opens bills on behalf of creators (a\\ncreator only supplies a receiving address, they need not have a wallet\\nconnected). No funds move here \\xe2\\x80\\x94 money only flows on `pay_share`.",
+      "name": "open_bill",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "num_shares",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pay one participant's `amount` into the bill's escrow.\\n\\nAuth: the **payer** signs (the same authorization covers the inner SAC\\n`transfer(payer -> contract)`). When this payment completes the bill's\\nfunding, the whole pot is released to the creator in the same call.\\nReturns the bill's funded amount after this contribution.",
+      "name": "pay_share",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "bill_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "payer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Explicitly release a fully-funded bill to its creator. Normally\\n`pay_share` releases automatically; this is a safety valve.",
+      "name": "release",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "bill_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Abandon an open bill (admin-gated). Opens the refund path so every\\ncontributor can reclaim their share.",
+      "name": "cancel",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "bill_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Reclaim a contributor's share from an abandoned bill.\\n\\nAllowed when the bill is `Cancelled`, or still `Open` but past its\\n`deadline` (the creator never collected). Auth: the **payer** signs.",
+      "name": "refund",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "bill_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "payer",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_bill",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "bill_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Bill"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_contribution",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "bill_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "payer",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_bills",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_token",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unpause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Replace the contract's own code (admin-gated). Ships fixes without\\nmigrating escrow state \\xe2\\x80\\x94 important for a mainnet (L6) deploy.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

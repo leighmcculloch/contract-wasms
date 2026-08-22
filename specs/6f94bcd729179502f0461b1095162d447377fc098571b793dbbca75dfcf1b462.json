@@ -1,0 +1,263 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "Namespaced storage keys.\\n\\nThe inbox is intentionally **not** a single `Vec`: each message lives under its\\nown `Msg(owner, index)` key and `MsgCount(owner)` tracks the length. This keeps\\nevery write O(1) and bounds the size of any single ledger entry (H-1).",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "MsgCount",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Msg",
+            "type_": [
+              "address",
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "SponsoredCount",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_messages",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "page",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "page_size",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "InboxMessage"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Standard self-paid mark-as-read (or transparently fee-bumped).",
+      "name": "mark_as_read",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Standard self-paid send (or transparently fee-bumped).",
+      "name": "send_message",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "content",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Marks every unread message in the caller's inbox as read. Issues one\\nstorage write per message but only a single auth entry, so it costs\\none wallet popup instead of N.",
+      "name": "mark_all_read",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "InboxMessage",
+      "fields": [
+        {
+          "doc": "",
+          "name": "content",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "read",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "my_message_count",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Number of actions a sponsor has paid for through this contract.",
+      "name": "get_sponsored_count",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sponsor",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Fee-sponsored (\"gasless\") mark-as-read.",
+      "name": "mark_as_read_sponsored",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sponsor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Fee-sponsored (\"gasless\") send.\\n\\nDesigned to ride inside a Stellar fee-bump transaction whose fee source is\\n`sponsor`. The sponsor co-authorizes (trustworthy accounting); the sender\\nstill authorizes their own message.",
+      "name": "send_message_sponsored",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sponsor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "content",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Gasless variant of `mark_all_read`.",
+      "name": "mark_all_read_sponsored",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sponsor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

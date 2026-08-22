@@ -1,0 +1,1505 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Side",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Long"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Short"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidLeverage",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InsufficientLiquidity",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "PositionNotFound",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "PositionNotOpen",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "NotLiquidatable",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "InvalidBatch",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "InvalidPrice",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "InvalidEstimate",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "Slippage",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "Arithmetic",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "WithdrawalLocked",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "MarketNotFound",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "MarketDisabled",
+          "value": 19
+        },
+        {
+          "doc": "",
+          "name": "InvalidPool",
+          "value": 20
+        },
+        {
+          "doc": "",
+          "name": "PoolSwapDisabled",
+          "value": 21
+        },
+        {
+          "doc": "",
+          "name": "PoolEmergencyMode",
+          "value": 22
+        },
+        {
+          "doc": "",
+          "name": "PositionTooLarge",
+          "value": 24
+        },
+        {
+          "doc": "",
+          "name": "SwapAccountingMismatch",
+          "value": 25
+        },
+        {
+          "doc": "",
+          "name": "RateConfigNotFound",
+          "value": 26
+        },
+        {
+          "doc": "",
+          "name": "MaxUtilizationExceeded",
+          "value": 27
+        },
+        {
+          "doc": "",
+          "name": "InvalidClosePercentage",
+          "value": 28
+        },
+        {
+          "doc": "",
+          "name": "PartialCloseTooSmall",
+          "value": 29
+        },
+        {
+          "doc": "",
+          "name": "PartialCloseLeavesUnsafePosition",
+          "value": 30
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_pool",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "PoolState"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_risk",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "PositionRisk"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "open_long",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "collateral_usdc",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "leverage_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_market",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "MarketConfig"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "open_short",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "collateral_usdc",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "leverage_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Adds or updates a USDC/asset market. USDC remains the universal base.",
+      "name": "set_market",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market",
+          "type_": {
+            "udt": {
+              "name": "MarketConfig"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_paused",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Position",
+      "fields": [
+        {
+          "doc": "",
+          "name": "action_queued",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "Normalized debt units at the lending pool borrow index.",
+          "name": "borrow_scaled",
+          "type_": "i128"
+        },
+        {
+          "doc": "USDC principal for longs; supported-asset principal for shorts.",
+          "name": "borrowed_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "collateral_usdc",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "entry_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "Supported asset held for longs; USDC sale proceeds held for shorts.",
+          "name": "held_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "initial_collateral_usdc",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "last_fee_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "Borrowed principal multiple. 50_000 means collateral * 5 is borrowed.",
+          "name": "leverage_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "open_fee_paid_usdc",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "opened_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "side",
+          "type_": {
+            "udt": {
+              "name": "Side"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "PositionStatus"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PoolState",
+      "fields": [
+        {
+          "doc": "",
+          "name": "accrued_interest",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "borrow_index",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "last_accrual_timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "reserves",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "Current principal plus accrued borrowing interest.",
+          "name": "total_borrowed",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_shares",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_position",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Position"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ScanResult",
+      "fields": [
+        {
+          "doc": "",
+          "name": "inspected",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "next_cursor",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "queued",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Settlement",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "Portion closed. 10_000 means 100%.",
+          "name": "close_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "debt_repaid",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fully_closed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "interest_paid_usdc",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "liquidation_reward_usdc",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "position_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "principal_closed",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "protocol_close_fee_usdc",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "reason",
+          "type_": {
+            "udt": {
+              "name": "CloseReason"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "remaining_collateral_usdc",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "remaining_debt",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "remaining_held_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "remaining_principal",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "returned_usdc",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Processes up to `max_positions` queued liquidations in one atomic transaction.\\nNo IDs, routes, pools, indices, min outputs, or max inputs are supplied by the keeper.",
+      "name": "process_ready",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "keeper",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "max_positions",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "BatchResult"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "config",
+          "type_": {
+            "udt": {
+              "name": "GlobalConfig"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BatchResult",
+      "fields": [
+        {
+          "doc": "",
+          "name": "executed",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "inspected",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "skipped",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CloseReason",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "User"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Liquidation"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "close_position",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "position_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "close_bps",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Settlement"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "GlobalConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "close_fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "liquidation_reward_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "open_fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        },
+        {
+          "doc": "USDC is the universal collateral, settlement, and quote asset.",
+          "name": "usdc",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketConfig",
+      "fields": [
+        {
+          "doc": "Fixed direct Aquarius pool for USDC/asset.",
+          "name": "aquarius_pool",
+          "type_": "address"
+        },
+        {
+          "doc": "Supported non-USDC asset, e.g. XLM or BTC.",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "Index of the supported asset in Aquarius pool.get_tokens().",
+          "name": "asset_index",
+          "type_": "u32"
+        },
+        {
+          "doc": "Number of token base units in one whole asset. Usually 10^7 on Stellar.",
+          "name": "asset_scale",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "closeness_equity_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "enabled",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "liquidation_slippage_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "maintenance_margin_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_leverage_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_position_notional_usdc",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "normal_slippage_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "Index of USDC in Aquarius pool.get_tokens().",
+          "name": "usdc_index",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PositionRisk",
+      "fields": [
+        {
+          "doc": "",
+          "name": "actionable",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "equity_ratio_bps",
+          "type_": "i128"
+        },
+        {
+          "doc": "Estimated USDC equity if the position closed against Aquarius now.",
+          "name": "executable_equity_usdc",
+          "type_": "i128"
+        },
+        {
+          "doc": "Effective USDC price for the full position-sized Aquarius close estimate.",
+          "name": "executable_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "liquidatable",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "margin_ratio_bps",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_borrow_rate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "side",
+          "type_": {
+            "udt": {
+              "name": "Side"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "BorrowRateView"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "preview_position",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "PositionPreview"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BorrowRateView",
+      "fields": [
+        {
+          "doc": "",
+          "name": "apr_bps",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "available_liquidity",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "borrowed_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "RATE_SCALE represents 100%. This is APR / 365.",
+          "name": "daily_rate_scaled",
+          "type_": "i128"
+        },
+        {
+          "doc": "RATE_SCALE represents 100%. This is APR / 8,760.",
+          "name": "hourly_rate_scaled",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "market_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "rate_scale",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "side",
+          "type_": {
+            "udt": {
+              "name": "Side"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "total_debt",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "utilization_bps",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PositionStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Open"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Closed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Liquidated"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "deposit_liquidity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "lp",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_global_config",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "GlobalConfig"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PositionPreview",
+      "fields": [
+        {
+          "doc": "",
+          "name": "accrued_borrow_fee_asset",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "accrued_borrow_fee_usdc",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "action_queued",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "actionable",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "borrowed_principal",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "collateral_usdc",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "current_borrow_apr_bps",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "current_debt",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "entry_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "equity_ratio_bps",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "estimated_close_fee_usdc",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "estimated_manual_payout_usdc",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "executable_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "gross_pnl_usdc",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "held_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "initial_collateral_usdc",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "liquidatable",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "margin_ratio_bps",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "net_pnl_usdc",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "open_fee_paid_usdc",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "side",
+          "type_": {
+            "udt": {
+              "name": "Side"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "PositionStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "total_estimated_fees_usdc",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_market_enabled",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "enabled",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "withdraw_liquidity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "lp",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Contract-owned global scan. Caller supplies only the work bound.",
+      "name": "refresh_action_queue",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "max_scan",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "ScanResult"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "InterestRateConfig",
+      "fields": [
+        {
+          "doc": "APR at zero utilization.",
+          "name": "base_apr_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "New borrowing is blocked above this projected utilization.",
+          "name": "max_utilization_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "Utilization where the steep part of the curve begins.",
+          "name": "optimal_utilization_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "Share of accrued borrowing interest retained as protocol reserves.",
+          "name": "reserve_factor_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "APR added linearly between optimal and 100% utilization.",
+          "name": "slope_after_kink_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "APR added linearly between zero and optimal utilization.",
+          "name": "slope_before_kink_bps",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_interest_rate_config",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "InterestRateConfig"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_interest_rate_config",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "rate",
+          "type_": {
+            "udt": {
+              "name": "InterestRateConfig"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

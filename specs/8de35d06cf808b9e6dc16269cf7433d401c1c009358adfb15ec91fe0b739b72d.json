@@ -1,0 +1,860 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "burn",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "mint",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "name",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "symbol",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "approve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "approver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "approved",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unpause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "owner_of",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "burn_from",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns `Some(Address)` if ownership is set, or `None` if ownership has\\nbeen renounced.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.",
+      "name": "get_owner",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "token_uri",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_approved",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the `token_id` at a given `index` in the global token list.\\nUse along with [`NonFungibleEnumerable::total_supply`] to enumerate\\nall the tokens in the contract.\\n\\nA function to get all tokens of a contract is not provided because that\\nwould be unbounded. To enumerate all tokens of a contract, use\\n[`NonFungibleEnumerable::total_supply`] to get the total number of\\ntokens and then use [`NonFungibleEnumerable::get_token_id`] to retrieve\\neach token one by one.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `index` - Index of the token in the global list.\\n\\n# Errors\\n\\n* [`crate::non_fungible::NonFungibleTokenError::TokenNotFoundInGlobalList`] - When the token\\nID is not found in the global enumeration.",
+      "name": "get_token_id",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the total amount of tokens stored by the contract.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.",
+      "name": "total_supply",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "uri",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "symbol",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer_from",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "approve_for_all",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Accepts a pending ownership transfer.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n\\n# Errors\\n\\n* [`crate::role_transfer::RoleTransferError::NoPendingTransfer`] - If\\nthere is no pending transfer to accept.\\n\\n# Events\\n\\n* topics - `[\"ownership_transfer_completed\"]`\\n* data - `[new_owner: Address]`",
+      "name": "accept_ownership",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the `token_id` owned by `owner` at a given `index` in the\\nowner's local list. Use along with\\n[`crate::non_fungible::NonFungibleToken::balance`] to enumerate all of\\n`owner`'s tokens.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `owner` - Account of the token's owner.\\n* `index` - Index of the token in the owner's local list.\\n\\n# Errors\\n\\n* [`crate::non_fungible::NonFungibleTokenError::TokenNotFoundInOwnerList`] - When the token\\nID is not found in the owner's enumeration.",
+      "name": "get_owner_token_id",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Renounces ownership of the contract.\\n\\nPermanently removes the owner, disabling all functions gated by\\n`#[only_owner]`.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n\\n# Errors\\n\\n* [`OwnableError::TransferInProgress`] - If there is a pending ownership\\ntransfer.\\n* [`OwnableError::OwnerNotSet`] - If the owner is not set.\\n\\n# Notes\\n\\n* Authorization for the current owner is required.",
+      "name": "renounce_ownership",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initiates a 2-step ownership transfer to a new address.\\n\\nRequires authorization from the current owner. The new owner must later\\ncall `accept_ownership()` to complete the transfer.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `new_owner` - The proposed new owner.\\n* `live_until_ledger` - Ledger number until which the new owner can\\naccept. A value of `0` cancels any pending transfer.\\n\\n# Errors\\n\\n* [`OwnableError::OwnerNotSet`] - If the owner is not set.\\n* [`crate::role_transfer::RoleTransferError::NoPendingTransfer`] - If\\ntrying to cancel a transfer that doesn't exist.\\n* [`crate::role_transfer::RoleTransferError::InvalidLiveUntilLedger`] -\\nIf the specified ledger is in the past.\\n* [`crate::role_transfer::RoleTransferError::InvalidPendingAccount`] -\\nIf the specified pending account is not the same as the provided `new`\\naddress.\\n\\n# Notes\\n\\n* Authorization for the current owner is required.",
+      "name": "transfer_ownership",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_approved_for_all",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RoleTransferError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NoPendingTransfer",
+          "value": 2200
+        },
+        {
+          "doc": "",
+          "name": "InvalidLiveUntilLedger",
+          "value": 2201
+        },
+        {
+          "doc": "",
+          "name": "InvalidPendingAccount",
+          "value": 2202
+        },
+        {
+          "doc": "",
+          "name": "TransferExpired",
+          "value": 2203
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OwnableError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "OwnerNotSet",
+          "value": 2100
+        },
+        {
+          "doc": "",
+          "name": "TransferInProgress",
+          "value": 2101
+        },
+        {
+          "doc": "",
+          "name": "OwnerAlreadySet",
+          "value": 2102
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an ownership transfer is initiated.",
+      "lib": "",
+      "name": "OwnershipTransfer",
+      "prefix_topics": [
+        "ownership_transfer"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when ownership is renounced.",
+      "lib": "",
+      "name": "OwnershipRenounced",
+      "prefix_topics": [
+        "ownership_renounced"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an ownership transfer is completed.",
+      "lib": "",
+      "name": "OwnershipTransferCompleted",
+      "prefix_topics": [
+        "ownership_transfer_completed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the contract is paused.",
+      "lib": "",
+      "name": "Paused",
+      "prefix_topics": [
+        "paused"
+      ],
+      "params": [],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the contract is unpaused.",
+      "lib": "",
+      "name": "Unpaused",
+      "prefix_topics": [
+        "unpaused"
+      ],
+      "params": [],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PausableError",
+      "cases": [
+        {
+          "doc": "The operation failed because the contract is paused.",
+          "name": "EnforcedPause",
+          "value": 1000
+        },
+        {
+          "doc": "The operation failed because the contract is not paused.",
+          "name": "ExpectedPause",
+          "value": 1001
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a token is minted.",
+      "lib": "",
+      "name": "Mint",
+      "prefix_topics": [
+        "mint"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an approval is granted.",
+      "lib": "",
+      "name": "Approve",
+      "prefix_topics": [
+        "approve"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "approver",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "approved",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a token is transferred.",
+      "lib": "",
+      "name": "Transfer",
+      "prefix_topics": [
+        "transfer"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when approval for all tokens is granted.",
+      "lib": "",
+      "name": "ApproveForAll",
+      "prefix_topics": [
+        "approve_for_all"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "NonFungibleTokenError",
+      "cases": [
+        {
+          "doc": "Indicates a non-existent `token_id`.",
+          "name": "NonExistentToken",
+          "value": 200
+        },
+        {
+          "doc": "Indicates an error related to the ownership over a particular token.\\nUsed in transfers.",
+          "name": "IncorrectOwner",
+          "value": 201
+        },
+        {
+          "doc": "Indicates a failure with the `operator`s approval. Used in transfers.",
+          "name": "InsufficientApproval",
+          "value": 202
+        },
+        {
+          "doc": "Indicates a failure with the `approver` of a token to be approved. Used\\nin approvals.",
+          "name": "InvalidApprover",
+          "value": 203
+        },
+        {
+          "doc": "Indicates an invalid value for `live_until_ledger` when setting\\napprovals.",
+          "name": "InvalidLiveUntilLedger",
+          "value": 204
+        },
+        {
+          "doc": "Indicates overflow when adding two values",
+          "name": "MathOverflow",
+          "value": 205
+        },
+        {
+          "doc": "Indicates all possible `token_id`s are already in use.",
+          "name": "TokenIDsAreDepleted",
+          "value": 206
+        },
+        {
+          "doc": "Indicates an invalid amount to batch mint in `consecutive` extension.",
+          "name": "InvalidAmount",
+          "value": 207
+        },
+        {
+          "doc": "Indicates the token does not exist in owner's list.",
+          "name": "TokenNotFoundInOwnerList",
+          "value": 208
+        },
+        {
+          "doc": "Indicates the token does not exist in global list.",
+          "name": "TokenNotFoundInGlobalList",
+          "value": 209
+        },
+        {
+          "doc": "Indicates access to unset metadata.",
+          "name": "UnsetMetadata",
+          "value": 210
+        },
+        {
+          "doc": "Indicates the length of the base URI exceeds the maximum allowed.",
+          "name": "BaseUriMaxLenExceeded",
+          "value": 211
+        },
+        {
+          "doc": "Indicates the royalty amount is higher than 10_000 (100%) basis points.",
+          "name": "InvalidRoyaltyAmount",
+          "value": 212
+        },
+        {
+          "doc": "Indicates the length of the name exceeds the maximum allowed.",
+          "name": "NameMaxLenExceeded",
+          "value": 213
+        },
+        {
+          "doc": "Indicates the length of the symbol exceeds the maximum allowed.",
+          "name": "SymbolMaxLenExceeded",
+          "value": 214
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a token is burned.",
+      "lib": "",
+      "name": "Burn",
+      "prefix_topics": [
+        "burn"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  }
+]

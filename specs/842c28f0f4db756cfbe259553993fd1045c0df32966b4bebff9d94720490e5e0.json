@@ -1,0 +1,299 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "SessionExpired",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "SessionRevoked",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "SessionMissing",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "BadPolicy",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidContext",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "CapExceeded",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "BadAmount",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "BadSignature",
+          "value": 10
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Owner"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "NativeSac"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Zipper delegate identity \\xe2\\x80\\x94 classic G (or C) address of the AI session.",
+            "name": "Session",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SessionPolicy",
+      "fields": [
+        {
+          "doc": "",
+          "name": "expires_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "Max native amount in stroops per authorization tree.",
+          "name": "per_tx_max_stroops",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "revoked",
+          "type_": "bool"
+        },
+        {
+          "doc": "Max total spend for this session lifetime (stroops).",
+          "name": "session_max_stroops",
+          "type_": "i128"
+        },
+        {
+          "doc": "Stateful spend counter (stroops).",
+          "name": "spent_stroops",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "owner",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "native_sac",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Register AI session as a Zipper delegate address. Requires owner auth.",
+      "name": "add_session",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "session",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "expires_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "per_tx_max_stroops",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "session_max_stroops",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_session",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "session",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "SessionPolicy"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__check_auth",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signature_payload",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signatures",
+          "type_": "void"
+        },
+        {
+          "doc": "",
+          "name": "auth_contexts",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Context"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Atomic init \\xe2\\x80\\x94 deploy with constructor args to avoid front-running.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "native_sac",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "revoke_session",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "session",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

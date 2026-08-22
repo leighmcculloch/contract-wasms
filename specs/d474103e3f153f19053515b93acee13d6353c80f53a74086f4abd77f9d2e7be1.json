@@ -1,0 +1,544 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Epoch",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "EpochRevenue",
+            "type_": [
+              "u64",
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "EpochTokenList",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "EpochPartnerRevenue",
+            "type_": [
+              "u64",
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Claimed",
+            "type_": [
+              "address",
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "LpContract",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LpCount"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "EpochData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "end_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "epoch_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "finalized",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "partner_revenue",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "per_token_revenue",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "protocol_revenue",
+          "type_": "i128"
+        },
+        {
+          "doc": "Total Stability Pool USDC deposits at epoch-finalise time \\xe2\\x80\\x94 the\\ndenominator used to pro-rate each claimer's \"staker\" bucket share.",
+          "name": "staker_snapshot",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "start_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "total_revenue",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "EpochClosed",
+      "prefix_topics": [
+        "epoch_closed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "epoch",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "total_revenue",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "EpochOpened",
+      "prefix_topics": [
+        "epoch_opened"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "epoch",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RevenueClaimed",
+      "prefix_topics": [
+        "revenue_claimed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "claimer",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "total",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RevenueReceived",
+      "prefix_topics": [
+        "revenue_received"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "source",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "epoch",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Claims a claimer's pro-rata share of the \"35% staker\" bucket for\\neach finalized epoch listed, based on how much USDC they had\\ndeposited in the Stability Pool at the time each epoch closed\\n(approximated by their *current* compounded deposit \\xe2\\x80\\x94 deposits are\\ngenerally stable/long-lived, so this is an acceptable trade-off vs.\\nstoring a full historical snapshot per depositor per epoch).",
+      "name": "claim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "claimer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "epochs",
+          "type_": {
+            "vec": {
+              "element_type": "u64"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Replace this contract's Wasm in place. Instance and persistent\\nstorage are preserved. Authorised by the stored DAO address.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_epoch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "epoch_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "EpochData"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "dev_fund",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "stab_pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "partner_reg",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "has_claimed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "claimer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "epoch_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "register_lp",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "lp",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PartnerRevenueForwarded",
+      "prefix_topics": [
+        "partner_revenue_forwarded"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "partner_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "epoch",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "partner_cut",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "source",
+          "type_": "symbol",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "finalize_epoch",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Receive protocol revenue, optionally tagged with a partner ID.\\n\\n# Arguments\\n* `sender`     \\xe2\\x80\\x94 the contract sending fees (engine, LP, etc.)\\n* `token`      \\xe2\\x80\\x94 the fee token address (usually USDC)\\n* `amount`     \\xe2\\x80\\x94 total fee amount in 7dp units\\n* `source`     \\xe2\\x80\\x94 fee type: \"stabfee\" | \"swapfee\" | \"liqfee\"\\n* `partner_id` \\xe2\\x80\\x94 optional partner referral tag; pass 0 for none.\\nWhen > 0, the partner's registered share is\\ndeducted before the protocol split.",
+      "name": "receive_revenue",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "source",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "partner_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_epoch_tokens",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "epoch_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_current_epoch",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_epoch_revenue",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "epoch_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_partner_epoch_revenue",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "epoch_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "partner_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  }
+]

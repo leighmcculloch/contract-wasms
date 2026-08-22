@@ -1,0 +1,529 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "auth_vk",
+      "inputs": [],
+      "outputs": [
+        "bytes"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Upgrade the contract WASM to a new version. Admin-only.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "auth_mode",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_auth_vk",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "auth_vk",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Smart-account authorization hook.\\n\\nVerifies a Poseidon ZK proof binding the owner commitment, auth context,\\nand signature payload. Proof-only mode (no envelope fallback).",
+      "name": "__check_auth",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signature_payload",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signatures",
+          "type_": "val"
+        },
+        {
+          "doc": "",
+          "name": "auth_context",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Context"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "owner_commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "auth_vk",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "owner_commitment",
+      "inputs": [],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_owner_commitment",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner_commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "MissingAdmin",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "MissingOwnerKey",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidOwnerKey",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidSignatureEnvelope",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "UnsupportedAuthMode",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidAuthContext",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidAuthDomain",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "InvalidAuthOwnerHash",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "InvalidAuthPayloadBinding",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "MissingOwnerCommitment",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "MissingAuthVk",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "InvalidOwnerCommitment",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "InvalidAuthVkLength",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "InvalidAuthMode",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "InvalidVkLength",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "InvalidProofOrVkLength",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "InvalidProofEncoding",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "InvalidVkEncoding",
+          "value": 19
+        },
+        {
+          "doc": "",
+          "name": "InvalidProof",
+          "value": 20
+        },
+        {
+          "doc": "",
+          "name": "ScalarFieldOverflow",
+          "value": 21
+        },
+        {
+          "doc": "",
+          "name": "UnsupportedOperation",
+          "value": 22
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "OwnerCommitment"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AuthVk"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AuthMode"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AuthFailed",
+      "prefix_topics": [
+        "auth_failed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "reason_code",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "owner_commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AuthSucceeded",
+      "prefix_topics": [
+        "auth_succeeded"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "owner_commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VerifyDiagnostic",
+      "prefix_topics": [
+        "verify_diagnostic"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "stage",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccountInitialized",
+      "prefix_topics": [
+        "account_initialized"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "owner_commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccountAdminUpdated",
+      "prefix_topics": [
+        "account_admin_updated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccountAuthVkUpdated",
+      "prefix_topics": [
+        "account_auth_vk_updated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "auth_vk_len",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OwnerCommitmentUpdated",
+      "prefix_topics": [
+        "owner_commitment_updated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "owner_commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  }
+]

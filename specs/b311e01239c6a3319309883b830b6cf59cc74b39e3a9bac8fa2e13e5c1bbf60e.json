@@ -1,0 +1,526 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Provider",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "ProviderList",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Observation",
+            "type_": [
+              "symbol",
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Feed",
+            "type_": [
+              "symbol"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Accumulator",
+            "type_": [
+              "symbol"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "PendingObservations",
+            "type_": [
+              "symbol"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AssetFeed",
+      "fields": [
+        {
+          "doc": "",
+          "name": "latest_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "latest_ts",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "observation_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "twap_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "twap_ts",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TwapEvent",
+      "prefix_topics": [
+        "twap"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "twap_price",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Replace this contract's Wasm in place. Instance and persistent\\nstorage are preserved. Authorised by the stored DAO address.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PriceEvent",
+      "prefix_topics": [
+        "price"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_feed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "AssetFeed"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_twap",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_stale",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "aggregate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_price",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "twap_window",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PriceAggEvent",
+      "prefix_topics": [
+        "price"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "median_price",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProviderEvent",
+      "prefix_topics": [
+        "provider"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "action",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_provider",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "addr",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "update_twap",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Cumulative sum for TWAP calculation",
+      "lib": "",
+      "name": "TwapAccumulator",
+      "fields": [
+        {
+          "doc": "",
+          "name": "cumulative_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "last_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "last_timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "window_cum_start",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "window_start",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "add_provider",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "submit_price",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PriceObservation",
+      "fields": [
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "provider_count",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "remove_provider",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_min_providers",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Adjust the minimum number of price observations required before an\\naggregation is accepted (quorum for the oracle to trust a price).\\nMust stay within [1, MAX_PROVIDERS] and can never exceed the current\\nprovider count, otherwise the oracle would be unable to ever\\naggregate a price. DAO-governed (see `_require_dao`).",
+      "name": "set_min_providers",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "min_providers",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

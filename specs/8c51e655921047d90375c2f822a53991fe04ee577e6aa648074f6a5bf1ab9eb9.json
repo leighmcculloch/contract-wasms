@@ -1,0 +1,762 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidExchangeRate",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InsufficientBalance",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "MathOverflow",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InsufficientAllowance",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidExpiration",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "ReadOnlyExchangeRate",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "InvalidBlendReserve",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "BlendWithdrawalFailed",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "NotAuthorized",
+          "value": 12
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Config",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "reserve_index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "underlying",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "name",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "config",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Config"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "redeem",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sy_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "symbol",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "approve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expiration_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "decimals",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "allowance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "underlying",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "underlying",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AllowanceValue",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expiration_ledger",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_shares",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_supply",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when an admin re-syncs the stored Blend reserve index after the pool\\nreindexed the underlying. Both indices are carried so integrators can audit\\nthe move.",
+      "lib": "",
+      "name": "ReserveMigrated",
+      "prefix_topics": [
+        "reserve_migrated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_index",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_index",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accrued_yield",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "exchange_rate",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "share_balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer_from",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initializes a production wrapper whose custody and exchange rate are\\nbacked by a Blend v2 plain-supply position.",
+      "name": "initialize_blend",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "underlying",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_exchange_rate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "exchange_rate",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Recovers from a Blend reserve reindex.\\n\\n`config.reserve_index` is fixed at init and the rate path traps with\\n`InvalidBlendReserve` whenever Blend has since moved the underlying to a\\ndifferent reserve slot. That fail-closed trap is correct (pricing the\\nwrong reserve would be worse), but on its own it is unrecoverable: every\\nrate read, and therefore every deposit/redeem/split/recombine, stays\\nbricked for the life of the market. This admin entrypoint re-syncs the\\nstored index to wherever the pool now keeps this wrapper's underlying.\\n\\nIt does NOT trust a caller-supplied index. It re-derives the index the\\nsame way `initialize_blend` does: it finds the underlying's position in\\nthe pool's reserve list and cross-checks that against the pool's own\\n`get_reserve(underlying).config.index`, and requires the reserve decimals\\nto still match. The new index is accepted only if the asset actually\\nsitting there is `config.underlying`. So the strongest thing an admin can\\ndo here is re-point the wrapper at the same underlying und",
+      "name": "migrate_reserve_index",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Request",
+      "fields": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "request_type",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Reserve",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "config",
+          "type_": {
+            "udt": {
+              "name": "ReserveConfig"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "data",
+          "type_": {
+            "udt": {
+              "name": "ReserveData"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "scalar",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Positions",
+      "fields": [
+        {
+          "doc": "",
+          "name": "collateral",
+          "type_": {
+            "map": {
+              "key_type": "u32",
+              "value_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "liabilities",
+          "type_": {
+            "map": {
+              "key_type": "u32",
+              "value_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "supply",
+          "type_": {
+            "map": {
+              "key_type": "u32",
+              "value_type": "i128"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ReserveData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "b_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "b_supply",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "backstop_credit",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "d_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "d_supply",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "ir_mod",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "last_time",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ReserveConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "c_factor",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "decimals",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "enabled",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "l_factor",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_util",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "r_base",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "r_one",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "r_three",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "r_two",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "reactivity",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "supply_cap",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "util",
+          "type_": "u32"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,947 @@
+[
+  {
+    "function_v0": {
+      "doc": "Extends an existing registration while it is still active or inside the grace period.",
+      "name": "renew",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "years",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Stores a commit hash used by the commit-reveal registration flow.",
+      "name": "commit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "committer",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Finalizes domain registration after a valid commit has matured.",
+      "name": "reveal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "years",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "buyer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "referrer",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Upgrades the current contract to a new WASM hash.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the reverse-resolution name for an address, if any.",
+      "name": "get_name",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "string"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns a text record for a domain and key.",
+      "name": "get_text",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "key",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "string"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the effective owner while the registration remains within the grace period.",
+      "name": "owner_of",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sets the resolved address for a domain.",
+      "name": "set_name",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Stores an arbitrary text record under a domain-owned key.",
+      "name": "set_text",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "key",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "value",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Transfers an owned domain to a new address.",
+      "name": "transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Calculates the total registration price for the requested number of years.",
+      "name": "get_price",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "years",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Clears the resolver target and matching reverse-resolution entry for a domain.",
+      "name": "clear_name",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initializes the base contract with its TLD configuration and pricing rules.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "udt": {
+              "name": "TldInitArgs"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the address set as the resolver target for a domain.",
+      "name": "get_address",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Updates the payment token and yearly registration price.",
+      "name": "set_pricing",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "payment_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "price_per_year",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Checks whether a domain can be registered again, including grace-period rules.",
+      "name": "is_available",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the owner of this domain zone.",
+      "name": "get_tld_owner",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the stored expiration timestamp for a domain.",
+      "name": "get_expiration",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Errors returned by the TLD base contract.",
+      "lib": "",
+      "name": "TldBaseError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidState",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "DomainUnavailable",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "DomainNotFound",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "CommitNotFound",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "NameValidationFailed",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "GracePeriodOutOfRange",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "Overflow",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "InvalidPrice",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "PriceNotConfigured",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "InvalidCommitTtl",
+          "value": 12
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Computes the commit hash for a name, salt, and buyer.",
+      "name": "get_commit_hash",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "buyer",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Compound key for storing text records for a domain.",
+      "lib": "",
+      "name": "TextRecordKey",
+      "fields": [
+        {
+          "doc": "",
+          "name": "key",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the configured grace period in days.",
+      "name": "get_grace_period",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Updates the grace period applied after expiration before a name becomes available again.",
+      "name": "set_grace_period",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "days",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sets the caller's primary reverse-resolution name.",
+      "name": "set_primary_name",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Preimage used to bind a commit to one buyer and one domain name.",
+      "lib": "",
+      "name": "CommitPreimage",
+      "fields": [
+        {
+          "doc": "",
+          "name": "buyer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Clears the caller's primary reverse-resolution name.",
+      "name": "clear_primary_name",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DomainRenewedEvent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DomainTextSetEvent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "value",
+          "type_": "string"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Stored referral status for a buyer after their first purchase.",
+      "lib": "",
+      "name": "BuyerReferralStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "NoReferrer"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Referrer",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "GracePeriodSetEvent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "days",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PrimaryNameSetEvent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the temporary-storage TTL applied to commit hashes, in ledgers.",
+      "name": "get_commit_ttl_ledgers",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Updates how long commit hashes are retained in temporary storage.",
+      "name": "set_commit_ttl_ledgers",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "value",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Transfers ownership of this domain zone to a new owner.",
+      "name": "transfer_tld_ownership",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DomainAddressSetEvent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DomainRegisteredEvent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DomainTransferredEvent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PrimaryNameClearedEvent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "previous_name",
+          "type_": "string"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DomainAddressClearedEvent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "previous_address",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TldOwnershipTransferredEvent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FqdnParts",
+      "fields": [
+        {
+          "doc": "",
+          "name": "label",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "tld",
+          "type_": "string"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CommonError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidName",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "InvalidYears",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidGracePeriod",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidBps",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidCommitWindow",
+          "value": 5
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TldInitArgs",
+      "fields": [
+        {
+          "doc": "",
+          "name": "root_registry_address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tld_name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "tld_owner",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TldAddedEvent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tld",
+          "type_": "string"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "GlobalTldEvent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "tld",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ImplementationAddedEvent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "implementation_id",
+          "type_": "symbol"
+        }
+      ]
+    }
+  }
+]

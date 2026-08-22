@@ -1,0 +1,271 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "plusd",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "treasury",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns `Some(Address)` if ownership is set, or `None` if ownership has\\nbeen renounced.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.",
+      "name": "get_owner",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Mints the yield for a recorded repayment: senior interest to the staked\\nvault, fees to the treasury, then marks it minted on the registry.",
+      "name": "mint_yield",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "loan_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "repayment_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Updates the treasury address. Access controlled via the access-manager.",
+      "name": "set_treasury",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_treasury",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "staked_plusd",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "# Arguments\\n\\n* `access_manager` - The manager that controls access to this contract's\\nmethods and owns PLUSD and the loan registry.\\n* `staked_plusd` - The sPLUSD vault; its underlying asset is taken as PLUSD.\\n* `loan_registry` - The loan registry to read repayments from and mark minted.\\n* `treasury` - Recipient of the fee portion of minted yield.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "access_manager",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "staked_plusd",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "loan_registry",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "loan_registry",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Accepts a pending ownership transfer.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n\\n# Errors\\n\\n* [`crate::role_transfer::RoleTransferError::NoPendingTransfer`] - If\\nthere is no pending transfer to accept.\\n\\n# Events\\n\\n* topics - `[\"ownership_transfer_completed\"]`\\n* data - `[new_owner: Address]`",
+      "name": "accept_ownership",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Renounces ownership of the contract.\\n\\nPermanently removes the owner, disabling all functions gated by\\n`#[only_owner]`.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n\\n# Errors\\n\\n* [`OwnableError::TransferInProgress`] - If there is a pending ownership\\ntransfer.\\n* [`OwnableError::OwnerNotSet`] - If the owner is not set.\\n\\n# Notes\\n\\n* Authorization for the current owner is required.",
+      "name": "renounce_ownership",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initiates a 2-step ownership transfer to a new address.\\n\\nRequires authorization from the current owner. The new owner must later\\ncall `accept_ownership()` to complete the transfer.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `new_owner` - The proposed new owner.\\n* `live_until_ledger` - Ledger number until which the new owner can\\naccept. A value of `0` cancels any pending transfer.\\n\\n# Errors\\n\\n* [`OwnableError::OwnerNotSet`] - If the owner is not set.\\n* [`crate::role_transfer::RoleTransferError::NoPendingTransfer`] - If\\ntrying to cancel a transfer that doesn't exist.\\n* [`crate::role_transfer::RoleTransferError::InvalidLiveUntilLedger`] -\\nIf the specified ledger is in the past.\\n* [`crate::role_transfer::RoleTransferError::InvalidPendingAccount`] -\\nIf the specified pending account is not the same as the provided `new`\\naddress.\\n\\n# Notes\\n\\n* Authorization for the current owner is required.",
+      "name": "transfer_ownership",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when the treasury address is set.\\n\\n* topics - `[\"treasury_set\"]`\\n* data - `[treasury: Address]`",
+      "lib": "",
+      "name": "TreasurySet",
+      "prefix_topics": [
+        "treasury_set"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when yield is minted: `s_plusd_amount` of PLUSD to the staked vault\\n(accruing to stakers) and `treasury_amount` to the treasury (fees).\\n\\n* topics - `[\"yield_minted\"]`\\n* data - `[s_plusd_amount: u128, treasury_amount: u128]`",
+      "lib": "",
+      "name": "YieldMinted",
+      "prefix_topics": [
+        "yield_minted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "s_plusd_amount",
+          "type_": "u128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "treasury_amount",
+          "type_": "u128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an ownership transfer is initiated.",
+      "lib": "",
+      "name": "OwnershipTransfer",
+      "prefix_topics": [
+        "ownership_transfer"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when ownership is renounced.",
+      "lib": "",
+      "name": "OwnershipRenounced",
+      "prefix_topics": [
+        "ownership_renounced"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an ownership transfer is completed.",
+      "lib": "",
+      "name": "OwnershipTransferCompleted",
+      "prefix_topics": [
+        "ownership_transfer_completed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  }
+]

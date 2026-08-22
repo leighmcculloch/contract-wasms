@@ -1,0 +1,2593 @@
+[
+  {
+    "function_v0": {
+      "doc": "Immutable after `__constructor`. No setter exists anywhere in the tree.",
+      "name": "vid",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admins",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_fee",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "send_lib",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "dst_eid",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "packet_header",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "payload_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "confirmations",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "options",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Empty allowlist == permissionless. All five live Stellar DVNs run this way.",
+      "name": "has_acl",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "oapp",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Runs migration logic after an upgrade.",
+      "name": "migrate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "migration_data",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Upgrades the contract to new WASM bytecode.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrader",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Checks if an address is a registered signer.",
+      "name": "is_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": {
+            "bytes_n": {
+              "n": 20
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Routed through the `set_admin` arm of `__check_auth`, which SKIPS the\\ned25519 admin leg (quorum-only admin recovery).",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "active",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the current signature threshold (quorum).",
+      "name": "threshold",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "assign_job",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "send_lib",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "dst_eid",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "packet_header",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "payload_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "confirmations",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "options",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "FeeRecipient"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "authorizer",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "dst_config",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dst_eid",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "DstConfig"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "price_feed",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_paused",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Adds or removes a signer from the multisig. Requires owner authorization.",
+      "name": "set_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": {
+            "bytes_n": {
+              "n": 20
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "active",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns all registered signers.",
+      "name": "get_signers",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "bytes_n": {
+                "n": 20
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the current TTL configs as (instance_config, persistent_config).",
+      "name": "ttl_configs",
+      "inputs": [],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              {
+                "option": {
+                  "value_type": {
+                    "udt": {
+                      "name": "TtlConfig"
+                    }
+                  }
+                }
+              },
+              {
+                "option": {
+                  "value_type": {
+                    "udt": {
+                      "name": "TtlConfig"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__check_auth",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signature_payload",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "auth_data",
+          "type_": {
+            "udt": {
+              "name": "TransactionAuthData"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "auth_contexts",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Context"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "message_libs",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_denylist",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "oapp",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "denied",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_upgrader",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "upgrader",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vid",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "signers",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 20
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "admins",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "supported_msglibs",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "price_feed",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "default_multiplier_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "worker_fee_lib",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "deposit_address",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_allowlist",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "oapp",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "allowed",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sets the signature threshold (quorum). Requires owner authorization.",
+      "name": "set_threshold",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the total number of registered signers.",
+      "name": "total_signers",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "allowlist_size",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The digest each secp256k1 signer signs RAW (no EIP-191 prefix):\\nkeccak256( u32BE vid || u64BE expiration || XDR(Vec<Call>) )",
+      "name": "hash_call_data",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vid",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "expiration",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "calls",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Call"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_on_denylist",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "oapp",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "`require_admin_auth` -- SINGLE ADMIN, NO QUORUM. This is the repricing /\\npathway-denial key. Guard it as hard as the quorum keys.",
+      "name": "set_dst_config",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "params",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "DstConfigParam"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_price_feed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "price_feed",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "worker_fee_lib",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "deposit_address",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_on_allowlist",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "oapp",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sets TTL configs for instance and persistent storage.\\n\\n- `None` values remove the corresponding config (disables auto-extension for that type)\\n- Validates that `threshold <= extend_to <= MAX_TTL`\\n\\n# Arguments\\n- `instance` - TTL config for instance storage\\n- `persistent` - TTL config for persistent storage\\n\\n# Panics\\n- `TtlConfigFrozen` if configs are frozen\\n- `InvalidTtlConfig` if validation fails",
+      "name": "set_ttl_configs",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "instance",
+          "type_": {
+            "option": {
+              "value_type": {
+                "udt": {
+                  "name": "TtlConfig"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "persistent",
+          "type_": {
+            "option": {
+              "value_type": {
+                "udt": {
+                  "name": "TtlConfig"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetUpgrader",
+      "prefix_topics": [
+        "set_upgrader"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "upgrader",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetDstConfig",
+      "prefix_topics": [
+        "set_dst_config"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "params",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "DstConfigParam"
+                }
+              }
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Verifies signatures against the configured threshold.",
+      "name": "verify_signatures",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "digest",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signatures",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 65
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Permanently freezes TTL configs, preventing any future modifications.\\n\\nThis is irreversible and provides immutability guarantees to users.\\nEmits `TtlConfigsFrozen` event.\\n\\n# Panics\\n- `TtlConfigAlreadyFrozen` if already frozen",
+      "name": "freeze_ttl_configs",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin-only, no quorum, SELF-REPLICATING: one admin key can mint more admins.",
+      "name": "set_admin_by_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "active",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_worker_fee_lib",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "worker_fee_lib",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Executes an arbitrary batch of calls as the DVN itself.\\n\\n`#[only_auth]` -> (multisig authorizer == self) ->\\n`env.current_contract_address().require_auth()` -> `__check_auth`.\\n\\nHARD LIMIT: `__check_auth` accepts `auth_contexts.len() == 1` (normal) or\\n`== 3` (upgrade). A batch that produces 2 contexts hard-fails with\\n`InvalidAuthContext`, so no deeper nesting is possible.",
+      "name": "execute_transaction",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "calls",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Call"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Extends the instance TTL.\\n\\n# Arguments\\n\\n* `threshold` - The threshold to extend the TTL (if current TTL is below this, extend).\\n* `extend_to` - The TTL to extend to.",
+      "name": "extend_instance_ttl",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "extend_to",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_deposit_address",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "deposit_address",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Verifies signatures against a custom threshold.",
+      "name": "verify_n_signatures",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "digest",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signatures",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 65
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns whether TTL configs are frozen.",
+      "name": "is_ttl_configs_frozen",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "default_multiplier_bps",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_supported_message_lib",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "message_lib",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_supported_message_lib",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "message_lib",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "supported",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_supported_option_types",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "eid",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "bytes"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_default_multiplier_bps",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "multiplier_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_supported_option_types",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "eid",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "option_types",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A single call the DVN will make on behalf of itself.\\n\\nsoroban-sdk emits `#[contracttype]` struct fields ALPHABETICALLY, so the XDR\\nScMap key order is: args, func, to. VERIFIED against the deployed spec.",
+      "lib": "",
+      "name": "Call",
+      "fields": [
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "func",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "The ed25519 admin leg of `__check_auth`.",
+      "lib": "",
+      "name": "Sender",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "No explicit sender (permissionless execution).",
+            "name": "None"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "A registered admin (ed25519) submitting the transaction.\\n`(public_key, signature)`; the signature covers the Soroban payload.",
+            "name": "Admin",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              },
+              {
+                "bytes_n": {
+                  "n": 64
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Per-destination pricing config.",
+      "lib": "",
+      "name": "DstConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "floor_margin_usd",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "gas",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "multiplier_bps",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "The single argument handed to `dvn_fee_lib.get_fee(dvn, params)`.\\nTen fields, DstConfig flattened in. VERIFIED against the deployed spec of\\nboth the DVN (CB5HHSB4...) and the fee lib (CBJAZEDI...).",
+      "lib": "",
+      "name": "DvnFeeParams",
+      "fields": [
+        {
+          "doc": "",
+          "name": "confirmations",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "default_multiplier_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "dst_eid",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "floor_margin_usd",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "gas",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "multiplier_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "options",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "price_feed",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "quorum",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Push-model fee return value from `assign_job`.",
+      "lib": "",
+      "name": "FeeRecipient",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Setter payload for `set_dst_config`. NOTE: the DstConfig is NESTED, not\\nflattened. VERIFIED against the deployed spec.",
+      "lib": "",
+      "name": "DstConfigParam",
+      "fields": [
+        {
+          "doc": "",
+          "name": "config",
+          "type_": {
+            "udt": {
+              "name": "DstConfig"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "dst_eid",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "`CustomAccountInterface::Signature` for the DVN.\\nWire order is alphabetical: expiration, sender, signatures, vid.",
+      "lib": "",
+      "name": "TransactionAuthData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "expiration",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": {
+            "udt": {
+              "name": "Sender"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signatures",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 65
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vid",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "DVN error codes. Contract-specific range 1..999.\\nVERIFIED byte-for-byte against the deployed spec of\\nCB5HHSB4RB7JOIVAWH3TKPXH76ZBNPIKHAHZQEHIPA4D4C3UR57KZRRD.\\nDeclaration order == discriminant order; upstream declares alphabetically.",
+      "lib": "",
+      "name": "DvnError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AuthDataExpired",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "EidNotSupported",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "HashAlreadyUsed",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidAuthContext",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidUpgradeContext",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidVid",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "NonContractInvoke",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "OnlyAdmin",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "UpgraderNotSet",
+          "value": 9
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Worker base errors. VERIFIED: 1200..1215 inclusive, alphabetical.\\nThe idempotency errors (AdminAlreadyExists, AlreadyOnAllowlist,\\nPauseStatusUnchanged, ...) tell you the upstream setters REJECT no-op writes\\nrather than silently succeeding -- reproduce that or a replayed operational\\nscript will behave differently against your DVN.",
+      "lib": "",
+      "name": "WorkerError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AdminAlreadyExists",
+          "value": 1200
+        },
+        {
+          "doc": "",
+          "name": "AdminNotFound",
+          "value": 1201
+        },
+        {
+          "doc": "",
+          "name": "AlreadyOnAllowlist",
+          "value": 1202
+        },
+        {
+          "doc": "",
+          "name": "AlreadyOnDenylist",
+          "value": 1203
+        },
+        {
+          "doc": "",
+          "name": "DepositAddressNotSet",
+          "value": 1204
+        },
+        {
+          "doc": "",
+          "name": "MessageLibAlreadySupported",
+          "value": 1205
+        },
+        {
+          "doc": "",
+          "name": "MessageLibNotSupported",
+          "value": 1206
+        },
+        {
+          "doc": "",
+          "name": "NotAllowed",
+          "value": 1207
+        },
+        {
+          "doc": "",
+          "name": "NotOnAllowlist",
+          "value": 1208
+        },
+        {
+          "doc": "",
+          "name": "NotOnDenylist",
+          "value": 1209
+        },
+        {
+          "doc": "",
+          "name": "PauseStatusUnchanged",
+          "value": 1210
+        },
+        {
+          "doc": "",
+          "name": "PriceFeedNotSet",
+          "value": 1211
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 1212
+        },
+        {
+          "doc": "",
+          "name": "UnsupportedMessageLib",
+          "value": 1213
+        },
+        {
+          "doc": "",
+          "name": "WorkerFeeLibNotSet",
+          "value": 1214
+        },
+        {
+          "doc": "",
+          "name": "WorkerIsPaused",
+          "value": 1215
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Paused",
+      "prefix_topics": [
+        "paused"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "pauser",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetAdmin",
+      "prefix_topics": [
+        "set_admin"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "active",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Unpaused",
+      "prefix_topics": [
+        "unpaused"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "unpauser",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetDenylist",
+      "prefix_topics": [
+        "set_denylist"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "oapp",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "denied",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetAllowlist",
+      "prefix_topics": [
+        "set_allowlist"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "oapp",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "allowed",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetPriceFeed",
+      "prefix_topics": [
+        "set_price_feed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "price_feed",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetWorkerFeeLib",
+      "prefix_topics": [
+        "set_worker_fee_lib"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "fee_lib",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetDepositAddress",
+      "prefix_topics": [
+        "set_deposit_address"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "deposit_address",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetSupportedMessageLib",
+      "prefix_topics": [
+        "set_supported_message_lib"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "message_lib",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "supported",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetDefaultMultiplierBps",
+      "prefix_topics": [
+        "set_default_multiplier_bps"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "multiplier_bps",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetSupportedOptionTypes",
+      "prefix_topics": [
+        "set_supported_option_types"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "dst_eid",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "option_types",
+          "type_": "bytes",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DvnStorage",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Vid"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Upgrader"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "DstConfig",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "UsedHash",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WorkerStorage",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admins"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MessageLibs"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Allowlist",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AllowlistSize"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Denylist",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "DefaultMultiplierBps"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "DepositAddress"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "SupportedOptionTypes",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "WorkerFeeLib"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PriceFeed"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UpgradeableStorage",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Migrating"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "TTL configuration: threshold (when to extend) and extend_to (target TTL).",
+      "lib": "",
+      "name": "TtlConfig",
+      "fields": [
+        {
+          "doc": "Target TTL after extension (in ledgers).",
+          "name": "extend_to",
+          "type_": "u32"
+        },
+        {
+          "doc": "TTL threshold that triggers extension (in ledgers).",
+          "name": "threshold",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when TTL configs are set.",
+      "lib": "",
+      "name": "TtlConfigsSet",
+      "prefix_topics": [
+        "ttl_configs_set"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "instance",
+          "type_": {
+            "option": {
+              "value_type": {
+                "udt": {
+                  "name": "TtlConfig"
+                }
+              }
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "persistent",
+          "type_": {
+            "option": {
+              "value_type": {
+                "udt": {
+                  "name": "TtlConfig"
+                }
+              }
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TtlConfigStorage",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Frozen"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Instance"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Persistent"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when TTL configs are frozen.",
+      "lib": "",
+      "name": "TtlConfigsFrozen",
+      "prefix_topics": [
+        "ttl_configs_frozen"
+      ],
+      "params": [],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RbacStorage",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExistingRoles"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "RoleIndexToAccount",
+            "type_": [
+              "symbol",
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "RoleAccountToIndex",
+            "type_": [
+              "symbol",
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "RoleAccountsCount",
+            "type_": [
+              "symbol"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "RoleAdmin",
+            "type_": [
+              "symbol"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a role is granted.",
+      "lib": "",
+      "name": "RoleGranted",
+      "prefix_topics": [
+        "role_granted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a role is revoked.",
+      "lib": "",
+      "name": "RoleRevoked",
+      "prefix_topics": [
+        "role_revoked"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a role admin is changed.",
+      "lib": "",
+      "name": "RoleAdminChanged",
+      "prefix_topics": [
+        "role_admin_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "previous_admin_role",
+          "type_": {
+            "option": {
+              "value_type": "symbol"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_admin_role",
+          "type_": {
+            "option": {
+              "value_type": "symbol"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "AuthError: 1070-1079",
+      "lib": "",
+      "name": "AuthError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AuthorizerNotFound",
+          "value": 1070
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "RbacError: 1080-1089",
+      "lib": "",
+      "name": "RbacError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AdminRoleNotFound",
+          "value": 1080
+        },
+        {
+          "doc": "",
+          "name": "IndexOutOfBounds",
+          "value": 1081
+        },
+        {
+          "doc": "",
+          "name": "MaxRolesExceeded",
+          "value": 1082
+        },
+        {
+          "doc": "",
+          "name": "RoleIsEmpty",
+          "value": 1083
+        },
+        {
+          "doc": "",
+          "name": "RoleNotFound",
+          "value": 1084
+        },
+        {
+          "doc": "",
+          "name": "RoleNotHeld",
+          "value": 1085
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 1086
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "OwnableError: 1030-1039",
+      "lib": "",
+      "name": "OwnableError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidAuthorizer",
+          "value": 1030
+        },
+        {
+          "doc": "",
+          "name": "InvalidPendingOwner",
+          "value": 1031
+        },
+        {
+          "doc": "",
+          "name": "InvalidTtl",
+          "value": 1032
+        },
+        {
+          "doc": "",
+          "name": "NoPendingTransfer",
+          "value": 1033
+        },
+        {
+          "doc": "",
+          "name": "OwnerAlreadySet",
+          "value": 1034
+        },
+        {
+          "doc": "",
+          "name": "OwnerNotSet",
+          "value": 1035
+        },
+        {
+          "doc": "",
+          "name": "TransferInProgress",
+          "value": 1036
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "BytesExtError: 1040-1049",
+      "lib": "",
+      "name": "BytesExtError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "LengthMismatch",
+          "value": 1040
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "MultiSigError: 1060-1069",
+      "lib": "",
+      "name": "MultiSigError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1060
+        },
+        {
+          "doc": "",
+          "name": "InvalidAuthorizer",
+          "value": 1061
+        },
+        {
+          "doc": "",
+          "name": "InvalidSigner",
+          "value": 1062
+        },
+        {
+          "doc": "",
+          "name": "SignatureError",
+          "value": 1063
+        },
+        {
+          "doc": "",
+          "name": "SignerAlreadyExists",
+          "value": 1064
+        },
+        {
+          "doc": "",
+          "name": "SignerNotFound",
+          "value": 1065
+        },
+        {
+          "doc": "",
+          "name": "TotalSignersLessThanThreshold",
+          "value": 1066
+        },
+        {
+          "doc": "",
+          "name": "UnsortedSigners",
+          "value": 1067
+        },
+        {
+          "doc": "",
+          "name": "ZeroThreshold",
+          "value": 1068
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "UpgradeableError: 1050-1059",
+      "lib": "",
+      "name": "UpgradeableError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidMigrationData",
+          "value": 1050
+        },
+        {
+          "doc": "",
+          "name": "MigrationNotAllowed",
+          "value": 1051
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "BufferReaderError: 1000-1009",
+      "lib": "",
+      "name": "BufferReaderError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidLength",
+          "value": 1000
+        },
+        {
+          "doc": "",
+          "name": "InvalidAddressPayload",
+          "value": 1001
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "BufferWriterError: 1010-1019",
+      "lib": "",
+      "name": "BufferWriterError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidAddressPayload",
+          "value": 1010
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "TtlConfigurableError: 1020-1029",
+      "lib": "",
+      "name": "TtlConfigurableError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidTtlConfig",
+          "value": 1020
+        },
+        {
+          "doc": "",
+          "name": "TtlConfigFrozen",
+          "value": 1021
+        },
+        {
+          "doc": "",
+          "name": "TtlConfigAlreadyFrozen",
+          "value": 1022
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OwnableStorage",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Owner"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PendingOwner"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when ownership is renounced.",
+      "lib": "",
+      "name": "OwnershipRenounced",
+      "prefix_topics": [
+        "ownership_renounced"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when ownership is transferred (both single-step and two-step completion).",
+      "lib": "",
+      "name": "OwnershipTransferred",
+      "prefix_topics": [
+        "ownership_transferred"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a 2-step ownership transfer is proposed.",
+      "lib": "",
+      "name": "OwnershipTransferring",
+      "prefix_topics": [
+        "ownership_transferring"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "ttl",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a 2-step ownership transfer is cancelled.",
+      "lib": "",
+      "name": "OwnershipTransferCancelled",
+      "prefix_topics": [
+        "ownership_transfer_cancelled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "cancelled_pending_owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a signer is added or removed.",
+      "lib": "",
+      "name": "SignerSet",
+      "prefix_topics": [
+        "signer_set"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": {
+            "bytes_n": {
+              "n": 20
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "active",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the signature threshold is changed.",
+      "lib": "",
+      "name": "ThresholdSet",
+      "prefix_topics": [
+        "threshold_set"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MultiSigStorage",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Signers"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Threshold"
+          }
+        }
+      ]
+    }
+  }
+]

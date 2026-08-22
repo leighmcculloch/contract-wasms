@@ -1,0 +1,524 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotFound",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Expired",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "Insufficient",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "Revoked",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "BadAmount",
+          "value": 101
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Usdc"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Registry"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Settler"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Auth",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 16
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Receipt",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 16
+                }
+              }
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Used to derive unique auth / receipt ids.",
+            "name": "Nonce"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "STEP 2 \\xe2\\x80\\x94 the settler (backend JobManager) draws `amount` from the auth\\nand triggers a USDC transfer from payer \\xe2\\x86\\x92 agent owner.",
+      "name": "charge",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "auth_id",
+          "type_": {
+            "bytes_n": {
+              "n": 16
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "job_id",
+          "type_": {
+            "bytes_n": {
+              "n": 16
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "bytes_n": {
+                "n": 16
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Payer cancels an unused authorization.",
+      "name": "revoke",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "payer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "auth_id",
+          "type_": {
+            "bytes_n": {
+              "n": 16
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "receipt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "receipt_id",
+          "type_": {
+            "bytes_n": {
+              "n": 16
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Receipt"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "settler",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "STEP 1 \\xe2\\x80\\x94 payer pre-authorizes a max spend for a given agent.\\nOn HTTP: this matches the initial 402 challenge response.",
+      "name": "authorize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "payer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "agent_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "max_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "bytes_n": {
+                "n": 16
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "registry",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "settler",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "authorization",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "auth_id",
+          "type_": {
+            "bytes_n": {
+              "n": 16
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Authorization"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Registered agent in AgentRegistry.",
+      "lib": "",
+      "name": "Agent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "active",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "USDC price-per-call, stroops (7 decimals, Stellar convention).",
+          "name": "price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "registered_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "skills",
+          "type_": {
+            "vec": {
+              "element_type": "symbol"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Rating aggregate per agent in ReputationLedger.",
+      "lib": "",
+      "name": "Score",
+      "fields": [
+        {
+          "doc": "",
+          "name": "count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "sum",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Payment receipt produced by a successful `charge`.",
+      "lib": "",
+      "name": "Receipt",
+      "fields": [
+        {
+          "doc": "",
+          "name": "agent_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "auth_id",
+          "type_": {
+            "bytes_n": {
+              "n": 16
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "job_id",
+          "type_": {
+            "bytes_n": {
+              "n": 16
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "settled_at",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Write-once attestation per job in AttestationRegistry.",
+      "lib": "",
+      "name": "Attestation",
+      "fields": [
+        {
+          "doc": "",
+          "name": "agents",
+          "type_": {
+            "vec": {
+              "element_type": "symbol"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "intent_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "orchestrator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "receipts",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 16
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "sealed_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "total_spent",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Pre-authorization created by a payer; consumed by `charge`.",
+      "lib": "",
+      "name": "Authorization",
+      "fields": [
+        {
+          "doc": "",
+          "name": "agent_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "max_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "payer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "revoked",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "spent",
+          "type_": "i128"
+        }
+      ]
+    }
+  }
+]

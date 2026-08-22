@@ -1,0 +1,291 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "Aquarius AMM adapter.\\n\\nReal Aquarius interface (docs.aqua.network, AquaToken/soroban-amm):\\nRouter (mainnet): CBQDHNBFBZYE4MKPWBSJOPIYLW4SFSXAXUTSXJN76GNKYVYPCKWC6QUK\\nswap_chained(user, swaps_chain: Vec<(Vec<Address>, BytesN<32>, Address)>,\\ntoken_in, amount: u128, amount_with_slippage: u128) -> u128\\nPer-pool quoting: estimate_swap(in_idx: u32, out_idx: u32, amount: u128) -> u128\\n\\nThis adapter executes SINGLE-HOP swaps through an admin-registered pool\\nper pair. Multi-hop routing goes through the backend's find-path API and\\nis out of scope for the on-chain adapter (stable pairs are single-hop).\\n\\nFunds flow (AtomicSwap Router contract \\xe2\\x86\\x92 this adapter):\\nThe router PUSHES token_in to this adapter before invoking `swap`.\\nThis adapter then approves the Aqua router and calls swap_chained.\\nNOTE: verify on testnet whether Aqua pulls via allowance\\n(transfer_from) or requires explicit sub-invocation auth\\n(authorize_as_current_contract) \\xe2\\x80\\x94 adjust if the latter.",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "The Aqua AMM router contract address",
+            "name": "AquaRouter"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Registered pool for a directed pair (token_in, token_out)",
+            "name": "Pool",
+            "type_": [
+              "address",
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "An Aquarius pool used for a pair.",
+      "lib": "",
+      "name": "PoolInfo",
+      "fields": [
+        {
+          "doc": "Pool contract address (for estimate_swap quoting)",
+          "name": "pool_address",
+          "type_": "address"
+        },
+        {
+          "doc": "Pool hash as used in swap_chained's swaps_chain",
+          "name": "pool_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "The pool's token list (order defines estimate_swap indexes)",
+          "name": "tokens",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Execute a single-hop swap through Aquarius.\\n\\nExpects `amount_in` of token_in to have been pushed to this contract\\nby the caller beforehand. Sends the output to `recipient` and returns\\nthe actual amount out.",
+      "name": "swap",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_amount_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "AquaAdapterError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Quote a swap via the registered pool's estimate_swap.",
+      "name": "quote",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "AquaAdapterError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Register the pool to use for a pair (both directions). Admin only.",
+      "name": "set_pool",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_a",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_b",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tokens",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "pool_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "pool_address",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "AquaAdapterError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AquaAdapterError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "SwapFailed",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "PoolNotSet",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "TokenNotInPool",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "Overflow",
+          "value": 8
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deploy-time constructor.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "aqua_router",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Update the Aqua router address. Admin only.",
+      "name": "set_aqua_router",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_router",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "AquaAdapterError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

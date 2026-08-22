@@ -1,0 +1,344 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PolicyError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidTemperatureRange",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidTransitDuration",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "PolicyNotFound",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "Overflow",
+          "value": 7
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PolicySetEvent",
+      "prefix_topics": [
+        "policy_set"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "category",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "min_milli_c",
+          "type_": "i32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "max_milli_c",
+          "type_": "i32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "max_transit_seconds",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_policy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "category",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "TemperaturePolicy"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "has_policy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "category",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_policy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "category",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "min_milli_c",
+          "type_": "i32"
+        },
+        {
+          "doc": "",
+          "name": "max_milli_c",
+          "type_": "i32"
+        },
+        {
+          "doc": "",
+          "name": "max_transit_seconds",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "TemperaturePolicy"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PolicyRemovedEvent",
+      "prefix_topics": [
+        "policy_removed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "category",
+          "type_": "symbol",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "remove_policy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "category",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "current_admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PolicyInitializedEvent",
+      "prefix_topics": [
+        "initialized"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PolicyAdminChangedEvent",
+      "prefix_topics": [
+        "admin_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "previous_admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_policy_count",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "validate_temperature",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "category",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "temperature_milli_c",
+          "type_": "i32"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TemperaturePolicy",
+      "fields": [
+        {
+          "doc": "",
+          "name": "category",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "max_milli_c",
+          "type_": "i32"
+        },
+        {
+          "doc": "",
+          "name": "max_transit_seconds",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "min_milli_c",
+          "type_": "i32"
+        }
+      ]
+    }
+  }
+]

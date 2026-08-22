@@ -1,0 +1,352 @@
+[
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DirectProtocol",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Soroswap",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Phoenix",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Aqua",
+          "value": 2
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Route",
+      "fields": [
+        {
+          "doc": "",
+          "name": "path",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "pool_hashes",
+          "type_": {
+            "option": {
+              "value_type": {
+                "vec": {
+                  "element_type": {
+                    "bytes_n": {
+                      "n": 32
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "pool_type",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "protocol",
+          "type_": {
+            "udt": {
+              "name": "DirectProtocol"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PhoenixSwap",
+      "fields": [
+        {
+          "doc": "",
+          "name": "ask_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "ask_asset_min_amount",
+          "type_": {
+            "option": {
+              "value_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "offer_asset",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PhoenixPoolType",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Xyk",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Stable",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Blend",
+          "value": 2
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ArbError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidProfit",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "Expired",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidFirstRoute",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidSecondRoute",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "DirtyIntermediateBalance",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "InsufficientIntermediate",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "IntermediateResidue",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "InsufficientProfit",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "ReentrantCall",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "ArithmeticError",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "InvalidPhoenixPoolType",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "InvalidAquaAmount",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "InsufficientLegOutput",
+          "value": 16
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "native",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "soroswap",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "phoenix",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "aqua",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "ArbError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execute",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "intermediate",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_profit",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "first",
+          "type_": {
+            "udt": {
+              "name": "Route"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "second",
+          "type_": {
+            "udt": {
+              "name": "Route"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "ArbError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "config",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": [
+                  "address",
+                  "address",
+                  "address",
+                  "address",
+                  "address"
+                ]
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "ArbError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

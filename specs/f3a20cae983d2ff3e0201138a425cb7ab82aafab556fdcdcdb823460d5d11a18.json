@@ -1,0 +1,96 @@
+[
+  {
+    "function_v0": {
+      "doc": "Return a deterministic placeholder address; we never call this in\\nthe real flow because the pool is deployed via the real pool_factory.",
+      "name": "deploy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "_admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "_name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "_salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "_oracle",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "_backstop_take_rate",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "_max_positions",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "_min_collateral",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Always returns true. The backstop's `require_is_from_pool_factory`\\ncheck is satisfied for any address.",
+      "name": "is_pool",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "_pool",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "No-op set_pool; the stub already accepts everything.",
+      "name": "set_pool",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "_pool",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "No-op constructor. The stub takes an admin but stores nothing.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

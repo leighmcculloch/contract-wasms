@@ -1,0 +1,1075 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "NotAuthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "PolicyMissing",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "PolicyInactive",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidTotalLimit",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidPaymentLimit",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "InvalidTimeWindow",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "OutsidePolicyWindow",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "TotalLimitExceeded",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "PolicyExists",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "NoPendingAdmin",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "InvalidMerchant",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "AmountAbovePaymentLimit",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "MathOverflow",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "PolicyTooLong",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "EmptyAssetAllowlist",
+          "value": 19
+        },
+        {
+          "doc": "",
+          "name": "EmptyMerchantAllowlist",
+          "value": 20
+        },
+        {
+          "doc": "",
+          "name": "AssetNotAllowed",
+          "value": 21
+        },
+        {
+          "doc": "",
+          "name": "MerchantNotAllowed",
+          "value": 22
+        },
+        {
+          "doc": "",
+          "name": "PaymentAlreadyUsed",
+          "value": 23
+        },
+        {
+          "doc": "",
+          "name": "TransactionCountExceeded",
+          "value": 24
+        },
+        {
+          "doc": "",
+          "name": "InvalidPaymentWindow",
+          "value": 25
+        },
+        {
+          "doc": "",
+          "name": "PaymentNonceAlreadyUsed",
+          "value": 26
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Config",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Policy",
+      "fields": [
+        {
+          "doc": "",
+          "name": "active",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "allowed_assets",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "allowed_merchants",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "expiration_timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "max_payment_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_total_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_transaction_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "session_key",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spent_total",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "start_timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "transaction_count",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Upgraded",
+      "prefix_topics": [
+        "upgraded"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AdminChanged",
+      "prefix_topics": [
+        "admin_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AdminProposed",
+      "prefix_topics": [
+        "admin_proposed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "pending_admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PausedChanged",
+      "prefix_topics": [
+        "paused_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PolicyCreated",
+      "prefix_topics": [
+        "policy_created"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "session_key",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "expiration_timestamp",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "max_total_amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "max_payment_amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "max_transaction_count",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PolicyRevoked",
+      "prefix_topics": [
+        "policy_revoked"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FundsDeposited",
+      "prefix_topics": [
+        "funds_deposited"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FundsWithdrawn",
+      "prefix_topics": [
+        "funds_withdrawn"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "destination",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PaymentExecuted",
+      "prefix_topics": [
+        "payment_executed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "payment_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "payment_nonce",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "merchant",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "spent_total",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "transaction_count",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Replaces the contract wasm in place, preserving contract id and policy\\nstate. Only the deploy/admin address can upgrade implementation code.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "destination",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "available",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_config",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Config"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_policy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Policy"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Emergency stop. Blocks `execute_payment` while leaving revocation,\\nwithdrawal, and reads available so owners can always exit.",
+      "name": "set_paused",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accept_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_policy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "session_key",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "allowed_assets",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "allowed_merchants",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "max_total_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_payment_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_transaction_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "start_timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "expiration_timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "funding_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "funding_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Anyone may pay to keep an idle policy's entries from being archived.",
+      "name": "extend_policy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Step one of admin rotation. The new admin must call `accept_admin`, so a\\nmistyped address can never lock the contract out of admin control.",
+      "name": "propose_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "revoke_policy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execute_payment",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payment_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payment_nonce",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "valid_after",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "payment_expires_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "session_key",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "merchant",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_payment_used",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payment_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "remaining_transactions",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

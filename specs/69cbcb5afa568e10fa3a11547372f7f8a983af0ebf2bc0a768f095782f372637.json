@@ -1,0 +1,407 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "PaymentExists",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "PaymentNotFound",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidParty",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidAsset",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidExpiry",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "InvalidStatus",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "Expired",
+          "value": 10
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Initialized",
+      "prefix_topics": [
+        "initialized"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PaymentIntent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "expires_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "memo",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "payer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "PaymentStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "tx_ref",
+          "type_": "string"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PaymentStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Pending"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Settled"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Expired"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cancelled"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PaymentCreated",
+      "prefix_topics": [
+        "payment_created"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "payment_id",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PaymentExpired",
+      "prefix_topics": [
+        "payment_expired"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "payment_id",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PaymentSettled",
+      "prefix_topics": [
+        "payment_settled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "payment_id",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PaymentCancelled",
+      "prefix_topics": [
+        "payment_cancelled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "payment_id",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_payment",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "payment_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "PaymentIntent"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel_payment",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "payment_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_payment",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "payment_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "payer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "memo",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "expires_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "expire_payment",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "payment_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "confirm_payment",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "payment_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "tx_ref",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

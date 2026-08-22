@@ -1,0 +1,306 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NoPailsProvided",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NoHarvestablePails",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "NoFarmersProvided",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "PlantFailed",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "NoWorkRequestsProvided",
+          "value": 6
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WorkResult",
+      "fields": [
+        {
+          "doc": "",
+          "name": "error_code",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "farmer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "gap",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "success",
+          "type_": "bool"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WorkRequest",
+      "fields": [
+        {
+          "doc": "",
+          "name": "farmer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "nonce",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PlantRequest",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "farmer",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PlantResultItem",
+      "fields": [
+        {
+          "doc": "",
+          "name": "farmer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "harvest",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "farmer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pails",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "i128"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "batch_work",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "requests",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "WorkRequest"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "WorkResult"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "extend_ttl",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "batch_plant",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "requests",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "PlantRequest"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "PlantResultItem"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "farm",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

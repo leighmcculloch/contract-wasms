@@ -1,0 +1,1047 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WebAuthnSignature",
+      "fields": [
+        {
+          "doc": "",
+          "name": "auth_data",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "client_data_json",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "nonce",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "public_key",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signature",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Stores details of a pending guardian recovery request.",
+      "lib": "",
+      "name": "PendingRecovery",
+      "fields": [
+        {
+          "doc": "",
+          "name": "new_public_key",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "recovery_unlock_time",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "Legacy single-signer key \\xe2\\x80\\x94 no longer used after multi-signer migration.",
+            "name": "Signer",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 65
+                }
+              }
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Map<u32, BytesN<65>> of signer index \\xe2\\x86\\x92 public key.",
+            "name": "Signers"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Guardian"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "SHA-256 preimage of the expected rpIdHash (e.g. \"localhost\" or \"veil.app\").\\nStored at init time; compared against auth_data[0..32] in __check_auth.",
+            "name": "RpId"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "The expected WebAuthn origin (e.g. \"https://veil.app\").\\nStored at init time; extracted from clientDataJSON and compared in __check_auth.",
+            "name": "Origin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Stores a PendingRecovery struct while a guardian recovery is in progress.",
+            "name": "RecoveryPending"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Strictly monotonic u64 nonce to prevent signature replay attacks.",
+            "name": "Nonce"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Granular spending limit for a spender and token.",
+            "name": "Allowance",
+            "type_": [
+              {
+                "udt": {
+                  "name": "AllowanceKey"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "The designated recovery key address (Address).",
+            "name": "RecoveryKey"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Stores a PendingRecovery struct while a recovery-key request is in progress.",
+            "name": "RecoveryKeyPending"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AllowanceKey",
+      "fields": [
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Allowance",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": {
+            "option": {
+              "value_type": "u64"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Access-control record stored per session key.\\n\\nSession keys are scoped bearer credentials backed by a real ed25519 keypair.\\nThe `pubkey` field holds the *public* key of the holder; every auth attempt\\nmust carry an ed25519 signature over `signature_payload` produced by the\\ncorresponding private key.  The `key_id` is a public lookup handle only \\xe2\\x80\\x94\\nknowing it is not sufficient to authorise a transfer.",
+      "lib": "",
+      "name": "SessionKeyAcl",
+      "fields": [
+        {
+          "doc": "Total token budget across the lifetime of this session key (raw units).\\n\\nAuthorisation is rejected once `spent + amount > amount_cap`.\\nThis is a *cumulative* cap, not a per-call limit: a key with\\n`amount_cap = 1_000` can authorise at most 1 000 units in total across\\nall transfers before it is exhausted.",
+          "name": "amount_cap",
+          "type_": "i128"
+        },
+        {
+          "doc": "Unix timestamp (seconds) after which the key is no longer valid.",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "The 32-byte ed25519 public key registered for this session key.\\n\\nEvery `__check_auth` call via this key MUST carry an ed25519 signature\\nof `signature_payload` verifiable against this public key.  The private\\nkey never leaves the holder's device \\xe2\\x80\\x94 only the signature travels on-chain.",
+          "name": "pubkey",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "The only function selector this key may invoke.",
+          "name": "selector",
+          "type_": "symbol"
+        },
+        {
+          "doc": "Running total of all amounts successfully authorised so far.\\n\\nPersisted in storage after every successful `enforce` call.  Never\\ndecremented.  Overflow is rejected via `checked_add`.",
+          "name": "spent",
+          "type_": "i128"
+        },
+        {
+          "doc": "The only contract address this key may target.",
+          "name": "target_contract",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Per-key 24-hour rolling spend window record.",
+      "lib": "",
+      "name": "SpendWindow",
+      "fields": [
+        {
+          "doc": "Maximum amount that may be spent in any single 24-hour window.",
+          "name": "cap",
+          "type_": "i128"
+        },
+        {
+          "doc": "Cumulative amount spent within the current window.",
+          "name": "window_spent",
+          "type_": "i128"
+        },
+        {
+          "doc": "Unix timestamp (seconds) when the current window started.",
+          "name": "window_start",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WalletError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "InvalidSignatureFormat",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "SignerNotAuthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidPublicKey",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidSignature",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "SignatureVerificationFailed",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidChallenge",
+          "value": 7
+        },
+        {
+          "doc": "The rpIdHash in authenticatorData does not match SHA-256(stored rp_id).\\nThis means the assertion was produced for a different domain.",
+          "name": "RpIdMismatch",
+          "value": 8
+        },
+        {
+          "doc": "The origin field in clientDataJSON does not match the stored origin.\\nThis means the assertion was produced on a different website.",
+          "name": "OriginMismatch",
+          "value": 9
+        },
+        {
+          "doc": "Cannot remove the last remaining signer \\xe2\\x80\\x94 wallet would become inaccessible.",
+          "name": "CannotRemoveLastSigner",
+          "value": 10
+        },
+        {
+          "doc": "The signer index does not exist in the signers map.",
+          "name": "SignerNotFound",
+          "value": 11
+        },
+        {
+          "doc": "Guardian recovery was requested but no guardian is set on this wallet.",
+          "name": "NoGuardianSet",
+          "value": 12
+        },
+        {
+          "doc": "A recovery is already pending \\xe2\\x80\\x94 cannot start another one.",
+          "name": "RecoveryAlreadyPending",
+          "value": 13
+        },
+        {
+          "doc": "No recovery is pending \\xe2\\x80\\x94 nothing to complete or cancel.",
+          "name": "RecoveryNotPending",
+          "value": 14
+        },
+        {
+          "doc": "The recovery timelock has not yet expired.",
+          "name": "RecoveryTimelockActive",
+          "value": 15
+        },
+        {
+          "doc": "The submitted nonce does not match the on-chain nonce (replay or out-of-order).",
+          "name": "NonceMismatch",
+          "value": 16
+        },
+        {
+          "doc": "The allowance is insufficient for this transfer.",
+          "name": "InsufficientAllowance",
+          "value": 17
+        },
+        {
+          "doc": "The allowance has expired.",
+          "name": "AllowanceExpired",
+          "value": 18
+        },
+        {
+          "doc": "The session key's expiry timestamp has passed.",
+          "name": "SessionKeyExpired",
+          "value": 19
+        },
+        {
+          "doc": "A session key call violates its ACL (wrong target, selector, or cumulative budget exceeded).",
+          "name": "SessionKeyAclViolation",
+          "value": 20
+        },
+        {
+          "doc": "The replacement key passed to `rotate_signer` is already a registered signer.",
+          "name": "SignerAlreadyExists",
+          "value": 21
+        },
+        {
+          "doc": "No recovery key is set on this wallet.",
+          "name": "NoRecoveryKeySet",
+          "value": 22
+        },
+        {
+          "doc": "The per-key 24-hour spend limit has been reached.",
+          "name": "SpendLimitExceeded",
+          "value": 23
+        },
+        {
+          "doc": "",
+          "name": "InvalidAuthData",
+          "value": 24
+        },
+        {
+          "doc": "",
+          "name": "UserVerificationRequired",
+          "value": 25
+        },
+        {
+          "doc": "",
+          "name": "InvalidCeremonyType",
+          "value": 26
+        },
+        {
+          "doc": "",
+          "name": "NegativeAmount",
+          "value": 27
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initialise the wallet with its first signer and domain-binding parameters.\\n\\n`rp_id`   - the WebAuthn relying party ID (e.g. `\"localhost\"` for dev,\\n`\"veil.app\"` for production). Must match the domain that\\nserves the frontend. Keep it configurable - do not hardcode.\\n\\n`origin`  - the exact WebAuthn origin (e.g. `\"https://veil.app\"`).\\nMust match the `origin` field the browser embeds in every\\nclientDataJSON for this deployment.",
+      "name": "init",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "initial_signer",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "rp_id",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "origin",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "WalletError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Add a new signer key to the wallet. Requires authorization from the\\ncontract itself (i.e. an existing signer must authorize via `__check_auth`).\\nReturns the index assigned to the new signer.",
+      "name": "add_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_public_key",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Remove a signer by index. Requires authorization from the contract.\\nRejects removal if it would leave the wallet with zero signers.",
+      "name": "remove_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "WalletError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Atomically replace a registered signer key (`old_public_key`) with a new\\none (`new_public_key`) \\xe2\\x80\\x94 the device-rotation flow for a lost or replaced\\npasskey.\\n\\nRequires authorization from the contract itself, so an *existing* signer\\nmust authorize the call via `__check_auth`. This means only the current\\nowner can rotate the key: a lost device cannot be silently swapped out by\\na third party.\\n\\nThe new key takes over the **same index** as the old one, so the signer\\nset size is unchanged and \\xe2\\x80\\x94 critically \\xe2\\x80\\x94 the wallet's contract address and\\nbalances are untouched. No redeploy is needed.\\n\\nErrors:\\n* `InvalidPublicKey`     \\xe2\\x80\\x94 `old` and `new` are the same key (no-op).\\n* `SignerAlreadyExists`  \\xe2\\x80\\x94 `new_public_key` is already registered.\\n* `SignerNotFound`       \\xe2\\x80\\x94 `old_public_key` is not a registered signer.",
+      "name": "rotate_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "old_public_key",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "new_public_key",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "WalletError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Called by the Soroban runtime to authorize a transaction.\\n\\nThree credential branches are handled, tried in order:\\n\\n**Branch 1 \\xe2\\x80\\x94 Allowance (spender Address)**\\n`signature` is an `Address`. The spender presents itself and the\\non-chain allowance record is debited. No cryptographic work needed\\nbecause `spender.require_auth()` already verified the spender's sig.\\n\\n**Branch 2 \\xe2\\x80\\x94 Session key `Vec<Val>[key_id, ed25519_sig, nonce]`**\\n`signature` is a `Vec<Val>` with exactly 3 elements:\\n[0] `BytesN<32>` \\xe2\\x80\\x94 key_id (storage lookup handle, NOT a secret)\\n[1] `BytesN<64>` \\xe2\\x80\\x94 ed25519 signature of `signature_payload`\\n[2] `u64`        \\xe2\\x80\\x94 current contract nonce (replay binding)\\n\\nAuthorization requires:\\n1. An ed25519 signature over `signature_payload` that verifies against\\nthe public key registered in the ACL for `key_id`.  The key_id is\\npublic; possession of it is NOT sufficient \\xe2\\x80\\x94 the holder must produce\\na fresh signature on the host-provided payload for every call.\\n2. The submitted nonce matches the on-chain nonce (contr",
+      "name": "__check_auth",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signature_payload",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signature",
+          "type_": "val"
+        },
+        {
+          "doc": "",
+          "name": "_auth_contexts",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Context"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "WalletError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Return the current monotonic nonce for this wallet.",
+      "name": "get_nonce",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "has_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_signers",
+      "inputs": [],
+      "outputs": [
+        {
+          "map": {
+            "key_type": "u32",
+            "value_type": {
+              "bytes_n": {
+                "n": 65
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execute",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "func",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set spending limit for a specific token and spender.\\n\\nRequires passkey authorization (i.e. from the contract itself).",
+      "name": "approve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": {
+            "option": {
+              "value_type": "u64"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get the current allowance for a spender and token.",
+      "name": "get_allowance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "Allowance"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set or update the guardian address for this wallet.\\n\\nOnly callable by the current wallet signer (authenticated via __check_auth).\\nThe guardian is authorized to initiate key recovery if the signer key is lost.\\n\\n# Arguments\\n* `env` - The Soroban environment handle.\\n* `guardian` - The `Address` of the new guardian.",
+      "name": "set_guardian",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "guardian",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initiate a guardian recovery to replace the wallet signer key.\\n\\nOnly callable by the designated guardian. Records the new public key\\nand starts a timelock countdown. After the timelock expires,\\n`complete_recovery` can be called to finalize the key replacement.\\n\\n# Arguments\\n* `env` - The Soroban environment handle.\\n* `new_public_key` - The 65-byte uncompressed public key of the new signer.\\n\\n# Errors\\n* `WalletError::NoGuardianSet` - if no guardian has been configured.\\n* `WalletError::RecoveryAlreadyPending` - if a recovery is already in progress.",
+      "name": "initiate_recovery",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_public_key",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "WalletError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Complete a pending guardian recovery after the timelock has expired.\\n\\nThis function is permissionless - anyone can call it once the timelock\\nhas expired. It replaces the wallet signer with the new public key\\nthat was specified during `initiate_recovery`.\\n\\n# Errors\\n* `WalletError::RecoveryNotPending` - if no recovery has been initiated.\\n* `WalletError::RecoveryTimelockActive` - if the timelock has not yet expired.",
+      "name": "complete_recovery",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "WalletError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Cancel a pending guardian recovery.\\n\\nOnly callable by the current wallet signer (the contract itself must\\nauthorize). This allows a wallet owner who still has their key to\\nabort an unwanted or malicious recovery attempt.\\n\\n# Errors\\n* `WalletError::RecoveryNotPending` - if no recovery has been initiated.",
+      "name": "cancel_recovery",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "WalletError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Register a scoped session key with an ACL.\\n\\nThe caller must supply the ed25519 public key (`pubkey`) of the session\\nkey holder in addition to the `key_id` storage handle.  Every future\\n`__check_auth` call using this key must carry an ed25519 signature of\\n`signature_payload` produced by the corresponding private key.\\n\\nRequires wallet owner authorization (existing signer via `__check_auth`).",
+      "name": "register_session_key",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pubkey",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "key_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "target_contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "selector",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "amount_cap",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Immediately revoke a session key.\\nRequires the wallet owner to authorize.",
+      "name": "revoke_session_key",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set a 24-hour rolling spend limit for a WebAuthn signer key.\\n\\nOnce set, every `__check_auth` call using `key_id` sums all context\\namounts and checks the total against `cap` within a rolling 24-hour window.\\nPass `cap = 0` to block all spending. Call `remove_key_spend_limit` to\\nlift the restriction entirely.\\n\\nRequires wallet owner authorization.",
+      "name": "set_key_spend_limit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key_id",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "cap",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Remove the 24-hour spend limit for a signer key (no limit = no cap).\\n\\nRequires wallet owner authorization.",
+      "name": "remove_key_spend_limit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key_id",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get the current spend window record for a signer key, if any.",
+      "name": "get_key_spend_limit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key_id",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "SpendWindow"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Register a designated recovery key for this wallet.\\n\\nThe recovery key is an Address (e.g. a cold-wallet account) that is\\nauthorized to initiate signer rotation via `request_recovery`.\\nRequires current wallet signer authorization.",
+      "name": "set_recovery_key",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Start a 7-day recovery cooldown to replace the active signer.\\n\\nOnly the designated recovery key (set via `set_recovery_key`) may call\\nthis. After the 7-day timelock expires, anyone can call `finalize_recovery`\\nto complete the rotation.\\n\\n# Errors\\n* `NoRecoveryKeySet`       \\xe2\\x80\\x94 no recovery key has been registered.\\n* `RecoveryAlreadyPending` \\xe2\\x80\\x94 a recovery request is already in progress.",
+      "name": "request_recovery",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_signer",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "WalletError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Finalize a pending recovery request after the 7-day timelock has expired.\\n\\nPermissionless \\xe2\\x80\\x94 anyone may call this once `ledger.timestamp > unlock_at`.\\n\\n# Errors\\n* `RecoveryNotPending`     \\xe2\\x80\\x94 no recovery request is in progress.\\n* `RecoveryTimelockActive` \\xe2\\x80\\x94 the 7-day cooldown has not yet elapsed.",
+      "name": "finalize_recovery",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "WalletError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Cancel a pending recovery-key request.\\n\\nOnly the current wallet signer (the contract itself) may cancel.\\nThis lets a wallet owner who still holds their key abort a recovery\\nattempt before it is finalized.\\n\\n# Errors\\n* `RecoveryNotPending` \\xe2\\x80\\x94 no recovery request is in progress.",
+      "name": "cancel_recovery_request",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "WalletError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

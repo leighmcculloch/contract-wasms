@@ -1,0 +1,326 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "PaymentFailed",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "DailyLimitExceeded",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "TooEarlyToRenew",
+          "value": 5
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MockToken"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Tier",
+            "type_": [
+              {
+                "udt": {
+                  "name": "PlanTier"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "UserSub",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "UserUsage",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PlanTier",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Alpha",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Vector",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Nexus",
+          "value": 2
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TierInfo",
+      "fields": [
+        {
+          "doc": "",
+          "name": "daily_tx_limit",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "has_nft_access",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "monthly_fee",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DailyUsage",
+      "fields": [
+        {
+          "doc": "",
+          "name": "count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "first_tx_timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UserSubscription",
+      "fields": [
+        {
+          "doc": "",
+          "name": "last_billing_timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "next_billing_timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "tier",
+          "type_": {
+            "udt": {
+              "name": "PlanTier"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "subscribe",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tier",
+          "type_": {
+            "udt": {
+              "name": "PlanTier"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "mock_token",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_user_tier",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "PlanTier"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "check_nft_access",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "record_transaction",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel_subscription",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_remaining_transactions",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  }
+]

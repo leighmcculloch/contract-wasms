@@ -1,0 +1,399 @@
+[
+  {
+    "function_v0": {
+      "doc": "After the co-signer has approved AND the optional time-lock has\\nexpired, anyone may call `claim()` to transfer the requested\\namount to the destination specified in the withdrawal request.\\n\\nThe vault is marked `withdrawn = true` and can never be used\\nagain (mirrors the existing vault contracts' one-shot semantics).",
+      "name": "claim",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Add more funds to the vault. Does not alter `unlock_timestamp`.",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "Caller is not the vault owner.",
+          "name": "NotOwner",
+          "value": 1
+        },
+        {
+          "doc": "Caller is not the vault co-signer.",
+          "name": "NotCoSigner",
+          "value": 2
+        },
+        {
+          "doc": "Withdrawal attempted before unlock timestamp.",
+          "name": "StillLocked",
+          "value": 3
+        },
+        {
+          "doc": "Vault already withdrawn (claimed).",
+          "name": "AlreadyWithdrawn",
+          "value": 4
+        },
+        {
+          "doc": "Attempt to reduce or zero the lock duration.",
+          "name": "ShortenForbidden",
+          "value": 5
+        },
+        {
+          "doc": "Vault not initialised (not found).",
+          "name": "VaultNotFound",
+          "value": 6
+        },
+        {
+          "doc": "Invalid amount (zero or negative deposit/withdrawal).",
+          "name": "InvalidAmount",
+          "value": 7
+        },
+        {
+          "doc": "Invalid timestamp (unlock in the past).",
+          "name": "InvalidTimestamp",
+          "value": 8
+        },
+        {
+          "doc": "No pending withdrawal request to approve/cancel.",
+          "name": "NoPendingRequest",
+          "value": 9
+        },
+        {
+          "doc": "Withdrawal request already approved.",
+          "name": "AlreadyApproved",
+          "value": 10
+        },
+        {
+          "doc": "Withdrawal request has not been approved yet.",
+          "name": "NotApproved",
+          "value": 11
+        },
+        {
+          "doc": "Caller is neither owner nor co-signer.",
+          "name": "NotAuthorized",
+          "value": 12
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Vault",
+      "fields": [
+        {
+          "doc": "",
+          "name": "balance",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "co_signer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "created_timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "unlock_timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "withdrawn",
+          "type_": "bool"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Read-only \\xe2\\x80\\x94 fetch the vault state.",
+      "name": "get_vault",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Vault"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Vault core data.",
+            "name": "Vault"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Pending withdrawal request (singleton \\xe2\\x80\\x94 at most one pending at a\\ntime, matching the single-vault-per-contract pattern).",
+            "name": "Withdrawal"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initialise the vault. Sets the owner, co-signer, optional unlock\\ntimestamp, and pulls the initial deposit from the caller (must be\\nthe owner). The caller must have pre-approved the vault contract\\nto spend at least `deposit_amount` of `token`.\\n\\n`unlock_timestamp` may be 0 for no time-lock (instant claim once\\napproved). Otherwise, funds are blocked until that ledger timestamp.\\n\\nCalled exactly once \\xe2\\x80\\x94 the contract is immutable thereafter.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "co_signer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "deposit_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "unlock_timestamp",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Push the unlock timestamp further into the future by\\n`additional_seconds`. Reducing or zeroing the lock is impossible.",
+      "name": "extend_lock",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "additional_seconds",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Either the owner OR the co-signer may cancel a pending withdrawal\\nrequest. This resets the request so a new one can be created.",
+      "name": "cancel_withdrawal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Co-signer approves the pending withdrawal request. Once approved,\\nthe request is locked and cannot be modified \\xe2\\x80\\x94 only `claim()` or\\n`cancel_withdrawal()` can follow.",
+      "name": "approve_withdrawal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Owner requests a withdrawal of `amount` to `destination`.\\nCreates a pending `WithdrawalRequest` that the co-signer must\\napprove before `claim()` can execute.\\n\\nReplaces any prior pending request (wipes the slate clean).",
+      "name": "request_withdrawal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "destination",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WithdrawalRequest",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "approved",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "destination",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Read-only \\xe2\\x80\\x94 fetch the pending withdrawal request, if any.\\nReturns `None` (via `Error::NoPendingRequest`) if none exists.",
+      "name": "get_withdrawal_request",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "WithdrawalRequest"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

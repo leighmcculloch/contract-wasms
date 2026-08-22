@@ -1,0 +1,76 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_apy",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TokenContract"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SavingsContract"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_contract_id",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "savings_contract_id",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Called only by the savings contract.\\nreward = principal * 5% * (duration / 100_000)",
+      "name": "calculate_and_pay",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "principal",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "duration_ledgers",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

@@ -1,0 +1,391 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "s",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "c",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "a",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "mtg",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "p",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "tuple": {
+                  "value_types": [
+                    "u32",
+                    "address",
+                    "address",
+                    "address"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "u",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "w",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "a",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "t",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "sp",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "c",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "np",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "tuple": {
+                  "value_types": [
+                    "u32",
+                    "address",
+                    "address",
+                    "address"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "sw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "a",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "s",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "exec_op",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "c",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "ba",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "a",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "f",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "a",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ContractError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "U",
+          "value": 900
+        },
+        {
+          "doc": "",
+          "name": "N",
+          "value": 901
+        },
+        {
+          "doc": "",
+          "name": "E",
+          "value": 902
+        },
+        {
+          "doc": "",
+          "name": "S",
+          "value": 903
+        },
+        {
+          "doc": "",
+          "name": "M",
+          "value": 904
+        },
+        {
+          "doc": "",
+          "name": "W",
+          "value": 905
+        },
+        {
+          "doc": "",
+          "name": "P",
+          "value": 906
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "C",
+      "prefix_topics": [
+        "c"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "a",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "p",
+          "type_": "u128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "S",
+      "prefix_topics": [
+        "s"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "fa",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "ta",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "tm",
+          "type_": "u128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "fm",
+          "type_": "u128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "W",
+      "prefix_topics": [
+        "w"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "a1",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "a2",
+          "type_": "u128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StorageKeys",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "A"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "W",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "P"
+          }
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,84 @@
+[
+  {
+    "function_v0": {
+      "doc": "Verify a Phantom-produced Ed25519 signature over the Latch signing convention.\\n\\nThe client signs: `\"Stellar Smart Account Auth:\\\\n\" + lowercase_hex(auth_payload_hash)`\\nThis contract reconstructs that message from `hash` and verifies `sig_data` against it.\\n\\nPanics with `Error(Crypto, InvalidInput)` if the signature is invalid.",
+      "name": "verify",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hash",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "key_data",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "sig_data",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the canonical 32-byte representation of the Ed25519 public key.\\n\\nEd25519 keys have exactly one canonical encoding \\xe2\\x80\\x94 this is a pass-through.",
+      "name": "canonicalize_key",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key_data",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bytes"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Canonicalizes a batch of Ed25519 keys, preserving input order.",
+      "name": "batch_canonicalize_key",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key_data",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "bytes"
+          }
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,411 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "Every failure mode is an explicit, contiguous `u32` so the TypeScript client\\ncan map a contract error straight to a user-facing message without guessing.",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "NotAuthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 4
+        },
+        {
+          "doc": "An individual share, or the computed total, was not strictly positive.",
+          "name": "InvalidAmount",
+          "value": 5
+        },
+        {
+          "doc": "recipients.len() != amounts.len(), or there were zero / too many lines.",
+          "name": "InvalidSplit",
+          "value": 6
+        },
+        {
+          "doc": "This `split_ref` was already settled \\xe2\\x80\\x94 a run can never be paid twice.",
+          "name": "AlreadyPaid",
+          "value": 7
+        },
+        {
+          "doc": "No receipt exists for the requested `split_ref`.",
+          "name": "ReceiptNotFound",
+          "value": 8
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys. `SplitReceipt` rows live in *persistent* storage (they are a\\npermanent ledger and must outlive the contract instance), while the admin,\\ntoken, counters and pause flag share the instance TTL.",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Token"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Number of split runs settled.",
+            "name": "Count"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Lifetime total paid through the contract, in token minor units.",
+            "name": "TotalOut"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "split_ref -> SplitReceipt",
+            "name": "Receipt",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A single immutable split receipt. Written exactly once per `split_ref` and\\nnever mutated: the permanent on-chain proof that one paycheck was fanned out\\nto every recipient inside a single atomic contract call.\\n\\n`split_ref` (the storage key) is sha256 of Sahod's run reference (32 bytes),\\nso the app can address a receipt directly and the same run can never be paid\\ntwice.",
+      "lib": "",
+      "name": "SplitReceipt",
+      "fields": [
+        {
+          "doc": "Ledger sequence the split settled on (proof-of-time).",
+          "name": "ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "The wallet that funded the split (the paycheck owner).",
+          "name": "payer",
+          "type_": "address"
+        },
+        {
+          "doc": "How many recipients were paid in this run.",
+          "name": "recipients",
+          "type_": "u32"
+        },
+        {
+          "doc": "Total paid in, in the token's minor units (stroops for XLM; 7 decimals).",
+          "name": "total",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "One-time setup. Records the admin and the pool's SAC token, then unpauses.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Atomically fund and fan out one paycheck.\\n\\n`payer` pays `sum(amounts)` into the contract, which then pays each\\n`recipients[i]` exactly `amounts[i]` \\xe2\\x80\\x94 all in this single call. Writes a\\npermanent receipt under `split_ref`. Returns the total moved.\\n\\nAuth: the payer's signature (covers the inner pay-in transfer).",
+      "name": "pay_split",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "split_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "recipients",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amounts",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_receipt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "split_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "SplitReceipt"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_paid",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "split_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_paid",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_splits",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_token",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unpause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Replace the contract's own code (admin-gated). Lets Sahod ship fixes\\nwithout migrating receipt state \\xe2\\x80\\x94 important for a mainnet (L6) deploy.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

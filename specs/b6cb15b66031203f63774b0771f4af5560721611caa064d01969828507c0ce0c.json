@@ -1,0 +1,1431 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "signers",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Multisig-gated: swaps the contract's executable WASM. Preserves storage.\\nDeliberately NOT single-admin-gated \\xe2\\x80\\x94 a compromised lone admin key\\nupgrading in a WASM that strips the multisig checks out of\\n`increment_stats`/`report_default`/etc. would defeat the whole point\\nof Phase 2. Costs the fast unilateral emergency-hotfix path; that\\ntrade is accepted for this contract. See CREDIT_SCORE_ORACLE_FIX.md.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Rating",
+      "fields": [
+        {
+          "doc": "",
+          "name": "comment_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "created_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "customer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "stars",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "has_rated",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vendor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tx_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "threshold",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Vendor",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "VendorCount"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Application",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PendingList"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "VendorList"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Rating",
+            "type_": [
+              "address",
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "RatingSum",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "RatingCount",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "VendorDefaultsReceived",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "CustomerDefaultsHistory",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PaymentContract"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "EscrowContract"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "ProcessedPayment",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "UtangProgress",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "ProcessedDefault",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "V1Registry"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Signers"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Threshold"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_rating",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vendor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tx_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Rating"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_vendor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "VendorRecord"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Rotates the committee/threshold. Requires the CURRENT committee's\\nsign-off, not the admin key \\xe2\\x80\\x94 otherwise a lone admin could always\\nre-bootstrap a trivial 1-of-1 \"multisig\" and the whole thing is\\ntheater.",
+      "name": "set_signers",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "new_signers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "new_threshold",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "v1_registry",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UtangView",
+      "fields": [
+        {
+          "doc": "",
+          "name": "customer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "description",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "installment_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "installments_paid",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "installments_total",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "interval_seconds",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "next_due",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "UtangStatusView"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "total_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "vendor",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "apply_vendor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "stall_number",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "phone",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "product_type",
+          "type_": "string"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "vendor_count",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pending_count",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "reject_vendor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "submit_rating",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "customer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "vendor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tx_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "stars",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "comment_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PaymentView",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "customer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "memo",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "vendor",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "approve_vendor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Manual-override / dispute-resolution path \\xe2\\x80\\x94 the routine path is the\\npermissionless `record_default_from_utang` above, which reads the\\nreal Defaulted status straight off utang-escrow. Multisig-gated\\n(Phase 2), same reasoning as `increment_stats`.",
+      "name": "report_default",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vendor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "customer",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "update_profile",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vendor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "stall_number",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "phone",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "product_type",
+          "type_": "string"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VendorRecord",
+      "fields": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "is_active",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "phone",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "product_type",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "registered_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "stall_number",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "total_transactions",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "total_volume",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "escrow_contract",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_all_vendors",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "limit",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "offset",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "VendorRecord"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_application",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "VendorApplication"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Manual-override / dispute-resolution path \\xe2\\x80\\x94 the routine path is the\\npermissionless `record_activity_from_payment`/`_installment` above.\\nMultisig-gated (Phase 2): this is the actual \"one key can't fabricate\\na score\" close, since this was the fabrication vector the judge\\nflagged in the first place.",
+      "name": "increment_stats",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vendor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "register_vendor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "stall_number",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "phone",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "product_type",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_v1_registry",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "contract",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UpgradedEvent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Computes a FICO-style on-chain credit score (300\\xe2\\x80\\x93850) for a vendor from\\ntheir settled cashflow, transaction count, customer ratings, and default\\nhistory. Deterministic and side-effect free \\xe2\\x80\\x94 this is the RWA primitive:\\nthe informal economy's creditworthiness derived purely from on-chain\\nstate. Returns the 300 floor for unknown/inactive vendors. Consumed by\\nCreditPool to gate score-based working-capital draws.",
+      "name": "get_credit_score",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vendor",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "payment_contract",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "deactivate_vendor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_vendor_rating",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vendor",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "u32",
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UtangStatusView",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Active"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Completed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Defaulted"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_pending_vendors",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "limit",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "offset",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "VendorApplication"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "One-time, admin-gated bootstrap of the multisig committee \\xe2\\x80\\x94 the last\\nthing the single admin key is ever needed for on this path. After\\nthis runs, `set_payment_contract`/`set_escrow_contract`/\\n`increment_stats`/`report_default`/`set_signers`/`upgrade` all\\nrequire `threshold`-of-`signers`, never the admin key alone again.",
+      "name": "migrate_to_multisig",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "signers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_escrow_contract",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "contract",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ApplicationStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Pending"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Approved"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Rejected"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VendorApplication",
+      "fields": [
+        {
+          "doc": "",
+          "name": "applied_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "phone",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "product_type",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "stall_number",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "ApplicationStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_payment_contract",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "contract",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Permissionless. Mirrors a vendor's identity fields (not stats \\xe2\\x80\\x94 those\\nstart fresh at 0 here; real activity accrues from that point via\\nrecord_activity_from_payment/_installment) from the real v1 vendor\\nonboarding registry, so a vendor approved there isn't silently\\ninvisible to scoring here. No-op if already present in this registry\\n(never clobbers real accrued stats). Traps if `wallet` has no v1\\nrecord \\xe2\\x80\\x94 same as any other lookup-by-address call in this contract\\n(e.g. `get_vendor`), so callers should only invoke this for wallets\\nthey know are real v1 vendors (e.g. reacting to a v1\\nVendorRegisteredEvent/approve_vendor call).",
+      "name": "mirror_vendor_from_v1",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SignersRotatedEvent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "new_signers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "new_threshold",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DefaultReportedEvent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "customer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "customer_total",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "vendor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "vendor_total",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RatingSubmittedEvent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "customer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "stars",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "tx_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vendor",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ActivityRecordedEvent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "source",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "vendor",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VendorRegisteredEvent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "vendor_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "vendor_defaults_received",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vendor",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "customer_defaults_history",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "customer",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Reads utang status from utang-escrow; if Defaulted and not already\\nprocessed, bumps the same VendorDefaultsReceived/CustomerDefaultsHistory\\ncounters as the admin-only `report_default` \\xe2\\x80\\x94 but driven by the real\\non-chain state, not an admin's claim.",
+      "name": "record_default_from_utang",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "utang_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Anyone can call. Reads the payment by ID from the configured\\nPaymentContract and credits the vendor's stats exactly once \\xe2\\x80\\x94 a\\nno-op (not a panic) if this payment_id was already processed, so a\\nrelayer can safely call this speculatively/repeatedly.",
+      "name": "record_activity_from_payment",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "payment_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Reads current `installments_paid` from utang-escrow and credits only\\nthe delta since the last call (handles the final/remainder\\ninstallment correctly by capping cumulative paid at total_amount).",
+      "name": "record_activity_from_installment",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "utang_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

@@ -1,0 +1,308 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotAuthorized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "TargetNotAllowed",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "SpendLimitExceeded",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "TimeRestrictionActive",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidTerms",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "AmountDecodeFailed",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "FunctionNotAllowed",
+          "value": 7
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "after_all",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "_terms",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "_context",
+          "type_": {
+            "udt": {
+              "name": "ExecutionContext"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "after_hook",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "_terms",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "_context",
+          "type_": {
+            "udt": {
+              "name": "ExecutionContext"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "before_all",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "terms",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "context",
+          "type_": {
+            "udt": {
+              "name": "ExecutionContext"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "before_hook",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "terms",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "context",
+          "type_": {
+            "udt": {
+              "name": "ExecutionContext"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "delegation_manager",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PolicyStateKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Spent",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "LastSpentTime",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "PooledSpent",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "PooledLastSpentTime",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "DelegationManager"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ExecutionContext",
+      "fields": [
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "delegate",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "delegator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "ledger_sequence",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "redeemer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,348 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "public-signal count doesn't match the embedded verifying key",
+          "name": "MalformedVerifyingKey",
+          "value": 1
+        },
+        {
+          "doc": "no public signals supplied (we need at least the nullifier at index 0)",
+          "name": "NoPublicSignals",
+          "value": 2
+        },
+        {
+          "doc": "the Groth16 pairing check failed \\xe2\\x80\\x94 the proof is not valid for this VK",
+          "name": "InvalidProof",
+          "value": 3
+        },
+        {
+          "doc": "this email/proof was already sealed (nullifier seen before) \\xe2\\x80\\x94 anti-replay",
+          "name": "AlreadySealed",
+          "value": 4
+        },
+        {
+          "doc": "a public signal is >= the BN254 scalar field modulus (non-canonical encoding)",
+          "name": "FieldElementNotCanonical",
+          "value": 5
+        },
+        {
+          "doc": "resuming SHA-256 over the public suffix did not reproduce the DKIM bh=",
+          "name": "SuffixMismatch",
+          "value": 6
+        },
+        {
+          "doc": "consumedBytes is not block-aligned or too small to contain a window",
+          "name": "BadConsumed",
+          "value": 7
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Proof",
+      "fields": [
+        {
+          "doc": "",
+          "name": "a",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "b",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "c",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Sealed",
+      "prefix_topics": [
+        "sealed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "nullifier",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "statement_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Same shape as the header verifier's attestation so every reader (server\\nroute, client fallback, /p page) works against either contract unchanged.",
+      "lib": "",
+      "name": "Attestation",
+      "fields": [
+        {
+          "doc": "",
+          "name": "ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "nullifier",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "statement_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VerificationKey",
+      "fields": [
+        {
+          "doc": "",
+          "name": "alpha",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "beta",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "delta",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "gamma",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "ic",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 64
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_sealed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "nullifier",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Verify a body proof AND seal it as a public attestation.\\n\\nCheck order is cheap-to-expensive (canonical form \\xe2\\x86\\x92 replay \\xe2\\x86\\x92 SHA over the\\nsuffix \\xe2\\x86\\x92 pairing) so invalid submissions cost the sponsor as little as\\npossible; nothing is persisted until every check has passed.\\n\\nNOTE: `suffix` rides in the transaction, so it is public forever in the\\nledger history. The client audits it for personal data and shows the user\\nexactly what will be published before submitting.",
+      "name": "seal_body",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "udt": {
+              "name": "Proof"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "pub_signals",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "suffix",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "bytes_n": {
+                "n": 32
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pure verification of proof + suffix, no state change. Returns true only\\nif BOTH the pairing check and the SHA completion against bh= pass.",
+      "name": "verify_proof",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "udt": {
+              "name": "Proof"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "pub_signals",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "suffix",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "bool",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Read a sealed attestation by id (== nullifier) \\xe2\\x80\\x94 same ABI as the header\\nverifier so the /p page readers work against either contract.",
+      "name": "get_attestation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "Attestation"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

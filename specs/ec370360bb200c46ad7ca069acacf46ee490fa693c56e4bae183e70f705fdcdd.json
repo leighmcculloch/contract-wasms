@@ -1,0 +1,3464 @@
+[
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Paused",
+      "prefix_topics": [
+        "pause"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Role",
+            "type_": [
+              "symbol"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Treasury"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Accounting",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "UserDeposit",
+            "type_": [
+              "u64",
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "RootStake",
+            "type_": [
+              "u64",
+              "address",
+              {
+                "udt": {
+                  "name": "Outcome"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "ChildCollateralUsedByOutcome",
+            "type_": [
+              "u64",
+              "address",
+              {
+                "udt": {
+                  "name": "Outcome"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "ChildCollateralUsed",
+            "type_": [
+              "u64",
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "ChildParent",
+            "type_": [
+              "u64",
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "ChildParentOutcome",
+            "type_": [
+              "u64",
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "ChildLoan",
+            "type_": [
+              "u64",
+              "u64",
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "ChildLoanByOutcome",
+            "type_": [
+              "u64",
+              {
+                "udt": {
+                  "name": "Outcome"
+                }
+              },
+              "u64",
+              {
+                "udt": {
+                  "name": "Outcome"
+                }
+              },
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "ChildDebt",
+            "type_": [
+              "u64",
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "ParentDebt",
+            "type_": [
+              "u64",
+              "address",
+              {
+                "udt": {
+                  "name": "Outcome"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "ChildMarketsOf",
+            "type_": [
+              "u64",
+              "address",
+              {
+                "udt": {
+                  "name": "Outcome"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "InsuranceReserve"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Bond",
+            "type_": [
+              "u64",
+              "address",
+              "bool"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "BondToken",
+            "type_": [
+              "u64",
+              "address",
+              "bool"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "BondMarket",
+            "type_": [
+              "u64",
+              "address",
+              "bool"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Redeemed",
+            "type_": [
+              "u64",
+              "address",
+              {
+                "udt": {
+                  "name": "Outcome"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "InvalidDustCarry",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RoleSet",
+      "prefix_topics": [
+        "role"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "module",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AdminSet",
+      "prefix_topics": [
+        "admin"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Redeemed",
+      "prefix_topics": [
+        "redeem"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "payout",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BondLocked",
+      "prefix_topics": [
+        "bond"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "is_dispute",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TreasurySet",
+      "prefix_topics": [
+        "treas"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BondReleased",
+      "prefix_topics": [
+        "bond_rel"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FeesCollected",
+      "prefix_topics": [
+        "fee"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "lp_fee",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "protocol_fee",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "cod_fee",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketDeposit",
+      "prefix_topics": [
+        "deposit"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "redeem",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "final_outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "redeemed_outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "redeemed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "module",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "lock_bond",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "is_dispute",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accounting",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "VaultAccounting"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "child_debt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "child_market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "root_stake",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "slash_bond",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "is_dispute",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LiquidationSettled",
+      "prefix_topics": [
+        "liq_settle"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "parent_market_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "liquidator",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "proceeds",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "debt_repaid",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "bonus",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "remainder",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "collect_fee",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "lp_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "protocol_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "cod_fee",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "parent_debt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "parent_market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "child_parent",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "child_market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "release_bond",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "is_dispute",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_treasury",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "user_deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "claim_lp_fees",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "lp",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ChildCollateralRepaid",
+      "prefix_topics": [
+        "cpay"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "parent_market_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "child_market_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ChildPredictionFunded",
+      "prefix_topics": [
+        "cfund"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "parent_market_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "child_market_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "redeem_resolved",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "redeemed_outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Every child market a given parent+user+outcome stake has drawn credit\\ninto. Lets keepers discover liquidation targets on-chain instead of\\nrelying on off-chain event indexing (and an incomplete keeper-supplied\\nlist stranding debt).",
+      "name": "child_markets_of",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "parent_market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "u64"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "redeem_cancelled",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "redeemed_outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "insurance_reserve",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Called by the AMM's `liquidate_position` after it force-sells a user's\\nentire parent-outcome balance (a normal `sell()` would call\\n`release_trade_payout` here and pay `proceeds` straight to the seller \\xe2\\x80\\x94\\nthis is the liquidation variant: extract `proceeds` from the parent's\\nbacking exactly like a normal sale would, then instead of paying the\\nuser, route it through debt settlement first).\\n\\nOrder: liquidator bonus is taken off the top of `proceeds` so a keeper\\nalways gets paid for a valid call regardless of how underwater the\\nposition is (otherwise nobody would bother liquidating the worst\\npositions \\xe2\\x80\\x94 exactly the ones most urgent to close). What's left pays\\ndown debt across every market in `child_markets_of`, in list order,\\nvia `settle_child_debt` (which restores the parent's own backing as\\neach debt gets repaid). Any remainder after that goes to the user.\\nWhatever debt survives because proceeds ran short is handed to\\n`resolve_parent_default` \\xe2\\x80\\x94 same insurance-then-shortfall path a\\nresolution-time default wo",
+      "name": "liquidate_release",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "liquidator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "parent_market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "parent_outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "tokens_sold",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "proceeds",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "record_cash_stake",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "collateral_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "tokens_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "deposit_for_market",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "sweep_protocol_fees",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "child_parent_outcome",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "child_market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Outcome"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "release_trade_payout",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "tokens_sold",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "payout",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "child_collateral_loan",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "parent_market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "child_market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "child_collateral_used",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "parent_market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "fund_child_prediction",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "parent_market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "child_market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "child_loan_for_outcome",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "parent_market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "parent_outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "child_market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "child_outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "child_used_for_outcome",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "parent_market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Voluntary repayment of an outstanding child-market debt, ahead of that\\nchild market resolving. Previously unimplemented \\xe2\\x80\\x94 there was no way for\\na user to close a risky credit line proactively; exposure just sat\\nopen until whichever market resolved first.",
+      "name": "repay_child_collateral",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "child_market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "child_avail_for_outcome",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "parent_market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Called by the AMM's `liquidate_child_position` \\xe2\\x80\\x94 the keeper's\\nfollow-up close for whatever child debt survived a parent liquidation\\n(or simply never triggered a parent-side liquidation but the child\\nleg itself is now underwater relative to its own debt). Symmetric to\\n`liquidate_release` but scoped to a single child, since a child market\\ncan never itself be a parent (`ChainDepthExceeded` blocks chaining).",
+      "name": "liquidate_child_release",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "liquidator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "child_market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "child_outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "tokens_sold",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "proceeds",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "child_collateral_available",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "parent_market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "open_child_credit_for_trade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "parent_market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "parent_outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "child_market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "child_outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "assert_position_transfer_allowed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "DikeError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Outcome",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Yes"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "No"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Invalid"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PoolData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "accumulated_cod_fees",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "accumulated_lp_fees",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "accumulated_protocol_fees",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee_per_share_scaled",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "live",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "no_reserve",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_lp_shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "yes_reserve",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DikeError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidInput",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidStatus",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidTransition",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "MarketExists",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "MarketNotFound",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "PoolNotFound",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "RequestNotFound",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "CaseNotFound",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "AlreadyResolved",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "AlreadyRedeemed",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "InsufficientBalance",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "InsufficientCollateral",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "SlippageExceeded",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "DeadlineExpired",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "NotExpired",
+          "value": 19
+        },
+        {
+          "doc": "",
+          "name": "DisputeWindowOpen",
+          "value": 20
+        },
+        {
+          "doc": "",
+          "name": "DisputeWindowClosed",
+          "value": 21
+        },
+        {
+          "doc": "",
+          "name": "EvidenceRequired",
+          "value": 22
+        },
+        {
+          "doc": "",
+          "name": "AlreadyDisputed",
+          "value": 23
+        },
+        {
+          "doc": "",
+          "name": "InvalidReveal",
+          "value": 24
+        },
+        {
+          "doc": "",
+          "name": "VoteAlreadyCommitted",
+          "value": 25
+        },
+        {
+          "doc": "",
+          "name": "VoteNotCommitted",
+          "value": 26
+        },
+        {
+          "doc": "",
+          "name": "TooEarly",
+          "value": 27
+        },
+        {
+          "doc": "",
+          "name": "TimelockNotReady",
+          "value": 28
+        },
+        {
+          "doc": "",
+          "name": "ActionConsumed",
+          "value": 29
+        },
+        {
+          "doc": "",
+          "name": "UnsupportedCollateral",
+          "value": 30
+        },
+        {
+          "doc": "",
+          "name": "CreatorNotApproved",
+          "value": 31
+        },
+        {
+          "doc": "",
+          "name": "ArithmeticError",
+          "value": 32
+        },
+        {
+          "doc": "",
+          "name": "ChainDepthExceeded",
+          "value": 33
+        },
+        {
+          "doc": "",
+          "name": "ChildCollateralLimitExceeded",
+          "value": 34
+        },
+        {
+          "doc": "",
+          "name": "EncumberedPosition",
+          "value": 35
+        },
+        {
+          "doc": "",
+          "name": "NotLiquidatable",
+          "value": 36
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FeeConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "cod_fee_share_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "council_reward",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "creation_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "lp_fee_share_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "trading_fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "treasury_fee_share_bps",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "bond_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "collateral",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "created_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "dispute_window",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "fee_config",
+          "type_": {
+            "udt": {
+              "name": "FeeConfig"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "final_outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "has_final_outcome",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "has_request",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "no_token_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "question",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "question_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "rules_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "rules_uri",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "MarketStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "yes_token_id",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TradeQuote",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "amount_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "average_price_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "net_in",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CouncilCase",
+      "fields": [
+        {
+          "doc": "",
+          "name": "commit_end",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "dispute_bond",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "disputer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "disputer_evidence_uri",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "disputer_outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "final_outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "has_final_outcome",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "invalid_votes",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "no_votes",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "proposal_bond",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "proposer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "proposer_evidence_uri",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "proposer_outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "reveal_end",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "CouncilCaseStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "total_valid_votes",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "voting_start",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "yes_votes",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "bond_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "category",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "collateral",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "dispute_window",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "fee_config",
+          "type_": {
+            "udt": {
+              "name": "FeeConfig"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "question",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "question_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "rules_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "rules_uri",
+          "type_": "string"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Created"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Live"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TradingClosed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ResolutionRequested"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Proposed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Disputed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "CouncilVoting"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Resolved"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cancelled"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OracleStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "None"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Requested"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Proposed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Disputed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Escalated"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Finalized"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OpenCaseConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "commit_duration",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "dispute_bond",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "proposal_bond",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "reveal_duration",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TimelockAction",
+      "fields": [
+        {
+          "doc": "",
+          "name": "cancelled",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "execute_after",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "executed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "kind",
+          "type_": {
+            "udt": {
+              "name": "TimelockActionKind"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payload",
+          "type_": {
+            "udt": {
+              "name": "TimelockPayload"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payload_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TimelockPayload",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Treasury",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Creator",
+            "type_": [
+              "address",
+              "bool"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "CouncilMember",
+            "type_": [
+              "address",
+              "bool"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "SupportedCollateral",
+            "type_": [
+              "address",
+              "bool"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "ModuleAddress",
+            "type_": [
+              "symbol",
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Pause",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "FeeConfig",
+            "type_": [
+              {
+                "udt": {
+                  "name": "FeeConfig"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Upgrade",
+            "type_": [
+              "symbol",
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Timelock",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VaultAccounting",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amm_collateral",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "child_collateral_defaulted",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "child_collateral_issued",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "child_collateral_repaid",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "cod_fees",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "collateral_backing",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "dispute_bonds",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "lp_fees",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "proposal_bonds",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "protocol_fees",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "redeemed",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "refundable",
+          "type_": "i128"
+        },
+        {
+          "doc": "Known unrecoverable deficit for this market \\xe2\\x80\\x94 claims that exceed real\\nbacking after insurance-reserve absorption. Read by `capped_payout`\\nto pro-rata haircut redemptions instead of hard-reverting.",
+          "name": "shortfall",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_deposited",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CouncilCaseStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Opened"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "CommitPhase"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "RevealPhase"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ReadyToFinalize"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Finalized"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cancelled"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ResolutionRequest",
+      "fields": [
+        {
+          "doc": "",
+          "name": "bond_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "dispute_evidence_uri",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "dispute_window",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "disputed_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "disputed_outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "disputer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "final_outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "has_dispute",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "has_final_outcome",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "has_proposal",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "proposal_evidence_uri",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "proposed_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "proposed_outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "proposer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "question_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "requested_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "rules_uri",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "OracleStatus"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TimelockActionKind",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "FeeConfig"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Treasury"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SupportedCollateral"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Creator"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "CouncilMember"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ModuleAddress"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Pause"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Upgrade"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Timelock"
+          }
+        }
+      ]
+    }
+  }
+]

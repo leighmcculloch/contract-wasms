@@ -1,0 +1,327 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "init",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "base_uri",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "pay_token",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "OutOfRange",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AlreadyClaimed",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "NotOwner",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "FeeTooHigh",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "NothingToWithdraw",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "ClaimingDisabled",
+          "value": 6
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "token_id",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "tx",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "ty",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "treasury",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Entire treasury to the receiver. Zeroed before returning.",
+      "name": "withdraw",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "mint_tile",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tx",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "ty",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Owner"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "BaseUri"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Tile",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Total"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Primary sale price in stroops. 0 disables on-chain claiming.",
+            "name": "TilePrice"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Resale fee, 700 = 7%. Capped at MAX_FEE_BPS.",
+            "name": "MarketFeeBps"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "100% of primary sales + the resale cut.",
+            "name": "Treasury"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Payout target \\xe2\\x80\\x94 set to a cold wallet.",
+            "name": "TreasuryReceiver"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "SAC address of the asset the sale is denominated in (XLM by default).",
+            "name": "PayToken"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Primary sale. Pulls `tile_price` from the buyer into the contract, so the\\ntreasury figure is backed by real balance rather than a bare counter.",
+      "name": "claim_tile",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "buyer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tx",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "ty",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "tile_price",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_minted",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "market_fee_bps",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_tile_price",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_market_fee_bps",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Point payouts at a cold wallet without handing over admin rights.",
+      "name": "set_treasury_receiver",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

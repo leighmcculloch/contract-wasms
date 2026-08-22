@@ -1,0 +1,1922 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "name",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pause both PT and the paired YT. Requires the `PAUSER` role.",
+      "name": "pause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Return the paired YT address.",
+      "name": "get_yt",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Return pause state.",
+      "name": "paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Redeem PT shares for underlying. Burns PT from `owner`, burns YT pre-expiry,\\nunwraps IBT, and transfers underlying to `receiver`.",
+      "name": "redeem",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "symbol",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "approve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deposit underlying assets. PT pulls from `caller`, wraps to IBT, mints PT\\nto `pt_receiver` and YT to `yt_receiver` after the tokenization fee.",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "pt_receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "yt_receiver",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Return the IBT vault address.",
+      "name": "get_ibt",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Unpause both PT and the paired YT. Requires the `PAUSER` role.",
+      "name": "unpause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Upgrade the contract code to `new_wasm_hash`. Requires the `UPGRADE` role.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "decimals",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "View: whether `account` currently holds `role`.",
+      "name": "has_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Return the maturity timestamp.",
+      "name": "maturity",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "muxed_address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Withdraw a fixed amount of underlying. Redeems IBT for `assets`, burns the\\ncorresponding PT (and YT pre-expiry), and transfers underlying to `receiver`.",
+      "name": "withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "allowance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Transfer accumulated fees to the registry fee collector as IBT shares.\\nPanics with `UnauthorizedFeeCollector` when caller is not the collector and\\n`NoFeesToClaim` when the accumulated fee balance is zero.",
+      "name": "claim_fees",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Grant `role` to `account`. `caller` must be the contract admin or hold\\nthe admin-role of `role`. Auth + admin checks are enforced by\\n`access_control::grant_role`.",
+      "name": "grant_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initialize the Principal Token and its paired Yield Token.\\n\\nRequires `admin` authorization and must be called only once. Reads IBT and\\nunderlying metadata, validates decimals, computes initial rates, sets PT\\nmetadata, grants roles, deploys the paired YT, and persists instance state.\\nPanics with `AlreadyInitialized`, `RateError`, or `InvalidDecimals` when\\npreconditions fail.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "ibt",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "duration",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "registry",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Max redeemable shares for `owner`. Returns 0 when paused.",
+      "name": "max_redeem",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Return the underlying asset address.",
+      "name": "underlying",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Upgrade the paired YT's WASM to `new_wasm_hash`. Requires the\\n`UPGRADE` role on PT. The PT is YT's policy authority \\xe2\\x80\\x94 YT's own\\n`upgrade` entry point requires `pt.require_auth()`, so this is the\\nonly legitimate path to roll YT forward.",
+      "name": "upgrade_yt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Claim accumulated yield as underlying. Settles yield, applies the yield fee,\\nredeems IBT, and transfers underlying to `receiver`.",
+      "name": "claim_yield",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "min_assets",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deposit using IBT shares directly. PT pulls IBT from `caller` and settles\\nminting through the same internal IBT deposit flow.",
+      "name": "deposit_ibt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "ibts",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "pt_receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "yt_receiver",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Return the current PT rate (Ray).",
+      "name": "get_pt_rate",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Max depositable assets for `receiver`. Returns 0 when paused or expired.",
+      "name": "max_deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Revoke `role` from `account`. Same auth model as `grant_role`.",
+      "name": "revoke_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Return the PT duration in seconds.",
+      "name": "get_duration",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Return the current IBT rate (Ray).",
+      "name": "get_ibt_rate",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Return the IBT unit (10^decimals).",
+      "name": "get_ibt_unit",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Max withdrawable underlying for `owner`. Returns 0 when paused.",
+      "name": "max_withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Bundled pricing snapshot for the limit-order engine:\\n`(ibt_rate, future_pt_value, maturity)` in a single cross-contract call.\\n\\nThe engine otherwise reads these via ~7 separate calls (PT `get_ibt`,\\nIBT `decimals`, vault `query_asset`, underlying `decimals`, PT\\n`get_ibt_rate`, PT `preview_redeem`, PT `maturity`) \\xe2\\x80\\x94 each re-instantiating\\nthe target contract, which on a heavy IBT (Blend pool / Upshift vault)\\ndominates per-fill memory. Folding them into one PT invocation (with one\\ninternal vault read) removes those redundant instantiations.",
+      "name": "pricing_data",
+      "inputs": [],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "i128",
+              "u64"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Underlying value of PT's IBT holdings (preview redeem on PT's IBT balance).",
+      "name": "total_assets",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_supply",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Settle yield for a user based on their pre-op YT balance.\\nCallable only by the paired YT.",
+      "name": "update_yield",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "user_yt_balance",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Withdraw IBT shares directly. Burns the matching PT (and YT pre-expiry) and\\ntransfers IBT to `receiver`.",
+      "name": "withdraw_ibt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "ibts",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Claim rewards through the installed proxy. Requires `RWD_HARV`.\\nSoroban has no `delegatecall`, so like the wrapper this is a dynamic\\ncross-contract call: the caller names the proxy entry point\\n(`function`) and passes its `args`.",
+      "name": "claim_rewards",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "val"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The installed rewards proxy, or `None` when unset.",
+      "name": "rewards_proxy",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer_from",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Preview redeem of PT shares into underlying assets.",
+      "name": "preview_redeem",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Redeem PT shares for IBT shares instead of underlying.",
+      "name": "redeem_for_ibt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Preview deposit with the headline tokenization fee (no user discount).",
+      "name": "preview_deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "assets",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Max withdrawable IBT shares for `owner`. Returns 0 when paused.",
+      "name": "max_withdraw_ibt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Preview withdraw of underlying assets into required PT shares.",
+      "name": "preview_withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "assets",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Install, replace, or clear the rewards proxy. Requires `RWD_PROX`.",
+      "name": "set_rewards_proxy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "proxy",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Settle yield for both sides of a YT transfer using pre-transfer balances.\\nCallable only by the paired YT.",
+      "name": "before_yt_transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from_balance",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "to_balance",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Claim accumulated yield as IBT shares. Settles yield, applies the yield fee,\\nand transfers IBT to `receiver`.",
+      "name": "claim_yield_in_ibt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "min_ibts",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Preview deposit for a specific user with their fee reduction applied.",
+      "name": "preview_deposit_for",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Preview IBT deposit with the headline tokenization fee (no user discount).",
+      "name": "preview_deposit_ibt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "ibts",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer_admin_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Convert underlying assets to PT shares using current rates.",
+      "name": "convert_to_principal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "underlying",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Return the current tokenization fee rate from the registry.",
+      "name": "get_tokenization_fee",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Preview withdraw of IBT shares into required PT shares.",
+      "name": "preview_withdraw_ibt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "ibts",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accept_admin_transfer",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Convert PT shares to underlying assets using current rates.",
+      "name": "convert_to_underlying",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "principal",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Return total accumulated fees in IBT shares.",
+      "name": "get_total_fees_in_ibt",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Freeze PT and IBT rates after expiry so all vault flows use fixed values.\\nPanics with `NotExpired` before maturity or `RatesAtExpiryAlreadyStored`\\non a repeat call.",
+      "name": "store_rates_at_expiry",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Preview redeem of PT shares into IBT shares.",
+      "name": "preview_redeem_for_ibt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Redeem with a minimum-asset guard.\\nPanics with `SlippageProtectionFailed` if delivered assets are below `min_assets`.",
+      "name": "redeem_with_min_assets",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "min_assets",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deposit underlying with a minimum-share guard.\\nPanics with `SlippageProtectionFailed` if minted shares are below `min_shares`.",
+      "name": "deposit_with_min_shares",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "pt_receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "yt_receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "min_shares",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Preview IBT deposit for a specific user with their fee reduction applied.",
+      "name": "preview_deposit_ibt_for",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "ibts",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Withdraw with a maximum-share guard.",
+      "name": "withdraw_with_max_shares",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "max_shares",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Return unclaimed fees in IBT shares.",
+      "name": "get_unclaimed_fees_in_ibt",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deposit IBT with a minimum-share guard.",
+      "name": "deposit_ibt_with_min_shares",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "ibts",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "pt_receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "yt_receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "min_shares",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Redeem for IBT with a minimum-IBT guard.",
+      "name": "redeem_for_ibt_with_min_ibts",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "min_ibts",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Withdraw IBT with a maximum-share guard.",
+      "name": "withdraw_ibt_with_max_shares",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "ibts",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "max_shares",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Return current accumulated yield in IBT for `user`, net of the yield fee.",
+      "name": "get_current_yield_of_user_in_ibt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted on every successful PT `redeem*` / `withdraw*`.",
+      "lib": "",
+      "name": "Redeem",
+      "prefix_topics": [
+        "redeem"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted on every successful PT mint via `deposit*`. Renamed from `Mint`\\nto avoid colliding with the OZ `stellar-tokens::fungible::Mint(to, amount)`\\nevent that `Base::mint` emits internally \\xe2\\x80\\x94 both events now appear in the\\ncontract spec under distinct names.",
+      "lib": "",
+      "name": "PtMinted",
+      "prefix_topics": [
+        "pt_minted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when the fee collector claims accrued IBT fees.",
+      "lib": "",
+      "name": "FeeClaimed",
+      "prefix_topics": [
+        "fee_claimed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "fee_collector",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "ibts",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted on `upgrade` \\xe2\\x80\\x94 off-chain monitor signal for WASM rotation.",
+      "lib": "",
+      "name": "PtUpgraded",
+      "prefix_topics": [
+        "pt_upgraded"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted at the end of `initialize` once the YT has been deployed.",
+      "lib": "",
+      "name": "YtDeployed",
+      "prefix_topics": [
+        "yt_deployed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted at the start of `claim_yield` / `claim_yield_in_ibt`.",
+      "lib": "",
+      "name": "YieldClaimed",
+      "prefix_topics": [
+        "yield_claimed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "yield_in_ibt",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted at the end of every successful `update_yield`.",
+      "lib": "",
+      "name": "YieldUpdated",
+      "prefix_topics": [
+        "yield_updated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "yield_in_ibt",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted on `claim_rewards`.",
+      "lib": "",
+      "name": "RewardsClaimed",
+      "prefix_topics": [
+        "rewards_claimed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted on `set_rewards_proxy`.",
+      "lib": "",
+      "name": "RewardsProxyChange",
+      "prefix_topics": [
+        "rewards_proxy_change"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted by `store_rates_at_expiry` when the rates are frozen.",
+      "lib": "",
+      "name": "RatesStoredAtExpiry",
+      "prefix_topics": [
+        "rates_stored_at_expiry"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "ibt_rate",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "pt_rate",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a role is granted.",
+      "lib": "",
+      "name": "RoleGranted",
+      "prefix_topics": [
+        "role_granted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a role is revoked.",
+      "lib": "",
+      "name": "RoleRevoked",
+      "prefix_topics": [
+        "role_revoked"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an admin transfer is completed.",
+      "lib": "",
+      "name": "AdminTransferCompleted",
+      "prefix_topics": [
+        "admin_transfer_completed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "previous_admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an admin transfer is initiated.",
+      "lib": "",
+      "name": "AdminTransferInitiated",
+      "prefix_topics": [
+        "admin_transfer_initiated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "current_admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the contract is paused.",
+      "lib": "",
+      "name": "Paused",
+      "prefix_topics": [
+        "paused"
+      ],
+      "params": [],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the contract is unpaused.",
+      "lib": "",
+      "name": "Unpaused",
+      "prefix_topics": [
+        "unpaused"
+      ],
+      "params": [],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when tokens are burned.",
+      "lib": "",
+      "name": "Burn",
+      "prefix_topics": [
+        "burn"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when tokens are minted.",
+      "lib": "",
+      "name": "Mint",
+      "prefix_topics": [
+        "mint"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an allowance is approved.",
+      "lib": "",
+      "name": "Approve",
+      "prefix_topics": [
+        "approve"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when tokens are transferred between addresses without a\\nmuxed destination.\\n\\nPer SEP-41, the event data is a bare `i128` when no muxed address is\\ninvolved. The `data_format = \"single-value\"` attribute ensures the\\n`amount` field is serialized as a bare value rather than a map.",
+      "lib": "",
+      "name": "Transfer",
+      "prefix_topics": [
+        "transfer"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when tokens are transferred to a muxed address.\\n\\nPer SEP-41, when the destination is a [`MuxedAddress`] the event data\\ncarries both the amount and the muxed identifier so that off-chain\\nconsumers can attribute the transfer to the correct sub-account.\\n\\nUses `topics = [\"transfer\"]` so that both [`Transfer`] and\\n[`MuxedTransfer`] share the same `\"transfer\"` event symbol, as required\\nby SEP-41.",
+      "lib": "",
+      "name": "MuxedTransfer",
+      "prefix_topics": [
+        "transfer"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "to_muxed_id",
+          "type_": {
+            "option": {
+              "value_type": "u64"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  }
+]

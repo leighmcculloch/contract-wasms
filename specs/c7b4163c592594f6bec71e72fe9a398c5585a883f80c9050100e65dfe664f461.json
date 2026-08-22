@@ -1,0 +1,1999 @@
+[
+  {
+    "function_v0": {
+      "doc": "Join the circle. r10: this takes NO money \\xe2\\x80\\x94 there is no deposit. A\\nA member self-joins (member-authorised). The custodial equivalent is\\n`enroll`, where the system adds them without a member signature.",
+      "name": "join",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Withdraw the caller's hand, less an optional business-set platform `fee`",
+      "name": "claim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "ClaimReceipt"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The organiser pauses the circle. Clocks stop; `resume` shifts every\\nstored window forward by however long it was down.\\n\\nThis is also the gate `upgrade` stands behind \\xe2\\x80\\x94 a circle must be\\npaused before its code can be swapped. With the vote gone there\\nwould otherwise be no way into that state at all, and the contract\\nwould be permanently unupgradable.",
+      "name": "pause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Recruiting \\xe2\\x86\\x92 Active: fix the roster's obligations, start the clock,",
+      "name": "start",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "RoundWindow"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The system (`creator`) enrolls `member` on their behalf \\xe2\\x80\\x94 the custodial\\npath. Same roster effect and admission gates as `join`, but authorised by\\nthe creator, not the member: the member never signs, so no signature can\\nexpire mid-async while a server-driven flow retries. This is how the\\nfounding owner (and any member) is added when the flow is system-driven.\\nThe platform vouches for the member's consent at the business layer.",
+      "name": "enroll",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Lift a pause, moving every deadline forward by its duration.",
+      "name": "resume",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Bring storage written by an older build into this one's shape, so a\\ncode swap lands as `upgrade() \\xe2\\x86\\x92 migrate(from)` with no bespoke\\nceremony per schema bump.\\n\\n`#[contracttype]` encodes a struct as a map keyed by field name, so\\nold bytes decode only if the field SET matches exactly \\xe2\\x80\\x94 a gained\\nfield makes the host trap, a removed one too. `ensure_schema` keeps\\nevery other entrypoint shut until this has run, which is why the\\ncontract fails closed rather than half-working after a code swap.\\n\\nThe reshaping is generic: read the stored value as a raw\\n`Map<Symbol, Val>`, drop keys this build no longer has, fill keys it\\nhas gained from `reference`, and write the result back typed. The\\nonly thing a future schema bump must touch is `reference` \\xe2\\x80\\x94 it is\\nboth the field list and the defaults for anything new.",
+      "name": "migrate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from_version",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "reference",
+          "type_": {
+            "udt": {
+              "name": "Policy"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Swap the executable. Requires the circle Paused (no live window can",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_wasm",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "expect_schema",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The circle owner (`admin`, r12) \\xe2\\x80\\x94 the user, set at deploy and resettable\\nby `creator` for recovery. Read-only, so the server can display / verify it.",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_cycle",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "CycleState"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_round",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "Round"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Reset the owner (`admin`) \\xe2\\x80\\x94 the platform-side recovery door. Gated on\\n`creator` (the system), which sits ABOVE `admin`: if a user loses their\\nkey, the system reassigns ownership to a fresh address. Distinct from the\\nowner's own two-step `transfer_admin`/`accept_admin` hand-off \\xe2\\x80\\x94 this is a\\ndirect set with no accept step, because a lost key can never complete an\\naccept. Clears any pending hand-off so state stays coherent.\\n\\nNOTE (scope): this reassigns the owner ROLE only. It does not move the\\nold owner's member record / funds \\xe2\\x80\\x94 those stay bound to the old address\\n(a member's payout requires that member's own auth). Member-fund recovery\\nis a separate concern, deliberately out of scope here.",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pay into the currently Open round.",
+      "name": "contribute",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "ContributeReceipt"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_member",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "MemberView"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_roster",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "page",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Permissionless, batched TTL rescue: a member can keep their own",
+      "name": "keep_alive",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "members",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "from_round",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "to_round",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Creator-only, Recruiting-only policy replacement: before `start()`",
+      "name": "set_policy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "p",
+          "type_": {
+            "udt": {
+              "name": "Policy"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Void an unresolved round. Remediation may do this at any time (with",
+      "name": "void_round",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "round_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "reason",
+          "type_": {
+            "udt": {
+              "name": "VoidReason"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "max_steps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "VoidReceipt"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The circle deployer (`creator`, r12) \\xe2\\x80\\x94 the system's super-role.",
+      "name": "get_creator",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accept_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The conservation ledger, one call. `surplus < 0` = defect; alert.",
+      "name": "get_solvency",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Solvency"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Ask to leave. r10: this FREEZES the member immediately \\xe2\\x80\\x94 there is no",
+      "name": "request_exit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Settle the oldest unresolved round. Permissionless. Admitted only",
+      "name": "settle_round",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "max_steps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "next_opens_at",
+          "type_": {
+            "option": {
+              "value_type": "u64"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "SettleReceipt"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deploy-time initialization. Runs exactly once, in the deploy",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "remediation",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "policy",
+          "type_": {
+            "udt": {
+              "name": "Policy"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "min_members",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_claimable",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The organiser removes a member. No vote, no automatic trigger.\\n\\nNobody is removed AUTOMATICALLY for not paying \\xe2\\x80\\x94 there is no violation\\ncounter and no auto-kick. A member who does not pay simply blocks the\\nround until the organiser decides to freeze them (this door) or anyone\\nvoids it. But a circle still needs that door: someone unreachable,\\nsomeone who asked to leave off-chain, someone who should not have been\\nlet in \\xe2\\x80\\x94 and, yes, someone stalling a round. In an acquaintance circle\\nthat call belongs to the person who assembled it, not to a 60% vote\\namong people who all know each other anyway.\\n\\nRemoval is not confiscation. It goes through the SAME door as a\\nvoluntary exit (`begin_exit`): an IMMEDIATE freeze that releases the\\nmember's slot and refunds any contribution they had staged into the\\nlive round. Nobody is ever removed for not paying \\xe2\\x80\\x94 the consequence for\\nfalling behind is being frozen out of payouts, not thrown out \\xe2\\x80\\x94 this\\ndoor is for the organiser's deliberate call.",
+      "name": "remove_member",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The incrementally-maintained aggregates, exposed so they can be",
+      "name": "get_aggregates",
+      "inputs": [],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "u32",
+              "u32",
+              "u32",
+              "u32",
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The raw obligation bitmaps, so the counters above can be checked",
+      "name": "get_obligation",
+      "inputs": [],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "bytes",
+              "bytes"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The authoritative clock. A round that closes early moves its own",
+      "name": "get_round_window",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "RoundWindow"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_active_policy",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Policy"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Name a beneficiary out of turn for the round now awaiting settlement.",
+      "name": "assign_beneficiary",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_schema_version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Round",
+      "fields": [
+        {
+          "doc": "",
+          "name": "beneficiary",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "closed_at",
+          "type_": {
+            "option": {
+              "value_type": "u64"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "closes_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "collected",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "collected_total",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "cursor",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "expected",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "expected_bitmap",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "opened_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "paid",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "paid_bitmap",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "payout",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "settleable_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "settled_at",
+          "type_": {
+            "option": {
+              "value_type": "u64"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "state",
+          "type_": {
+            "udt": {
+              "name": "RoundState"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "tail_best_score",
+          "type_": "i64"
+        },
+        {
+          "doc": "",
+          "name": "tail_best_slot",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "tail_cursor",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "void_cursor",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "void_reason",
+          "type_": {
+            "udt": {
+              "name": "VoidReason"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "void_refunded",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "void_refunded_total",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Member",
+      "fields": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "contribution_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "receive_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "received_epoch",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "slot",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "MemberStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "total_contributed",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_received",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Solvency",
+      "fields": [
+        {
+          "doc": "",
+          "name": "in_flight",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "surplus",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "token_balance",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_claimable",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CycleState",
+      "fields": [
+        {
+          "doc": "",
+          "name": "current_round",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "cycle_complete",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "epoch",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "members",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "received_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "CircleStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "waiting_count",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MemberView",
+      "fields": [
+        {
+          "doc": "",
+          "name": "can_receive_now",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "claimable",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "member",
+          "type_": {
+            "udt": {
+              "name": "Member"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RoundState",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Open"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Closing"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Settled"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Voiding"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Void"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VoidReason",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "NotVoided"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "OperatorError"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SettlementStalled"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RoundWindow",
+      "fields": [
+        {
+          "doc": "",
+          "name": "closes_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "opened_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "round",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "settleable_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "state",
+          "type_": {
+            "udt": {
+              "name": "RoundState"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VoidReceipt",
+      "fields": [
+        {
+          "doc": "",
+          "name": "complete",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "cursor",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "next_opens_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "next_round",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "reason",
+          "type_": {
+            "udt": {
+              "name": "VoidReason"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "refunded_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "refunded_total",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "round_id",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CircleStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Recruiting"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Active"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Completed"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ClaimReceipt",
+      "fields": [
+        {
+          "doc": "",
+          "name": "fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "paid",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "remaining",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MemberStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Active"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Frozen"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettleOutcome",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paid"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "NoBeneficiary"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Partial"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettleReceipt",
+      "fields": [
+        {
+          "doc": "",
+          "name": "beneficiary",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "collected",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "complete",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "cursor",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "cycle_complete",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "next_closes_at",
+          "type_": {
+            "option": {
+              "value_type": "u64"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "next_opens_at",
+          "type_": {
+            "option": {
+              "value_type": "u64"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "next_round",
+          "type_": {
+            "option": {
+              "value_type": "u64"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": {
+            "udt": {
+              "name": "SettleOutcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payout",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "round_id",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ContributeReceipt",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "closed_round",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "round",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 100
+        },
+        {
+          "doc": "",
+          "name": "NotRecruiting",
+          "value": 101
+        },
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 103
+        },
+        {
+          "doc": "",
+          "name": "NotPaused",
+          "value": 104
+        },
+        {
+          "doc": "",
+          "name": "Dissolved",
+          "value": 106
+        },
+        {
+          "doc": "",
+          "name": "SchemaMismatch",
+          "value": 109
+        },
+        {
+          "doc": "",
+          "name": "NotCreator",
+          "value": 121
+        },
+        {
+          "doc": "",
+          "name": "NoPendingAdmin",
+          "value": 124
+        },
+        {
+          "doc": "",
+          "name": "MemberAlreadyExists",
+          "value": 200
+        },
+        {
+          "doc": "",
+          "name": "MemberNotFound",
+          "value": 201
+        },
+        {
+          "doc": "",
+          "name": "MemberNotActive",
+          "value": 202
+        },
+        {
+          "doc": "",
+          "name": "GroupFull",
+          "value": 203
+        },
+        {
+          "doc": "",
+          "name": "JoinNotAllowed",
+          "value": 204
+        },
+        {
+          "doc": "",
+          "name": "InsufficientMembers",
+          "value": 209
+        },
+        {
+          "doc": "",
+          "name": "CannotExit",
+          "value": 210
+        },
+        {
+          "doc": "",
+          "name": "NothingToClaim",
+          "value": 212
+        },
+        {
+          "doc": "",
+          "name": "RoundNotFound",
+          "value": 300
+        },
+        {
+          "doc": "",
+          "name": "RoundNotOpen",
+          "value": 301
+        },
+        {
+          "doc": "",
+          "name": "WindowClosed",
+          "value": 302
+        },
+        {
+          "doc": "",
+          "name": "WindowNotOpen",
+          "value": 303
+        },
+        {
+          "doc": "",
+          "name": "AlreadyContributed",
+          "value": 304
+        },
+        {
+          "doc": "",
+          "name": "NotSettleable",
+          "value": 305
+        },
+        {
+          "doc": "",
+          "name": "SettlementStale",
+          "value": 306
+        },
+        {
+          "doc": "",
+          "name": "SettleTwiceInLedger",
+          "value": 307
+        },
+        {
+          "doc": "",
+          "name": "NotVoidable",
+          "value": 309
+        },
+        {
+          "doc": "",
+          "name": "FeeExceedsClaim",
+          "value": 312
+        },
+        {
+          "doc": "",
+          "name": "InvalidPolicy",
+          "value": 500
+        },
+        {
+          "doc": "",
+          "name": "PolicyNotFound",
+          "value": 501
+        },
+        {
+          "doc": "",
+          "name": "Insolvent",
+          "value": 900
+        },
+        {
+          "doc": "",
+          "name": "Overflow",
+          "value": 901
+        },
+        {
+          "doc": "",
+          "name": "InvalidState",
+          "value": 902
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 903
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Policy",
+      "fields": [
+        {
+          "doc": "",
+          "name": "cycle_end",
+          "type_": {
+            "udt": {
+              "name": "CycleEnd"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "max_settle_latency_secs",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "params",
+          "type_": {
+            "udt": {
+              "name": "EconomicParams"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "recruiting_timeout_secs",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "settle_buffer_secs",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CycleEnd",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Never"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "EveryoneReceivedOnce"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "FixedRounds",
+            "type_": [
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "EconomicParams",
+      "fields": [
+        {
+          "doc": "",
+          "name": "allow_join_after_start",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "contribution_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_members",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "period_secs",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "IKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SchemaVersion"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PendingAdmin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Creator"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Remediation"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Token"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "FeeAccount"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Status"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "CurrentRound"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "OldestUnresolved"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "RecruitingStart"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LastProgress"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MinMembers"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MemberCount"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SlotCount"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PauseTime"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LastSettleLedger"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "CycleEpoch"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SettledRounds"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Obliged"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ObligedPending"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ObligedCount"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ObligedPendingCount"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PayoutClass"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ReceivedOnce"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "InFlight"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalClaimable"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Policy"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "RosterPage",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Slot",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "MemberRec",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Round",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Claimable",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Assigned",
+            "type_": [
+              "u64"
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

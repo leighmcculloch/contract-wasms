@@ -1,0 +1,532 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Deposit",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "State"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "EpochSum",
+            "type_": [
+              "u64",
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "EpochP",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "PendingColl",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Deposit",
+      "fields": [
+        {
+          "doc": "",
+          "name": "deposited_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "initial_value",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "snapshot",
+          "type_": {
+            "udt": {
+              "name": "Snapshot"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Snapshot",
+      "fields": [
+        {
+          "doc": "",
+          "name": "epoch",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "p_value",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "scale",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "sum_coll",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PoolState",
+      "fields": [
+        {
+          "doc": "",
+          "name": "epoch",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "p",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "scale",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "sum_coll",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_coll_gained",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_deposits",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_liq_count",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DepositEvent",
+      "prefix_topics": [
+        "deposit"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "depositor",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WithdrawEvent",
+      "prefix_topics": [
+        "withdraw"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "depositor",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "depositor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Replace this contract's Wasm in place. Instance and persistent\\nstorage are preserved. Authorised by the stored DAO address.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "depositor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ClaimGainsEvent",
+      "prefix_topics": [
+        "claim"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "depositor",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "gain_type",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_state",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "PoolState"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "engine",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "compliance",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_paused",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "claim_gains",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "depositor",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "depositor",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "Deposit"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Allow the DAO to point at a new compliance registry deployment.",
+      "name": "set_compliance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "compliance",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AbsorbLiquidationEvent",
+      "prefix_topics": [
+        "liqabs"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "engine",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "debt_absorbed",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "collateral_reward",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "absorb_liquidation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "engine",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "debt_to_abs",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "coll_reward",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "coll_token",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Total USDC currently deposited in the pool. Used by\\nEarningsDistributor as the snapshot denominator when splitting\\nrevenue pro-rata across depositors.",
+      "name": "get_total_deposits",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_collateral_gain",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "depositor",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_compounded_deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "depositor",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  }
+]

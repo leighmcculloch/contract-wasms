@@ -1,0 +1,466 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "lp_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "harvest",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "lp_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "reward_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_mode",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "VaultMode"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "lp_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "df_token_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_keeper",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "keeper",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "mode",
+          "type_": {
+            "udt": {
+              "name": "VaultMode"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "i128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get the RAW$ AMM contract address.",
+      "name": "get_amm_address",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set the RAW$ AMM contract address. Admin-only, immutable after first set.",
+      "name": "set_amm_address",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amm",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_total_supply",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Safe Mode deposit: routes single-token deposit into RAW$ AMM via C2C.\\n\\nAtomic flow:\\n1. Pull token_in from caller\\n2. Query AMM for token_a and token_b addresses\\n3. Split 50/50: swap half for token_pair via AMM exchange()\\n4. Add liquidity to AMM with both sides balanced via add_liquidity()\\n5. Mint dfTokens proportional to LP shares received\\n6. Update vault positions map\\n\\nIf any step fails, the entire transaction reverts \\xe2\\x80\\x94 user keeps their tokens.",
+      "name": "deposit_safe_mode",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_shares",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_soroswap_router",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set the Soroswap router address. Admin-only, immutable after first set.",
+      "name": "set_soroswap_router",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "router",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Single-asset deposit into a Soroswap LP pool.\\n\\nAtomic flow:\\n1. Pull token_in from caller\\n2. Split 50/50: swap half for token_pair via Soroswap router\\n3. Add liquidity to target pool via Soroswap router\\n4. Mint dfTokens proportional to LP tokens received\\n5. Update positions map\\n\\nIf any step fails, the entire transaction reverts \\xe2\\x80\\x94 user keeps their tokens.",
+      "name": "deposit_single_asset",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "target_pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "min_lp_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VaultMode",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SafeMode"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "YieldMode"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LPPosition",
+      "fields": [
+        {
+          "doc": "",
+          "name": "entry_price_ratio",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "entry_timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "lp_tokens",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_a",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_b",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StorageKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SharesSupply"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Keeper"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Mode"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalLp"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "UserShares",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SoroswapRouter"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Positions",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "RawsAmmAddress"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VaultError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "ZeroAmount",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "InsufficientShares",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InsufficientLp",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "MathOverflow",
+          "value": 6
+        }
+      ]
+    }
+  }
+]

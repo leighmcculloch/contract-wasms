@@ -1,0 +1,1130 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ProposalCounter"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "OperatorConfig"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Contract",
+      "fields": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "wasm_hash",
+          "type_": {
+            "option": {
+              "value_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Proposal",
+      "fields": [
+        {
+          "doc": "",
+          "name": "approvals",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "executed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "operator_config",
+          "type_": {
+            "udt": {
+              "name": "OperatorConfig"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "proposal_action",
+          "type_": {
+            "udt": {
+              "name": "ProposalAction"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "proposal_data",
+          "type_": {
+            "udt": {
+              "name": "ProposalData"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "proposal_ends_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "proposer",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SwapStep",
+      "fields": [
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fees",
+          "type_": {
+            "option": {
+              "value_type": {
+                "vec": {
+                  "element_type": {
+                    "udt": {
+                      "name": "FeeCollection"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "interface",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "min_amount_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tracking_id",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Interface",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount_arg_index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "amount_field",
+          "type_": {
+            "option": {
+              "value_type": "symbol"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "contract",
+          "type_": {
+            "udt": {
+              "name": "Contract"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "enabled",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "execute_fn",
+          "type_": "symbol"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RoutePlan",
+      "fields": [
+        {
+          "doc": "",
+          "name": "bridge",
+          "type_": {
+            "udt": {
+              "name": "BridgeStep"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "fees",
+          "type_": {
+            "option": {
+              "value_type": {
+                "vec": {
+                  "element_type": {
+                    "udt": {
+                      "name": "FeeCollection"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "input_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "input_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "integrator",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "swap",
+          "type_": {
+            "udt": {
+              "name": "SwapStep"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "tracking_id",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BridgeStep",
+      "fields": [
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "destination_chain_id",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fees",
+          "type_": {
+            "option": {
+              "value_type": {
+                "vec": {
+                  "element_type": {
+                    "udt": {
+                      "name": "FeeCollection"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "interface",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "min_amount_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tracking_id",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ContractKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Proposal",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Interface",
+            "type_": [
+              "symbol"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProposalData",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "OperatorConfig",
+            "type_": [
+              {
+                "udt": {
+                  "name": "OperatorConfig"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Interface",
+            "type_": [
+              {
+                "udt": {
+                  "name": "InterfaceProposal"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FeeCollection",
+      "fields": [
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee_destination",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OperatorConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "operators",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "timelock",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProposalAction",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Add"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Remove"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Update"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "InterfaceProposal",
+      "fields": [
+        {
+          "doc": "",
+          "name": "interface",
+          "type_": {
+            "udt": {
+              "name": "Interface"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "symbol"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LiFiError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "UnexpectedError",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "UnauthorizedOperator",
+          "value": 101
+        },
+        {
+          "doc": "",
+          "name": "MultisigError",
+          "value": 102
+        },
+        {
+          "doc": "",
+          "name": "OperatorAlreadyExist",
+          "value": 201
+        },
+        {
+          "doc": "",
+          "name": "OperatorAlreadyApproved",
+          "value": 202
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 203
+        },
+        {
+          "doc": "",
+          "name": "InvalidDeadline",
+          "value": 204
+        },
+        {
+          "doc": "",
+          "name": "InvalidFeeConfiguration",
+          "value": 205
+        },
+        {
+          "doc": "",
+          "name": "InvalidRouteConfiguration",
+          "value": 206
+        },
+        {
+          "doc": "",
+          "name": "InvalidValParsing",
+          "value": 207
+        },
+        {
+          "doc": "",
+          "name": "UnknownInterface",
+          "value": 301
+        },
+        {
+          "doc": "",
+          "name": "UnknownProposal",
+          "value": 302
+        },
+        {
+          "doc": "",
+          "name": "InterfaceDisabled",
+          "value": 303
+        },
+        {
+          "doc": "",
+          "name": "ProposalVotingTime",
+          "value": 401
+        },
+        {
+          "doc": "",
+          "name": "SlippageExceeded",
+          "value": 402
+        },
+        {
+          "doc": "",
+          "name": "ProposalAlreadyExecuted",
+          "value": 403
+        },
+        {
+          "doc": "",
+          "name": "ContractPaused",
+          "value": 500
+        },
+        {
+          "doc": "",
+          "name": "ContractValidation",
+          "value": 501
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LifiFee",
+      "prefix_topics": [
+        "lifi_fee"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "tracking_id",
+          "type_": "i128",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LifiSwap",
+      "prefix_topics": [
+        "lifi_swap"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "tracking_id",
+          "type_": "i128",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "bytes",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "swap_from_asset",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "swap_from_amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "swap_to_asset",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "swap_to_amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LifiBridge",
+      "prefix_topics": [
+        "lifi_bridge"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "tracking_id",
+          "type_": "i128",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "destination_chain_id",
+          "type_": "i128",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "bridge",
+          "type_": "symbol",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "integrator",
+          "type_": "symbol",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "bridged_amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "bytes",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "source_asset",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "destination_min_amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AdminChanged",
+      "prefix_topics": [
+        "admin_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "previous_admin",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ContractPaused",
+      "prefix_topics": [
+        "contract_paused"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProposalStatus",
+      "prefix_topics": [
+        "proposal_status"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": "symbol",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pause or unpause the contract (emergency stop.)\\n\\n# Arguments\\n* `env` - The environment object\\n* `paused` - Pause or unpause the contract operations which change\\nledger states.",
+      "name": "pause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "operator_config",
+          "type_": {
+            "udt": {
+              "name": "OperatorConfig"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Require that the contract is not paused, panic if it is the case.\\n\\n# Panics\\n* If the contract is paused.",
+      "name": "require_not_paused",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "swap",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "swap_step",
+          "type_": {
+            "udt": {
+              "name": "SwapStep"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "bridge",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "bridge_step",
+          "type_": {
+            "udt": {
+              "name": "BridgeStep"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "swap_bridge",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "route_plan",
+          "type_": {
+            "udt": {
+              "name": "RoutePlan"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_proposal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Proposal"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_interface",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Interface"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_proposal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proposer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "proposal_action",
+          "type_": {
+            "udt": {
+              "name": "ProposalAction"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "proposal_data",
+          "type_": {
+            "udt": {
+              "name": "ProposalData"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "approve_proposal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execute_proposal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_operator_config",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "OperatorConfig"
+          }
+        }
+      ]
+    }
+  }
+]

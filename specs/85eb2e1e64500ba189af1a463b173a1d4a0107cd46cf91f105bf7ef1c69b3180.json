@@ -1,0 +1,515 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "join",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sponsor",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "activate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Circle",
+      "fields": [
+        {
+          "doc": "",
+          "name": "contribution_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "current_round",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "duration",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "max_members",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "members",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "payout_mode",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "rotation_order",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "place_bid",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "discount_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Creator"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Name"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Contribution"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MaxMembers"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Duration"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Token"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Members"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "RotationOrder"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "CurrentRound"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Deadline"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Status"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SecDeposits"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "RoundContribs"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MissedPayments"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Reputation"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Vouches"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Forfeits"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "EmergencyFlags"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "EmergencyActive"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "FlaggedMisses"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PayoutMode"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AuctionBids"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "contribute",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "distribute",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_circle",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Circle"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "contribution",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_members",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "duration",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "payout_mode",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "flag_missed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "round",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_sponsor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "m",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "can_distribute",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "flag_emergency",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_reputation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "m",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "has_contributed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "r",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "m",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_auction_bids",
+      "inputs": [],
+      "outputs": [
+        {
+          "map": {
+            "key_type": "address",
+            "value_type": "i128"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_member_misses",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "m",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_member_deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "m",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "withdraw_principal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

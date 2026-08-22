@@ -1,0 +1,439 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "auth_vk",
+      "inputs": [],
+      "outputs": [
+        "bytes"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin-only: upgrade the factory WASM.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_auth_vk",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "auth_vk",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "lockb0x_account_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "auth_vk",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin-only: upgrade a deployed child lockb0x account's WASM.\\nThe factory is the admin of its deployed accounts, so it can invoke upgrade().",
+      "name": "upgrade_child",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner_commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deploy a lockb0x account using sha256(owner_commitment) as the\\ndeterministic salt.",
+      "name": "deploy_lockb0x",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner_commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "account_wasm_hash",
+      "inputs": [],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_account_wasm_hash",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "lockb0x_account_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "predict_lockb0x_address",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner_commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "MissingAdmin",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "MissingAccountWasmHash",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidOwnerKey",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidWasmHash",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "MissingAuthVk",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidAuthVkLength",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidOwnerCommitment",
+          "value": 8
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AccountWasmHash"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AuthVk"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Deployment",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccountDeployed",
+      "prefix_topics": [
+        "account_deployed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "lockb0x_address",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "owner_commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FactoryInitialized",
+      "prefix_topics": [
+        "factory_initialized"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "lockb0x_account_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "auth_vk_len",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FactoryAdminUpdated",
+      "prefix_topics": [
+        "factory_admin_updated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FactoryAuthVkUpdated",
+      "prefix_topics": [
+        "factory_auth_vk_updated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "auth_vk_len",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccountWasmHashUpdated",
+      "prefix_topics": [
+        "account_wasm_hash_updated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "lockb0x_account_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  }
+]

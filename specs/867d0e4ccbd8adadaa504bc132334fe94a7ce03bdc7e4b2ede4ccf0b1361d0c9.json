@@ -1,0 +1,151 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "FeedbackCount"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Feedback",
+            "type_": [
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FeedbackEntry",
+      "fields": [
+        {
+          "doc": "",
+          "name": "company",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "designation",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "email",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "rating",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "thoughts",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_feedback",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "FeedbackEntry"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "save_feedback",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "email",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "designation",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "company",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "thoughts",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "rating",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_feedback_count",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  }
+]

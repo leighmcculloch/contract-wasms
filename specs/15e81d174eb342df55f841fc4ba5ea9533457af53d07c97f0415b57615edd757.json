@@ -1,0 +1,257 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidTokens",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "QuoteExpired",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "QuoteAlreadyUsed",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidSigner",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidSignature",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "InvalidFee",
+          "value": 9
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Quote submitted by taker. The maker signs SHA256(XDR(quote)) off-chain.\\nField serialization is canonical XDR (ScVal) of this exact struct.\\nOff-chain SDK must reproduce: sha256(quote.to_xdr(env)) and sign with ed25519.",
+      "lib": "",
+      "name": "Quote",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "amount_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "maker",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "quote_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "taker",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "registry",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_distributor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "eurc",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_fee_bps",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_fee_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Mirrors pool_registry::MakerInfo. Soroban cross-contract calls match\\ncontracttype values structurally, so each contract keeps its own copy \\xe2\\x80\\x94\\nthere's no shared crate between workspace members.",
+      "lib": "",
+      "name": "MakerInfo",
+      "fields": [
+        {
+          "doc": "",
+          "name": "active",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "maker",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool_address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "signer_key",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "supported_pairs",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "tuple": {
+                  "value_types": [
+                    "address",
+                    "address"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execute_quote",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "quote",
+          "type_": {
+            "udt": {
+              "name": "Quote"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signature",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_protocol_fee",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  }
+]

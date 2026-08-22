@@ -1,0 +1,988 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidProof",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "NullifierAlreadyUsed",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "TreeFull",
+          "value": 5
+        },
+        {
+          "doc": "H4: proof was built against a root no longer in the historical window.",
+          "name": "UnknownRoot",
+          "value": 6
+        },
+        {
+          "doc": "M2: amount/fee is negative (non-encodable as a field element).",
+          "name": "InvalidAmount",
+          "value": 7
+        },
+        {
+          "doc": "C3: deposit `asp_root` is not the trusted AspMembership root (current or\\nin-window). The depositor supplied a root the ASP contract never produced.",
+          "name": "InvalidAspRoot",
+          "value": 8
+        },
+        {
+          "doc": "D1: `execute_settlement` caller is not on the admin-managed settlement\\nauthority allowlist.",
+          "name": "NotSettlementAuthority",
+          "value": 9
+        },
+        {
+          "doc": "A spent nullifier is on the ASP blocklist (non-membership enforcement).",
+          "name": "NullifierBlocked",
+          "value": 10
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Admin authorized to `upgrade()` this pool in place.",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Asset"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Verifier"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Membership"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "NonMembership"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TreeNextIndex"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TreeFrontier"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TreeRoot"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TreeZeros"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "H4: ring buffer of the last `ROOT_HISTORY_SIZE` roots (oldest first).",
+            "name": "RootHistory"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Nullifier",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "D1: allowlist of contracts permitted to call `execute_settlement`\\n(position-manager, liquidation-engine, and later the order/agentic hubs).\\nAdmin-managed. Presence of the key = authorized.",
+            "name": "SettlementAuthority",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "C4: deposit event \\xe2\\x80\\x94 topic `deposit` + the commitment; data carries the\\nleaf index (for Merkle-path reconstruction) and the public amount.",
+      "lib": "",
+      "name": "Deposit",
+      "prefix_topics": [
+        "deposit"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "leaf_index",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get the admin authorized to upgrade this pool.",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "C4: transfer event \\xe2\\x80\\x94 both spent nullifiers as topics, both new commitments\\nas data (so the client note-scan sees the fresh outputs).",
+      "lib": "",
+      "name": "Transfer",
+      "prefix_topics": [
+        "transfer"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "nullifier1",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "nullifier2",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "commitment1",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "commitment2",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "C4: withdraw event \\xe2\\x80\\x94 topic `withdraw` + the spent nullifier; data carries\\nthe public recipient and amount.",
+      "lib": "",
+      "name": "Withdraw",
+      "prefix_topics": [
+        "withdraw"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "nullifier",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deposit public funds into the shielded pool",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "depositor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "udt": {
+              "name": "Groth16Proof"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "public_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "asp_root",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Upgrade the pool's WASM code in place (admin-gated).\\n\\nThis is the single most important mainnet safety valve: it lets a bug fix\\nor feature addition (deposit ASP membership is now enforced; still to come:\\nnon-membership on transfer/withdraw, `execute_settlement`) reuse the SAME\\npool address, so the Merkle tree, nullifier set, and root history all\\nsurvive and every user note stays valid. Without it, a fix means a new\\naddress with empty state and stranded funds.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "D1: settlement event \\xe2\\x80\\x94 topic `authority` (the settlement contract that drove\\nit); data carries how many output commitments were inserted and the public\\npayout amount (0 for a pure re-shield). Lets the indexer / client note-scan\\npick up notes created by position close, liquidation seizure, orders, etc.",
+      "lib": "",
+      "name": "Settlement",
+      "prefix_topics": [
+        "settlement"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "authority",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "num_commitments",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "payout_amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get the current Merkle root",
+      "name": "get_root",
+      "inputs": [],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Transfer shielded funds (2-in / 2-out)",
+      "name": "transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "udt": {
+              "name": "Groth16Proof"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "nullifier1",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "nullifier2",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "commitment1",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "commitment2",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "root",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "relayer",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Withdraw funds from the shielded pool to a public address",
+      "name": "withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "udt": {
+              "name": "Groth16Proof"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "nullifier",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "public_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "root",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "relayer",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initialize the Vayyl Pool with the underlying asset and external contract references",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "membership",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "non_membership",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get the current leaf count",
+      "name": "get_leaf_count",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "D1: generic settlement primitive \\xe2\\x80\\x94 the shared fund-movement entrypoint\\nfor position close, liquidation seizure, hidden orders, and agentic\\nsettlement. The **calling contract** (an allowlisted settlement authority)\\nhas already verified its own circuit-specific proof; this entrypoint\\nperforms the pool-level effects that only the custody contract can do:\\n\\n1. spend `spent_nullifiers` in the pool's nullifier set (double-spend\\nprotection for any pool notes consumed by the settlement),\\n2. insert `output_commitments` into the pool Merkle tree (re-shielded\\nnotes / new positions become withdrawable via the normal circuits),\\n3. optionally pay `payout_amount` of the pool asset to `payout_recipient`\\n(funds leaving the shield \\xe2\\x80\\x94 e.g. seized collateral to a keeper).\\n\\nTrust model: the pool trusts an allowlisted authority to have verified the\\nsettlement (amounts, nullifiers, commitments) against its circuit. The\\nallowlist is the security boundary \\xe2\\x80\\x94 only admin-approved contracts can move\\nfunds this way. A contract auto-au",
+      "name": "execute_settlement",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "authority",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spent_nullifiers",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "output_commitments",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payout_recipient",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payout_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pull public tokens from `depositor` into pool custody. Callable only by\\nsettlement authorities (hidden-order / agentic hubs lock escrow at commit).\\nBoth the authority sub-call and the depositor must authorize.",
+      "name": "pull_public_deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "authority",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "depositor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "True if `authority` is on the settlement-authority allowlist.",
+      "name": "is_settlement_authority",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "authority",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin: add a contract to the settlement-authority allowlist.",
+      "name": "add_settlement_authority",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "authority",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin: remove a contract from the settlement-authority allowlist.",
+      "name": "remove_settlement_authority",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "authority",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Circuit identifiers for different proof types",
+      "lib": "",
+      "name": "CircuitId",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Deposit"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Transfer"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Withdraw"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PositionOpen"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PositionHealth"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PositionClose"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LiquidationHeartbeat"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "HiddenOrderTrigger"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MultiLegBasket"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AspMembership"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AspNonMembership"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SealedOrder"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "The internal state of a hidden order",
+      "lib": "",
+      "name": "OrderState",
+      "fields": [
+        {
+          "doc": "",
+          "name": "commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "escrowed_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Proof components for Groth16/BN254",
+      "lib": "",
+      "name": "Groth16Proof",
+      "fields": [
+        {
+          "doc": "",
+          "name": "a",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "b",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "c",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "The internal state of a derivative position",
+      "lib": "",
+      "name": "PositionState",
+      "fields": [
+        {
+          "doc": "The current ZK commitment binding collateral, size, direction, and entry price",
+          "name": "commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "The last time health was attested",
+          "name": "last_health_timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "The owner of the position",
+          "name": "owner",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Verification key components for Groth16/BN254",
+      "lib": "",
+      "name": "VerificationKey",
+      "fields": [
+        {
+          "doc": "",
+          "name": "alpha_g1",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "beta_g2",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "delta_g2",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "gamma_g2",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "ic",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 64
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

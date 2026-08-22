@@ -1,0 +1,187 @@
+[
+  {
+    "function_v0": {
+      "doc": "Credit limit (max outstanding principal) for an agent.",
+      "name": "limit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Full derived terms for an agent. The advertised limit is the credit ramp\\napplied to the revenue-sized limit (grows with on-time repayment history,\\ncollapses on defaults), so it matches exactly what `lending_vault` will\\nenforce at borrow time. The APR shown is the tier base rate; the vault\\ncharges this plus a utilisation premium at draw time.",
+      "name": "terms",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "CreditTerms"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Fixed APR (basis points) for an agent's tier.",
+      "name": "apr_bps",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Derived borrowing terms for an agent.",
+      "lib": "",
+      "name": "CreditTerms",
+      "fields": [
+        {
+          "doc": "Fixed APR in basis points.",
+          "name": "apr_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "Maximum outstanding principal, in USDC stroops (7 decimals).",
+          "name": "limit",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "tier",
+          "type_": {
+            "udt": {
+              "name": "Tier"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The bound score_registry address.",
+      "name": "registry",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Bind this credit-line contract to a score_registry instance.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "registry",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "Underwriting tier, derived from the published score. Ordered worst\\xe2\\x86\\x92best so\\nthe enum's discriminants are meaningful if ever compared.",
+      "lib": "",
+      "name": "Tier",
+      "cases": [
+        {
+          "doc": "Below the lending threshold \\xe2\\x80\\x94 no credit extended.",
+          "name": "Unrated",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "C",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "B",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "A",
+          "value": 3
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "What the registry stores per agent and what cross-contract readers consume.",
+      "lib": "",
+      "name": "ScoreData",
+      "fields": [
+        {
+          "doc": "Verified trailing revenue (USDC, 7-decimal stroops) the score was\\ncomputed against. Drives the credit limit.",
+          "name": "revenue",
+          "type_": "i128"
+        },
+        {
+          "doc": "Composite revenue-coverage score, 0..=850 (FICO-like range).",
+          "name": "score",
+          "type_": "u32"
+        },
+        {
+          "doc": "Tier banded from `score`.",
+          "name": "tier",
+          "type_": {
+            "udt": {
+              "name": "Tier"
+            }
+          }
+        },
+        {
+          "doc": "Ledger timestamp the score was last published.",
+          "name": "updated_at",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Running tally of an agent's repayment history, maintained by `score_registry`\\nand consumed on-chain by the credit ramp (`ramp_limit`). Lives here (the\\nshared-types home) so the vault and the registry agree on its shape.",
+      "lib": "",
+      "name": "RepaymentRecord",
+      "fields": [
+        {
+          "doc": "Loans repaid on or before their due date.",
+          "name": "on_time",
+          "type_": "u32"
+        },
+        {
+          "doc": "Total repayment outcomes observed (on-time + missed).",
+          "name": "total",
+          "type_": "u32"
+        }
+      ]
+    }
+  }
+]

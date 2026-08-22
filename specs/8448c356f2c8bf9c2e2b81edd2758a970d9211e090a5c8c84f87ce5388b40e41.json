@@ -1,0 +1,1365 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidRate",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidDeposit",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidDuration",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "TitleTooLong",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InsufficientDeposit",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "StreamNotFound",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "NotSender",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "NotRecipient",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "WrongStatus",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "NothingToWithdraw",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "Overflow",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "HistoryFull",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "InvalidCheckpointCount",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "DurationNotDivisible",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "InvalidCapPercent",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "InvalidTimeout",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "IndexOutOfRange",
+          "value": 19
+        },
+        {
+          "doc": "",
+          "name": "CheckpointNotSubmitted",
+          "value": 20
+        },
+        {
+          "doc": "",
+          "name": "CheckpointAlreadyFinalized",
+          "value": 21
+        },
+        {
+          "doc": "",
+          "name": "InvalidRequestId",
+          "value": 22
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 23
+        },
+        {
+          "doc": "",
+          "name": "AmountExceedsWithdrawable",
+          "value": 24
+        },
+        {
+          "doc": "",
+          "name": "WithdrawalNotFound",
+          "value": 25
+        },
+        {
+          "doc": "",
+          "name": "WithdrawalAlreadyExists",
+          "value": 26
+        },
+        {
+          "doc": "",
+          "name": "WithdrawalNotApproved",
+          "value": 27
+        },
+        {
+          "doc": "",
+          "name": "WithdrawalDisputed",
+          "value": 28
+        },
+        {
+          "doc": "",
+          "name": "WithdrawalApprovalRequired",
+          "value": 29
+        },
+        {
+          "doc": "",
+          "name": "NotAdmin",
+          "value": 30
+        },
+        {
+          "doc": "",
+          "name": "SenderMatchesRecipient",
+          "value": 33
+        },
+        {
+          "doc": "",
+          "name": "InvalidActiveDuration",
+          "value": 34
+        },
+        {
+          "doc": "",
+          "name": "PaymentMismatch",
+          "value": 35
+        },
+        {
+          "doc": "",
+          "name": "OutstandingWithdrawals",
+          "value": 36
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "init",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "attestation_contract",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StreamPaused",
+      "prefix_topics": [
+        "stream_paused"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "paused_at_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StreamCreated",
+      "prefix_topics": [
+        "stream_created"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "total_deposited",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StreamResumed",
+      "prefix_topics": [
+        "stream_resumed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "resumed_at_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StreamCancelled",
+      "prefix_topics": [
+        "stream_cancelled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "paid_to_recipient",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "refunded_to_sender",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StreamWithdrawn",
+      "prefix_topics": [
+        "stream_withdrawn"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WithdrawalRecord",
+      "fields": [
+        {
+          "doc": "",
+          "name": "active_duration_seconds",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "deadline_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "evidence_hash",
+          "type_": {
+            "option": {
+              "value_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "requested_at_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "WithdrawalStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "work_start_ledger",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WithdrawalStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Pending"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Approved"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Disputed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Withdrawn"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_stream",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "StreamRecord"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WithdrawalApproved",
+      "prefix_topics": [
+        "withdrawal_approved"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "string",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WithdrawalDisputed",
+      "prefix_topics": [
+        "withdrawal_disputed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "string",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WithdrawalRequested",
+      "prefix_topics": [
+        "withdrawal_requested"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "deadline_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause_stream",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel_stream",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_stream",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "rate_per_second",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_deposited",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "duration_ledgers",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "checkpoint_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "withdrawable_cap_percent",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "approval_timeout_ledgers",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "category",
+          "type_": {
+            "udt": {
+              "name": "Category"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "title",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "resume_stream",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Total value already withdrawn or reserved.",
+      "name": "compute_earned",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_withdrawal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "WithdrawalRecord"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Unreserved escrow still available for future withdrawals.",
+      "name": "compute_available",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "withdraw_approved",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "approve_withdrawal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "dispute_withdrawal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_sender_streams",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "u64"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Request a withdrawal from the stream escrow.\\nThe recipient signs this transaction. The request goes directly into\\nPending status; no verifier is required.",
+      "name": "request_withdrawal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_recipient_streams",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "u64"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Category",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Freelance"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Salary"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Bounty"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Grant"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AgentTask"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Subscription"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StreamRecord",
+      "fields": [
+        {
+          "doc": "",
+          "name": "approval_timeout_ledgers",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "category",
+          "type_": {
+            "udt": {
+              "name": "Category"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "checkpoint_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "checkpoint_span_ledgers",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "duration_ledgers",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "paused_at_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "paused_duration_ledgers",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "rate_per_ledger",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "start_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "StreamStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "title",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "total_deposited",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_withdrawn",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "withdrawable_cap_percent",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StreamStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Active"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Completed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cancelled"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AttestationKind",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Checkpoint"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LegacyReviewed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "StreamCompletion"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CheckpointRecord",
+      "fields": [
+        {
+          "doc": "",
+          "name": "approved",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "attestation_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "auto_approved",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "due_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "evidence_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "submitted",
+          "type_": "bool"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AttestationRecord",
+      "fields": [
+        {
+          "doc": "",
+          "name": "active_duration_seconds",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "amount_paid",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "auto_released",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "category",
+          "type_": {
+            "udt": {
+              "name": "Category"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "checkpoint_index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "client_confirmed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "kind",
+          "type_": {
+            "udt": {
+              "name": "AttestationKind"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "minted_at_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "period_end_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "period_start_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "report_hash",
+          "type_": {
+            "option": {
+              "value_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "request_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "stream_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "title",
+          "type_": "string"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,608 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "init",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin-gated WASM upgrade \\xe2\\x80\\x94 same contract instance + storage, new code. Lets us\\niterate/season without a new address or state migration (mainnet de-risk).",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "NotAuthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "VouchNotFound",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "AlreadyClaimed",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "SelfVouch",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "Overflow",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "BadSecret",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "DailyCapReached",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "NotExpired",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "InsufficientStake",
+          "value": 11
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Async half-card vouch. `from` mints it bound to `claim_hash = sha256(secret)`.\\nThe recipient (unknown at mint time) claims by presenting the secret. `stake` is\\nthe voucher's escrowed Social XP \\xe2\\x80\\x94 refunded on a claim within `VOUCH_TTL_SECS`,\\notherwise slashed (`expire_vouch`).",
+      "lib": "",
+      "name": "Vouch",
+      "fields": [
+        {
+          "doc": "",
+          "name": "claim_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "claimed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "claimer",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "created",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "note",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "slashed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "stake",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Allowlisted attester (or the QuestRegistry contract) credits the EARNED\\n(cashable) track, writes the canonical attestation, emits `att_set`.",
+      "name": "award_xp",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "attester",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "schema_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Social score \\xe2\\x80\\x94 leaderboard / fun. NOT cashable.",
+      "name": "get_score",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "addr",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "A half-card by id \\xe2\\x80\\x94 for the claim preview and the expiry keeper.",
+      "name": "get_vouch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vouch_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "Vouch"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Attester",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Social",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Earned",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Seen",
+            "type_": [
+              "address",
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "DailyCount",
+            "type_": [
+              "address",
+              "u64"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "VouchSeq"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Vouch",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Attestation",
+            "type_": [
+              "address",
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Started",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Verified",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Pending",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Aggregate read shape for get_profile \\xe2\\x80\\x94 the single-round-trip replacement for\\nseparately calling get_score + get_earned (+ is_verified) from anchors/apps.",
+      "lib": "",
+      "name": "Profile",
+      "fields": [
+        {
+          "doc": "",
+          "name": "earned",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "social",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "verified",
+          "type_": "bool"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Earned score \\xe2\\x80\\x94 the ONLY track Rewards may gate USDC payouts on.",
+      "name": "get_earned",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "addr",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "`from` mints a half-card bound to `claim_hash` (= sha256 of a secret held in\\nthe share link). Escrows `VOUCH_STAKE` Social XP from `from` (refunded on a\\ntimely claim, else slashed). New wallets get `STARTER_SOCIAL` first so the\\nfirst vouch is free. Per-day cap applies. Returns the vouch id.",
+      "name": "mint_vouch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "claim_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "note",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "`claimer` claims by presenting `secret` (sha256(secret) must equal claim_hash).\\nThe claimer earns SOCIAL XP (first-pair-only), the voucher's stake is refunded\\n(if the claim is within `VOUCH_TTL_SECS`), and the voucher's 2nd-order bonus is\\nreleased now if the claimer is already verified \\xe2\\x80\\x94 otherwise it is queued until\\nthe claimer performs a verified (Earned) action. Vouches never touch Earned.",
+      "name": "claim_vouch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "claimer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "vouch_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "secret",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Aggregate profile view \\xe2\\x80\\x94 social + earned + verified in ONE call. Purely\\ncomposes the existing getters; no new storage, no new write path. Cuts\\nget_profile-style callers from 2-3 round-trips down to 1.",
+      "name": "get_profile",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "addr",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Profile"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_attester",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "who",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "True once `addr` has performed a verified (Earned) action \\xe2\\x80\\x94 this is the gate\\nthat releases pending 2nd-order voucher bonuses.",
+      "name": "is_verified",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "addr",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "add_attester",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "attester",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Slash an unclaimed half-card after its 7-day window (the staked Social XP was\\ndeducted at mint and is not refunded). Callable by anyone \\xe2\\x80\\x94 a cheap keeper job.\\nIdempotent; a still-claimable (late) claim earns no refund either way.",
+      "name": "expire_vouch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vouch_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Canonical attestation record \\xe2\\x80\\x94 the fundable primitive's read shape (00-strategy \\xc2\\xa74).",
+      "lib": "",
+      "name": "Attestation",
+      "fields": [
+        {
+          "doc": "",
+          "name": "issuer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "revoked",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "value",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A voucher's 2nd-order bonus, owed once the claimer performs a verified action.",
+      "lib": "",
+      "name": "PendingBonus",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "voucher",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_attestation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "addr",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "schema_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "Attestation"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "remove_attester",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "attester",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

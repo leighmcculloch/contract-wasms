@@ -1,0 +1,476 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "All failure modes are explicit, contiguous `u32` codes so the TypeScript\\nclient can map them to user-facing messages without guessing.",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidTarget",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "GoalNotFound",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "GoalClosed",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "NothingToWithdraw",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "WrongToken",
+          "value": 9
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys. `Goal` lives in *persistent* storage (it must outlive the\\ncontract instance so funds are never stranded); `Admin`/`Token`/`Paused`/\\n`TotalSaved` live in *instance* storage so they share the instance TTL.",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Default token (the XLM Stellar Asset Contract) recorded at init.",
+            "name": "Token"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Running total of all minor units ever deposited across every goal.",
+            "name": "TotalSaved"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "(saver, goal_id) -> Goal",
+            "name": "Goal",
+            "type_": [
+              "address",
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "Lifecycle of a saver's goal.\\nA goal starts `Saving`; it flips to `Reached` once its held balance meets the\\ntarget (purely informational \\xe2\\x80\\x94 withdraw is allowed in either state); it\\nbecomes `Withdrawn` once the saver pulls the full balance back out.",
+      "lib": "",
+      "name": "GoalStatus",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Saving",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Reached",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Withdrawn",
+          "value": 2
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A single saver's goal, keyed in storage by `(saver, goal_id)`.\\n\\nThe contract custodies exactly `balance` minor units of `token` for this\\ngoal. `deposited` is the lifetime sum ever paid in (never decremented), so\\nthe UI can show \"saved so far\" even after a withdrawal.",
+      "lib": "",
+      "name": "Goal",
+      "fields": [
+        {
+          "doc": "Balance currently held in the contract for this goal.",
+          "name": "balance",
+          "type_": "i128"
+        },
+        {
+          "doc": "Lifetime total ever deposited (monotonic; survives withdrawals).",
+          "name": "deposited",
+          "type_": "i128"
+        },
+        {
+          "doc": "Owner; the only address allowed to deposit to or withdraw this goal.",
+          "name": "saver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "GoalStatus"
+            }
+          }
+        },
+        {
+          "doc": "Target the saver is working toward, in the token's minor units (7 dp).",
+          "name": "target",
+          "type_": "i128"
+        },
+        {
+          "doc": "Stellar Asset Contract (SAC) address of the saved asset (XLM SAC by default).",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "One-time setup. Records the admin (the deployer) and the default token\\n(the XLM Stellar Asset Contract), and unpauses the contract.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deposit `amount` of `token` toward the `(saver, goal_id)` goal, locking it\\nin the contract. Creates the goal on first deposit (binding its `target`\\nand `token`); accumulates on subsequent deposits. Returns the new balance.\\n\\nAuth: requires the saver's signature. The same authorization covers the\\ninner SAC `transfer(saver -> contract)`.",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "saver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "goal_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Withdraw the full held balance of `(saver, goal_id)` back to the saver and\\nclose the goal. Allowed at any time by the goal's owner. Returns the amount\\npaid out. Pausing the contract never blocks this \\xe2\\x80\\x94 funds can't be trapped.\\n\\nAuth: requires the saver's signature.",
+      "name": "withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "saver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "goal_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_goal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "saver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "goal_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Goal"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "saver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "goal_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_saved",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_token",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unpause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Replace the contract's own code (admin-gated). Enables shipping fixes\\nwithout migrating saver balances.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

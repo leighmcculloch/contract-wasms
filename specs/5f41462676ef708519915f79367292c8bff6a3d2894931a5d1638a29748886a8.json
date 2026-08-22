@@ -1,0 +1,228 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OriginVerifierError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "rpIdHash trong authenticatorData kh\\xc3\\xb4ng kh\\xe1\\xbb\\x9bp gi\\xc3\\xa1 tr\\xe1\\xbb\\x8b pin (K1).",
+          "name": "RpIdHashMismatch",
+          "value": 3
+        },
+        {
+          "doc": "origin trong clientDataJSON kh\\xc3\\xb4ng n\\xe1\\xba\\xb1m trong allow-list 3 v\\xe1\\xbb\\x8f (K1).",
+          "name": "OriginNotAllowed",
+          "value": 4
+        },
+        {
+          "doc": "authenticatorData ng\\xe1\\xba\\xafn h\\xc6\\xa1n 37 byte.",
+          "name": "AuthDataTooShort",
+          "value": 5
+        },
+        {
+          "doc": "`sig_data` kh\\xc3\\xb4ng gi\\xe1\\xba\\xa3i m\\xc3\\xa3 \\xc4\\x91\\xc6\\xb0\\xe1\\xbb\\xa3c th\\xc3\\xa0nh `WebAuthnSigData` (XDR h\\xe1\\xbb\\x8fng) \\xe2\\x80\\x94 thay cho\\npanic tr\\xe1\\xba\\xa7n, \\xc4\\x91\\xe1\\xbb\\x83 fuzzer/FE th\\xe1\\xba\\xa5y m\\xc3\\xa3 l\\xe1\\xbb\\x97i thay v\\xc3\\xac \"unreachable\" (skill C2).",
+          "name": "MalformedSigData",
+          "value": 6
+        },
+        {
+          "doc": "`key_data` kh\\xc3\\xb4ng \\xc4\\x91\\xe1\\xbb\\xa7 65 byte pubkey \\xe2\\x80\\x94 c\\xc3\\xb9ng l\\xc3\\xbd do C2.",
+          "name": "MalformedPublicKey",
+          "value": 7
+        },
+        {
+          "doc": "Allow-list origin l\\xc3\\xbac deploy r\\xe1\\xbb\\x97ng, c\\xc3\\xb3 ph\\xe1\\xba\\xa7n t\\xe1\\xbb\\xad r\\xe1\\xbb\\x97ng, ho\\xe1\\xba\\xb7c ch\\xe1\\xbb\\xa9a origin DEV\\n(`localhost` / `127.0.0.1`) \\xe2\\x80\\x94 ch\\xe1\\xba\\xbft ngay \\xe1\\xbb\\x9f `__constructor` thay v\\xc3\\xac s\\xe1\\xbb\\x91ng\\nth\\xc3\\xa0nh verifier v\\xc3\\xb4 d\\xe1\\xbb\\xa5ng tr\\xc3\\xaan production. Tr\\xc6\\xb0\\xe1\\xbb\\x9bc b\\xe1\\xba\\xa3n v\\xc3\\xa1, g\\xc3\\xa1c n\\xc3\\xa0y ch\\xe1\\xbb\\x89 n\\xe1\\xba\\xb1m \\xe1\\xbb\\x9f\\ndeploy script (shell) \\xe2\\x80\\x94 t\\xe1\\xba\\xa7ng contract ph\\xe1\\xba\\xa3i t\\xe1\\xbb\\xb1 fail-closed (audit \\xc2\\xa74.4).",
+          "name": "InvalidOrigin",
+          "value": 8
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "config",
+      "inputs": [],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              },
+              {
+                "vec": {
+                  "element_type": "bytes"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "verify",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signature_payload",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "key_data",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "sig_data",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pin rpIdHash + allow-list origin m\\xe1\\xbb\\x99t l\\xe1\\xba\\xa7n (m\\xe1\\xbb\\x97i h\\xe1\\xbb\\x99 deploy m\\xe1\\xbb\\x99t instance;\\n\\xc4\\x91\\xe1\\xbb\\x95i cert APK / extension ID = deploy instance m\\xe1\\xbb\\x9bi, KH\\xc3\\x94NG s\\xe1\\xbb\\xada code).",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "rp_id_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "allowed_origins",
+          "type_": {
+            "vec": {
+              "element_type": "bytes"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "canonicalize_key",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key_data",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        "bytes"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "batch_canonicalize_key",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "keys_data",
+          "type_": {
+            "vec": {
+              "element_type": "bytes"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "bytes"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Error types for WebAuthn verification operations.",
+      "lib": "",
+      "name": "WebAuthnError",
+      "cases": [
+        {
+          "doc": "The signature payload is invalid or has incorrect format.",
+          "name": "SignaturePayloadInvalid",
+          "value": 3110
+        },
+        {
+          "doc": "The client data exceeds the maximum allowed length.",
+          "name": "ClientDataTooLong",
+          "value": 3111
+        },
+        {
+          "doc": "Failed to parse JSON from client data.",
+          "name": "JsonParseError",
+          "value": 3112
+        },
+        {
+          "doc": "The type field in client data is not \"webauthn.get\".",
+          "name": "TypeFieldInvalid",
+          "value": 3113
+        },
+        {
+          "doc": "The challenge in client data does not match expected value.",
+          "name": "ChallengeInvalid",
+          "value": 3114
+        },
+        {
+          "doc": "The authenticator data format is invalid or too short.",
+          "name": "AuthDataFormatInvalid",
+          "value": 3115
+        },
+        {
+          "doc": "The User Present (UP) bit is not set in authenticator flags.",
+          "name": "PresentBitNotSet",
+          "value": 3116
+        },
+        {
+          "doc": "The User Verified (UV) bit is not set in authenticator flags.",
+          "name": "VerifiedBitNotSet",
+          "value": 3117
+        },
+        {
+          "doc": "Invalid relationship between Backup Eligibility and State bits.",
+          "name": "BackupEligibilityAndStateNotSet",
+          "value": 3118
+        },
+        {
+          "doc": "The provided key data does not contain a valid 65-byte public key.",
+          "name": "KeyDataInvalid",
+          "value": 3119
+        }
+      ]
+    }
+  }
+]

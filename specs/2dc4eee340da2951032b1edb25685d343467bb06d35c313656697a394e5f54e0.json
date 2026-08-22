@@ -1,0 +1,107 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "batch_work",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "kale_contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "farmers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "hashes",
+          "type_": {
+            "vec": {
+              "element_type": "bytes"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "nonces",
+          "type_": {
+            "vec": {
+              "element_type": "u64"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "batch_plant",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "kale_contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "farmers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amounts",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "batch_harvest",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "kale_contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "farmers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "blocks",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

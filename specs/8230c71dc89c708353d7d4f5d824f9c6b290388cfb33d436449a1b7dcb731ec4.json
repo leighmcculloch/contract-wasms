@@ -1,0 +1,165 @@
+[
+  {
+    "function_v0": {
+      "doc": "Upgrades the current contract to a new WASM hash.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initializes the registry and stores the admin.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Adds a new implementation id to WASM hash mapping.",
+      "name": "add_implementation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the WASM hash for the requested implementation id.",
+      "name": "get_implementation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "bytes_n": {
+                "n": 32
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Lists all registered implementations with their ids and WASM hashes.",
+      "name": "list_implementations",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "ImplementationInfo"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Metadata describing a registered TLD implementation.",
+      "lib": "",
+      "name": "ImplementationInfo",
+      "fields": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Removes an implementation mapping and updates the cached implementation list.",
+      "name": "remove_implementation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Errors returned by the implementation registry contract.",
+      "lib": "",
+      "name": "ImplementationRegistryError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "AlreadyExists",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "NotFound",
+          "value": 4
+        }
+      ]
+    }
+  }
+]

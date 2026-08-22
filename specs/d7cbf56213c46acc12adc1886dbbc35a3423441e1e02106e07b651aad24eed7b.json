@@ -1,0 +1,468 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OracleHints",
+      "fields": [
+        {
+          "doc": "",
+          "name": "checkpoint",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "checkpoint_min",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "slot",
+          "type_": "u128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SwapResult",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount0",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "amount1",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "liquidity",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "sqrt_price_x96",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "tick",
+          "type_": "i32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Field subset + names verbatim from the dumped `PoolState` (iface-sushi.txt).",
+      "lib": "",
+      "name": "SushiPoolState",
+      "fields": [
+        {
+          "doc": "",
+          "name": "fee",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "liquidity",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "sqrt_price_x96",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "tick",
+          "type_": "i32"
+        },
+        {
+          "doc": "",
+          "name": "tick_spacing",
+          "type_": "i32"
+        },
+        {
+          "doc": "",
+          "name": "token0",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token1",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Stores the orchestrator (\"executor\") address. The receiver trusts exactly\\nthis address to `arm`/`disarm` it and to appear as `caller` in `exec_op`.\\nWired post-deploy from the executor side via `set_receiver` (circular dep).",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "executor",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Executor-only: stage the flight for the imminent flash loan. This is a\\nsub-call from `executor.execute` that RETURNS before `pool.flash_loan` is\\ninvoked, so the receiver is off the call stack when the pool later calls\\n`exec_op` \\xe2\\x80\\x94 the whole point of the two-contract split (no re-entry).",
+      "name": "arm",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "legs",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Leg"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Blend flash-loan callback (moderc3156 shape). Legal ONLY inside an armed,\\nunconsumed flight whose `caller`/`token`/`amount` match. Runs the legs and\\nsweeps the full loan-asset balance (repayment + profit) back to the executor.",
+      "name": "exec_op",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "_fee",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Executor-only: close out the flight. Panics unless `exec_op` consumed it \\xe2\\x80\\x94\\nthis is the guard that proves the pool actually ran the callback. A pool\\nthat skipped `exec_op` (e.g. to repay itself from the executor's prior\\nprofits) leaves the flight unconsumed, so `disarm` reverts the whole tx.",
+      "name": "disarm",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Executor-only: run an owned-funds cycle. The executor has already\\ntransferred `amount` of `token` here; run the legs and sweep the entire\\n`token` balance back. No flight staging: unlike the flash path there is\\nno external callback (executor -> receiver is a plain sub-call), so\\narm/disarm's callback-proof machinery does not apply.",
+      "name": "exec_owned",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "legs",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Leg"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Upgrade the receiver wasm. Authorized by the stored executor address (the\\nreceiver's admin proxy). In practice a receiver is replaced by deploying a\\nnew one and calling `executor.set_receiver`; this exists for in-place upgrades\\ndriven through the executor's admin. See docs/modules/executor.md.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ExecutorError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "DeadlineExceeded",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "PoolNotAllowed",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "BadRoute",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "NotInFlight",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "AlreadyExecuted",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "FlightNotConsumed",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "MinOutNotMet",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "MinProfitNotMet",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "UnknownVenue",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "ReceiverNotSet",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "AlreadyArmed",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "InsufficientBalance",
+          "value": 13
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "Venue discriminants \\xe2\\x80\\x94 MUST stay in sync with src/executor/txBuilder.ts VENUE_IDS.",
+      "lib": "",
+      "name": "Venue",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Soroswap",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Aqua",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Phoenix",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Comet",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "Sushi",
+          "value": 4
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "One swap hop. `amount_in` is NOT stored: leg *i* consumes leg *i\\xe2\\x88\\x921*'s actual\\noutput (leg 0 consumes the loan amount).",
+      "lib": "",
+      "name": "Leg",
+      "fields": [
+        {
+          "doc": "",
+          "name": "min_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "venue",
+          "type_": {
+            "udt": {
+              "name": "Venue"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Mirrors Blend v2's FlashLoan (verified: .superpowers/iface-blend-fixed-v2.txt).\\nDeclared locally \\xe2\\x80\\x94 resources/ is never a dependency.",
+      "lib": "",
+      "name": "FlashLoan",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "contract",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Mirrors Blend v2's Request. request_type Repay = 5\\n(resources/blend-protocol/pool/src/pool/actions.rs:29).",
+      "lib": "",
+      "name": "Request",
+      "fields": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "request_type",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "One in-flight flash-loan execution, staged by the executor via `receiver.arm`\\nand consumed by `receiver.exec_op`. Lives in the receiver's temporary storage;\\nstrictly single-use within a transaction (armed \\xe2\\x86\\x92 consumed \\xe2\\x86\\x92 disarmed).",
+      "lib": "",
+      "name": "Flight",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "consumed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "legs",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Leg"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  }
+]

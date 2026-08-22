@@ -1,0 +1,1431 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Kyc",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "ComplianceRec",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "DailyVol",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "AssetRule",
+            "type_": [
+              "symbol"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Verifier",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "VerifierList",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "BlockedJurisdiction",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Frozen",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "TravelRuleLog",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TravelRuleCount"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Whitelist",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Attestation",
+            "type_": [
+              "address",
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "AttestationCount",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Signer",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AssetRule",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "blocked_jurisdictions",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "daily_limit_usd",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "enabled",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "require_travel_rule",
+          "type_": "bool"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DailyVolume",
+      "fields": [
+        {
+          "doc": "",
+          "name": "date_ts",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "volume",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AttestEvent",
+      "prefix_topics": [
+        "attest"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "subject",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "jurisdiction_allowed",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RevokeEvent",
+      "prefix_topics": [
+        "revoke"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "subject",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Public, privacy-preserving view of an address's compliance state.\\nExposes whether the address's jurisdiction is currently allowed\\nWITHOUT revealing which jurisdiction it actually is.",
+      "lib": "",
+      "name": "ComplianceView",
+      "fields": [
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "True if the address's on-file jurisdiction is not currently on the\\nDAO's blocklist. False if never attested (jurisdiction unknown).",
+          "name": "jurisdiction_allowed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "reason",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "ComplianceStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "updated_at",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Internal attestation record \\xe2\\x80\\x94 never returned wholesale by a public\\ngetter because it carries the subject's raw jurisdiction code. Use\\n`get_compliance_status` (returns `ComplianceView`) for public reads.",
+      "lib": "",
+      "name": "KycAttestation",
+      "fields": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "issued_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "jurisdiction",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "metadata",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TravelRuleEvent",
+      "prefix_topics": [
+        "travel"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "sequence",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Internal compliance snapshot for an address \\xe2\\x80\\x94 stored alongside the KYC\\nattestation. Never returned wholesale by a public getter (see\\n`ComplianceView`) because it carries the raw jurisdiction code.",
+      "lib": "",
+      "name": "ComplianceRecord",
+      "fields": [
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "jurisdiction",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "reason",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "ComplianceStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "updated_at",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "High-level compliance status for an address.\\nThe ComplianceStatus determines whether the address may use the\\nprotocol at all \\xe2\\x80\\x94 there are no KYC tiers, a user is either verified\\nor they are not.",
+      "lib": "",
+      "name": "ComplianceStatus",
+      "cases": [
+        {
+          "doc": "Never attested \\xe2\\x80\\x94 no KYC provider has ever submitted an attestation.",
+          "name": "Unknown",
+          "value": 0
+        },
+        {
+          "doc": "KYC submitted but not yet fully verified (e.g. documents under review).",
+          "name": "Pending",
+          "value": 1
+        },
+        {
+          "doc": "Fully verified \\xe2\\x80\\x94 may use the protocol within the limits of their\\njurisdiction.",
+          "name": "Verified",
+          "value": 2
+        },
+        {
+          "doc": "Temporarily suspended (regulatory review, investigation, or admin\\naction). May not use the protocol until unsuspended.",
+          "name": "Suspended",
+          "value": 3
+        },
+        {
+          "doc": "Permanently blocked (OFAC / sanctions list). May never use the\\nprotocol \\xe2\\x80\\x94 this status cannot be self-cured.",
+          "name": "Sanctioned",
+          "value": 4
+        },
+        {
+          "doc": "KYC attestation has passed its expiry date and must be renewed.",
+          "name": "Expired",
+          "value": 5
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "attest",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "subject",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "jurisdiction",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "metadata",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Verifier can revoke their own attestation",
+      "name": "revoke",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "subject",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Fired when an address is suspended, sanctioned, or has its status\\nchanged by an admin action.",
+      "lib": "",
+      "name": "StatusChangeEvent",
+      "prefix_topics": [
+        "status_change"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "old_status",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_status",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "reason",
+          "type_": "symbol",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Fired when a user submits a provider-signed attestation.",
+      "lib": "",
+      "name": "SubmitAttestEvent",
+      "prefix_topics": [
+        "submit_attest"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "subject",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "jurisdiction_allowed",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Replace this contract's Wasm in place. Instance and persistent\\nstorage are preserved. Authorised by the stored DAO address.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FreezeAccountEvent",
+      "prefix_topics": [
+        "freeze"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "reason",
+          "type_": "symbol",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_frozen",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "addr",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VerifierChangedEvent",
+      "prefix_topics": [
+        "verifier_set"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_us_or_eu",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "code",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Simple yes/no: is this address allowed to use the protocol\\n*right now*? Equivalent to status==Verified && not expired &&\\nnot in a blocked jurisdiction.",
+      "name": "is_verified",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_verifier",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "addr",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BlockJurisdictionEvent",
+      "prefix_topics": [
+        "block"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "action",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "country_code",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Authorise an additional KYC provider address so users can choose it\\nto complete their KYC (multiple providers can be active at once;\\nuse `set_verifier` if you only want a single canonical provider).",
+      "name": "add_verifier",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The current canonical KYC provider address, if one has been set via\\n`set_verifier`.",
+      "name": "get_verifier",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set/replace the single canonical KYC provider address (e.g. the\\nsigning address used by Persona or another provider). This both\\nauthorises the new address and revokes the previous one, so a\\nrotated/compromised provider key stops working immediately.\\nDoes not affect any OTHER providers already authorised via\\n`add_verifier` \\xe2\\x80\\x94 this only manages the \"canonical\" single-provider\\nslot for integrations that want one default provider.",
+      "name": "set_verifier",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Fired when a provider registers their signing key for attestation\\nverification.",
+      "lib": "",
+      "name": "ProviderRegisteredEvent",
+      "prefix_topics": [
+        "provider_reg"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns all KYC provider addresses that have attested the given\\nsubject. Use this to check whether the user has attestations from\\nmultiple approved providers (e.g. both Sumsub AND Persona).",
+      "name": "get_providers",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "subject",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_whitelist",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "whitelisted",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "freeze_account",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "reason",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_asset_rule",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "AssetRule"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns every authorised KYC provider address (Sumsub, Persona,\\nVeriff, \\xe2\\x80\\xa6) so a dApp can present the full list of providers the\\nuser may choose from to complete KYC. Off-chain metadata (display\\nname, logo, hosted-flow URL) is intentionally not stored on-chain \\xe2\\x80\\x94\\nthe backend/webapp map each address to that metadata.",
+      "name": "list_verifiers",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_asset_rule",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "blocked_juris",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "daily_limit",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "travel_rule",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Re-apply the default US + EU jurisdiction block. Useful if the DAO\\nwants to restore the default posture after selectively unblocking\\nsome codes.",
+      "name": "block_us_and_eu",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Register a signing key for an authorised provider. The signing key\\nis used to verify provider signatures on attestation submissions\\n(see `submit_attestation`). This enables the scalable model where\\nthe provider signs a message off-chain and the user submits it \\xe2\\x80\\x94\\nthe provider never pays gas.\\n\\nOnly an already-authorised verifier (added via `add_verifier`) may\\nregister their own signing key.",
+      "name": "register_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "remove_verifier",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Suspend an address \\xe2\\x80\\x94 temporarily prevents protocol usage without\\ndestroying the KYC attestation. The user's provider data is\\npreserved; when unsuspended the user resumes as verified. For\\nregulatory reviews, investigations, or temporary risk-management\\nholds.",
+      "name": "suspend_account",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "reason",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_daily_volume",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "addr",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Permanently sanction (block) an address \\xe2\\x80\\x94 OFAC / sanctions-list\\nlevel action. This is NOT reversible through the contract (requires\\na new DAO proposal + admin action to overwrite). Differs from\\n`freeze_account` in that a freeze may be temporary (regulatory\\norder), while a sanction is a permanent status change.",
+      "name": "sanction_account",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "reason",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unfreeze_account",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Read-only version of `assert_user_compliant` (never panics).",
+      "name": "is_user_compliant",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Un-suspend an address \\xe2\\x80\\x94 restores Verified status. Only callable by\\nadmin.",
+      "name": "unsuspend_account",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "block_jurisdiction",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "country_code",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the number of distinct providers that have attested this\\naddress. Can be used to require N-of-M attestations for high-value\\noperations.",
+      "name": "get_provider_count",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "subject",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Is `user`'s on-file jurisdiction currently allowed? Never reveals\\nwhich jurisdiction it is \\xe2\\x80\\x94 just whether it's currently blocked.\\nReturns false if the user has never been attested.",
+      "name": "is_jurisdiction_ok",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Submit a provider-signed attestation. This is the scalable flow:\\n\\n1. User picks any approved provider (Sumsub, Persona, Veriff, \\xe2\\x80\\xa6)\\nand completes KYC with them\\n2. Provider signs a message: { subject, jurisdiction, expires_at }\\n3. User submits the message + signature here\\n4. Contract verifies the provider's signing key \\xe2\\x86\\x92 authorised verifier\\n5. Attestation is stored on-chain\\n\\nBenefits:\\n- Provider never pays gas\\n- User pays their own transaction fee\\n- User can choose any approved provider\\n- Adding/removing providers is a DAO action\\n\\nFor now, the signature verification is done via `provider.require_auth()`\\non the provider address \\xe2\\x80\\x94 in a full implementation, this would use\\nEd25519 signature verification against the registered signer key.\\nThe `signer` argument identifies WHICH provider is attesting.",
+      "name": "submit_attestation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "subject",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "jurisdiction",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Read-only compliance check (doesn't update volumes)",
+      "name": "is_transfer_allowed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unblock_jurisdiction",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "country_code",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Panics with a descriptive reason if `user` may not use the protocol.\\n`caller` is the contract requesting the check; it is only ever used\\nfor the narrow system-to-system bypass (see comment below) \\xe2\\x80\\x94 never\\nto exempt a real end user.",
+      "name": "assert_user_compliant",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns a privacy-preserving view of the ComplianceRecord for an\\naddress (or a default Unknown view if never attested). The raw\\njurisdiction/country is NEVER returned \\xe2\\x80\\x94 only whether it is\\ncurrently allowed (`jurisdiction_allowed`), computed live against\\nthe DAO's current blocklist so it stays accurate even if the DAO\\nblocks/unblocks a jurisdiction after the user was attested.",
+      "name": "get_compliance_status",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "ComplianceView"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_travel_rule_count",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_sanctioned_country",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "code",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Main entry: called before any transfer/mint/burn.\\nReturns true if allowed, panics with reason if not.",
+      "name": "assert_transfer_allowed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Look up which provider a signing key belongs to.",
+      "name": "get_provider_for_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_jurisdiction_blocked",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "code",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Re-apply the default OFAC/high-risk sanctioned-country block (Cuba,\\nIran, North Korea, Syria, Russia, Belarus, Myanmar, Venezuela,\\nSudan, South Sudan). Useful if the DAO wants to restore the default\\nposture after selectively unblocking some codes.",
+      "name": "block_sanctioned_countries",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

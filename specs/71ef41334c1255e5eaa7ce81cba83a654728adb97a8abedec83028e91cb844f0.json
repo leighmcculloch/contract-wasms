@@ -1,0 +1,542 @@
+[
+  {
+    "function_v0": {
+      "doc": "Stores a commit hash used by the commit-reveal user TLD registration flow.",
+      "name": "commit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "committer",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Upgrades the current contract to a new WASM hash.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deploys a new TLD contract, initializes it, and registers it in the root registry.",
+      "name": "create_tld",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "implementation_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "deploy_salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initializes factory dependencies and stores the admin.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "root_registry",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "impl_registry",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the configured user-created TLD price for the requested zone name.",
+      "name": "get_tld_price",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Price buckets used for user-created TLDs.",
+      "lib": "",
+      "name": "TldPriceTier",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Len2"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Len3"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Len4"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Len5Plus"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deploys a paid user-created TLD after a valid commit and transfers the price.",
+      "name": "create_tld_paid",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "implementation_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "deploy_salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "buyer",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Computes the commit hash for a full TLD registration request.",
+      "name": "get_commit_hash",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "implementation_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "deploy_salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "buyer",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Updates the payment token and all user-created TLD price buckets.",
+      "name": "set_tld_pricing",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "payment_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "price_len_2",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "price_len_3",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "price_len_4",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "price_len_5_plus",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Preimage used to bind a commit to one buyer and one TLD registration request.",
+      "lib": "",
+      "name": "CommitPreimage",
+      "fields": [
+        {
+          "doc": "",
+          "name": "buyer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "deploy_salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "implementation_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Updates the root registry dependency.",
+      "name": "set_root_registry",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Errors returned by the TLD factory contract.",
+      "lib": "",
+      "name": "TldFactoryError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidName",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "MissingImplementation",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidPrice",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "PriceNotConfigured",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidState",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "CommitNotFound",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "InvalidCommitTtl",
+          "value": 9
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the temporary-storage TTL applied to commit hashes, in ledgers.",
+      "name": "get_commit_ttl_ledgers",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Updates how long commit hashes are retained in temporary storage.",
+      "name": "set_commit_ttl_ledgers",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "value",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Updates the implementation registry dependency.",
+      "name": "set_implementation_registry",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FqdnParts",
+      "fields": [
+        {
+          "doc": "",
+          "name": "label",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "tld",
+          "type_": "string"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CommonError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidName",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "InvalidYears",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidGracePeriod",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidBps",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidCommitWindow",
+          "value": 5
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TldInitArgs",
+      "fields": [
+        {
+          "doc": "",
+          "name": "root_registry_address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tld_name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "tld_owner",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TldAddedEvent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tld",
+          "type_": "string"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "GlobalTldEvent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "tld",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ImplementationAddedEvent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "implementation_id",
+          "type_": "symbol"
+        }
+      ]
+    }
+  }
+]

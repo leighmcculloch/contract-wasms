@@ -1,0 +1,313 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotFound",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Replay",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "OutOfRange",
+          "value": 100
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Scorer"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "agent_id \\xe2\\x86\\x92 RepState (persistent).",
+            "name": "Rep",
+            "type_": [
+              "symbol"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "(agent_id, job_id) replay marker \\xe2\\x80\\x94 PERSISTENT storage so the guard\\nnever lapses (the v1 bug kept it in temporary storage).",
+            "name": "Rated",
+            "type_": [
+              "symbol",
+              {
+                "bytes_n": {
+                  "n": 16
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "(agent_id, payer) \\xe2\\x86\\x92 cumulative i128 weight (persistent, never decayed).\\nRaw per-payer stake for off-chain Sybil / self-dealing analysis.",
+            "name": "PayerW",
+            "type_": [
+              "symbol",
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Per-agent reputation accumulator.",
+      "lib": "",
+      "name": "RepState",
+      "fields": [
+        {
+          "doc": "Lifetime rating count \\xe2\\x80\\x94 never decayed.",
+          "name": "count",
+          "type_": "u32"
+        },
+        {
+          "doc": "Lifetime dispute count \\xe2\\x80\\x94 never decayed.",
+          "name": "disputed",
+          "type_": "u32"
+        },
+        {
+          "doc": "Epoch of the last write (epoch = ledger timestamp / EPOCH_SECONDS).",
+          "name": "last_epoch",
+          "type_": "u64"
+        },
+        {
+          "doc": "\\xce\\xa3 (rating_bps \\xc3\\x97 weight), decayed. rating_bps = rating_0_to_100 \\xc3\\x97 100,\\ni.e. 0..10_000, so `sum_w / weight` is already a basis-point mean.",
+          "name": "sum_w",
+          "type_": "i128"
+        },
+        {
+          "doc": "\\xce\\xa3 weight, decayed. Weight is the job's USDC value in stroops\\n(7 decimals, Stellar convention).",
+          "name": "weight",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Record a rating for a completed job.\\n\\n- `caller` must be the registered scorer (the backend JobManager).\\n- `rating_0_to_100` is stored as basis points (\\xc3\\x97 100 \\xe2\\x86\\x92 0..10_000).\\n- `weight` is the job's USDC value in stroops, 0 < weight \\xe2\\x89\\xa4 MAX_WEIGHT.\\n- `(agent_id, job_id)` can only ever be rated once (persistent guard).\\n- `payer` accrues cumulative stake for off-chain Sybil analysis.\\n- `kind == \"dispute\"` additionally bumps the lifetime dispute counter.",
+      "name": "submit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "agent_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "job_id",
+          "type_": {
+            "bytes_n": {
+              "n": 16
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "rating_0_to_100",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "weight",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "payer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "kind",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "View \\xe2\\x80\\x94 decayed weighted mean in basis points (0..10_000, since\\n`sum_w` already carries the \\xc3\\x97 100 scale). 0 when weight == 0.",
+      "name": "avg_bps",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "agent_id",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "View \\xe2\\x80\\x94 Bayesian-smoothed mean:\\n`(prior_weight \\xc3\\x97 prior_bps + sum_w) / (prior_weight + weight)`.\\nThe caller-supplied prior anchors low-evidence agents; as decayed\\nevidence weight grows the result converges to the raw mean.\\nReturns `prior_bps` when both weights are 0. Clamped to 0..10_000.",
+      "name": "rep_bps",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "agent_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "prior_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "prior_weight",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "View \\xe2\\x80\\x94 the agent's RepState decayed to now (nothing is written).",
+      "name": "rep_state",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "agent_id",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "RepState"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin-only: swap the scorer address.",
+      "name": "set_scorer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_scorer",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "View \\xe2\\x80\\x94 cumulative (never decayed) weight this payer has contributed\\nto this agent's reputation. 0 by default. Raw evidence for off-chain\\nSybil / self-dealing analysis.",
+      "name": "payer_weight",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "agent_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "payer",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "scorer",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "View \\xe2\\x80\\x94 lifetime dispute rate in basis points:\\n`disputed \\xc3\\x97 10_000 / count`. 0 when count == 0. Never decayed.",
+      "name": "dispute_rate_bps",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "agent_id",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  }
+]

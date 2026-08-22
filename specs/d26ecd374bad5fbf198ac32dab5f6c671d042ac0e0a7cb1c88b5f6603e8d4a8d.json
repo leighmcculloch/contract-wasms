@@ -1,0 +1,253 @@
+[
+  {
+    "function_v0": {
+      "doc": "Fund the escrow \\xe2\\x80\\x94 inter-contract call: client \\xe2\\x86\\x92 escrow contract via ZPAY token transfer.",
+      "name": "fund",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "escrow_id",
+          "type_": "string"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Create a new escrow between client and freelancer.\\ntoken_id points to the deployed ZPAY SEP-41 token contract.",
+      "name": "create",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "escrow_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "client",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "freelancer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "arbiter",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Freelancer marks work as delivered.",
+      "name": "deliver",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "escrow_id",
+          "type_": "string"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Raise a dispute \\xe2\\x80\\x94 either client OR freelancer can call this.",
+      "name": "dispute",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "escrow_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Arbiter resolves dispute \\xe2\\x80\\x94 inter-contract call to distribute ZPAY tokens.",
+      "name": "resolve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "escrow_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "pay_freelancer",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Escrow",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "arbiter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "cancelled",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "client",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "delivered",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "disputed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "escrow_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "freelancer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "funded",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "released",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Escrow",
+            "type_": [
+              "string"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "EscrowCount"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_escrow",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "escrow_id",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Escrow"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Cancel escrow and return ZPAY tokens to client via inter-contract call.\\nCan only be called before release, and either before funding or if disputed.",
+      "name": "cancel_escrow",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "escrow_id",
+          "type_": "string"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Client releases funds to freelancer \\xe2\\x80\\x94 inter-contract call: escrow \\xe2\\x86\\x92 ZPAY token contract.",
+      "name": "release_funds",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "escrow_id",
+          "type_": "string"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_escrow_count",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  }
+]

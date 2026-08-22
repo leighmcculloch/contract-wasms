@@ -1,0 +1,376 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Tier",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "None"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Bronze"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Silver"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Gold"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "ProfileAlreadyExists",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "ProfileNotFound",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidAvatarId",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "NotAuthorized",
+          "value": 4
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Profile",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Relayer"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UserProfile",
+      "fields": [
+        {
+          "doc": "",
+          "name": "avatar_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "bio",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "cross_chain_address",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "email",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "phone",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "quota",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "tier",
+          "type_": {
+            "udt": {
+              "name": "Tier"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "mint_tier",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tier",
+          "type_": {
+            "udt": {
+              "name": "Tier"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "relayer",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_profile",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "UserProfile"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__check_auth",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signature_payload",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signatures",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "auth_context",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "consume_quota",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_profile",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "email",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "phone",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "bio",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "avatar_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "cross_chain_address",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "update_profile",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "email",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "phone",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "bio",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "avatar_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "cross_chain_address",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,68 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "verify",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hash",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "key_data",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "sig_data",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "canonicalize_key",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key_data",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        "bytes"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "batch_canonicalize_key",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key_data",
+          "type_": {
+            "vec": {
+              "element_type": "bytes"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "bytes"
+          }
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,1481 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "wad",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initialise a freshly-deployed scalar-Gaussian market. See the Sprint-1\\ndocs; Sprint 2 appends the `usdc` SAC contract id (the settlement asset,\\nresolved per-network at deploy time \\xe2\\x80\\x94 never hardcoded).",
+      "name": "init",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "k",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "b",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "resolver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tier",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "window_open",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "window_lock",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "window_resolve",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "mu0",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "sigma0",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "usdc",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "capped_flag",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_lp_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "fee_treasury_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "fee_creator_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "blend_adapter",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Claim a resolved position: returns `collateral + (g(x\\xe2\\x82\\x80) \\xe2\\x88\\x92 f(x\\xe2\\x82\\x80))`\\nclamped at `0` in USDC (floor 7-dp), deletes the position.",
+      "name": "claim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "position_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Submit a belief `(\\xce\\xbc\\xe2\\x82\\x82, \\xcf\\x83\\xe2\\x82\\x82)`: scale to `\\xce\\xbb\\xe2\\x82\\x82 = k\\xc2\\xb7\\xe2\\x88\\x9a(2\\xcf\\x83\\xe2\\x82\\x82\\xe2\\x88\\x9a\\xcf\\x80)`, compute the\\nposition `g \\xe2\\x88\\x92 f` and worst-case collateral, add the fee, pull USDC, mint\\na position, advance the curve to `g`, return the position id.\\n`max_collateral_7dp` guards slippage (total = collateral + fee, 7-dp).",
+      "name": "trade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "trader",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "mu2",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "sigma2",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_collateral_7dp",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "After `window.resolve`, pull `x\\xe2\\x82\\x80` from the resolver. `Stale` \\xe2\\x87\\x92 market\\nbecomes `Disputable` (no payouts). `Pending` \\xe2\\x87\\x92 reverts\\n`ResolverNotReady`. Otherwise `Resolved(x\\xe2\\x82\\x80)` and `claim` opens.",
+      "name": "resolve",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_state",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "MarketState"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "LP shares held by `lp`.",
+      "name": "lp_shares",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "lp",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_params",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "MarketParams"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "`(collateral_pool_wad, lp_total_shares, fee_pool_wad)`.",
+      "name": "pool_state",
+      "inputs": [],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "i128",
+              "i128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Live per-checkpoint curves (trajectory markets only).",
+      "name": "get_beliefs",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "Belief"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "A stored position (panics `PositionNotFound` if claimed/unknown).",
+      "name": "get_position",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "PositionData"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "`(treasury_fees_wad, creator_fees_wad)`.",
+      "name": "pending_fees",
+      "inputs": [],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "i128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Add liquidity at scale `scale_y` (WAD; `WAD` = 100%). Deposits\\n`scale_y\\xc2\\xb7(b \\xe2\\x88\\x92 locked_collateral)` USDC and mints `scale_y\\xc2\\xb7L` LP shares\\n(or `scale_y` shares when `L = 0`). Only while `Open`.",
+      "name": "add_liquidity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "lp",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "scale_y",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Free collateral available for LP entry: `b \\xe2\\x88\\x92 locked \\xe2\\x88\\x92 pool` (WAD).",
+      "name": "free_collateral",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The checkpoint timestamps (trajectory markets only).",
+      "name": "get_checkpoints",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "u64"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initialise a freshly-deployed trajectory market. `checkpoints` are Unix\\ntimestamps (ascending, \\xe2\\x89\\xa4 `window.resolve`); `mus0`/`sigmas0` are the\\ninitial per-checkpoint Gaussian params (WAD), one per checkpoint. The\\n\\xcf\\x83-floor + `peak \\xe2\\x89\\xa4 b` solvency checks apply to every checkpoint.",
+      "name": "init_trajectory",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "k",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "b",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "resolver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tier",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "checkpoints",
+          "type_": {
+            "vec": {
+              "element_type": "u64"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "window_open",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "window_lock",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "window_resolve",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "mus0",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "sigmas0",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "usdc",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_lp_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "fee_treasury_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "fee_creator_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "blend_adapter",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Claim a resolved trajectory position: returns `collateral +\\n\\xce\\xa3_i (g_i(x_i) \\xe2\\x88\\x92 f_i(x_i))` clamped at `0` in USDC (floor 7-dp), deletes\\nthe position.",
+      "name": "claim_trajectory",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "position_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Burn LP `shares` and withdraw the proportional slice of `pool + fee_pool`\\nin USDC. While `Open`, only the slice not reserved for locked trader\\ncollateral is withdrawable. Blocked during `Locked`, `Disputable`, and\\nafter resolution until every position is claimed.",
+      "name": "remove_liquidity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "lp",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Submit per-checkpoint beliefs `(\\xce\\xbc_i, \\xcf\\x83_i)`: for each checkpoint compute\\nthe position `g_i \\xe2\\x88\\x92 f_i` and its worst-case collateral; the trade's\\ncollateral is the sum (the checkpoints are independent \\xe2\\x87\\x92 worst-case of\\nthe sum is the sum of worst-cases). Adds the fee, pulls USDC, mints a\\ntrajectory position, advances every checkpoint curve to `g_i`.",
+      "name": "trade_trajectory",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "trader",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "mus2",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "sigmas2",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "max_collateral_7dp",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "USDC (7-dp) from Blend borrows still held by this market's wallet.",
+      "name": "blend_backed_usdc",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The realised per-checkpoint outcomes once resolved (trajectory markets).",
+      "name": "resolved_outcomes",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "i128"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Blend-backed borrow headroom for this market (7-dp USDC), `0` if disabled.",
+      "name": "blend_backed_depth",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Market creator claims accrued fee share (7-dp USDC).",
+      "name": "claim_creator_fees",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Treasury claims accrued fee share (7-dp USDC).",
+      "name": "claim_treasury_fees",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "A stored trajectory position (panics `PositionNotFound` if unknown).",
+      "name": "get_trajectory_position",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "TrajectoryPositionData"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted by `DistributionMarket::trade` (topic `\"trade\"`).",
+      "lib": "",
+      "name": "Trade",
+      "prefix_topics": [
+        "trade"
+      ],
+      "params": [
+        {
+          "doc": "Position id minted.",
+          "name": "id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "The trader.",
+          "name": "trader",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "Collateral locked (WAD).",
+          "name": "collateral",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "Fee paid (WAD).",
+          "name": "fee",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "The new aggregate belief after the trade.",
+          "name": "belief",
+          "type_": {
+            "udt": {
+              "name": "Belief"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A Gaussian belief curve, stored as parameters (ADR-2): `f(x) = \\xce\\xbb \\xc2\\xb7 \\xcf\\x86_{\\xce\\xbc,\\xcf\\x83}(x)`\\nwith `\\xce\\xbb = k\\xc2\\xb7\\xe2\\x88\\x9a(2\\xcf\\x83\\xe2\\x88\\x9a\\xcf\\x80)` so `\\xe2\\x80\\x96f\\xe2\\x80\\x96\\xe2\\x82\\x82 = k`. All WAD. `\\xce\\xbb` is derived and stored\\nredundantly so reads never recompute a square root.",
+      "lib": "",
+      "name": "Belief",
+      "fields": [
+        {
+          "doc": "Scale `\\xce\\xbb = k\\xc2\\xb7\\xe2\\x88\\x9a(2\\xcf\\x83\\xe2\\x88\\x9a\\xcf\\x80)` (WAD). Derived from `(k, \\xcf\\x83)`.",
+          "name": "lambda",
+          "type_": "i128"
+        },
+        {
+          "doc": "Center `\\xce\\xbc` (outcome units, WAD).",
+          "name": "mu",
+          "type_": "i128"
+        },
+        {
+          "doc": "Width `\\xcf\\x83` (outcome units, WAD). Must satisfy `\\xcf\\x83 \\xe2\\x89\\xa5 \\xcf\\x83_min` for the market.",
+          "name": "sigma",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted by `DistributionMarket::resolve` (topic `\"resolved\"`).",
+      "lib": "",
+      "name": "Resolved",
+      "prefix_topics": [
+        "resolved"
+      ],
+      "params": [
+        {
+          "doc": "Realised outcome `x\\xe2\\x82\\x80` (WAD).",
+          "name": "x0",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Canonical error space for the Kaido contracts. Numeric values are stable \\xe2\\x80\\x94\\noff-chain code (SDK, indexer) maps them to messages, so **never renumber an\\nexisting variant**; only append.",
+      "lib": "",
+      "name": "KaidoError",
+      "cases": [
+        {
+          "doc": "The contract has already been constructed/initialised.",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "The contract has not been constructed/initialised yet.",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "The caller is not authorised for this action.",
+          "name": "Unauthorized",
+          "value": 3
+        },
+        {
+          "doc": "`k` must be strictly positive.",
+          "name": "InvalidK",
+          "value": 10
+        },
+        {
+          "doc": "`b` (collateral) must be strictly positive.",
+          "name": "InvalidB",
+          "value": 11
+        },
+        {
+          "doc": "`fee_bps` exceeds the protocol cap.",
+          "name": "FeeTooHigh",
+          "value": 12
+        },
+        {
+          "doc": "Window timestamps are out of order (need `open \\xe2\\x89\\xa4 lock \\xe2\\x89\\xa4 resolve`) or in\\nthe past.",
+          "name": "InvalidWindow",
+          "value": 13
+        },
+        {
+          "doc": "The initial / submitted `\\xcf\\x83` is not strictly positive.",
+          "name": "InvalidSigma",
+          "value": 14
+        },
+        {
+          "doc": "The submitted belief's `\\xcf\\x83` is below the market's `\\xcf\\x83_min` floor\\n(whitepaper \\xc2\\xa710 option 1; ADR-3).",
+          "name": "SigmaBelowFloor",
+          "value": 15
+        },
+        {
+          "doc": "The resulting payout curve would exceed the collateral `b` at some point\\n\\xe2\\x80\\x94 i.e. the solvency invariant `max_x f(x) \\xe2\\x89\\xa4 b` would be violated.",
+          "name": "PeakExceedsCollateral",
+          "value": 16
+        },
+        {
+          "doc": "The capped-Gaussian parameterisation is not available yet (Sprint 5).",
+          "name": "CappedNotSupported",
+          "value": 17
+        },
+        {
+          "doc": "The trajectory outcome space is not available yet (Sprint 2, ADR-4).",
+          "name": "TrajectoryNotSupported",
+          "value": 18
+        },
+        {
+          "doc": "The numeric resolver-tier code is not one of `0..=3` (see [`ResolverTier`]).",
+          "name": "InvalidTier",
+          "value": 19
+        },
+        {
+          "doc": "The market is not in the `Open` state (trading window not active).",
+          "name": "MarketNotOpen",
+          "value": 30
+        },
+        {
+          "doc": "The market is locked (no more trades) or already resolved.",
+          "name": "MarketClosed",
+          "value": 31
+        },
+        {
+          "doc": "`resolve()` was called before `resolve_time`.",
+          "name": "NotYetResolveTime",
+          "value": 32
+        },
+        {
+          "doc": "The market is already resolved.",
+          "name": "AlreadyResolved",
+          "value": 33
+        },
+        {
+          "doc": "Slippage guard: the required collateral exceeds the caller's `max`.",
+          "name": "SlippageExceeded",
+          "value": 34
+        },
+        {
+          "doc": "The resolver has no value yet (still `Pending`) \\xe2\\x80\\x94 too early to resolve.",
+          "name": "ResolverNotReady",
+          "value": 35
+        },
+        {
+          "doc": "The resolver's underlying oracle is stale / missing \\xe2\\x80\\x94 market is paused\\n(`Disputable`), never a bad payout.",
+          "name": "OracleStale",
+          "value": 36
+        },
+        {
+          "doc": "`claim` / `remove_liquidity` called when there is nothing to withdraw.",
+          "name": "NothingToWithdraw",
+          "value": 37
+        },
+        {
+          "doc": "Not enough free (unlocked) collateral in the pool for this LP withdrawal.",
+          "name": "InsufficientLiquidity",
+          "value": 38
+        },
+        {
+          "doc": "No position with the given id.",
+          "name": "PositionNotFound",
+          "value": 39
+        },
+        {
+          "doc": "The caller does not own this position.",
+          "name": "NotPositionOwner",
+          "value": 40
+        },
+        {
+          "doc": "The market is not in the `Resolved` state (so claims aren't open yet).",
+          "name": "MarketNotResolved",
+          "value": 41
+        },
+        {
+          "doc": "The submitted belief's peak exceeds the market's collateral `b` even\\nthough `\\xcf\\x83 \\xe2\\x89\\xa5 \\xcf\\x83_min` \\xe2\\x80\\x94 a rounding-edge solvency reject.",
+          "name": "PeakExceedsB",
+          "value": 42
+        },
+        {
+          "doc": "A non-positive amount was passed where a strictly-positive one is needed.",
+          "name": "InvalidAmount",
+          "value": 43
+        },
+        {
+          "doc": "Reserved (legacy error slot \\xe2\\x80\\x94 was HouseVault).",
+          "name": "Reserved44",
+          "value": 44
+        },
+        {
+          "doc": "Reserved (legacy error slot \\xe2\\x80\\x94 was HouseVault).",
+          "name": "Reserved45",
+          "value": 45
+        },
+        {
+          "doc": "BlendTap: the requested borrow exceeds per-market cap or pool depth.",
+          "name": "BlendDepthExceeded",
+          "value": 46
+        },
+        {
+          "doc": "BlendTap: the caller is not an authorized `DistributionMarket`.",
+          "name": "BlendMarketNotAuthorized",
+          "value": 47
+        },
+        {
+          "doc": "A fixed-point computation overflowed `i128` (a bug / out-of-envelope\\ninput \\xe2\\x80\\x94 see `kaido_math::fp`).",
+          "name": "MathOverflow",
+          "value": 50
+        },
+        {
+          "doc": "A market parameter (`k`, `b`, `\\xce\\xbc`, `\\xcf\\x83`) is outside the protocol envelope.",
+          "name": "OutOfEnvelope",
+          "value": 51
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "The summary the [`Registry`] indexes for each market \\xe2\\x80\\x94 enough for the\\nfrontend's market list without a per-market `get_params` round-trip. The\\nmarket contract itself stays the source of truth for live state (belief,\\nstatus, pool).",
+      "lib": "",
+      "name": "MarketInfo",
+      "fields": [
+        {
+          "doc": "Capped-Gaussian flag.",
+          "name": "capped",
+          "type_": "bool"
+        },
+        {
+          "doc": "Who created the market (called `MarketFactory::create_market`).",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "The deployed `DistributionMarket` contract.",
+          "name": "market",
+          "type_": "address"
+        },
+        {
+          "doc": "Scalar vs. trajectory.",
+          "name": "outcome_space",
+          "type_": {
+            "udt": {
+              "name": "OutcomeSpace"
+            }
+          }
+        },
+        {
+          "doc": "Belief parameterisation.",
+          "name": "parameterization",
+          "type_": {
+            "udt": {
+              "name": "Parameterization"
+            }
+          }
+        },
+        {
+          "doc": "The resolver contract.",
+          "name": "resolver",
+          "type_": "address"
+        },
+        {
+          "doc": "The resolver's declared trust tier (the UI badge \\xe2\\x80\\x94 ADR-5).",
+          "name": "tier",
+          "type_": {
+            "udt": {
+              "name": "ResolverTier"
+            }
+          }
+        },
+        {
+          "doc": "Open / lock / resolve timestamps.",
+          "name": "window",
+          "type_": {
+            "udt": {
+              "name": "MarketWindow"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "What `DistributionMarket::get_state()` returns: the live belief, the status,\\nand the (constructor-computed) \\xcf\\x83-floor.",
+      "lib": "",
+      "name": "MarketState",
+      "fields": [
+        {
+          "doc": "Current aggregate belief curve `(\\xce\\xbc, \\xcf\\x83, \\xce\\xbb)`.",
+          "name": "belief",
+          "type_": {
+            "udt": {
+              "name": "Belief"
+            }
+          }
+        },
+        {
+          "doc": "`\\xcf\\x83_min(k, b)` for this market \\xe2\\x80\\x94 the smallest `\\xcf\\x83` a trade may set (ADR-3).",
+          "name": "sigma_min",
+          "type_": "i128"
+        },
+        {
+          "doc": "Current lifecycle status.",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "MarketStatus"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "`M = ( OutcomeSpace, Parameterization, k, b, fee, Resolver, Window )`\\n(whitepaper \\xc2\\xa715). All numeric fields are WAD-scaled (ADR-2).",
+      "lib": "",
+      "name": "MarketParams",
+      "fields": [
+        {
+          "doc": "Per-outcome collateral `b`. WAD. Must be `> 0`. (Converted from a 7-dp\\nUSDC deposit at the contract boundary.)",
+          "name": "b",
+          "type_": "i128"
+        },
+        {
+          "doc": "`false` \\xe2\\x87\\x92 \\xcf\\x83-floor enforcement (default; ADR-3). `true` \\xe2\\x87\\x92 capped Gaussian\\n`f(x) = min(b, \\xce\\xbb\\xcf\\x86(x))` \\xe2\\x80\\x94 reserved for Sprint 5; `init` rejects it now.",
+          "name": "capped",
+          "type_": "bool"
+        },
+        {
+          "doc": "Trade fee in basis points (1 bp = 0.01%). Capped by the contract.",
+          "name": "fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "L\\xc2\\xb2-norm liquidity constant `k` (`\\xe2\\x80\\x96f\\xe2\\x80\\x96\\xe2\\x82\\x82 = k`). WAD. Must be `> 0`.",
+          "name": "k",
+          "type_": "i128"
+        },
+        {
+          "doc": "Scalar vs. trajectory.",
+          "name": "outcome_space",
+          "type_": {
+            "udt": {
+              "name": "OutcomeSpace"
+            }
+          }
+        },
+        {
+          "doc": "Belief parameterisation (Gaussian in v1).",
+          "name": "parameterization",
+          "type_": {
+            "udt": {
+              "name": "Parameterization"
+            }
+          }
+        },
+        {
+          "doc": "The resolver contract (implements the `Resolver` interface; Sprint 2+).",
+          "name": "resolver",
+          "type_": "address"
+        },
+        {
+          "doc": "The resolver's declared trust tier \\xe2\\x80\\x94 rendered as a badge everywhere\\n(ADR-5).",
+          "name": "tier",
+          "type_": {
+            "udt": {
+              "name": "ResolverTier"
+            }
+          }
+        },
+        {
+          "doc": "Open / lock / resolve timestamps.",
+          "name": "window",
+          "type_": {
+            "udt": {
+              "name": "MarketWindow"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Lifecycle status of a market. Sprint 1 only ever sets `Open` (no\\ntrading/resolution yet); `Locked` / `Resolved` and the oracle-failure\\n`Disputable` state arrive in Sprint 2.",
+      "lib": "",
+      "name": "MarketStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Trading window active.",
+            "name": "Open"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Past `lock`, before `resolve` \\xe2\\x80\\x94 no more trades.",
+            "name": "Locked"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Resolved; payouts settled. (Carries the realised outcome value, WAD.)",
+            "name": "Resolved",
+            "type_": [
+              "i128"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "A trajectory market, resolved; the realised per-checkpoint values are\\nstored alongside (see `DistributionMarket::resolved_outcomes`).",
+            "name": "ResolvedVec"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "The resolver returned a stale/garbage value \\xe2\\x80\\x94 market is paused pending a\\ndispute, never a bad payout (ADR-5; Sprint 2).",
+            "name": "Disputable"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Trading window \\xe2\\x80\\x94 Unix timestamps (ledger time, seconds). Requires\\n`open \\xe2\\x89\\xa4 lock \\xe2\\x89\\xa4 resolve` and `resolve` in the future at construction time.",
+      "lib": "",
+      "name": "MarketWindow",
+      "fields": [
+        {
+          "doc": "When trading locks (no more trades).",
+          "name": "lock",
+          "type_": "u64"
+        },
+        {
+          "doc": "When trading opens.",
+          "name": "open",
+          "type_": "u64"
+        },
+        {
+          "doc": "When `resolve()` becomes callable.",
+          "name": "resolve",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "The shape of a market's outcome. Sprint 1 ships **scalar** markets only;\\ntrajectory markets (a path sampled at checkpoints) land in Sprint 2 (ADR-4)\\nas an additional variant \\xe2\\x80\\x94 adding it is non-breaking for existing markets.",
+      "lib": "",
+      "name": "OutcomeSpace",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "The outcome is a single real number (a price at `T`, an election margin,\\na rainfall in mm, \\xe2\\x80\\xa6). The belief is one [`Belief`].",
+            "name": "Scalar"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "The outcome is a path sampled at N checkpoint timestamps (Unix\\nseconds, ascending). The belief is one [`Belief`] per checkpoint; the\\ncheckpoints share one collateral pool (whitepaper \\xc2\\xa716; ADR-4). v1\\ntreats the per-checkpoint Gaussians as independent.",
+            "name": "Trajectory",
+            "type_": [
+              {
+                "vec": {
+                  "element_type": "u64"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A trader's position: the market curve immediately *before* the trade (`f`)\\nand immediately *after* (`g`), the collateral locked, and the owner \\xe2\\x80\\x94\\neverything needed to compute the payout `g(x\\xe2\\x82\\x80) \\xe2\\x88\\x92 f(x\\xe2\\x82\\x80)` at resolution\\nwithout storing any curve array (ADR-2, whitepaper \\xc2\\xa711). Used from Sprint 2.",
+      "lib": "",
+      "name": "PositionData",
+      "fields": [
+        {
+          "doc": "Market belief just after this trade (`g`).",
+          "name": "after",
+          "type_": {
+            "udt": {
+              "name": "Belief"
+            }
+          }
+        },
+        {
+          "doc": "Market belief just before this trade (`f`).",
+          "name": "before",
+          "type_": {
+            "udt": {
+              "name": "Belief"
+            }
+          }
+        },
+        {
+          "doc": "Collateral the trader locked = worst-case loss `\\xe2\\x88\\x92min_x(g\\xe2\\x88\\x92f)` (WAD).",
+          "name": "collateral",
+          "type_": "i128"
+        },
+        {
+          "doc": "Who owns the claim.",
+          "name": "owner",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "Trust tier a resolver declares. Stored on-chain in [`MarketParams`] so the\\nfrontend renders the badge from the source of truth, not from off-chain\\nmetadata. Numeric values match the `T0\\xe2\\x80\\xa6T3` naming in ADR-5 / whitepaper \\xc2\\xa717.",
+      "lib": "",
+      "name": "ResolverTier",
+      "cases": [
+        {
+          "doc": "**T0** \\xe2\\x80\\x94 reads a robust on-chain price feed (Reflector SEP-40). The\\ndefault tier for on-chain price feeds (e.g. Reflector BTC/USD).",
+          "name": "Reflector",
+          "value": 0
+        },
+        {
+          "doc": "**T1** \\xe2\\x80\\x94 a signed report from a permissioned poster, with a challenge\\nwindow.",
+          "name": "Attested",
+          "value": 1
+        },
+        {
+          "doc": "**T2** \\xe2\\x80\\x94 optimistic propose/dispute with bonds; undisputed-after-window\\n\\xe2\\x87\\x92 final.",
+          "name": "Optimistic",
+          "value": 2
+        },
+        {
+          "doc": "**T3** \\xe2\\x80\\x94 a single named party reports. Pure trust, clearly flagged.",
+          "name": "Designated",
+          "value": 3
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted by `DistributionMarket::init` (and, from Sprint 3, by `MarketFactory`\\nwhen it deploys + initialises one): a new market exists, seeded with `belief`.",
+      "lib": "",
+      "name": "MarketCreated",
+      "prefix_topics": [
+        "market_created"
+      ],
+      "params": [
+        {
+          "doc": "The market's immutable seven-field tuple.",
+          "name": "params",
+          "type_": {
+            "udt": {
+              "name": "MarketParams"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "The initial aggregate curve `(\\xce\\xbc\\xe2\\x82\\x80, \\xcf\\x83\\xe2\\x82\\x80, \\xce\\xbb\\xe2\\x82\\x80)`.",
+          "name": "belief",
+          "type_": {
+            "udt": {
+              "name": "Belief"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "`\\xcf\\x83_min(k, b)` for the market.",
+          "name": "sigma_min",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Status a resolver reports for its market's outcome.",
+      "lib": "",
+      "name": "ResolverStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Not available yet (e.g. before `resolve_time`).",
+            "name": "Pending"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Available \\xe2\\x80\\x94 carries the realised outcome `x\\xe2\\x82\\x80` (WAD).",
+            "name": "Resolved",
+            "type_": [
+              "i128"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Available for a trajectory market \\xe2\\x80\\x94 the realised value at each\\ncheckpoint, in checkpoint order (all WAD).",
+            "name": "ResolvedVec",
+            "type_": [
+              {
+                "vec": {
+                  "element_type": "i128"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "The underlying source is stale/garbage; the market should pause\\n(`Disputable`), not pay out.",
+            "name": "Stale"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted by `DistributionMarket::add_liquidity` (topic `\"liquidity_added\"`).",
+      "lib": "",
+      "name": "LiquidityAdded",
+      "prefix_topics": [
+        "liquidity_added"
+      ],
+      "params": [
+        {
+          "doc": "The LP.",
+          "name": "lp",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "USDC added (7-dp).",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "Shares minted.",
+          "name": "shares",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted by `DistributionMarket::trade_trajectory` (topic `\"trade_trajectory\"`).",
+      "lib": "",
+      "name": "TradeTrajectory",
+      "prefix_topics": [
+        "trade_trajectory"
+      ],
+      "params": [
+        {
+          "doc": "Position id minted.",
+          "name": "id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "The trader.",
+          "name": "trader",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "Aggregate collateral locked (WAD).",
+          "name": "collateral",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "Fee paid (WAD).",
+          "name": "fee",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "How a belief is parameterised. Sprint 1 ships `Gaussian` only; richer\\nfamilies (right-skewed, multi-modal \\xe2\\x80\\x94 build.md E18, post-M3) are added as\\nfurther variants. (`#[contracttype]` enum variants can't carry named fields,\\nso the \\xcf\\x83-floor-vs-capped choice is a separate `capped: bool` on\\n[`MarketParams`], not a payload here.)",
+      "lib": "",
+      "name": "Parameterization",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "`N(\\xce\\xbc, \\xcf\\x83)` \\xe2\\x80\\x94 the two-number belief (whitepaper \\xc2\\xa711).",
+            "name": "Gaussian"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted by `DistributionMarket::remove_liquidity` (topic `\"liquidity_removed\"`).",
+      "lib": "",
+      "name": "LiquidityRemoved",
+      "prefix_topics": [
+        "liquidity_removed"
+      ],
+      "params": [
+        {
+          "doc": "The LP.",
+          "name": "lp",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "Shares burned.",
+          "name": "shares",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "USDC returned (7-dp).",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted by `Registry::register` (topic `\"market_registered\"`).",
+      "lib": "",
+      "name": "MarketRegistered",
+      "prefix_topics": [
+        "market_registered"
+      ],
+      "params": [
+        {
+          "doc": "The newly-indexed market.",
+          "name": "market",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "Its summary.",
+          "name": "info",
+          "type_": {
+            "udt": {
+              "name": "MarketInfo"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted by `DistributionMarket::resolve` for a trajectory market\\n(topic `\"resolved_trajectory\"`).",
+      "lib": "",
+      "name": "ResolvedTrajectory",
+      "prefix_topics": [
+        "resolved_trajectory"
+      ],
+      "params": [
+        {
+          "doc": "Realised value at each checkpoint, in checkpoint order (WAD).",
+          "name": "x0s",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A trajectory trader's position: the per-checkpoint curves before and after\\nthe trade, the aggregate collateral locked, and the owner. At resolution the\\npayout is `\\xce\\xa3_i (g_i(x_i) \\xe2\\x88\\x92 f_i(x_i))` over the N checkpoints, returned (with\\nthe collateral) clamped at `0`.",
+      "lib": "",
+      "name": "TrajectoryPositionData",
+      "fields": [
+        {
+          "doc": "Per-checkpoint market beliefs just after this trade.",
+          "name": "after",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Belief"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "Per-checkpoint market beliefs just before this trade.",
+          "name": "before",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Belief"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "Aggregate collateral locked = `\\xce\\xa3_i \\xe2\\x88\\x92min_x(g_i \\xe2\\x88\\x92 f_i)` (WAD).",
+          "name": "collateral",
+          "type_": "i128"
+        },
+        {
+          "doc": "Who owns the claim.",
+          "name": "owner",
+          "type_": "address"
+        }
+      ]
+    }
+  }
+]

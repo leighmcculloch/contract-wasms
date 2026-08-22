@@ -1,0 +1,354 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "NotOwner",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "AlreadyVerified",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "NullifierUsed",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "VerificationFailed",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "NotVerified",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "SbtMintFailed",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "SbtRevokeFailed",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "InvalidMinAge",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "CommitmentUsed",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "InvalidOracles",
+          "value": 12
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "VerifierContract"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SbtContract"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Owner"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Credential",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Nullifier",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Commitment",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Oracles"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "KYCCredential",
+      "fields": [
+        {
+          "doc": "",
+          "name": "active",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "issued_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "min_age_secs",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Revoke a user's KYC credential. Only the contract owner may call this.",
+      "name": "revoke",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Register a user's KYC credential by verifying their ZK proof on-chain via the verifier contract.",
+      "name": "register",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "public_inputs",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "nullifier",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "min_age_secs",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "oracle_idx_a",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "sig_a",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "oracle_idx_b",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "sig_b",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initialize the registry with an owner, the verifier contract, and the SBT contract.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "verifier_contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sbt_contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "oracle1",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "oracle2",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "oracle3",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Check whether a user has a verified and active KYC credential.",
+      "name": "is_verified",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  }
+]

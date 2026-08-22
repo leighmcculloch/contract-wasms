@@ -1,0 +1,555 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "All failure modes are explicit, contiguous `u32` codes so the TypeScript\\nclient can map them to user-facing messages without guessing.",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "NotAuthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidSlots",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidExpiry",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "EnvelopeNotFound",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "EnvelopeNotActive",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "Expired",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "NotYetExpired",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "AlreadyClaimed",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "AllSlotsClaimed",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "InvalidPreimage",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "NothingToRefund",
+          "value": 15
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys. `Envelope` and `Claimed` live in *persistent* storage (they\\nmust outlive the contract instance); `Admin`/`Paused`/`Counter` live in\\n*instance* storage so they share the instance's TTL.",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Counter"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "envelope id -> Envelope",
+            "name": "Envelope",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "(envelope id, claimer) -> () ; presence means \"already claimed once\"",
+            "name": "Claimed",
+            "type_": [
+              "u64",
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "How a multi-slot envelope distributes its balance across claimers.",
+      "lib": "",
+      "name": "SplitMode",
+      "cases": [
+        {
+          "doc": "Every slot receives `total / slots`; the final claimer also sweeps any\\ninteger remainder so the envelope always settles to exactly zero.",
+          "name": "Equal",
+          "value": 0
+        },
+        {
+          "doc": "Lucky-money mode \\xe2\\x80\\x94 each claimer gets a random portion, bounded so every\\nremaining slot is still guaranteed at least one unit.",
+          "name": "Random",
+          "value": 1
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "Lifecycle of an envelope. An envelope is created `Active`; it becomes\\n`Completed` once every slot is claimed, or `Refunded` if the sender\\nreclaims the unclaimed remainder after expiry.",
+      "lib": "",
+      "name": "EnvelopeStatus",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Active",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Completed",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Refunded",
+          "value": 2
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A single escrowed red envelope. The contract custodies `remaining_amount`\\nof `token` until it is fully claimed or refunded.",
+      "lib": "",
+      "name": "Envelope",
+      "fields": [
+        {
+          "doc": "Slots already claimed.",
+          "name": "claimed_slots",
+          "type_": "u32"
+        },
+        {
+          "doc": "Unix timestamp (ledger time) after which claims stop and refund opens.",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "Balance still held in escrow (decremented on each claim / refund).",
+          "name": "remaining_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "sha256(preimage). A claimer must reveal a `preimage` that hashes to this.",
+          "name": "secret_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "Funder; the only address allowed to refund after expiry.",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "split",
+          "type_": {
+            "udt": {
+              "name": "SplitMode"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "EnvelopeStatus"
+            }
+          }
+        },
+        {
+          "doc": "Stellar Asset Contract (SAC) address of the escrowed asset, e.g. USDC.",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "Original deposit, in the token's minor units (USDC = 6 decimals).",
+          "name": "total_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "Number of independent claim slots (1 = a classic single-recipient gift).",
+          "name": "total_slots",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "One-time setup. Records the admin and unpauses the contract.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Lock `total_amount` of `token` into a new envelope and return its id.\\n\\nAuth: requires the sender's signature. The same authorization covers the\\ninner SAC `transfer(sender -> contract)`.",
+      "name": "create_envelope",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_slots",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "secret_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "split",
+          "type_": {
+            "udt": {
+              "name": "SplitMode"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Claim one slot of an envelope by revealing the secret `preimage`.\\nReturns the amount transferred to `recipient` (minor units).\\n\\nAuth: requires the recipient's signature (binds the payout to them).",
+      "name": "claim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "envelope_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "preimage",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "After `expiry`, the sender reclaims the unclaimed remainder.",
+      "name": "refund",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "envelope_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_envelope",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "envelope_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Envelope"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "has_claimed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "envelope_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_envelopes",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unpause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Replace the contract's own code (admin-gated). Enables shipping fixes\\nwithout migrating escrow state \\xe2\\x80\\x94 important for a mainnet (L6) deploy.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

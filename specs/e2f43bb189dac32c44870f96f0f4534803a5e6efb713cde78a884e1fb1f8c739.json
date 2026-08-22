@@ -1,0 +1,1067 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "info",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "VerifierInfo"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "domain",
+      "inputs": [],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "verify",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "statement",
+          "type_": {
+            "udt": {
+              "name": "ProofStatement"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "add_key",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "controller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "key",
+          "type_": {
+            "udt": {
+              "name": "CircuitKey"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VerifierInfo",
+      "fields": [
+        {
+          "doc": "",
+          "name": "circuits",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "domain",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "finalized",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "required_circuits",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "finalize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "controller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VerifierError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidConfiguration",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "InvalidCircuitKey",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "NotFinalized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "AlreadyFinalized",
+          "value": 4
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "extend_ttl",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "circuit_key",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "circuit",
+          "type_": {
+            "udt": {
+              "name": "ProofCircuit"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "CircuitKey"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "verify_batch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "statement",
+          "type_": {
+            "udt": {
+              "name": "BatchProofStatement"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "controller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BatchQuote",
+      "fields": [
+        {
+          "doc": "",
+          "name": "aggregate_market_charge",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "batch_size",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "conditional_lp_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "conditional_protocol_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee_escrow",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee_per_position",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "no_charge_per_position",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "no_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "no_market_cost",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "no_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "post_yes_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "pre_yes_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "rounding_contribution",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "state_version",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "yes_charge_per_position",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "yes_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "yes_market_cost",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "yes_price",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CircuitKey",
+      "fields": [
+        {
+          "doc": "",
+          "name": "circuit",
+          "type_": {
+            "udt": {
+              "name": "ProofCircuit"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "schema_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "verification_key",
+          "type_": {
+            "udt": {
+              "name": "VerificationKeyBytes"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BindingKind",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Empty"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Liquidity"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Order"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Refund"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Allocation"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Treasury"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExitRequest"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExitCancel"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExitMatch"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProofAction",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Deposit"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Transfer"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Withdraw"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Order"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Claim"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Refund"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LiquidityFund"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LiquidityExit"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LiquidityRedeem"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExecutionChange"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Treasury"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExitRequest"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExitCancel"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExitMatch"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SignalError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidShape",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NonCanonicalField",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "NegativeBatchValue",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "MalformedProof",
+          "value": 4
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProofCircuit",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Deposit"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Transfer"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Withdraw"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Order"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Claim"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Refund"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LiquidityFund"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LiquidityExit"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LiquidityRedeem"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExecutionChange"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Treasury"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExitRequest"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExitCancel"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExitMatch"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Batch"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "KeyDomainStep",
+      "fields": [
+        {
+          "doc": "",
+          "name": "key",
+          "type_": {
+            "udt": {
+              "name": "CircuitKey"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "prior",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProofStatement",
+      "fields": [
+        {
+          "doc": "",
+          "name": "action",
+          "type_": {
+            "udt": {
+              "name": "ProofAction"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "append_root",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "context_digest",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "first_leaf_index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "input_nullifiers",
+          "type_": {
+            "vec": {
+              "element_type": "u256"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "membership_root",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "new_root",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "output_commitments",
+          "type_": {
+            "vec": {
+              "element_type": "u256"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "output_envelope_hashes",
+          "type_": {
+            "vec": {
+              "element_type": "u256"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "public_amount",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OperationBinding",
+      "fields": [
+        {
+          "doc": "",
+          "name": "fields",
+          "type_": {
+            "vec": {
+              "element_type": "u256"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "kind",
+          "type_": {
+            "udt": {
+              "name": "BindingKind"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OperationContext",
+      "fields": [
+        {
+          "doc": "",
+          "name": "action",
+          "type_": {
+            "udt": {
+              "name": "ProofAction"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "action_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "binding",
+          "type_": {
+            "udt": {
+              "name": "OperationBinding"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "market",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "network_domain",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "public_account",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "public_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "verifier_domain",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BatchProofStatement",
+      "fields": [
+        {
+          "doc": "",
+          "name": "accepted_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "accepted_root",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "aggregate_ciphertext",
+          "type_": {
+            "vec": {
+              "element_type": "u256"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "allocation_root",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "committee_config_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "committee_epoch",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "committee_public_key_x",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "committee_public_key_y",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "committee_statement_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "decryption_proof_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "epoch",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "first_sequence",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "included_root",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "last_sequence",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "lot_size",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "market",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "network_domain",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "quote",
+          "type_": {
+            "udt": {
+              "name": "BatchQuote"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vault",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VerificationKeyBytes",
+      "fields": [
+        {
+          "doc": "",
+          "name": "alpha",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "beta",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "delta",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "gamma",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "ic",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 64
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

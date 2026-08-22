@@ -1,0 +1,597 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "Contract error types for the ASP non-membership sparse Merkle tree",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "Caller is not authorized to perform this operation",
+          "name": "NotAuthorized",
+          "value": 1
+        },
+        {
+          "doc": "Key was not found in the tree",
+          "name": "KeyNotFound",
+          "value": 2
+        },
+        {
+          "doc": "Key already exists in the tree",
+          "name": "KeyAlreadyExists",
+          "value": 3
+        },
+        {
+          "doc": "Non-membership proof verification failed",
+          "name": "InvalidProof",
+          "value": 4
+        },
+        {
+          "doc": "The contract has not been initialized yet",
+          "name": "NotInitialized",
+          "value": 5
+        },
+        {
+          "doc": "Arithmetic overflow occurred",
+          "name": "Overflow",
+          "value": 6
+        },
+        {
+          "doc": "Field input is outside the BN254 scalar field",
+          "name": "InvalidFieldElement",
+          "value": 7
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a leaf is deleted from the tree",
+      "lib": "",
+      "name": "LeafDeletedEvent",
+      "prefix_topics": [
+        "LeafDeleted"
+      ],
+      "params": [
+        {
+          "doc": "The key that was deleted",
+          "name": "key",
+          "type_": "u256",
+          "location": "data"
+        },
+        {
+          "doc": "New tree root after deletion",
+          "name": "root",
+          "type_": "u256",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an existing leaf's value is updated",
+      "lib": "",
+      "name": "LeafUpdatedEvent",
+      "prefix_topics": [
+        "LeafUpdated"
+      ],
+      "params": [
+        {
+          "doc": "The key whose value was updated",
+          "name": "key",
+          "type_": "u256",
+          "location": "data"
+        },
+        {
+          "doc": "The previous value",
+          "name": "old_value",
+          "type_": "u256",
+          "location": "data"
+        },
+        {
+          "doc": "The new value",
+          "name": "new_value",
+          "type_": "u256",
+          "location": "data"
+        },
+        {
+          "doc": "New tree root after the update",
+          "name": "root",
+          "type_": "u256",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a new leaf is inserted into the tree",
+      "lib": "",
+      "name": "LeafInsertedEvent",
+      "prefix_topics": [
+        "LeafInserted"
+      ],
+      "params": [
+        {
+          "doc": "The key that was inserted",
+          "name": "key",
+          "type_": "u256",
+          "location": "data"
+        },
+        {
+          "doc": "The value associated with the key",
+          "name": "value",
+          "type_": "u256",
+          "location": "data"
+        },
+        {
+          "doc": "New tree root after insertion",
+          "name": "root",
+          "type_": "u256",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Result of a find operation in the sparse Merkle tree",
+      "lib": "",
+      "name": "FindResult",
+      "fields": [
+        {
+          "doc": "Whether the key was found in the tree",
+          "name": "found",
+          "type_": "bool"
+        },
+        {
+          "doc": "Value associated with the key (if found), zero otherwise",
+          "name": "found_value",
+          "type_": "u256"
+        },
+        {
+          "doc": "True if the path ended at an empty branch, false if collision with\\nexisting leaf",
+          "name": "is_old0",
+          "type_": "bool"
+        },
+        {
+          "doc": "Key at the collision point",
+          "name": "not_found_key",
+          "type_": "u256"
+        },
+        {
+          "doc": "Value at the collision point",
+          "name": "not_found_value",
+          "type_": "u256"
+        },
+        {
+          "doc": "Sibling hashes along the path from root to leaf",
+          "name": "siblings",
+          "type_": {
+            "vec": {
+              "element_type": "u256"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Find a key in the tree\\n\\nPublic entry point for searching the tree. Returns comprehensive\\ninformation about the key including whether it exists, its value,\\nand the Merkle path siblings required for proof generation.",
+      "name": "find_key",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key",
+          "type_": "u256"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "FindResult"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get the current root of the tree\\n\\nReturns the root hash of the Sparse Merkle tree.",
+      "name": "get_root",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u256",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Delete a key from the tree\\n\\nRemoves a leaf from the Sparse Merkle tree, handling both sparse\\nbranches (single child) and mixed branches (two populated children).\\nWhen a leaf is deleted, its sibling may be promoted to replace the\\nparent node, collapsing the tree structure. Requires admin\\nauthorization.",
+      "name": "delete_leaf",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key",
+          "type_": "u256"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Insert a new key-value pair into the tree\\n\\nAdds a new leaf to the Sparse Merkle tree, building any missing\\nintermediate nodes. Handles collision cases where a new key shares a\\npath prefix with an existing leaf by extending the tree depth.\\nRequires admin authorization.",
+      "name": "insert_leaf",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "value",
+          "type_": "u256"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Update a key-value pair in the tree\\n\\nChanges the value associated with an existing key. Recomputes all nodes\\nalong the path from the leaf to the root, removing old nodes and\\ncreating new ones. Requires admin authorization.",
+      "name": "update_leaf",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "new_value",
+          "type_": "u256"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Update the admin address\\n\\nTransfers administrative control to a new address. Requires\\nauthorization from the current admin.",
+      "name": "update_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Constructor: initialize the contract with an admin address and an empty\\ntree",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Verify non-membership proof for a key\\n\\nVerifies that a key is NOT in the tree by checking the provided Merkle\\nproof. The proof includes siblings along the path and collision\\ninformation (not_found_key/value at the leaf). Reconstructs the root\\nfrom the proof and compares it with the stored root.",
+      "name": "verify_non_membership",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "siblings",
+          "type_": {
+            "vec": {
+              "element_type": "u256"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "not_found_key",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "not_found_value",
+          "type_": "u256"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "bool",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Errors that can occur during Groth16 proof verification.",
+      "lib": "",
+      "name": "Groth16Error",
+      "cases": [
+        {
+          "doc": "The pairing product did not equal identity.",
+          "name": "InvalidProof",
+          "value": 0
+        },
+        {
+          "doc": "The public inputs length does not match the verification key.",
+          "name": "MalformedPublicInputs",
+          "value": 1
+        },
+        {
+          "doc": "The proof bytes are malformed.",
+          "name": "MalformedProof",
+          "value": 2
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Groth16 proof composed of points A, B, and C.\\nG2 point B uses Soroban's c1||c0 (imaginary||real) ordering.",
+      "lib": "",
+      "name": "Groth16Proof",
+      "fields": [
+        {
+          "doc": "Point A",
+          "name": "a",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "Point B",
+          "name": "b",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "Point C",
+          "name": "c",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Groth16 verification key for BN254 curve (byte-oriented).\\nAll G2 points use Soroban's c1||c0 (imaginary||real) ordering.",
+      "lib": "",
+      "name": "VerificationKeyBytes",
+      "fields": [
+        {
+          "doc": "Alpha G1 point",
+          "name": "alpha",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "Beta G2 point",
+          "name": "beta",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "Delta G2 point",
+          "name": "delta",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "Gamma G2 point",
+          "name": "gamma",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "IC (public input commitments)",
+          "name": "ic",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 64
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "approve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "allowance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer_from",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

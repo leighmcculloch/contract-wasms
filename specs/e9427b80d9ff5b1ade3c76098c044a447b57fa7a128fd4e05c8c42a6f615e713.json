@@ -1,0 +1,638 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Task",
+      "fields": [
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "poster",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "reward",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "Status"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "winner",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "TaskExists",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "TaskNotFound",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidState",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "ScoreTooLow",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "NotExpired",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "RefundLocked",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "InvalidConfig",
+          "value": 9
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Config",
+      "fields": [
+        {
+          "doc": "Administrative authority (state transitions, pause, key rotation).",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "Minimum average score (1-100) required to pay a winner.",
+          "name": "pass_threshold",
+          "type_": "u32"
+        },
+        {
+          "doc": "Emergency stop: blocks `release_to_winner` and `post_task` (never refund).",
+          "name": "paused",
+          "type_": "bool"
+        },
+        {
+          "doc": "Seconds after `deadline` during which a permissionless refund is blocked,\\ngiving the platform a window to settle to a winner without being\\nfront-run. Active tasks cannot be refunded until this window elapses.",
+          "name": "settle_grace",
+          "type_": "u64"
+        },
+        {
+          "doc": "Stellar Asset Contract (SAC) address for the USDC reward asset.",
+          "name": "usdc_sac",
+          "type_": "address"
+        },
+        {
+          "doc": "ed25519 public key of the off-chain verdict authority (rotatable).",
+          "name": "verdict_pubkey",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Status",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Open",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Active",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Completed",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Disputed",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "Refunded",
+          "value": 4
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Config"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Task",
+            "type_": [
+              "u64"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PostEvent",
+      "prefix_topics": [
+        "post"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "task_id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "poster",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "reward",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PauseEvent",
+      "prefix_topics": [
+        "pause"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RefundEvent",
+      "prefix_topics": [
+        "refund"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "task_id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "poster",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "reward",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettleEvent",
+      "prefix_topics": [
+        "settle"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "task_id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "winner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "reward",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "score",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Emergency stop: block `release_to_winner` and `post_task`. Admin-only.\\nRefunds remain available so posters can always exit. Intended for a\\nsuspected verdict-key compromise while the key is rotated.",
+      "name": "pause",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DisputeEvent",
+      "prefix_topics": [
+        "dispute"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "task_id",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Refund the reward to the poster.\\n\\n- **Open** task: before `deadline + settle_grace` this is a\\nposter-authorized cancel; after it, permissionless.\\n- **Active** task (work submitted): locked until `deadline + settle_grace`\\nso the platform can settle to a winner without being front-run; after\\nthe window it is permissionless.",
+      "name": "refund",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "task_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ActivateEvent",
+      "prefix_topics": [
+        "activate"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "task_id",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Lift the emergency stop. Admin-only.",
+      "name": "unpause",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Mark a task Active (admin records the first agent submission).",
+      "name": "activate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "task_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_task",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "task_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "Task"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VerdictKeyEvent",
+      "prefix_topics": [
+        "verdict_key"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "pubkey",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Lock a task's USDC reward in escrow. Pulls `reward` from the poster's\\naccount into the contract via the USDC SAC. Requires the poster's auth.",
+      "name": "post_task",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "poster",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "task_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "reward",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_config",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Config"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "One-time constructor: wires the USDC SAC, the verdict-authority public\\nkey, the pass threshold, and the post-deadline settlement grace window.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc_sac",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "verdict_pubkey",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "pass_threshold",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "settle_grace",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Flag a completed task as disputed (state stub; full Agent Court\\nresolution is a later deliverable). Admin-authorized.",
+      "name": "flag_disputed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "task_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Release the reward to the winning agent on a verified judge verdict.\\nAnyone may submit the transaction, but only a signature from the verdict\\nauthority over the canonical `(task_id, winner, score, nonce)` message\\n\\xe2\\x80\\x94 with `score >= pass_threshold` \\xe2\\x80\\x94 moves the funds.",
+      "name": "release_to_winner",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "task_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "winner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "score",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "nonce",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "signature",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Rotate the verdict-authority public key (e.g. after a key compromise)\\nwithout redeploying. Admin-only. Existing signatures over the old key\\nstop verifying immediately.",
+      "name": "set_verdict_pubkey",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_pubkey",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

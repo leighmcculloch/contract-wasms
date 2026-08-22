@@ -1,0 +1,598 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Read a wallet's attestation.\\n\\nMulti-wallet resolution (Option A \\xe2\\x80\\x94 shared group score): if the wallet's\\nown attestation carries an `identity_commitment` and a WalletIdentity\\ncontract is configured, the shared group attestation is returned instead,\\nso any wallet in the group surfaces the same group score. That group score\\nis a *holistic union* re-score (the off-chain attestor's `attest_group`\\nmerges every member wallet's on-chain history and scores it as one\\neconomic actor), not a per-wallet \"best score\" cherry-pick \\xe2\\x80\\x94 one bad\\nwallet cannot be hidden behind a better-scoring one in the same group.\\nThe querying wallet's own record is never exposed when a group score is\\navailable.",
+      "name": "get_attestation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "AttestationData"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Optimistic hash-anchored attestation path.  Stores the attestation\\nwithout on-chain proof verification.  `zk_verified` is always false.",
+      "name": "attest_with_hash",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "data",
+          "type_": {
+            "udt": {
+              "name": "AttestationData"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Full Groth16 on-chain verification path.\\n\\nIf a verification key for `data.distilled_model_hash` has been registered\\nvia `register_verification_key`, the proof is verified on-chain and\\n`zk_verified` is set to `true`.  Otherwise falls back to the hash-anchored\\npath with `zk_verified = false` (DG1 fallback behaviour).",
+      "name": "attest_with_proof",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "data",
+          "type_": {
+            "udt": {
+              "name": "AttestationData"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "proof_bytes",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Attest a wallet's risk from a RISC Zero zkVM Groth16 receipt (the distilled-model\\nguest). Verifies the receipt against the whitelisted image id, then binds the proven\\njournal fields (risk_bucket, confidence, identity_commitment, distilled_model_hash)\\ninto the stored attestation with `zk_verified = true`.\\n\\n`seal` is the Groth16 proof (a|b|c, 256 bytes; selector stripped); `journal` is the\\n72-byte guest journal. Caller supplies the non-proven metadata in `data` (attestor,\\ntimestamps, model hashes); the proven fields are overwritten from the journal so the\\nstored record always reflects the proof.\\nAttest \\xe2\\x80\\x94 or **re-attest** \\xe2\\x80\\x94 a wallet from a RISC Zero receipt.\\n\\nUnlike the hash/proof paths, this is no longer write-once: a wallet can\\nre-attest after further on-chain activity to refresh its score. The only\\nguard is monotonicity \\xe2\\x80\\x94 `data.issued_at` must be strictly newer than the\\nstored attestation's \\xe2\\x80\\x94 so an older (possibly better) signed attestation\\ncannot be replayed to shed a worse, more recent score. On-cha",
+      "name": "attest_with_risc0",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "data",
+          "type_": {
+            "udt": {
+              "name": "AttestationData"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "seal",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "journal",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Register the whitelisted RISC Zero guest image id (the distilled-model guest).\\nAdmin-only. Only receipts from this image verify in `attest_with_risc0`.",
+      "name": "set_risc0_image_id",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "image_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set the WalletIdentity contract address. Admin-only. Optional: when set,\\n`get_attestation` resolves a wallet's `identity_commitment` to the shared\\ngroup attestation (multi-wallet reputation sharing).",
+      "name": "set_wallet_identity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "contract_id",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set the AttestorRegistry contract address. Admin-only.",
+      "name": "set_attestor_registry",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "contract_id",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Register a Groth16 verification key for a distilled model.\\nAdmin-only.  Must be called before `attest_with_proof` can set\\n`zk_verified = true` for attestations using that model.",
+      "name": "register_verification_key",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "model_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vk_bytes",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyAttested",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotAuthorized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "AttestationNotFound",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "AttestationExpired",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidProof",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "AttestorNotRegistered",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "AttestorRevoked",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "ModelDeprecated",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "InvalidInputs",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "KycNotVerified",
+          "value": 10
+        },
+        {
+          "doc": "Wallet tried to join a group with a commitment different from one it already registered.",
+          "name": "CommitmentConflict",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInGroup",
+          "value": 12
+        },
+        {
+          "doc": "Caller is not an authorized attestor in the AttestorRegistry.",
+          "name": "UnauthorizedAttestor",
+          "value": 13
+        },
+        {
+          "doc": "RISC Zero guest image id has not been registered (set_risc0_image_id).",
+          "name": "Risc0ImageNotSet",
+          "value": 14
+        },
+        {
+          "doc": "Re-attestation carried an `issued_at` not strictly newer than the stored\\none \\xe2\\x80\\x94 rejected so an older (possibly better) score can't be replayed.",
+          "name": "StaleAttestation",
+          "value": 15
+        },
+        {
+          "doc": "This KYC nullifier is already bound to a *different* identity commitment \\xe2\\x80\\x94\\nthe same verified human cannot mint a second identity group (Sybil block).",
+          "name": "NullifierAlreadyBound",
+          "value": 16
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Attestation",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Attestor",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Groth16 verification key, keyed by distilled_model_hash.\\nRegistered by admin; enables on-chain proof verification for that model.",
+            "name": "VerificationKey",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Maps a wallet address to its Poseidon identity commitment (multi-wallet group key).",
+            "name": "WalletCommitment",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Aggregated group AttestationData, keyed by the shared Poseidon commitment.",
+            "name": "IdentityAttestation",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Count of wallets enrolled in an identity group (commitment \\xe2\\x86\\x92 u32).",
+            "name": "IdentityMemberCount",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Groth16 VK for the Poseidon identity circuit, stored by WalletIdentity.\\nWhen set, `register_wallet` requires a valid proof of secret knowledge.",
+            "name": "IdentityVerificationKey"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Whitelisted RISC Zero guest image id (the distilled-model guest), stored by\\nRiskAttestation. Only receipts from this image verify in `attest_with_risc0`.",
+            "name": "Risc0ImageId"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "WalletIdentity contract address, stored by RiskAttestation for cross-contract resolution.",
+            "name": "WalletIdentityContract"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Address of the AttestorRegistry contract used to validate attestor addresses.",
+            "name": "AttestorRegistry"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Address of the RiskAttestation contract used by downstream consumers (e.g. MockLendingPool).",
+            "name": "RiskAttestation"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Sybil-resistance registry: maps an opaque KYC nullifier (HMAC of the\\nverified document, computed off-chain \\xe2\\x80\\x94 never raw PII) to the single\\nidentity commitment it is bound to. One verified human \\xe2\\x86\\x92 one nullifier \\xe2\\x86\\x92\\nat most one identity group. Stored by WalletIdentity::bind_kyc.",
+            "name": "NullifierCommitment",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Whether an identity group (commitment) has a bound KYC nullifier, i.e. is\\nKYC-verified. Set by bind_kyc; overlaid onto the group AttestationData so\\nKYC survives regardless of scoring order. commitment \\xe2\\x86\\x92 bool.",
+            "name": "KycVerified",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Common on-chain attestation record.\\nPer the ZKredit spec, only risk bucket, confidence, hashes, timestamps,\\nattestor, and wallet go on-chain. No raw wallet data.",
+      "lib": "",
+      "name": "AttestationData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "attestor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "confidence",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "distilled_model_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "full_model_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "Poseidon(secret) commitment that links this wallet to an identity group.\\nNone means the wallet is not enrolled in any multi-wallet group.",
+          "name": "identity_commitment",
+          "type_": {
+            "option": {
+              "value_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "issued_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "Attestor-certified KYC status, bound via a Sybil-resistant nullifier\\n(WalletIdentity::bind_kyc). The credit *gate* in lending: only a\\nkyc_verified identity gets real borrowing capacity (anti-wallet-hopping);\\nun-KYC'd wallets get thin-file terms.",
+          "name": "kyc_verified",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "proof_or_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "risk_bucket",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "zk_verified",
+          "type_": "bool"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Standard attestation-written event.",
+      "lib": "",
+      "name": "AttestationWritten",
+      "prefix_topics": [
+        "attest"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "attestor",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "risk_bucket",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "data",
+          "type_": {
+            "udt": {
+              "name": "AttestationData"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  }
+]

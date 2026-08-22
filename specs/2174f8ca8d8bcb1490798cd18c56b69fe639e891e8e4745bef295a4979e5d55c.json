@@ -1,0 +1,573 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireRolloverError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unpause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireRolloverError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Tokenizer"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Vault"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Marketplace"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "IntentEngine"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Keeper"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "RolloverPositions",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PtToken"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "UnderlyingToken"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "GracePeriodLedgers"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalPtHeld"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Factory"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tokenizer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "marketplace",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "intent_engine",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "keeper",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pt_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "underlying_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "factory",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "grace_period_ledgers",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireRolloverError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_position",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "RolloverPosition"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireRolloverError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "exit_rollover",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireRolloverError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "update_keeper",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_keeper",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireRolloverError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "EpochRecord",
+      "fields": [
+        {
+          "doc": "",
+          "name": "created_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "epoch_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "maturity_ledger",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execute_rollover",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireRolloverError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "register_rollover",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pt_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "current_epoch_maturity",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "min_rate_bps",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_underlying_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "NovaireRolloverError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RolloverPosition",
+      "fields": [
+        {
+          "doc": "",
+          "name": "active",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "created_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "current_epoch_maturity",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "initial_principal",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "last_rolled_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "min_rate_bps",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_underlying_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "protocol_yield_earned",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "pt_balance",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "realized_pnl",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "NovaireRolloverError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "PositionNotFound",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "EpochNotExpired",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "NextEpochNotSet",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "PositionNotActive",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "RateTooLow",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "ZeroAmount",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "StorageMissing",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "MathOverflow",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "MathUnderflow",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "InvariantViolation",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "InvalidKeeper",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "InvalidEpoch",
+          "value": 15
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CumulativeIntentRecord",
+      "fields": [
+        {
+          "doc": "",
+          "name": "total_deposited_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_pt_held",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_underlying_received",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_yt_sold",
+          "type_": "i128"
+        }
+      ]
+    }
+  }
+]

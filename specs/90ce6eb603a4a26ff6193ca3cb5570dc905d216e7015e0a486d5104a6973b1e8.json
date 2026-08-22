@@ -1,0 +1,1699 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SettlementError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "dispute",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "dispute_evidence_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SettlementError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "resolve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "resolution",
+          "type_": {
+            "udt": {
+              "name": "DisputeResolution"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SettlementError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_manager",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_request",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "SettlementRequest"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "update_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SettlementError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "manager",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "settlement_asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SettlementError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "refund_settler",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SettlementError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "update_manager",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_manager",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SettlementError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accept_settlement",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "settler_type",
+          "type_": {
+            "udt": {
+              "name": "SettlerType"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "settler",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SettlementError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "confirm_settlement",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "confirmation_type",
+          "type_": {
+            "udt": {
+              "name": "ConfirmationType"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "evidence_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SettlementError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_settlement_asset",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_settlement_quote",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "source_amount",
+          "type_": {
+            "option": {
+              "value_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "settler_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "quote_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SettlementError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "claim_settlement_asset",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "claimant",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SettlementError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "deposit_settlement_asset",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "depositor",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SettlementError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_settlement_request",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sender_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "recipient_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "route",
+          "type_": {
+            "udt": {
+              "name": "SettlementRoute"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "settlement_type",
+          "type_": {
+            "udt": {
+              "name": "SettlementType"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "destination_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "deadline_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": {
+              "udt": {
+                "name": "SettlementError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Manager"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SettlementAsset"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "NextId"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Request",
+            "type_": [
+              "u64"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettlerType",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Source"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Destination"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FundingStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PendingQuote"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "QuoteSet"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "FiatConfirmed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Ready"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RequestStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Created"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SourceAccepted"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SettlementFunded"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SourceSettlementConfirmed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SettlementInProgress"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ReadyForClaim"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Disputed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Completed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cancelled"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Refunded"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettlementType",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "FiatToCrypto"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "CryptoToFiat"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "FiatToFiat"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RequestSettlers",
+      "fields": [
+        {
+          "doc": "",
+          "name": "destination",
+          "type_": {
+            "option": {
+              "value_type": {
+                "udt": {
+                  "name": "SettlerAssignment"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "source",
+          "type_": {
+            "option": {
+              "value_type": {
+                "udt": {
+                  "name": "SettlerAssignment"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettlementRoute",
+      "fields": [
+        {
+          "doc": "",
+          "name": "destination",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "origin",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ConfirmationType",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SourceSettlement"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "DestinationSettlement"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DisputeResolution",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ReleaseToClaimant"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "RefundDepositor"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettlementRequest",
+      "fields": [
+        {
+          "doc": "",
+          "name": "created_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "deadline_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "destination_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fiat_evidence_hash",
+          "type_": {
+            "option": {
+              "value_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "funding_status",
+          "type_": {
+            "udt": {
+              "name": "FundingStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "quote_evidence_hash",
+          "type_": {
+            "option": {
+              "value_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "recipient_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "route",
+          "type_": {
+            "udt": {
+              "name": "SettlementRoute"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "sender_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "settlement_evidence_hash",
+          "type_": {
+            "option": {
+              "value_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "settlement_type",
+          "type_": {
+            "udt": {
+              "name": "SettlementType"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "settler_amount",
+          "type_": {
+            "option": {
+              "value_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "settlers",
+          "type_": {
+            "udt": {
+              "name": "RequestSettlers"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "source_amount",
+          "type_": {
+            "option": {
+              "value_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "RequestStatus"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettlerAssignment",
+      "fields": [
+        {
+          "doc": "",
+          "name": "confirmed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "fiat_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "proof_hash",
+          "type_": {
+            "option": {
+              "value_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "settlement_asset_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "settler",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettlementError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 200
+        },
+        {
+          "doc": "",
+          "name": "BadDeadline",
+          "value": 201
+        },
+        {
+          "doc": "",
+          "name": "IdOverflow",
+          "value": 202
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 203
+        },
+        {
+          "doc": "",
+          "name": "InvalidRoute",
+          "value": 204
+        },
+        {
+          "doc": "",
+          "name": "UnsupportedCurrency",
+          "value": 205
+        },
+        {
+          "doc": "",
+          "name": "RequestNotFound",
+          "value": 206
+        },
+        {
+          "doc": "",
+          "name": "InvalidRequestStatus",
+          "value": 207
+        },
+        {
+          "doc": "",
+          "name": "BadFundingStatus",
+          "value": 208
+        },
+        {
+          "doc": "",
+          "name": "SettlementExpired",
+          "value": 209
+        },
+        {
+          "doc": "",
+          "name": "FiatFundingNotRequired",
+          "value": 210
+        },
+        {
+          "doc": "",
+          "name": "QuoteNotSet",
+          "value": 211
+        },
+        {
+          "doc": "",
+          "name": "SourceAmountMissing",
+          "value": 212
+        },
+        {
+          "doc": "",
+          "name": "SettlerAmountMissing",
+          "value": 213
+        },
+        {
+          "doc": "",
+          "name": "SourceSettlerNotNeeded",
+          "value": 214
+        },
+        {
+          "doc": "",
+          "name": "DestinationSettlerNotNeeded",
+          "value": 215
+        },
+        {
+          "doc": "",
+          "name": "FiatNotConfirmed",
+          "value": 216
+        },
+        {
+          "doc": "",
+          "name": "SourceSettlerMissing",
+          "value": 219
+        },
+        {
+          "doc": "",
+          "name": "DestinationSettlerMissing",
+          "value": 220
+        },
+        {
+          "doc": "",
+          "name": "ConditionFailed",
+          "value": 224
+        },
+        {
+          "doc": "",
+          "name": "SettlementAssetNotDeposited",
+          "value": 228
+        },
+        {
+          "doc": "",
+          "name": "PayoutExceedsDeposit",
+          "value": 230
+        },
+        {
+          "doc": "",
+          "name": "NotAuthorized",
+          "value": 232
+        },
+        {
+          "doc": "",
+          "name": "RequestCancelled",
+          "value": 237
+        },
+        {
+          "doc": "",
+          "name": "RequestDisputed",
+          "value": 238
+        },
+        {
+          "doc": "",
+          "name": "ReadyForClaim",
+          "value": 239
+        },
+        {
+          "doc": "",
+          "name": "NothingToDispute",
+          "value": 240
+        },
+        {
+          "doc": "",
+          "name": "AlreadyProcessed",
+          "value": 245
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AdminUpdateEvent",
+      "prefix_topics": [
+        "Update",
+        "AdminUpdate"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ManagerUpdateEvent",
+      "prefix_topics": [
+        "Update",
+        "ManagerUpdate"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "manager",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettlementFiatEvent",
+      "prefix_topics": [
+        "Fiat",
+        "SettlementFiat"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "source_amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "fiat_evidence_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettlementQuoteEvent",
+      "prefix_topics": [
+        "Quote",
+        "SettlementQuote"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "source_amount",
+          "type_": {
+            "option": {
+              "value_type": "i128"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "settler_amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "quote_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettlementDepositEvent",
+      "prefix_topics": [
+        "Deposit",
+        "SettlementAsset"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "depositor",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettlementDisputeEvent",
+      "prefix_topics": [
+        "Dispute",
+        "SettlementDispute"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "dispute_evidence_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettlerAssignmentEvent",
+      "prefix_topics": [
+        "Assignment",
+        "SettlerAssignment"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "settler_type",
+          "type_": {
+            "udt": {
+              "name": "SettlerType"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "assignment",
+          "type_": {
+            "udt": {
+              "name": "SettlerAssignment"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettlementCreationEvent",
+      "prefix_topics": [
+        "Creation",
+        "SettlementRequest"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "sender_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "recipient_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "destination_amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettlementAcceptanceEvent",
+      "prefix_topics": [
+        "Settler",
+        "SettlementAcceptance"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "settler_type",
+          "type_": {
+            "udt": {
+              "name": "SettlerType"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "settler",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettlementClaimAssetEvent",
+      "prefix_topics": [
+        "Claim",
+        "SettlementClaimAsset"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "claimant",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettlementRefundAssetEvent",
+      "prefix_topics": [
+        "Refund",
+        "SettlementRefundAsset"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettlementCancellationEvent",
+      "prefix_topics": [
+        "Cancel",
+        "SettlementCancellation"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettlementConfirmationEvent",
+      "prefix_topics": [
+        "Destination",
+        "SettlementConfirmation"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "proof_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "settler",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettlementDisputeResolutionEvent",
+      "prefix_topics": [
+        "Dispute",
+        "SettlementDispute"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "resolution",
+          "type_": {
+            "udt": {
+              "name": "DisputeResolution"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  }
+]

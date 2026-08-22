@@ -1,0 +1,1200 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "NotVerified",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "PolicyNotActive",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "ThresholdNotMet",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InsufficientLiquidity",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "NoConsensus",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "Overflow",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "InsufficientSignatures",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "NoParametricBands",
+          "value": 12
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Policy",
+      "fields": [
+        {
+          "doc": "",
+          "name": "farm_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "is_active",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "payout_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "premium",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "region",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "season",
+          "type_": "symbol"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "PersistentPool",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "TempTicket",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AdminMultisig"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "XlmToken"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "QuorumThreshold"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Oracle",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SingleOracle"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "IsMainnetMode"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Verified",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SubsidyBalance"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalReinsuranceShares"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalReinsuranceDeposited"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "LpShares",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Policy",
+            "type_": [
+              "address",
+              "symbol",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "FarmList",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Report",
+            "type_": [
+              "symbol",
+              "symbol",
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "ReportedOracles",
+            "type_": [
+              "symbol",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "ConsensusDamagePercentage",
+            "type_": [
+              "symbol",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "ConsensusReached",
+            "type_": [
+              "symbol",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "DaoAddress"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "RiskZoneMultiplier",
+            "type_": [
+              "symbol"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "MicroLoan",
+            "type_": [
+              "address",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "ParametricBands",
+            "type_": [
+              "symbol"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "OracleWindSpeed",
+            "type_": [
+              "symbol",
+              "symbol"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MicroLoan",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "farmer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "is_active",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "repaid",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "yield_prediction",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PayoutBand",
+      "fields": [
+        {
+          "doc": "",
+          "name": "min_wind_speed",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "payout_percentage",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AdminMultisig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "keys",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Subscribe a farm to a parametric insurance policy for a specific season",
+      "name": "subscribe",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "farmer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "farm_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "region",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "season",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "premium",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initialize the contract with admin, token address, oracle parameters, and mainnet/testnet flag",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin_keys",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "admin_threshold",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "xlm_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "quorum",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "is_mainnet_mode",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "single_oracle",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set the active status of a weather oracle (Testnet consensus)",
+      "name": "set_oracle",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "payload",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "signatures",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "tuple": {
+                  "value_types": [
+                    {
+                      "bytes_n": {
+                        "n": 32
+                      }
+                    },
+                    {
+                      "bytes_n": {
+                        "n": 64
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "oracle",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "is_active",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Claim payout based on dynamic network-configured parametric curves for a specific farm and season",
+      "name": "claim_payout",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "farmer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "farm_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "season",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "typhoon_id",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get details of LP shares",
+      "name": "get_lp_shares",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "lp",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Official KYC/RSBSA Verification of farmers",
+      "name": "verify_farmer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "payload",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "signatures",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "tuple": {
+                  "value_types": [
+                    {
+                      "bytes_n": {
+                        "n": 32
+                      }
+                    },
+                    {
+                      "bytes_n": {
+                        "n": 64
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "farmer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "is_verified",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Check if contract is initialized",
+      "name": "is_initialized",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Donors can deposit XLM into the public premium subsidy pool",
+      "name": "deposit_subsidy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "donor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Check if running in mainnet mode",
+      "name": "is_mainnet_mode",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Repay a microloan",
+      "name": "repay_microloan",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "farmer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "loan_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set the DAO Address (Admin transition)",
+      "name": "set_dao_address",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "payload",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "signatures",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "tuple": {
+                  "value_types": [
+                    {
+                      "bytes_n": {
+                        "n": 32
+                      }
+                    },
+                    {
+                      "bytes_n": {
+                        "n": 64
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "dao",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Transfer reinsurance bond shares to another address (Tokenized Bond Trading)",
+      "name": "transfer_shares",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set the single authorized oracle (Mainnet mode)",
+      "name": "set_single_oracle",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "payload",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "signatures",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "tuple": {
+                  "value_types": [
+                    {
+                      "bytes_n": {
+                        "n": 32
+                      }
+                    },
+                    {
+                      "bytes_n": {
+                        "n": 64
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "single_oracle",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Reinsurance pool deposits (Yield Seekers back the pool to gain interest from premiums)",
+      "name": "deposit_reinsurance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "lp",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get total subsidy pool balance",
+      "name": "get_subsidy_balance",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Originate an uncollateralized rebuilding micro-loan",
+      "name": "originate_microloan",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "farmer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "loan_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "yield_prediction",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "DAO ONLY: Update premium rate multiplier for a geospatial risk zone",
+      "name": "update_premium_rate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "region",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "multiplier",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set the consensus quorum threshold",
+      "name": "set_quorum_threshold",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "payload",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "signatures",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "tuple": {
+                  "value_types": [
+                    {
+                      "bytes_n": {
+                        "n": 32
+                      }
+                    },
+                    {
+                      "bytes_n": {
+                        "n": 64
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "verify_and_liquidate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "public_inputs",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Reinsurance pool withdrawals (burning LP shares for XLM)",
+      "name": "withdraw_reinsurance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "lp",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Oracles submit damage estimation reports (Combined Oracle + AI) for a typhoon in a region, along with raw wind speed",
+      "name": "submit_weather_report",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "oracle",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "typhoon_id",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "region",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "damage_percentage",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "wind_speed",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin Multi-sig: Update parametric payout bands for a region",
+      "name": "update_parametric_bands",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "payload",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "signatures",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "tuple": {
+                  "value_types": [
+                    {
+                      "bytes_n": {
+                        "n": 32
+                      }
+                    },
+                    {
+                      "bytes_n": {
+                        "n": 64
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "region",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "bands",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "PayoutBand"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get total reinsurance shares",
+      "name": "get_total_reinsurance_shares",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get total reinsurance deposited",
+      "name": "get_total_reinsurance_deposited",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  }
+]

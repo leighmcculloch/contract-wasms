@@ -1,0 +1,197 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Err",
+      "cases": [
+        {
+          "doc": "",
+          "name": "UnimplementedRequestType",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotAllowlisted",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Overflow",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "NegativeAmount",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "BadRequestShape",
+          "value": 5
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Request",
+      "fields": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "request_type",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Positions",
+      "fields": [
+        {
+          "doc": "",
+          "name": "collateral",
+          "type_": {
+            "map": {
+              "key_type": "u32",
+              "value_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "liabilities",
+          "type_": {
+            "map": {
+              "key_type": "u32",
+              "value_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "supply",
+          "type_": {
+            "map": {
+              "key_type": "u32",
+              "value_type": "i128"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Mirrors Blend's `submit(from, spender, to, requests) -> Positions`\\nABI. Translates each request by DIRECTION:\\n\\n- OUTBOUND (`Supply`, `SupplyCollateral`, `Repay`) on the\\nvenue-wrapper asset: pre-wrap so the member holds the\\nwrapped balance the pool will debit.\\n- INBOUND (`Withdraw`, `WithdrawCollateral`, `Borrow`) on the\\nvenue-wrapper asset: forward first, then unwrap what comes\\nback so the member holds the underlying.\\n- Types 6-9: refused with `Err::UnimplementedRequestType`.\\nThose are liquidator and auction paths, a different actor,\\ndeliberately out of scope.\\n\\nThe returned `Positions` is the pool's response, passed through\\nunmodified.\\n\\n### Unwrap amount\\n\\nThe facade measures the member's wrapped balance before doing\\nanything and again after the pool call, and unwraps the\\nincrease. It does NOT unwrap `request.amount`, because Blend\\nindependently caps all three inbound types and can refund an\\noutbound one:\\n\\n- `Withdraw` / `WithdrawCollateral` are capped to the\\nmember's actual position (`actions.rs:323`, `374`).",
+      "name": "submit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "requests",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Request"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Positions"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_pool",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "View the wrapper's allowlist. Returns false for never-allowed\\naddresses.\\n\\nTHIS IS UX, NOT ENFORCEMENT. The wrapper's `transfer` gate is\\nthe actual allowlist enforcement; a `false` return here means\\n`submit` will reject the call with `Err::NotAllowlisted`, not\\nthat the address is barred from the underlying system.",
+      "name": "is_allowed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_wrapped",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Constructor. Runs ATOMICALLY with deploy, which is the only\\nwindow in which pool and wrapped can be set. There is no\\nseparate `init` step and so no init front-run window for an\\nattacker to claim these: the only way they are set is the\\ndeploy transaction itself.\\n\\nRequires `--pool <P> --wrapped <W>` at deploy time. There is\\nno admin argument: see the file-level Immutability section.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "wrapped",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

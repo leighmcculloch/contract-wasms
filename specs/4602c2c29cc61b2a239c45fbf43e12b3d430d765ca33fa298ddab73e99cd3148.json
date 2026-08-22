@@ -1,0 +1,1180 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "settle",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "top_up",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "_asset",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_pot",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "period",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "has_won",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "_member",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_phase",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Phase"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_state",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "GroupState"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "graduates",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "place_bid",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "discount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "contribute",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_config",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "GroupConfig"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_history",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "HistoryEntry"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_members",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "Member"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_settled",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "period",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "claim_payout",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_completed",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "request_join",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "applicant",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "vote_on_join",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "voter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "applicant",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "approve",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "apply_upgrade",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_claimable",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "_member",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "health_factor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "_member",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "u32"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "p",
+          "type_": {
+            "udt": {
+              "name": "GroupParams"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel_upgrade",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "resolve_period",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_current_bid",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "Bid"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "lock_collateral",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pending_upgrade",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "tuple": {
+                "value_types": [
+                  {
+                    "bytes_n": {
+                      "n": 32
+                    }
+                  },
+                  "u64"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "propose_upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "_new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_join_request",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "applicant",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "JoinRequest"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_pending_joins",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "required_collateral",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "_asset",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "withdraw_collateral",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "collateral_unlock_at",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Live highest bid for a period (open auction \\xe2\\x80\\x94 highest discount leads).",
+      "lib": "",
+      "name": "Bid",
+      "fields": [
+        {
+          "doc": "",
+          "name": "bidder",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "discount",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotMember",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AlreadyMember",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "AlreadyRequested",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "NoPendingRequest",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "AlreadyResolved",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "AlreadyVoted",
+          "value": 6
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "Which window of the current period we are in (only meaningful while Active).\\nPeriods now have FOUR windows: Contribution \\xe2\\x86\\x92 Settlement \\xe2\\x86\\x92 Auction \\xe2\\x86\\x92 Payout.",
+      "lib": "",
+      "name": "Phase",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Contribution",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Settlement",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Auction",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Payout",
+          "value": 3
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Per-member record. Collateral is held in two buckets because top-ups may mix\\nassets; `collateral_asset` is the option chosen at lock time and fixes the\\nrequirement ratio (USDC = 100% of pot, XLM = 150%).",
+      "lib": "",
+      "name": "Member",
+      "fields": [
+        {
+          "doc": "",
+          "name": "addr",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "collateral_asset",
+          "type_": {
+            "udt": {
+              "name": "CollateralAsset"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "collateral_usdc",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "collateral_xlm",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "has_won",
+          "type_": "bool"
+        },
+        {
+          "doc": "0 = healthy. Otherwise the period at which the health factor first fell\\nbelow 1.0 \\xe2\\x80\\x94 the member has until the NEXT period's settlement to top up.",
+          "name": "hf_breach_period",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "in_default",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "joined_period",
+          "type_": "u32"
+        },
+        {
+          "doc": "Liquidated out of the group: no longer contributes or wins; remaining\\nobligations are auto-funded from the liquidated collateral.",
+          "name": "removed",
+          "type_": "bool"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Config"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "State"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Members"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Member",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Approved",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Contributed",
+            "type_": [
+              "u32",
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Claimable",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Debt",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Bid",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Settled",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Pot",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "JoinReq",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "JoinReqList"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "History"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PendingUpgrade"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Mutable group-level state.",
+      "lib": "",
+      "name": "GroupState",
+      "fields": [
+        {
+          "doc": "Unix ts the cycle completed (0 while Forming/Active). Collateral unlocks\\nat completed_at + grace \\xe2\\x80\\x94 the single source of truth the UI reads via\\n`collateral_unlock_at`, so the frontend never re-derives (Bug 1 fix).",
+          "name": "completed_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "completed_periods",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "current_period",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "members_won",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "start_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "GroupStatus"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "Group visibility. Encoded as u32 across the contract boundary so the factory\\ncan forward it without sharing this type: 0 = Public, 1 = Private.",
+      "lib": "",
+      "name": "Visibility",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Public",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Private",
+          "value": 1
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Immutable group configuration, locked at deploy.",
+      "lib": "",
+      "name": "GroupConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "auction_window",
+          "type_": "u64"
+        },
+        {
+          "doc": "Same-asset collateral: 100% of pot in the group currency. For USDC\\ngroups the XLM option is pot * 150% worth of XLM at the oracle price.",
+          "name": "collateral_requirement",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "contribution_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "contribution_window",
+          "type_": "u64"
+        },
+        {
+          "doc": "Token every contribution, pot and payout is denominated in.\\nUSDC groups keep the two collateral options (USDC 100% / XLM 150%);\\nXLM groups require same-asset XLM collateral at 100% (no oracle risk).",
+          "name": "currency",
+          "type_": {
+            "udt": {
+              "name": "CollateralAsset"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "description",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "factory",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "min_reputation",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "oracle",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "payout_window",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "period_length",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "pot_size",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "router",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "settlement_window",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "target_members",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "usdc",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "visibility",
+          "type_": {
+            "udt": {
+              "name": "Visibility"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "xlm",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Constructor parameters bundle (contract fns are capped at 10 args, so the\\ninputs travel as one struct). `visibility`: 0 = Public, 1 = Private.\\n`currency`: 0 = USDC, 1 = XLM \\xe2\\x80\\x94 the token every contribution/payout uses.\\nThe factory builds a structurally-identical struct on its side \\xe2\\x80\\x94 they match on\\nthe wire because `#[contracttype]` structs serialize by field name.",
+      "lib": "",
+      "name": "GroupParams",
+      "fields": [
+        {
+          "doc": "",
+          "name": "auction_window",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "contribution_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "contribution_window",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "currency",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "description",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "factory",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "min_reputation",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "oracle",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "period_length",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "router",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "settlement_window",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "target_members",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "usdc",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "visibility",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "xlm",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "Lifecycle of a group.",
+      "lib": "",
+      "name": "GroupStatus",
+      "cases": [
+        {
+          "doc": "Members are still joining / locking collateral / paying first contribution.",
+          "name": "Forming",
+          "value": 0
+        },
+        {
+          "doc": "All members in, clock running, periods rotating.",
+          "name": "Active",
+          "value": 1
+        },
+        {
+          "doc": "Every eligible member has won once; collateral withdrawable after grace.",
+          "name": "Completed",
+          "value": 2
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A pending governance join request.",
+      "lib": "",
+      "name": "JoinRequest",
+      "fields": [
+        {
+          "doc": "",
+          "name": "applicant",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "approved",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "created_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "no_votes",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "resolved",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "voters",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "yes_votes",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "One transparent governance/history entry.",
+      "lib": "",
+      "name": "HistoryEntry",
+      "fields": [
+        {
+          "doc": "",
+          "name": "actor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "detail",
+          "type_": "symbol"
+        },
+        {
+          "doc": "join_req | join_ok | join_no | joined | contrib | bid | resolved |\\ndefault | withdraw | started | settled | liquid | hf_warn | removed | topup",
+          "name": "kind",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "period",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "Collateral asset a member chose when locking. Encoded as u32 across the\\nboundary: 0 = USDC (100% of pot), 1 = XLM (150% of pot, priced by oracle).",
+      "lib": "",
+      "name": "CollateralAsset",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Usdc",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Xlm",
+          "value": 1
+        }
+      ]
+    }
+  }
+]

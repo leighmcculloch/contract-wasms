@@ -1,0 +1,423 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Plan",
+      "fields": [
+        {
+          "doc": "",
+          "name": "active",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "merchant",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "period_ledgers",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "InvalidPeriod",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "PlanExists",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "PlanNotFound",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "PlanInactive",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "SubscriptionExists",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "SubscriptionNotFound",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidStatus",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "NotDue",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "ChargeAlreadyProcessed",
+          "value": 10
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PlanCreated",
+      "prefix_topics": [
+        "plan_created"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "plan_id",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Subscription",
+      "fields": [
+        {
+          "doc": "",
+          "name": "charge_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "last_charge_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "next_charge_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "plan_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "SubscriptionStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "subscriber",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SubscriptionStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Active"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cancelled"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SubscriptionCharged",
+      "prefix_topics": [
+        "subscription_charged"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "plan_id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "subscriber",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "charge_id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SubscriptionStarted",
+      "prefix_topics": [
+        "subscription_started"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "plan_id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "subscriber",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SubscriptionCancelled",
+      "prefix_topics": [
+        "subscription_cancelled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "subscriber",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "subscriber",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "charge",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "subscriber",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "charge_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_plan",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "plan_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Plan"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "subscribe",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "plan_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "subscriber",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_plan",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "plan_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "merchant",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "period_ledgers",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_subscription",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "subscriber",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Subscription"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

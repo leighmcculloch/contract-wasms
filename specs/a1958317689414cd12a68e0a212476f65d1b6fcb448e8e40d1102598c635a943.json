@@ -1,0 +1,487 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "Caller is not the contract admin",
+          "name": "Unauthorized",
+          "value": 1
+        },
+        {
+          "doc": "No verification key registered for this circuit",
+          "name": "VkNotFound",
+          "value": 2
+        },
+        {
+          "doc": "Verification key gamma == delta (Veil Cash / FoomCash bug)",
+          "name": "GammaEqualsDelta",
+          "value": 3
+        },
+        {
+          "doc": "Public input count doesn't match VK's IC length - 1",
+          "name": "PublicInputMismatch",
+          "value": 4
+        },
+        {
+          "doc": "Proof verification failed (pairing check returned false)",
+          "name": "ProofInvalid",
+          "value": 5
+        },
+        {
+          "doc": "Invalid point encoding",
+          "name": "InvalidEncoding",
+          "value": 6
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Verification key for a specific circuit",
+            "name": "Vk",
+            "type_": [
+              {
+                "udt": {
+                  "name": "CircuitId"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get the admin address",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Check if a VK is registered for a circuit",
+      "name": "has_vk",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "circuit_id",
+          "type_": {
+            "udt": {
+              "name": "CircuitId"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Register a verification key for a circuit.\\nAdmin-gated. Asserts gamma \\xe2\\x89\\xa0 delta (prevents Veil Cash / FoomCash forgery bug).",
+      "name": "set_vk",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "circuit_id",
+          "type_": {
+            "udt": {
+              "name": "CircuitId"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vk",
+          "type_": {
+            "udt": {
+              "name": "VerificationKey"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Verify a Groth16 proof against registered VK for the given circuit.\\n\\nUses native BN254 host functions via `env.crypto().bn254()`:\\n- `g1_mul` for scalar multiplication\\n- `g1_add` for point addition\\n- `Neg` trait on `Bn254G1Affine` for point negation\\n- `pairing_check` for the final verification equation\\n\\nThe Groth16 verification equation:\\ne(A, B) \\xc2\\xb7 e(-\\xce\\xb1, \\xce\\xb2) \\xc2\\xb7 e(-vk_x, \\xce\\xb3) \\xc2\\xb7 e(-C, \\xce\\xb4) == 1\\n\\nwhere vk_x = IC[0] + \\xce\\xa3(public_input[i] \\xc2\\xb7 IC[i+1])",
+      "name": "verify",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "circuit_id",
+          "type_": {
+            "udt": {
+              "name": "CircuitId"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "udt": {
+              "name": "Groth16Proof"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "public_inputs",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "bool",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Upgrade the contract's WASM code in place (admin-gated).\\n\\nSwaps the code this same address runs while keeping all stored state\\n(admin + every registered VK). Without this, a verifier bug fix would\\nrequire a fresh deploy and re-registration of every circuit's VK.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initialize the verifier with an admin address",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get the number of public inputs expected for a circuit",
+      "name": "get_public_input_count",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "circuit_id",
+          "type_": {
+            "udt": {
+              "name": "CircuitId"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Circuit identifiers for different proof types",
+      "lib": "",
+      "name": "CircuitId",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Deposit"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Transfer"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Withdraw"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PositionOpen"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PositionHealth"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PositionClose"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LiquidationHeartbeat"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "HiddenOrderTrigger"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MultiLegBasket"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AspMembership"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AspNonMembership"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SealedOrder"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "The internal state of a hidden order",
+      "lib": "",
+      "name": "OrderState",
+      "fields": [
+        {
+          "doc": "",
+          "name": "commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "escrowed_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Proof components for Groth16/BN254",
+      "lib": "",
+      "name": "Groth16Proof",
+      "fields": [
+        {
+          "doc": "",
+          "name": "a",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "b",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "c",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "The internal state of a derivative position",
+      "lib": "",
+      "name": "PositionState",
+      "fields": [
+        {
+          "doc": "The current ZK commitment binding collateral, size, direction, and entry price",
+          "name": "commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "The last time health was attested",
+          "name": "last_health_timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "The owner of the position",
+          "name": "owner",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Verification key components for Groth16/BN254",
+      "lib": "",
+      "name": "VerificationKey",
+      "fields": [
+        {
+          "doc": "",
+          "name": "alpha_g1",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "beta_g2",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "delta_g2",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "gamma_g2",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "ic",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 64
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

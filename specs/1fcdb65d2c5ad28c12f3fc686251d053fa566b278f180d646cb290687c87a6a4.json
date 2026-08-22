@@ -1,0 +1,170 @@
+[
+  {
+    "function_v0": {
+      "doc": "Execute the atomic XLM/USDC swap for a matched pair.\\nCalled ONLY by MatchingEngine \\xe2\\x80\\x94 no other caller can release escrow funds.\\n\\nBuyer deposited USDC to buy XLM \\xe2\\x86\\x92 seller receives USDC.\\nSeller deposited XLM to sell    \\xe2\\x86\\x92 buyer receives XLM.",
+      "name": "settle",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "buyer_nullifier",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "seller_nullifier",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "buyer_address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "seller_address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "xlm_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "usdc_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "matching_engine",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "escrow_vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "xlm_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc_token",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_settlement_count",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_total_volume_xlm",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_total_volume_usdc",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MatchingEngine"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "EscrowVault"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "XlmToken"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "UsdcToken"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SettlementCount"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalVolumeXlm"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalVolumeUsdc"
+          }
+        }
+      ]
+    }
+  }
+]

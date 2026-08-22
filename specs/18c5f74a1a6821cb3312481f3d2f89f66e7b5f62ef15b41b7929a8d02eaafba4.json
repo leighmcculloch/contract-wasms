@@ -1,0 +1,864 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "InsufficientLiquidity",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InsufficientCredit",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InsufficientDeposit",
+          "value": 4
+        },
+        {
+          "doc": "Agent has defaulted; borrowing and new deposits are frozen.",
+          "name": "Defaulted",
+          "value": 5
+        },
+        {
+          "doc": "`mark_default` called on a loan that is not past its due date.",
+          "name": "NotOverdue",
+          "value": 6
+        },
+        {
+          "doc": "`mark_default` called on an agent with no outstanding principal.",
+          "name": "NothingOwed",
+          "value": 7
+        },
+        {
+          "doc": "New deposits/borrows are halted (admin circuit breaker). Exits\\n(repay/withdraw/claim_yield) and mark_default are never paused.",
+          "name": "Paused",
+          "value": 8
+        },
+        {
+          "doc": "Deposit would push this agent's vault past the global cap.",
+          "name": "DepositCapExceeded",
+          "value": 9
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Repaid",
+      "prefix_topics": [
+        "repay"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Borrowed",
+      "prefix_topics": [
+        "borrow"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "due_date",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Deposited",
+      "prefix_topics": [
+        "deposit"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "lender",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Withdrawn",
+      "prefix_topics": [
+        "withdraw"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "lender",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Snapshot of one agent's isolated vault.",
+      "lib": "",
+      "name": "VaultState",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount_owed",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "apr_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "defaulted",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "due_date",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "limit",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "liquidity",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "principal",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "realized_loss",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "reserve",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_assets",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "utilization_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "yield_pool",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Circuit breaker: halt new deposits and new borrows. Exits (repay,\\nwithdraw, claim_yield) and mark_default always keep working \\xe2\\x80\\x94 pausing\\ncan never trap anyone's funds, it only stops NEW risk from being taken.",
+      "name": "pause",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Agent repays. Payment covers accrued interest first \\xe2\\x80\\x94 a cut of which funds\\nthe reserve and the rest becomes lender yield \\xe2\\x80\\x94 then principal (\\xe2\\x86\\x92 returned\\nto lendable liquidity). Full repayment clears the repayment clock.",
+      "name": "repay",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Full isolated state for an agent's vault.",
+      "name": "state",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "VaultState"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "token",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "A defaulted loan: `loss` written off, `reserve_used` absorbed by the buffer,\\n`socialized` borne by lenders (share value drop). The backend watches this to\\nrecord the missed repayment on-chain and re-underwrite the agent.",
+      "lib": "",
+      "name": "Defaulted_",
+      "prefix_topics": [
+        "default"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "loss",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "reserve_used",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "socialized",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Agent draws against its credit line; USDC is disbursed from its vault. The\\ndrawable limit is ramped by repayment history; the first draw from a zero\\nbalance starts the repayment clock. Blocked while paused (new risk-taking\\nonly \\xe2\\x80\\x94 an agent that already has a loan can still repay it while paused).",
+      "name": "borrow",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The lender's raw share balance in this agent's vault.",
+      "name": "shares",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "lender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Lender deposits USDC into a specific agent's isolated vault, receiving\\nshares priced against the vault's current assets. Frozen after default,\\nblocked while paused, and capped at the global per-vault deposit cap.",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "lender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "reserve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unpause",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "YieldClaimed",
+      "prefix_topics": [
+        "yield"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "lender",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "due_date",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The lender's current claim value (USDC) at the vault's share price.",
+      "name": "position",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "lender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "registry",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Lender withdraws idle deposited value (only funds not currently lent),\\nburning shares at the current share price.",
+      "name": "withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "lender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "defaulted",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "liquidity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "term_secs",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "yield_pool",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Total currently owed (principal + interest accrued to the current ledger).",
+      "name": "amount_owed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Lender claims its pro-rata (by shares) share of accumulated interest yield.",
+      "name": "claim_yield",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "lender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "deposit_cap",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Permissionless default trigger: once an agent's loan is past its due date\\nand principal remains outstanding, anyone may crystallise the default. The\\nreserve absorbs the loss first; the unrecovered remainder is socialised to\\nthe vault's lenders (share value falls); the agent is frozen out of\\nfurther borrowing. Isolated to this agent's vault.",
+      "name": "mark_default",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Bind the vault to a score_registry (for limits), the USDC SEP-41 SAC, the\\nloan term (seconds) a fresh draw must be repaid within, an admin (can\\npause/unpause and adjust the deposit cap), and an initial global deposit\\ncap per agent vault (0 = uncapped).",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "registry",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "term_secs",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "deposit_cap",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin-adjustable global cap on capital at risk (liquidity + principal)\\nper agent vault. Caps the blast radius of an undiscovered bug: no single\\nvault can ever hold more than this, no matter how much lenders want to\\ndeposit. 0 = uncapped.",
+      "name": "set_deposit_cap",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_cap",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Remaining drawable credit (ramped limit \\xe2\\x88\\x92 outstanding principal).",
+      "name": "available_credit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "Underwriting tier, derived from the published score. Ordered worst\\xe2\\x86\\x92best so\\nthe enum's discriminants are meaningful if ever compared.",
+      "lib": "",
+      "name": "Tier",
+      "cases": [
+        {
+          "doc": "Below the lending threshold \\xe2\\x80\\x94 no credit extended.",
+          "name": "Unrated",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "C",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "B",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "A",
+          "value": 3
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "What the registry stores per agent and what cross-contract readers consume.",
+      "lib": "",
+      "name": "ScoreData",
+      "fields": [
+        {
+          "doc": "Verified trailing revenue (USDC, 7-decimal stroops) the score was\\ncomputed against. Drives the credit limit.",
+          "name": "revenue",
+          "type_": "i128"
+        },
+        {
+          "doc": "Composite revenue-coverage score, 0..=850 (FICO-like range).",
+          "name": "score",
+          "type_": "u32"
+        },
+        {
+          "doc": "Tier banded from `score`.",
+          "name": "tier",
+          "type_": {
+            "udt": {
+              "name": "Tier"
+            }
+          }
+        },
+        {
+          "doc": "Ledger timestamp the score was last published.",
+          "name": "updated_at",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Running tally of an agent's repayment history, maintained by `score_registry`\\nand consumed on-chain by the credit ramp (`ramp_limit`). Lives here (the\\nshared-types home) so the vault and the registry agree on its shape.",
+      "lib": "",
+      "name": "RepaymentRecord",
+      "fields": [
+        {
+          "doc": "Loans repaid on or before their due date.",
+          "name": "on_time",
+          "type_": "u32"
+        },
+        {
+          "doc": "Total repayment outcomes observed (on-time + missed).",
+          "name": "total",
+          "type_": "u32"
+        }
+      ]
+    }
+  }
+]

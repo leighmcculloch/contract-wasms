@@ -1,0 +1,250 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Subscription",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "customer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "merchant",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "period_duration",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "period_end",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initial call by customer. Bundles approval + first payment + subscription creation.\\n`duration` is in seconds (e.g. 86400 = 1 day, 3600 = 1 hour for custom periods).",
+      "name": "start",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "customer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "merchant",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "product_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "duration",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Called by backend/cron when the billing period ends.\\n`amount` is computed off-chain from current fiat/crypto rates each cycle.\\nPanics on insufficient funds \\xe2\\x80\\x94 period_end is NOT advanced on failure.",
+      "name": "charge",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "customer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "product_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "customer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "product_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Resume a paused subscription.\\nIf the paused period already expired, resets period_end from now so the\\ncustomer gets a full cycle without immediately triggering charge.",
+      "name": "resume",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "customer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "product_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "customer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "product_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin / backend override. Validates status and guards against zero duration.",
+      "name": "update",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "customer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "product_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "period_duration",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "period_end",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_subscription",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "customer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "product_id",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Subscription"
+          }
+        }
+      ]
+    }
+  }
+]

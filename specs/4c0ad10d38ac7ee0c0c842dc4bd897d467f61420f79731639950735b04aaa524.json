@@ -1,0 +1,40 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WebAuthError",
+      "cases": [
+        {
+          "doc": "Thi\\xe1\\xba\\xbfu args b\\xe1\\xba\\xaft bu\\xe1\\xbb\\x99c `account`.",
+          "name": "MissingAccount",
+          "value": 1
+        },
+        {
+          "doc": "Thi\\xe1\\xba\\xbfu args b\\xe1\\xba\\xaft bu\\xe1\\xbb\\x99c `web_auth_domain_account`.",
+          "name": "MissingServerAccount",
+          "value": 2
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "\\xc4\\x90i\\xe1\\xbb\\x83m neo x\\xc3\\xa1c th\\xe1\\xbb\\xb1c SEP-45. Ch\\xe1\\xbb\\xaf k\\xc3\\xbd h\\xc3\\xa0m ph\\xe1\\xba\\xa3i gi\\xe1\\xbb\\xaf \\xc4\\x91\\xc3\\xbang t\\xc3\\xaan/args theo spec\\nv\\xc3\\xac server-kh\\xc3\\xa1c (anchor, wallet b\\xc3\\xaan th\\xe1\\xbb\\xa9 ba) nh\\xe1\\xba\\xadn di\\xe1\\xbb\\x87n qua `function_name`.",
+      "name": "web_auth_verify",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "map": {
+              "key_type": "symbol",
+              "value_type": "string"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

@@ -1,0 +1,1513 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WalletAuth",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Passkey",
+            "type_": [
+              {
+                "udt": {
+                  "name": "PasskeySignature"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Session",
+            "type_": [
+              {
+                "udt": {
+                  "name": "SessionAuthorization"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SessionPolicy",
+      "fields": [
+        {
+          "doc": "",
+          "name": "delegate",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "epoch",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "expires_at_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_uses",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "permissions",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "ProtocolPermission"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "spend_limits",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "AssetSpendLimit"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "uses",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "valid_after_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SessionDataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Epoch"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Policy",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Stored form with contract-controlled accounting.",
+      "lib": "",
+      "name": "AssetSpendLimit",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "max_per_call",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_total",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "recipients",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "spent",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Allows exactly one Soroban contract function.\\nArguments remain dynamic and are committed by the signed Soroban auth payload.",
+      "lib": "",
+      "name": "ProtocolPermission",
+      "fields": [
+        {
+          "doc": "",
+          "name": "contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SessionPolicyInput",
+      "fields": [
+        {
+          "doc": "",
+          "name": "delegate",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "expires_at_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_uses",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "permissions",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "ProtocolPermission"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "spend_limits",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "AssetSpendLimitInput"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "valid_after_ledger",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Input form. Mutable accounting is intentionally excluded.",
+      "lib": "",
+      "name": "AssetSpendLimitInput",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "max_per_call",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_total",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "recipients",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SessionAuthorization",
+      "fields": [
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signature",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "FactoryContract"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Owner"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Guardians"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "UnpauseApproved"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AggregatedBlsKey"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Passkey"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Nonce"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "RpidHash"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "RPID"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Immediately pauses the wallet.\\n\\nAny authorized guardian may trigger a pause to protect the account.",
+      "name": "pause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "guardian",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "WalletError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Removes the paused state after wallet authentication\\nand guardian approval.",
+      "name": "unpause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "WalletError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns whether the wallet is currently paused.",
+      "name": "is_paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the currently registered passkey.",
+      "name": "get_passkey",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "bytes_n": {
+                "n": 65
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_session",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "SessionPolicy"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Soroban authentication entrypoint.\\n\\nEvery contract invocation requiring wallet authorization\\npasses through this method. It validates the execution\\ncontext and verifies the passkey signature over the\\ntransaction payload.",
+      "name": "__check_auth",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signature_payload",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signature",
+          "type_": {
+            "udt": {
+              "name": "WalletAuth"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "auth_contexts",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Context"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "WalletError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Adds a new guardian to the wallet.",
+      "name": "add_guardian",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "guardian",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "WalletError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initializes a newly deployed wallet.\\n\\nVerifies the initial passkey and guardian configuration,\\naggregates the guardian BLS keys, and stores the wallet state.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "challenge",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "passkey",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "passkey_sig",
+          "type_": {
+            "udt": {
+              "name": "PasskeySignature"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "rpid_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "bls_keys_pop",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "BlsKeyWithPoP"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "guardians",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "WalletError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_session",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "input",
+          "type_": {
+            "udt": {
+              "name": "SessionPolicyInput"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "delegate_pop",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "bytes_n": {
+                "n": 32
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "WalletError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "revoke_session",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "WalletError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Rotates the wallet's passkey.\\n\\nRequires normal wallet authentication and proof of possession\\nfor the new passkey before replacing the stored credential.",
+      "name": "rotate_passkey",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_passkey",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "new_passkey_pop_sig",
+          "type_": {
+            "udt": {
+              "name": "PasskeySignature"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "WalletError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Guardian approval to resume wallet activity.",
+      "name": "approve_unpause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "guardian",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "WalletError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Recovers the wallet using the stored aggregate BLS recovery key.\\n\\nOff chain verification of account ownership\\nA new passkey is installed only after:\\n- the new passkey proves possession, and\\n- the aggregate BLS recovery signature is verified.",
+      "name": "recover_account",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_passkey",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "new_passkey_pop_sig",
+          "type_": {
+            "udt": {
+              "name": "PasskeySignature"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "agg_bls_sig",
+          "type_": {
+            "bytes_n": {
+              "n": 192
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "WalletError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "revoke_all_sessions",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": {
+              "udt": {
+                "name": "WalletError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Completes a previously scheduled guardian removal.",
+      "name": "finalize_guardian_removal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "guardian",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "WalletError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "\\nRemoval is delayed to provide a safety window.",
+      "name": "schedule_guardian_removal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "guardian",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "WalletError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WalletError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidSignature",
+          "value": 100
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 200
+        },
+        {
+          "doc": "",
+          "name": "PasskeyNotFound",
+          "value": 201
+        },
+        {
+          "doc": "",
+          "name": "RpidNotFound",
+          "value": 202
+        },
+        {
+          "doc": "",
+          "name": "WalletVersionNotFound",
+          "value": 203
+        },
+        {
+          "doc": "",
+          "name": "InvalidBlsKey",
+          "value": 300
+        },
+        {
+          "doc": "",
+          "name": "InvalidPoPSignature",
+          "value": 301
+        },
+        {
+          "doc": "",
+          "name": "TooManyKeys",
+          "value": 302
+        },
+        {
+          "doc": "",
+          "name": "InsufficientKeys",
+          "value": 303
+        },
+        {
+          "doc": "",
+          "name": "DuplicateKeys",
+          "value": 304
+        },
+        {
+          "doc": "",
+          "name": "MissingBlsKeys",
+          "value": 305
+        },
+        {
+          "doc": "",
+          "name": "KeyAtInfinity",
+          "value": 306
+        },
+        {
+          "doc": "",
+          "name": "ClientDataTooLarge",
+          "value": 400
+        },
+        {
+          "doc": "",
+          "name": "InvalidClientDataType",
+          "value": 401
+        },
+        {
+          "doc": "",
+          "name": "InvalidChallenge",
+          "value": 402
+        },
+        {
+          "doc": "",
+          "name": "InvalidRpIdHash",
+          "value": 403
+        },
+        {
+          "doc": "",
+          "name": "InvalidAuthenticatorData",
+          "value": 404
+        },
+        {
+          "doc": "",
+          "name": "UserPresenceRequired",
+          "value": 405
+        },
+        {
+          "doc": "",
+          "name": "UserVerificationRequired",
+          "value": 406
+        },
+        {
+          "doc": "",
+          "name": "InvalidNetwork",
+          "value": 500
+        },
+        {
+          "doc": "",
+          "name": "NonceAlreadyUsed",
+          "value": 501
+        },
+        {
+          "doc": "",
+          "name": "MaxGuardiansExceeded",
+          "value": 600
+        },
+        {
+          "doc": "",
+          "name": "DuplicateGuardian",
+          "value": 601
+        },
+        {
+          "doc": "",
+          "name": "GuardianNotFound",
+          "value": 602
+        },
+        {
+          "doc": "",
+          "name": "UnauthorizedGuardian",
+          "value": 603
+        },
+        {
+          "doc": "",
+          "name": "InvalidGuardian",
+          "value": 604
+        },
+        {
+          "doc": "",
+          "name": "RemovalAlreadyScheduled",
+          "value": 700
+        },
+        {
+          "doc": "",
+          "name": "RemovalNotScheduled",
+          "value": 701
+        },
+        {
+          "doc": "",
+          "name": "GuardianRemovalDelayNotElapsed",
+          "value": 702
+        },
+        {
+          "doc": "",
+          "name": "WalletPaused",
+          "value": 800
+        },
+        {
+          "doc": "",
+          "name": "UnpauseNotApproved",
+          "value": 801
+        },
+        {
+          "doc": "",
+          "name": "InvalidSessionPolicy",
+          "value": 811
+        },
+        {
+          "doc": "",
+          "name": "SessionRevoked",
+          "value": 812
+        },
+        {
+          "doc": "",
+          "name": "SessionAlreadyExists",
+          "value": 813
+        },
+        {
+          "doc": "",
+          "name": "SessionNotFound",
+          "value": 814
+        },
+        {
+          "doc": "",
+          "name": "SessionUnavailable",
+          "value": 815
+        },
+        {
+          "doc": "",
+          "name": "SessionUnauthorized",
+          "value": 816
+        },
+        {
+          "doc": "",
+          "name": "SessionLimitExceeded",
+          "value": 817
+        },
+        {
+          "doc": "",
+          "name": "ArithmeticOverflow",
+          "value": 818
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Represents the type of upgrade proposal.\\n\\nVARIANTS:\\n- `Upgrade` \\xe2\\x86\\x92 upgrade the current contract WASM\\n- `WalletVersion` \\xe2\\x86\\x92 update approved wallet implementation hash\\n\\nDESIGN:\\n- Persisted in contract storage (`ProposalType`)\\n- Used to determine execution path during proposal finalization\\n\\nCRITICAL COMPATIBILITY NOTE:\\n- This enum is stored on-chain.\\n- DO NOT:\\n- reorder variants\\n- remove existing variants\\n\\n- Adding new variants requires:\\n- updating parsing logic (`upgrade_type`)\\n- ensuring existing stored values remain valid",
+      "lib": "",
+      "name": "UpgradeType",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Upgrade"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "WalletVersion"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VoteEvent",
+      "prefix_topics": [
+        "Upgrade",
+        "VoteCast"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "wasm",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "voter",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AddVoterEvent",
+      "prefix_topics": [
+        "Add",
+        "Voter"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "value",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RemoveVoterEvent",
+      "prefix_topics": [
+        "Remove",
+        "Voter"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "value",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UpdateAdminEvent",
+      "prefix_topics": [
+        "Update",
+        "Admin"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "value",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WalletCreationEvent",
+      "prefix_topics": [
+        "Wallet",
+        "Creation"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "passkey",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "bls_keys",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 96
+                }
+              }
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WalletRecoveryEvent",
+      "prefix_topics": [
+        "Wallet",
+        "PasskeyRecovery"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_passkey",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ContractUpgradeEvent",
+      "prefix_topics": [
+        "Upgrade",
+        "ContractUpgrade"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "wasm",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PasskeyRotationEvent",
+      "prefix_topics": [
+        "Wallet",
+        "PasskeyRotation"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_passkey",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UpgradeProposalEvent",
+      "prefix_topics": [
+        "Upgrade",
+        "ProposalCreated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "wasm",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "voting_deadline",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UpgradeCancelledEvent",
+      "prefix_topics": [
+        "Upgrade",
+        "UpgradeCancelled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "wasm",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WalletVersionUpgradeEvent",
+      "prefix_topics": [
+        "Upgrade",
+        "WalletVersion"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "wasm",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "GuardianInfo",
+      "fields": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "removal_time",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BlsKeyWithPoP",
+      "fields": [
+        {
+          "doc": "",
+          "name": "key",
+          "type_": {
+            "bytes_n": {
+              "n": 96
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "sig",
+          "type_": {
+            "bytes_n": {
+              "n": 192
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PasskeySignature",
+      "fields": [
+        {
+          "doc": "",
+          "name": "authenticator_data",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "client_data_json",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "signature",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ]
+    }
+  }
+]

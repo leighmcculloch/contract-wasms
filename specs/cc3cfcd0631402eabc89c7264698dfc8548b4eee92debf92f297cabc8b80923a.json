@@ -1,0 +1,576 @@
+[
+  {
+    "function_v0": {
+      "doc": "One-time initialisation.  Reverts if called again.\\n\\nParameters\\n- `passkey_admin`: Zion1 PasskeyID smart-wallet address.\\n- `lobstr_admin`:  Distinct Lobstr G-address.\\n- `reward_token`: Zi SAC address (reward currency).\\n- `lp_token`:     Zi/XLM LP pool-share token address (staking asset).\\n**Immutable** \\xe2\\x80\\x94 cannot be changed after init.",
+      "name": "init",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "passkey_admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "lobstr_admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "reward_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "lp_token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Claim all pending Zi rewards without unstaking.\\n\\n**Not blocked by pause** \\xe2\\x80\\x94 claim is always available as an exit path.",
+      "name": "claim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "staker",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Stake `amount` LP tokens.\\n\\nEach call (re)sets the unlock timestamp to `now + LOCK_PERIOD`.\\nAccrued rewards up to this point are snapshotted into `pending_rewards`\\nso they are not lost.\\n\\nReverts if:\\n- Contract is paused.\\n- Amount \\xe2\\x89\\xa4 0.\\n- The contract's actual Zi balance is insufficient to honour outstanding\\nreward obligations at the current rate (solvency gate).",
+      "name": "stake",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "staker",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Withdraw all staked LP tokens.  Auto-claims pending rewards.\\n\\n**Not blocked by pause** \\xe2\\x80\\x94 unstake is always available as an exit path.\\nReverts if the lock period has not yet expired.",
+      "name": "unstake",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "staker",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "LP token address (immutable after init).",
+      "name": "lp_token",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Extend the contract instance and an existing staker position to the\\nconfigured TTL target. Anyone may call this method so an operations\\nkeeper can preserve one-year locked positions without holding user or\\nadmin credentials. It cannot create or modify a staking balance.",
+      "name": "keep_alive",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "staker",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pause or unpause the contract.  Admin only.\\n\\nWhen paused: `stake` and `fund_rewards` revert.\\nWhen paused: `claim` and `unstake` still succeed (exit paths).",
+      "name": "set_paused",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Actual Zi token balance held by this contract.\\nSource of truth for solvency \\xe2\\x80\\x94 use this in the admin panel, not\\nany tracked pool counter.",
+      "name": "zi_balance",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Current reward emission rate (Zi stroops per second).",
+      "name": "reward_rate",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Staker position: `(staked_lp, unlock_time, pending_rewards)`.\\nFrontend reads are simulations and do not persist a TTL extension. The\\noperations keeper must submit `keep_alive` before the entry reaches its\\nthreshold.",
+      "name": "staker_info",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "staker",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "u64",
+              "i128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deposit Zi into the reward pool.  **Admin only.**\\n\\nWhy admin-only: allowing anyone to call `fund_rewards` enables a\\ngriefing attack where the attacker resets the one-year reward window\\nwith a tiny amount, collapsing the reward rate to near-zero.\\n\\nThe `funder` parameter identifies whose Zi is transferred; both the\\nadmin and the funder must authorise so that treasury and operational\\nkeys can be separate accounts or contracts.\\n\\nUnspent rewards from any in-progress period roll forward into the new\\nperiod budget.  The new rate is `total_budget / SECONDS_PER_YEAR`.\\nThe contract does not enforce a 23% APR; it emits whatever rate the\\ndeposited budget can sustain.",
+      "name": "fund_rewards",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "funder",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Configured Lobstr G-address admin.",
+      "name": "lobstr_admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Reward token address (Zi SAC).",
+      "name": "reward_token",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Total LP tokens currently staked across all accounts.",
+      "name": "total_staked",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Configured Zion1 PasskeyID admin address.",
+      "name": "passkey_admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Timestamp (seconds) when the current reward period ends.",
+      "name": "period_finish",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pending Zi rewards for `staker` at the current ledger timestamp.\\nInformational \\xe2\\x80\\x94 uses saturating arithmetic (no state written).",
+      "name": "pending_rewards",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "staker",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Replace the Lobstr admin. Both current admins and the replacement must\\nauthorize, and the two configured identities must remain distinct.",
+      "name": "transfer_lobstr_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Transfer the admin role to `new_admin`.  Both current and new admin\\nmust authorise (prevents accidental transfer to an inaccessible address).\\n\\n`new_admin` may be a Soroban multisig policy contract for 2-of-3 or\\nthreshold schemes without any custom cryptography in this contract.",
+      "name": "transfer_passkey_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "All contract-level errors.  Numeric codes are stable across versions.",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "`init()` has already been called.",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "Caller is not the contract admin.",
+          "name": "NotAdmin",
+          "value": 2
+        },
+        {
+          "doc": "Amount must be greater than zero.",
+          "name": "ZeroAmount",
+          "value": 3
+        },
+        {
+          "doc": "Staker has no staked balance.",
+          "name": "NothingStaked",
+          "value": 4
+        },
+        {
+          "doc": "Lock period has not expired yet \\xe2\\x80\\x94 unstake is blocked.",
+          "name": "LockNotExpired",
+          "value": 5
+        },
+        {
+          "doc": "Contract Zi balance is insufficient to cover outstanding reward obligations;\\nfund the contract before accepting new stakes.",
+          "name": "InsufficientRewardPool",
+          "value": 6
+        },
+        {
+          "doc": "Contract is paused; new stakes and funding are blocked.\\nClaim and unstake remain available as exit paths.",
+          "name": "ContractPaused",
+          "value": 7
+        },
+        {
+          "doc": "Funding amount must be greater than zero.",
+          "name": "ZeroFundAmount",
+          "value": 8
+        },
+        {
+          "doc": "LP token address has not been configured.",
+          "name": "LpTokenNotSet",
+          "value": 9
+        },
+        {
+          "doc": "Reward token address has not been configured.",
+          "name": "RewardTokenNotSet",
+          "value": 10
+        },
+        {
+          "doc": "Integer overflow detected in reward calculation.",
+          "name": "Overflow",
+          "value": 11
+        },
+        {
+          "doc": "PasskeyID and Lobstr admin addresses must be different identities.",
+          "name": "EqualAdmins",
+          "value": 12
+        },
+        {
+          "doc": "A replacement admin cannot equal the other current admin.",
+          "name": "NewAdminEqualsExisting",
+          "value": 13
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StakerKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Staker",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StakerInfo",
+      "fields": [
+        {
+          "doc": "Rewards accrued but not yet claimed (in Zi stroops).",
+          "name": "pending_rewards",
+          "type_": "i128"
+        },
+        {
+          "doc": "Snapshot of `reward_per_token_stored` at the staker's last update.\\nUsed to compute newly accrued rewards since that checkpoint.",
+          "name": "reward_per_token_paid",
+          "type_": "i128"
+        },
+        {
+          "doc": "LP tokens currently staked (in stroops).",
+          "name": "staked",
+          "type_": "i128"
+        },
+        {
+          "doc": "Unix timestamp (seconds) when the stake lock expires.",
+          "name": "unlock_time",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "InstanceKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PasskeyAdmin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LobstrAdmin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "RewardToken"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LpToken"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalStaked"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "RewardPerTokenStored"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LastUpdateTime"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "RewardRate"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PeriodFinish"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "RewardLiability"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        }
+      ]
+    }
+  }
+]

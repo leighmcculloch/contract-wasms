@@ -1,0 +1,182 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "init",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "add_wallet",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "batch_work",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "invoker",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "kale_contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "farmers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "hashes",
+          "type_": {
+            "vec": {
+              "element_type": "bytes"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "nonces",
+          "type_": {
+            "vec": {
+              "element_type": "u64"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "batch_plant",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "invoker",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "kale_contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "farmers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amounts",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "batch_harvest",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "invoker",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "kale_contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "farmers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "blocks",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "remove_wallet",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

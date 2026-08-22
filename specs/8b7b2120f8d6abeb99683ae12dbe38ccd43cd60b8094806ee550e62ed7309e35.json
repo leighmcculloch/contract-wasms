@@ -1,0 +1,782 @@
+[
+  {
+    "function_v0": {
+      "doc": "Keeper pushes the latest SY->asset rate and accrues yield to YT holders.",
+      "name": "sync",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_index",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "NotMatured",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InsufficientPt",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InsufficientYt",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "BadAmount",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "IndexWentDown",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "NoLiquidity",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "VaultClosed",
+          "value": 9
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Buy PT with `quote_in` of the stable token, this LOCKS A FIXED RATE.",
+      "name": "buy_pt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "buyer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "quote_in",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Recombine `amt` PT + `amt` YT back into SY at any time (PT + YT == SY).",
+      "name": "combine",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amt",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deposit `sy_amt` of the underlying SY; mint equal PT and YT (asset-denominated).",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sy_amt",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sell `pt_in` PT back to the pool for the stable token.",
+      "name": "sell_pt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "seller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pt_in",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Underlying"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Quote"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Maturity"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "IndexLast"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalPt"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalYt"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalSy"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AccYield"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ReserveQuote"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LpTotal"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Pt",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Yt",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Debt",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Owed",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Lp",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Start"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "VaultShares",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "VaultTotalShares"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "VaultPt"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "VaultQuote"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "VaultSy"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "VaultSettled"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "PT spot price in quote units (1e7-scaled). 1.0 == par. Uses the time-decayed\\neffective reserve so the mark converges to par as maturity approaches.",
+      "name": "pt_price",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "After maturity, redeem `amt` PT for its asset value in SY (the fixed-rate settles).",
+      "name": "redeem_pt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amt",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VaultInfo",
+      "fields": [
+        {
+          "doc": "",
+          "name": "idle_quote",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "nav_quote",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "pt",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "settled",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "sy",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_shares",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Implied annualized fixed rate (1e7-scaled) from the pool's current PT price.",
+      "name": "fixed_rate",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Create the market. `index_init` is the starting SY->asset rate (1e7 = 1:1).\\n`quote` is the stable token (e.g. USDC) the built-in PT AMM prices against.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "underlying",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "quote",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "maturity",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "index_init",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pt_balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "vault_info",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "VaultInfo"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "yt_balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketInfo",
+      "fields": [
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "matured",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "maturity",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "quote",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "reserve_pt",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "reserve_quote",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_pt",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_sy",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_yt",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "underlying",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Claim accrued yield (paid in SY worth the owed asset value).",
+      "name": "claim_yield",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "market_info",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "MarketInfo"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer_pt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amt",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer_yt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amt",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "After settlement, claim your pro-rata SY and any uninvested cash, burning shares.",
+      "name": "vault_claim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "View: how much PT `quote_in` would buy right now (no state change).",
+      "name": "quote_buy_pt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "quote_in",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Keeper deploys `amount` of idle vault cash into PT at the current price (the carry).",
+      "name": "vault_invest",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "After maturity, redeem all vault PT at par into SY. This locks in the fixed return.",
+      "name": "vault_settle",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "vault_shares",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Seed / add liquidity to the PT-quote pool. Returns LP shares minted.",
+      "name": "add_liquidity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pt_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "quote_in",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Live claimable yield (asset units) without mutating state.",
+      "name": "pending_yield",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Fraction of the tenor elapsed, 1e7-scaled (0 at issuance, 1e7 at maturity).",
+      "name": "time_progress",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deposit `quote_in` of the stable token into the carry vault. Returns shares minted.",
+      "name": "vault_deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "quote_in",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Annualized fixed rate (1e7-scaled) implied by a PT quoted at `pt_price` (asset per PT,\\n1e7-scaled) with `secs_to_maturity` left. rate = (1/price - 1) * year/tenor.",
+      "name": "implied_fixed_rate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pt_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "secs_to_maturity",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  }
+]

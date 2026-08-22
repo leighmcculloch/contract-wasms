@@ -1,0 +1,301 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TokenError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InsufficientBalance",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 2
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Mint tokens to an address. Admin only, no attestation required.",
+      "name": "mint",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Query token balance.",
+      "name": "balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Query the registry address.",
+      "name": "registry",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Transfer tokens. Requires a valid Predicate attestation.\\n\\nThis is the key function: before moving tokens, it calls the Predicate\\nRegistry via `predicate_client::authorize_transaction()` to verify that\\nthe transfer is compliant with the configured policy.",
+      "name": "transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "attestation",
+          "type_": {
+            "udt": {
+              "name": "Attestation"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "TokenError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Query the policy ID.",
+      "name": "policy_id",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deploy the token with a Predicate Registry binding.\\n\\n# Arguments\\n* `admin` - Token admin who can mint\\n* `registry` - Address of the deployed PredicateRegistry contract\\n* `policy_id` - Policy identifier (e.g. \"x-a1b2c3d4e5f6g7h8\")\\n* `network` - Stellar network passphrase (e.g. \"Test SDF Network ; September 2015\")",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "registry",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "policy_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "network",
+          "type_": "string"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Register this contract's policy with the Predicate Registry.\\nCall this once after deployment. The admin must authorize.",
+      "name": "register_policy",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Describes a transaction to be authorized.",
+      "lib": "",
+      "name": "Statement",
+      "fields": [
+        {
+          "doc": "",
+          "name": "encoded_sig_and_args",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "expiration",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "msg_sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "msg_value",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "policy",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "uuid",
+          "type_": "string"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Ed25519-signed authorization from an attester.",
+      "lib": "",
+      "name": "Attestation",
+      "fields": [
+        {
+          "doc": "",
+          "name": "attester",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "expiration",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "signature",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "uuid",
+          "type_": "string"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RegistryError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AttesterAlreadyRegistered",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "AttesterNotRegistered",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "AttestationExpired",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "UuidAlreadyUsed",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "UuidMismatch",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "ExpirationMismatch",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidSignature",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 10
+        }
+      ]
+    }
+  }
+]

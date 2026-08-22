@@ -1,0 +1,733 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "All failure modes are explicit, contiguous `u32` codes so the TypeScript\\nclient can map them to user-facing messages without guessing.",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "TripExists",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "TripNotFound",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "TripSettled",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InsufficientBalance",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "ExceedsContribution",
+          "value": 9
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys. `Trip`, `Member` and `Spends` live in *persistent* storage\\n(they must outlive the contract instance so funds and the audit trail are\\nnever stranded); `Admin`/`Token`/`TotalPooled` live in *instance* storage so\\nthey share the instance TTL.",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Default token (the XLM Stellar Asset Contract) recorded at init.",
+            "name": "Token"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Running total of all minor units ever contributed across every trip.",
+            "name": "TotalPooled"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "trip_id -> Trip",
+            "name": "Trip",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "(trip_id, member) -> i128 lifetime contributed by that wallet.",
+            "name": "Member",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              },
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "trip_id -> Vec<SpendRecord> (append-only on-chain spend ledger).",
+            "name": "Spends",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "Lifecycle of a trip pool.\\nA trip starts `Open`; the organizer may `Settled` it once the journey is over.\\nSettling only blocks *new contributions* \\xe2\\x80\\x94 the organizer can still spend or\\nrefund the remaining held balance afterward.",
+      "lib": "",
+      "name": "TripStatus",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Open",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Settled",
+          "value": 1
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "Whether a ledger entry was an outbound spend to a payee, or a remainder\\nrefund returned to a member at trip end.",
+      "lib": "",
+      "name": "SpendKind",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Spend",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Refund",
+          "value": 1
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A single group travel fund, keyed in storage by a 32-byte `trip_id`\\n(the app passes `sha256(<trip UUID>)`).\\n\\nThe contract custodies exactly `balance` minor units of `token` for this\\ntrip. `pooled` is the lifetime sum ever contributed (never decremented), so\\nthe UI can always show \"total pooled\". `spent` + `refunded` + `balance` ==\\n`pooled`.",
+      "lib": "",
+      "name": "Trip",
+      "fields": [
+        {
+          "doc": "Funds currently held in the contract for this trip (pooled - spent - refunded).",
+          "name": "balance",
+          "type_": "i128"
+        },
+        {
+          "doc": "Number of distinct member wallets that have funded this trip.",
+          "name": "members",
+          "type_": "u32"
+        },
+        {
+          "doc": "The organizer who opened the trip; the only address allowed to spend/refund.",
+          "name": "organizer",
+          "type_": "address"
+        },
+        {
+          "doc": "Lifetime total ever contributed (monotonic; survives spends/refunds).",
+          "name": "pooled",
+          "type_": "i128"
+        },
+        {
+          "doc": "Lifetime total ever refunded to members at trip end.",
+          "name": "refunded",
+          "type_": "i128"
+        },
+        {
+          "doc": "Number of entries recorded in the on-chain spend ledger (spends + refunds).",
+          "name": "spends",
+          "type_": "u32"
+        },
+        {
+          "doc": "Lifetime total ever paid out to payees.",
+          "name": "spent",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "TripStatus"
+            }
+          }
+        },
+        {
+          "doc": "Stellar Asset Contract (SAC) address of the pool asset (XLM SAC by default).",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "One immutable entry in a trip's on-chain spend ledger. Appended on every\\n`spend` and `refund` and never mutated \\xe2\\x80\\x94 this is the audit trail the whole\\ngroup can read.",
+      "lib": "",
+      "name": "SpendRecord",
+      "fields": [
+        {
+          "doc": "Amount paid out, in the token's minor units (7 dp).",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "Spend (to a payee) or Refund (remainder back to a member).",
+          "name": "kind",
+          "type_": {
+            "udt": {
+              "name": "SpendKind"
+            }
+          }
+        },
+        {
+          "doc": "Ledger sequence at which the payout was recorded (on-chain timestamp).",
+          "name": "ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "`sha256(<payout description>)` \\xe2\\x80\\x94 ties the on-chain entry to its off-chain note.",
+          "name": "memo",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "Wallet the funds were paid to (a vendor payee, or a member on refund).",
+          "name": "payee",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "One-time setup. Records the admin (the deployer) and the default token\\n(the XLM Stellar Asset Contract).",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Open a new trip pool owned by `organizer` and denominated in `token` (the\\nXLM SAC by default). Fails if the id is already taken.\\n\\nAuth: requires the organizer's signature.",
+      "name": "open_trip",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "organizer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "trip_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Contribute `amount` of the trip's token into the pool, locking it in the\\ncontract. Tracks the trip total and the member's lifetime amount;\\nincrements the distinct-member count on a wallet's first contribution.\\nReturns the new lifetime pooled total.\\n\\nAuth: requires the member's signature. The same authorization covers the\\ninner SAC `transfer(member -> contract)`.",
+      "name": "contribute",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "trip_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Spend `amount` of the held balance to `payee`, appending an immutable\\n`SpendRecord` (payee, amount, `memo` = sha256 of the payout note, ledger\\nsequence, kind=Spend) to the trip's on-chain spend ledger. Returns the\\nindex of the new ledger entry.\\n\\nAuth: requires the trip organizer's signature; cannot exceed the held\\nbalance.",
+      "name": "spend",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "organizer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "trip_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payee",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "memo",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Refund `amount` of the remaining held balance back to `member` at trip\\nend, decrementing that member's tracked contribution and appending an\\nimmutable `SpendRecord` (kind=Refund) to the on-chain ledger. Returns the\\nindex of the new ledger entry.\\n\\nAuth: requires the trip organizer's signature; cannot exceed the member's\\nremaining tracked contribution nor the held balance.",
+      "name": "refund",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "organizer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "trip_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "memo",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Settle a trip: block new contributions (the organizer can still spend or\\nrefund the remaining held balance afterward). Auth: trip organizer.",
+      "name": "close_trip",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "organizer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "trip_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_trip",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "trip_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Trip"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pooled",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "trip_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "trip_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "member_amount",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "trip_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "member",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "spend_count",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "trip_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_spends",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "trip_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "SpendRecord"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_pooled",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_token",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Replace the contract's own code (admin-gated). Enables shipping fixes\\nwithout migrating trip balances.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

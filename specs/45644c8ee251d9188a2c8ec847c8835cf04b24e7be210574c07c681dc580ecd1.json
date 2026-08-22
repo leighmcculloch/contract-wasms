@@ -1,0 +1,738 @@
+[
+  {
+    "function_v0": {
+      "doc": "Send a support payment to a creator.\\nTransfers USDC from sender \\xe2\\x86\\x92 recipient directly on-chain.",
+      "name": "support",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "message",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvoiceNotFound",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvoiceAlreadyPaid",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvoiceExpired",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvoiceCancelled",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "InvalidExpiry",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "InsufficientBalance",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "IdentityNotFound",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "UsernameAlreadyTaken",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "InvalidUsername",
+          "value": 13
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_stats",
+      "inputs": [],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "u64",
+              "i128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "UsdcContract"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "NextInvoiceId"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Invoice",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "MerchantInvoices",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "MerchantBalance",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalVolume"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalInvoices"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Identity",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "UsernameToAddr",
+            "type_": [
+              "string"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "NextSupportId"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "SupportPayment",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "ReceivedSupports",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Invoice",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "created_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "memo",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "merchant",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "paid_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "payer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "InvoiceStatus"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc_contract",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Public profile stored on-chain for each freelancer.",
+      "lib": "",
+      "name": "Identity",
+      "fields": [
+        {
+          "doc": "",
+          "name": "avatar_url",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "bio",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "created_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "display_name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "supporter_count",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "total_received",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "username",
+          "type_": "string"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_invoice",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "invoice_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Invoice"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pay_invoice",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "invoice_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "payer",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "bool",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get identity by address.",
+      "name": "get_identity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Identity"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Register or update a freelancer's on-chain identity.\\nUsername must be unique across the platform.",
+      "name": "set_identity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "username",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "display_name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "bio",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "avatar_url",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel_invoice",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "invoice_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "merchant",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_invoice",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "merchant",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "memo",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "InvoiceStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Pending"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paid"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cancelled"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Expired"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A single \"support me\" (Buy-Me-a-Coffee) payment.",
+      "lib": "",
+      "name": "SupportPayment",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "created_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "message",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get a single support payment by ID.",
+      "name": "get_support_payment",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "support_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "SupportPayment"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_merchant_balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "merchant",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_merchant_invoices",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "merchant",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "u64"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get all support payments received by an address.",
+      "name": "get_received_supports",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "u64"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get identity by username.",
+      "name": "get_identity_by_username",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "username",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Identity"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

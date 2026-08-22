@@ -1,0 +1,571 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "active",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "collateral_factor",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "debt_ceiling",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "emode_category",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "liquidation_threshold",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "permissioned",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "pool_type",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "total_borrowed",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_supplied",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Flash loan callback handler.",
+      "name": "execute_op",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initializes liquidation engine dependencies and admin.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "core_pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "backstop",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "base_asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Queries an active or historical auction state.",
+      "name": "get_auction",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "auction_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Auction"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Fills liquidation auction directly.",
+      "name": "fill_auction",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "filler",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "auction_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Finalizes bad debt against backstop.",
+      "name": "finalize_bad_debt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "auction_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "residual_shortfall",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Fills liquidation auction via flash loan.",
+      "name": "fill_via_flash_loan",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "filler",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "auction_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Runs fallback protocol liquidator.",
+      "name": "run_protocol_liquidator",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "auction_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Creates a liquidation auction for an unhealthy position.",
+      "name": "create_liquidation_auction",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "borrower",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "collateral_asset",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "debt_asset",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AuctionNotFound",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AuctionExpired",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "HealthFactorTooHigh",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "CorePoolNotFound",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "Unsupported",
+          "value": 99
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "active",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "collateral_factor",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "debt_ceiling",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "emode_category",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "liquidation_threshold",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "permissioned",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "pool_type",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "total_borrowed",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_supplied",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PositionState",
+      "fields": [
+        {
+          "doc": "",
+          "name": "borrowed",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "delegated",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "supplied",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Auction",
+      "fields": [
+        {
+          "doc": "",
+          "name": "active",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "collateral_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "collateral_asset",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "debt_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "debt_asset",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "start_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "CorePool"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Backstop"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "BaseAsset"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AuctionCount"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Auction",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "FlashContextKey"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FlashContext",
+      "fields": [
+        {
+          "doc": "",
+          "name": "auction_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "filler",
+          "type_": "address"
+        }
+      ]
+    }
+  }
+]

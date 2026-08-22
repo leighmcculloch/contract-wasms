@@ -1,0 +1,151 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "WasmHash"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Deployed",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FactoryError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "AlreadyDeployed",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidPublicKey",
+          "value": 4
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Contract constructor. Runs atomically as part of the deploy transaction,\\nso the admin is fixed the instant the factory exists \\xe2\\x80\\x94 it cannot be\\nfront-run. Only this admin may later call `init`.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "One-time initialization. Stores the wallet Wasm hash.\\n\\nGated on the admin set at construction. Without this, `init` was\\nunauthenticated and \\xe2\\x80\\x94 because the mainnet runbook deploys and initializes\\nin two separate transactions \\xe2\\x80\\x94 anyone monitoring mainnet could win the\\nrace, install their own wasm hash, and have every wallet subsequently\\ndeployed through the factory run attacker-controlled code.",
+      "name": "init",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "FactoryError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deploy a new invisible_wallet for the given P-256 public key.\\nReturns the Address of the newly deployed wallet.",
+      "name": "deploy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "public_key",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "rp_id",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "origin",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": {
+              "udt": {
+                "name": "FactoryError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

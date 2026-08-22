@@ -1,0 +1,751 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "Errors returned by the Factory contract. Codes are a published ABI.\\n\\nFactory codes occupy `11000-11999`; the shared band contract lives in `contracts/pool/src/error.rs`.\\n\\n| Band   | Range       | What it means                   | Retriable            |\\n|--------|-------------|---------------------------------|----------------------|\\n| Input  | `x000\\xe2\\x80\\x93x099` | Argument malformed              | No \\xe2\\x80\\x94 fix the call    |\\n| Policy | `x100\\xe2\\x80\\x93x199` | Not the admin                   | No \\xe2\\x80\\x94 get authorized  |\\n| State  | `x200\\xe2\\x80\\x93x299` | Mutable state forbids it now    | When state changes   |\\n| Ext    | `x400\\xe2\\x80\\x93x499` | A candidate coin's token failed | Depends on the token |",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "Fewer than 2 or more than 8 coins.",
+          "name": "InputCoinCountOutOfRange",
+          "value": 11000
+        },
+        {
+          "doc": "The same coin appears twice.",
+          "name": "InputDuplicateCoins",
+          "value": 11001
+        },
+        {
+          "doc": "A coin reports more decimals than `PRECISION_DECIMALS`.",
+          "name": "InputTooManyDecimals",
+          "value": 11002
+        },
+        {
+          "doc": "`fee` exceeds the 1% deploy-time cap.",
+          "name": "InputFeeOutOfRange",
+          "value": 11003
+        },
+        {
+          "doc": "`offpeg_fee_multiplier` below `FEE_DENOMINATOR`, or the dynamic fee it implies exceeds 50%.",
+          "name": "InputOffpegMultiplierOutOfRange",
+          "value": 11004
+        },
+        {
+          "doc": "`A` is zero or \\xe2\\x89\\xa5 1e6.",
+          "name": "InputAmpOutOfRange",
+          "value": 11005
+        },
+        {
+          "doc": "The parallel per-coin arrays disagree with the coin count.",
+          "name": "InputArrayLengthMismatch",
+          "value": 11006
+        },
+        {
+          "doc": "A reserved parameter carried a value this build cannot honour.",
+          "name": "InputNotImplemented",
+          "value": 11007
+        },
+        {
+          "doc": "An admin-gated entrypoint was called by a non-admin.",
+          "name": "PolicyNotAdmin",
+          "value": 11100
+        },
+        {
+          "doc": "Called before the constructor ran.",
+          "name": "StateNotInitialized",
+          "value": 11200
+        },
+        {
+          "doc": "`accept_transfer_ownership` was called with no transfer pending.",
+          "name": "StateNoPendingTransfer",
+          "value": 11201
+        },
+        {
+          "doc": "No implementation is registered at the requested index.",
+          "name": "StateUnregisteredImplementation",
+          "value": 11202
+        },
+        {
+          "doc": "A candidate coin would not report usable `decimals`.",
+          "name": "ExtTokenBadMetadata",
+          "value": 11400
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PoolDeployed",
+      "prefix_topics": [
+        "plain_pool_deployed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "deployer",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "coins",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "a",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "fee",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FeeReceiverSet",
+      "prefix_topics": [
+        "fee_receiver_set"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_receiver",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_receiver",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OwnershipAccepted",
+      "prefix_topics": [
+        "ownership_accepted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "previous_admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FactoryInitialized",
+      "prefix_topics": [
+        "factory_initialized"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "fee_receiver",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OwnershipCommitted",
+      "prefix_topics": [
+        "ownership_committed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "current_admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "future_admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PoolImplementationSet",
+      "prefix_topics": [
+        "pool_implementation_set"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PoolImplementationRetired",
+      "prefix_topics": [
+        "pool_implementation_retired"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "The current admin address of the factory.",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "The pending admin of a two-step transfer, absent when none is in flight.",
+            "name": "FutureAdmin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Destination address of every pool's admin-fee collection. Never null.",
+            "name": "FeeReceiver"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Pools count ever deployed.",
+            "name": "PoolCount"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Pool wasm hash at an implementation-catalogue index, absent when unregistered or retired.",
+            "name": "PoolImpl",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Deployed pool's address by index. Append-only: never removed, never re-indexed.",
+            "name": "PoolList",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Pool's data - the Factory's record of a pool it deployed.",
+            "name": "PoolData",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "What the Factory records about every pool it deploys.",
+      "lib": "",
+      "name": "PoolData",
+      "fields": [
+        {
+          "doc": "In index order. Position is the pool's coin index, fixed forever.",
+          "name": "coins",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "Decimals for all coins, read from each token itself \\xe2\\x80\\x94 never supplied by the caller.",
+          "name": "decimals",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "The implementation this pool was built from. Retiring that index does not touch this pool.",
+          "name": "implementation",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The only authority over every pool this Factory deployed. Pools have no owner of their own.",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The pool's coins, in index order. Empty for a pool this Factory never deployed.\\n\\n- `pool`: a pool this Factory deployed.",
+      "name": "get_coins",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The pool's address at a given deployment position, or `None` past the end.\\n\\n- `index`: 0-based deployment order; index = 0 is the first pool ever deployed.",
+      "name": "pool_list",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Number of pools ever deployed.",
+      "name": "pool_count",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "How many coins the pool trades. Zero for a pool this Factory never deployed.\\n\\n- `pool`: a pool this Factory deployed.",
+      "name": "get_n_coins",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Destination of every pool's `withdraw_admin_fees`.\\nCall is permissionless; the destination is not.",
+      "name": "fee_receiver",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The pending admin, if a transfer is in flight. Holds no authority until accepted.",
+      "name": "future_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Each coin's decimals, read from the token at deploy time. Empty for an unknown pool.\\n\\n- `pool`: a pool this Factory deployed.",
+      "name": "get_decimals",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "u32"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set up the Factory: record the admin and fee receiver.\\n\\n- `admin`: the sole authority over every pool this Factory deploys.\\n- `fee_receiver`: destination of every pool's admin-fee sweep.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_receiver",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Redirect the admin-fee destination for every pool at once.",
+      "name": "set_fee_receiver",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_receiver",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deploy and register a pool from a registered implementation.\\n\\nPermissionless: `deployer` is authorized only to prove identity.\\nDuplicates are allowed \\xe2\\x80\\x94 the salt is the pool counter, so identical\\ndeploys cannot collide. Coin order is fixed verbatim and never sorted; coin 0's position is\\npermanent, as it is the base the pool's price oracle prices every other coin against.\\n\\n- `deployer`: pays for and is recorded as the deployer; does not gate the call.\\n- `name`, `symbol`: the LP share token's name and symbol.\\n- `coins`: token addresses; order is permanent, with coin 0 as the price-oracle base.\\n- `a`: amplification coefficient, unscaled.\\n- `fee`: swap fee charged on each trade.\\n- `offpeg_fee_multiplier`: scales the fee up as the pool depegs.\\n- `implementation_idx`: which registered implementation to deploy.\\n- `ma_exp_time`, `asset_types`, `method_ids`, `oracles`: reserved for asset-type-1 (rate-oracle)\\nsupport, which this build does not implement. They are currently accepted but ignored \\xe2\\x80\\x94 only\\n`asset_types.le",
+      "name": "deploy_plain_pool",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "deployer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "symbol",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "coins",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "a",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "offpeg_fee_multiplier",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "ma_exp_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "implementation_idx",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "asset_types",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "method_ids",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 4
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "oracles",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The wasm hash bound to pool's `index`, or `None` if unregistered or retired.\\n\\n- `index`: the implementation slot to read.",
+      "name": "pool_implementation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "bytes_n": {
+                "n": 32
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Bind an implementation index to a pool wasm hash, or retire it by passing `None`.\\n\\n- `index`: the implementation slot to bind or clear.\\n- `wasm_hash`: the pool wasm hash to bind, or `None` to retire the slot.",
+      "name": "set_pool_implementations",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "wasm_hash",
+          "type_": {
+            "option": {
+              "value_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Second step of ownership transfer. Callable only by the pending admin; promotes it and clears the pending slot.",
+      "name": "accept_transfer_ownership",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "First step in a two-step ownership transfer: records `new_admin` as pending.\\n\\nStep two is `accept_transfer_ownership`, which the pending admin calls to take authority.\\nThe two steps make the new admin prove they can sign before any authority moves,\\nso a typo in the address can't hand the pools to a key nobody controls.\\n\\n- `new_admin`: the address that may later accept to become the Factory admin.",
+      "name": "commit_transfer_ownership",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The wasm hash of the implementation a pool was built from, or `None` for an unknown pool.\\nRetiring that implementation index leaves this pool untouched.\\n\\n- `pool`: a pool this Factory deployed.",
+      "name": "get_implementation_address",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "bytes_n": {
+                "n": 32
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

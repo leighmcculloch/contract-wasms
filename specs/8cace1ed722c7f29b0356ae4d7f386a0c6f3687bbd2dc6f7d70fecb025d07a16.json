@@ -1,0 +1,272 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "PlayerCredentials",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "CredentialById",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "CredentialCounter"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Credential",
+      "fields": [
+        {
+          "doc": "",
+          "name": "cefr_level",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "issued_at_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "issuer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "player",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "score",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "subject",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ContractError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NonTransferable",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "CredentialNotFound",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Unauthorised",
+          "value": 3
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Credentials are soulbound \\xe2\\x80\\x94 they can never move between wallets.\\nAlways rejects, on purpose: this is what makes a credential prove\\n*this specific player* earned it, instead of just being a tradeable\\nbadge someone else could buy.",
+      "name": "transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "bool",
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Register the deployer as admin (call once after deploy).",
+      "name": "init_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Return all credentials earned by a player, most recent last.",
+      "name": "get_credentials",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "player",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "Credential"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Issue a soulbound credential to a player for completing `subject` at\\n`cefr_level` with `score` (0-100). Admin-only: in this MVP the admin\\nacts as the trusted issuer on behalf of WordScrambleContract, since\\nthe two contracts aren't wired together yet. Panics if score is below\\nthe pass threshold, so a credential can never be issued for a failing\\nor borderline result.",
+      "name": "issue_credential",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "player",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "subject",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "cefr_level",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "score",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Publicly verify a single credential by ID. Anyone can call this via\\nthe public RPC without needing to trust the issuing platform.",
+      "name": "verify_credential",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "credential_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Credential"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

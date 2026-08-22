@@ -1,0 +1,491 @@
+[
+  {
+    "function_v0": {
+      "doc": "Deploy-time initialisation.  Must be called exactly once.\\n\\n* `admin`        \\xe2\\x80\\x94 address that can call admin-only functions.\\n* `reward_token` \\xe2\\x80\\x94 SEP-41 contract address for Zi (the reward currency).\\n* `lp_token`     \\xe2\\x80\\x94 SEP-41 LP token contract address stakers must deposit.\\nCan be updated later by the admin via `set_lp_token()`.",
+      "name": "init",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "reward_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "lp_token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Claim all pending Zi rewards without unstaking.  Can be called at any\\ntime, regardless of the lock status.",
+      "name": "claim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "staker",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Stake `amount` LP tokens.  Starts (or extends) a 1-year hard lock.\\n\\nIf the staker already has an active position, the new tokens are added\\nand the lock is reset to `now + 1 year` from the new deposit time.\\nRewards already accrued up to this point are snapshotted into\\n`pending_rewards`.",
+      "name": "stake",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "staker",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Withdraw all staked LP tokens.  Reverts if the 1-year lock has not\\nexpired.  Automatically claims any pending Zi rewards.",
+      "name": "unstake",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "staker",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the configured LP token address.",
+      "name": "lp_token",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pause the contract \\xe2\\x80\\x94 blocks stake / unstake / claim.  Admin only.",
+      "name": "set_paused",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the current reward rate (Zi stroops per second).",
+      "name": "reward_rate",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the staker's current position: (staked, unlock_time, pending_rewards).",
+      "name": "staker_info",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "staker",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "u64",
+              "i128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deposit Zi into the reward pool.  Can be called by **any** account\\n(G-address or Soroban contract address) at any time.\\n\\nWhen called:\\n1. Transfers `amount` Zi from `funder` to this contract.\\n2. If there is an active reward period with remaining rewards, those\\nremaining rewards roll forward into the new period budget.\\n3. Recalculates `reward_rate` = total_budget / SECONDS_PER_YEAR.\\n4. Sets `period_finish` = now + SECONDS_PER_YEAR.\\n\\nThe 10% APR target is achieved by the caller depositing 10% of the\\ntotal staked LP value in Zi per year.  The contract does not enforce\\nthe 10% figure \\xe2\\x80\\x94 it emits whatever rate the pool can sustain.",
+      "name": "fund_rewards",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "funder",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the configured reward token address.",
+      "name": "reward_token",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Update the LP token address the contract accepts for staking.\\nAdmin only.  Existing stakers are unaffected \\xe2\\x80\\x94 their positions remain\\nvalid under the old token; only new stakes use the new address.",
+      "name": "set_lp_token",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_lp_token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns total LP tokens staked across all accounts.",
+      "name": "total_staked",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the timestamp when the current reward period ends.",
+      "name": "period_finish",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Transfer the admin role to a new address.",
+      "name": "transfer_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the current pending rewards for a staker (without mutating state).",
+      "name": "pending_rewards",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "staker",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "`init()` has already been called",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "Caller is not the contract admin",
+          "name": "NotAdmin",
+          "value": 2
+        },
+        {
+          "doc": "Amount must be greater than zero",
+          "name": "ZeroAmount",
+          "value": 3
+        },
+        {
+          "doc": "Staker has no staked balance",
+          "name": "NothingStaked",
+          "value": 4
+        },
+        {
+          "doc": "Lock period has not expired yet \\xe2\\x80\\x94 unstake is blocked",
+          "name": "LockNotExpired",
+          "value": 5
+        },
+        {
+          "doc": "Reward pool has insufficient Zi to cover new rewards for the period",
+          "name": "InsufficientRewardPool",
+          "value": 6
+        },
+        {
+          "doc": "Contract is paused; all user actions are blocked",
+          "name": "ContractPaused",
+          "value": 7
+        },
+        {
+          "doc": "Attempted to fund with zero Zi",
+          "name": "ZeroFundAmount",
+          "value": 8
+        },
+        {
+          "doc": "LP token address has not been configured",
+          "name": "LpTokenNotSet",
+          "value": 9
+        },
+        {
+          "doc": "Reward token address has not been configured",
+          "name": "RewardTokenNotSet",
+          "value": 10
+        },
+        {
+          "doc": "Integer overflow in reward calculation (should never happen in practice)",
+          "name": "Overflow",
+          "value": 11
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "All persistent storage keys used by the contract.",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Contract admin (can set reward rate, pause, update LP token)",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "The SEP-41 token used for rewards (Zi SAC or contract address)",
+            "name": "RewardToken"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "The LP token contract address stakers must deposit",
+            "name": "LpToken"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Total LP tokens currently held by the contract",
+            "name": "TotalStaked"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Accumulated reward per LP token (scaled by PRECISION), updated on every\\nmutating call (stake / unstake / claim / fund_rewards)",
+            "name": "RewardPerTokenStored"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Timestamp (ledger timestamp seconds) of the last time reward state was\\nupdated",
+            "name": "LastUpdateTime"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Zi reward tokens per second emitted to all stakers.\\nAdmin sets this when funding the pool.  Formula:\\nreward_rate = annual_reward_budget / SECONDS_PER_YEAR",
+            "name": "RewardRate"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Unix timestamp at which the current reward period ends.\\nRewards stop accruing after this point until the pool is topped up.",
+            "name": "PeriodFinish"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Total Zi tokens held in the reward pool (unfunded balance tracking)",
+            "name": "RewardPool"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Whether the contract is paused (emergency use only)",
+            "name": "Paused"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Per-staker state",
+            "name": "Staker",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Stored for every address that stakes.",
+      "lib": "",
+      "name": "StakerInfo",
+      "fields": [
+        {
+          "doc": "Rewards accrued but not yet claimed.",
+          "name": "pending_rewards",
+          "type_": "i128"
+        },
+        {
+          "doc": "Snapshot of `reward_per_token_stored` at the time of the last update\\nfor this staker.  Used to compute newly accrued rewards.",
+          "name": "reward_per_token_paid",
+          "type_": "i128"
+        },
+        {
+          "doc": "Amount of LP tokens currently staked.",
+          "name": "staked",
+          "type_": "i128"
+        },
+        {
+          "doc": "Unix timestamp (seconds) when the lock expires.\\nSet to `env.ledger().timestamp() + LOCK_PERIOD` on `stake()`.\\nA staker may only `unstake()` once this has passed.",
+          "name": "unlock_time",
+          "type_": "u64"
+        }
+      ]
+    }
+  }
+]

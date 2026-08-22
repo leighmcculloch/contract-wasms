@@ -1,0 +1,808 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "add_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": {
+            "udt": {
+              "name": "Signer"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signer_key",
+          "type_": {
+            "udt": {
+              "name": "SignerKey"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "SignerVal"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__check_auth",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signature_payload",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signatures",
+          "type_": {
+            "udt": {
+              "name": "Signatures"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "auth_contexts",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Context"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": {
+            "udt": {
+              "name": "Signer"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "remove_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signer_key",
+          "type_": {
+            "udt": {
+              "name": "SignerKey"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "update_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": {
+            "udt": {
+              "name": "Signer"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Contract errors.\\n\\nDeliberately renumbered for the v1 interface so the error space is disjoint\\nfrom the legacy (pre-1.0) contract's 1-9 range. A client decoding an error\\ncode < 100 is talking to a legacy wallet.\\n\\nRanges:\\n- 100-109: signer storage / management\\n- 110-119: auth (`__check_auth`)\\n- 120-129: WebAuthn (secp256r1) verification",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "The requested signer does not exist on this smart wallet.",
+          "name": "SignerNotFound",
+          "value": 100
+        },
+        {
+          "doc": "`add_signer` was called with a signer key that already exists.",
+          "name": "SignerAlreadyExists",
+          "value": 101
+        },
+        {
+          "doc": "The signer's expiration timestamp is in the past.",
+          "name": "SignerExpired",
+          "value": 102
+        },
+        {
+          "doc": "The operation would remove \\xe2\\x80\\x94 or demote via `update_signer` \\xe2\\x80\\x94 the\\nwallet's LAST durable admin signer: a signer stored `Persistent`,\\nnon-expiring (`SignerExpiration(None)`), and independently\\nadmin-capable \\xe2\\x80\\x94 either unlimited (`SignerLimits(None)`) or holding a\\nlimits entry for the wallet's own address with no required co-signers\\n(`None` or an empty list). With zero such signers no `add_signer` or\\n`upgrade` could ever be authorized again, permanently locking the\\nwallet on an immutable network, so the transition is rejected.\\nTo retire the last admin signer, add (or promote) a replacement\\ndurable admin signer first.\\n\\nCase this guard CANNOT catch (statically undecidable): a POLICY\\nsigner with an admin-shaped grant counts as an admin even if its\\n`policy__` rejects every request. If such a policy is your only\\nremaining admin, the wallet's admin surface is unrecoverable even\\nthough the signer still exists. Keep a non-policy admin (or a second\\nadmin) at all times.",
+          "name": "LastAdminSigner",
+          "value": 103
+        },
+        {
+          "doc": "The operation would leave the wallet without any DURABLE signer \\xe2\\x80\\x94 one\\nstored `Persistent` with `SignerExpiration(None)`, any limits. Fired\\nby `remove_signer` (removing the last durable signer), `update_signer`\\n(demoting it to `Temporary` storage or to an expiring value), and\\n`__constructor` (the wallet's first signer must be durable).\\nNon-durable signers can evict or expire with NO contract\\ncall, so only a durable signer guarantees the wallet always keeps at\\nleast one live signer; with zero live signers nothing \\xe2\\x80\\x94 not even\\n`add_signer` \\xe2\\x80\\x94 can ever be authorized again. This is the\\nclassification-independent backstop beneath `LastAdminSigner`. To\\nretire the last durable signer, add a durable replacement first.",
+          "name": "LastSigner",
+          "value": 104
+        },
+        {
+          "doc": "No signer in the signatures map is permitted to authorize one of the\\nrequested auth contexts.",
+          "name": "MissingContext",
+          "value": 110
+        },
+        {
+          "doc": "A signature's variant does not match the stored signer it claims to be\\nfor (e.g. an Ed25519 signature submitted for a Policy signer key).",
+          "name": "SignatureKeyValueMismatch",
+          "value": 111
+        },
+        {
+          "doc": "clientDataJSON exceeds the 1024 byte parse buffer.",
+          "name": "ClientDataJsonTooLarge",
+          "value": 120
+        },
+        {
+          "doc": "clientDataJSON is not parseable JSON (or is missing required fields).",
+          "name": "ClientDataJsonParseError",
+          "value": 121
+        },
+        {
+          "doc": "The challenge in clientDataJSON does not match the base64url-encoded\\nsignature payload. This binds the WebAuthn assertion to the Soroban\\nauthorization entry and MUST NOT be weakened.",
+          "name": "ClientDataJsonChallengeIncorrect",
+          "value": 122
+        },
+        {
+          "doc": "clientDataJSON `type` is not \"webauthn.get\".",
+          "name": "InvalidWebAuthnType",
+          "value": 123
+        },
+        {
+          "doc": "authenticatorData is shorter than the WebAuthn minimum of 37 bytes\\n(rpIdHash 32 + flags 1 + signCount 4).",
+          "name": "InvalidAuthenticatorData",
+          "value": 124
+        },
+        {
+          "doc": "The authenticator did not set the User Present (UP) flag.\\n\\nUP-only is the deliberate default. Requiring UP keeps\\nsilent, non-interactive assertions out while staying compatible with\\nauthenticators that cannot do User Verification (UV \\xe2\\x80\\x94 biometric/PIN).\\nUV is therefore NOT required by this contract. A deployment that wants\\nUV-required assertions should enforce it at the client/relayer layer,\\nor via a future per-signer flag (which would be a signer-model change,\\nnot a change to this check); the contract cannot upgrade UP-only\\nsigners to UV-required retroactively without such a flag.",
+          "name": "UserPresenceRequired",
+          "value": 125
+        },
+        {
+          "doc": "authenticatorData exceeds the 1024 byte cap (symmetric with\\n`ClientDataJsonTooLarge`). Real assertions are ~37 bytes; the cap\\nrejects oversized input BEFORE it is hashed, since this path is\\nreachable without a valid signature.",
+          "name": "AuthenticatorDataTooLarge",
+          "value": 126
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Full signer description used by `__constructor`, `add_signer` and\\n`update_signer`.",
+      "lib": "",
+      "name": "Signer",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Policy",
+            "type_": [
+              "address",
+              {
+                "udt": {
+                  "name": "SignerExpiration"
+                }
+              },
+              {
+                "udt": {
+                  "name": "SignerLimits"
+                }
+              },
+              {
+                "udt": {
+                  "name": "SignerStorage"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Ed25519",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              },
+              {
+                "udt": {
+                  "name": "SignerExpiration"
+                }
+              },
+              {
+                "udt": {
+                  "name": "SignerLimits"
+                }
+              },
+              {
+                "udt": {
+                  "name": "SignerStorage"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Secp256r1",
+            "type_": [
+              "bytes",
+              {
+                "bytes_n": {
+                  "n": 65
+                }
+              },
+              {
+                "udt": {
+                  "name": "SignerExpiration"
+                }
+              },
+              {
+                "udt": {
+                  "name": "SignerLimits"
+                }
+              },
+              {
+                "udt": {
+                  "name": "SignerStorage"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "A signature entry in the signatures map. `Policy` carries no signature\\nmaterial: inclusion of the policy key authorizes an on-chain `policy__`\\ncheck instead.",
+      "lib": "",
+      "name": "Signature",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Policy"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Ed25519",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 64
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Secp256r1",
+            "type_": [
+              {
+                "udt": {
+                  "name": "Secp256r1Signature"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage key identifying a signer. Secp256r1 carries the WebAuthn\\ncredential id (`keyId`).",
+      "lib": "",
+      "name": "SignerKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Policy",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Ed25519",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Secp256r1",
+            "type_": [
+              "bytes"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Stored signer value. Secp256r1 carries the SEC-1 uncompressed public key.",
+      "lib": "",
+      "name": "SignerVal",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Policy",
+            "type_": [
+              {
+                "udt": {
+                  "name": "SignerExpiration"
+                }
+              },
+              {
+                "udt": {
+                  "name": "SignerLimits"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Ed25519",
+            "type_": [
+              {
+                "udt": {
+                  "name": "SignerExpiration"
+                }
+              },
+              {
+                "udt": {
+                  "name": "SignerLimits"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Secp256r1",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 65
+                }
+              },
+              {
+                "udt": {
+                  "name": "SignerExpiration"
+                }
+              },
+              {
+                "udt": {
+                  "name": "SignerLimits"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "The `__check_auth` signature object: a map of signer keys to signatures.\\nMap ordering is the host's ScVal ordering. EVERY entry must verify (pass\\n2 of `__check_auth`) \\xe2\\x80\\x94 include only signatures that are needed.",
+      "lib": "",
+      "name": "Signatures",
+      "fields": [
+        {
+          "doc": "",
+          "name": "0",
+          "type_": {
+            "map": {
+              "key_type": {
+                "udt": {
+                  "name": "SignerKey"
+                }
+              },
+              "value_type": {
+                "udt": {
+                  "name": "Signature"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Authorization limits for a signer.\\n\\n- `None`: unlimited.\\n- `Some(empty map)`: no independent authority.\\n- `Some({address -> None})`: any invocation of `address`.\\n- `Some({address -> Some([keys])})`: any invocation of `address` only when\\nevery listed key also approves.\\n\\nA required key approves independently of its own limits. A required\\nnon-policy key must appear in the signatures map and pass full verification.\\nA required policy need not appear there, but it must remain stored and\\nunexpired. It must also approve through `policy__`. Removing it revokes all\\ndependent signers.\\n\\nLimited signers cannot authorize `CreateContract*`. A limited cryptographic\\nsigner can remove itself without satisfying its limits. A policy signature\\nalways calls `policy__`, including during self-removal. A limit for the\\nwallet address grants access to the wallet administration functions.",
+      "lib": "",
+      "name": "SignerLimits",
+      "fields": [
+        {
+          "doc": "",
+          "name": "0",
+          "type_": {
+            "option": {
+              "value_type": {
+                "map": {
+                  "key_type": "address",
+                  "value_type": {
+                    "option": {
+                      "value_type": {
+                        "vec": {
+                          "element_type": {
+                            "udt": {
+                              "name": "SignerKey"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Which durability a signer entry is stored under. At most one entry exists\\nper signer key; lookups check Temporary before Persistent.",
+      "lib": "",
+      "name": "SignerStorage",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Persistent"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Temporary"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Optional expiration for a signer as a UNIX timestamp in seconds, INCLUSIVE:\\nthe signer is valid while `ledger timestamp <= expiration` and expired once\\n`ledger timestamp > expiration`. `None` never expires.\\n\\nv1 breaking change: this was a ledger sequence number pre-1.0. Timestamps\\ndon't drift with changes to ledger close time (e.g. CAP-0070 dynamic\\ntiming), which ledger-sequence expirations did.",
+      "lib": "",
+      "name": "SignerExpiration",
+      "fields": [
+        {
+          "doc": "",
+          "name": "0",
+          "type_": {
+            "option": {
+              "value_type": "u64"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A WebAuthn assertion over the Soroban authorization payload. The signed\\nmessage is `authenticator_data || sha256(client_data_json)` and the\\npayload binding lives in clientDataJSON's `challenge` field.",
+      "lib": "",
+      "name": "Secp256r1Signature",
+      "fields": [
+        {
+          "doc": "",
+          "name": "authenticator_data",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "client_data_json",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "signature",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "The contract's wasm was replaced via `upgrade`. `old_hash` is `None` on a\\nwallet's first-ever upgrade: the host exposes no way for a contract to\\nread its own executable hash, so the wallet caches the hash in instance\\nstorage at each upgrade and the genesis hash is unknowable in-contract.",
+      "lib": "",
+      "name": "Upgraded",
+      "prefix_topics": [
+        "upgraded"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_hash",
+          "type_": {
+            "option": {
+              "value_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "A signer was added (via `__constructor` or `add_signer`).",
+      "lib": "",
+      "name": "SignerAdded",
+      "prefix_topics": [
+        "signer_added"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "key",
+          "type_": {
+            "udt": {
+              "name": "SignerKey"
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "val",
+          "type_": {
+            "udt": {
+              "name": "SignerVal"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "storage",
+          "type_": {
+            "udt": {
+              "name": "SignerStorage"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "A signer was removed via `remove_signer`. `storage` is the durability the\\nentry was removed from.",
+      "lib": "",
+      "name": "SignerRemoved",
+      "prefix_topics": [
+        "signer_removed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "key",
+          "type_": {
+            "udt": {
+              "name": "SignerKey"
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "storage",
+          "type_": {
+            "udt": {
+              "name": "SignerStorage"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "An existing signer was modified via `update_signer`.",
+      "lib": "",
+      "name": "SignerUpdated",
+      "prefix_topics": [
+        "signer_updated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "key",
+          "type_": {
+            "udt": {
+              "name": "SignerKey"
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "val",
+          "type_": {
+            "udt": {
+              "name": "SignerVal"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "storage",
+          "type_": {
+            "udt": {
+              "name": "SignerStorage"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "old_storage",
+          "type_": {
+            "udt": {
+              "name": "SignerStorage"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  }
+]

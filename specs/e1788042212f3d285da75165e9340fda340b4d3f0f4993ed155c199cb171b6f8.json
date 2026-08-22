@@ -1,0 +1,822 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Config",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "high_value_threshold",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_oracle_age_seconds",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "max_payout_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "oracle_adapter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "payout_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "premium_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "protected_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "protected_balance_vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "reserve_vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "zk_verifier",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Position",
+      "fields": [
+        {
+          "doc": "",
+          "name": "automation_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "claimable_payout",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "entry_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expiry_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "fee_paid",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "maximum_payout",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "notional",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "partner",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payout_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "payout_claimed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "premium_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "principal_withdrawn",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "protected_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "protected_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "risk_premium",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "settlement_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "start_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "PositionStatus"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Settlement",
+      "fields": [
+        {
+          "doc": "",
+          "name": "keeper_rewarded",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "payout",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "position_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "settlement_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "PositionStatus"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "EngineError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "NotAdmin",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidMaxPayoutBps",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidDuration",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidPrice",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "PositionNotFound",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "NotOwner",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "InvalidStatus",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "NotExpired",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "AlreadyWithdrawn",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "NothingToClaim",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "StaleOraclePrice",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "UnsupportedMarket",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "UnsafeUtilization",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "ConcentrationLimit",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "MathOverflow",
+          "value": 19
+        },
+        {
+          "doc": "",
+          "name": "NotionalTooSmall",
+          "value": 20
+        },
+        {
+          "doc": "",
+          "name": "ComplianceRequired",
+          "value": 21
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PositionStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Active"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AwaitingOracle"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SettledNoPayout"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Claimable"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Claimed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PrincipalWithdrawn"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProtectionQuote",
+      "fields": [
+        {
+          "doc": "",
+          "name": "automation_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "base_premium",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "concentration_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "concentration_surcharge",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "entry_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "maximum_payout",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "notional",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "protocol_commission",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "risk_premium",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "safety_margin",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_due",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "utilization_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "utilization_surcharge",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "volatility_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "volatility_surcharge",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PriceObservation",
+      "fields": [
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unpause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "extend_ttl",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_config",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Config"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "protected_balance_vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "reserve_vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "oracle_adapter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "zk_verifier",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "protected_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "payout_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "premium_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "max_payout_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_oracle_age_seconds",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "high_value_threshold",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accept_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pending",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "claim_payout",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "position_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_position",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "position_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Position"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "propose_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pending",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "quote_position",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "protected_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "payout_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "protected_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "duration_seconds",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "ProtectionQuote"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_position",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "protected_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "payout_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "protected_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "duration_seconds",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "partner",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "settle_position",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "position_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Settlement"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_user_positions",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "u64"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "withdraw_principal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "position_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  }
+]

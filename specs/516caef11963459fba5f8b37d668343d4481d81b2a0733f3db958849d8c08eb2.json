@@ -1,0 +1,1133 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "owner",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": {
+              "udt": {
+                "name": "OmniseaError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "OmniseaError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "fee_token",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "bind_omnisea",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "omnisea",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "OmniseaError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "protocol_fee",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "expected_omnisea",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fixed_protocol_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_protocol_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "protocol_fee_receiver",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "OmniseaError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pending_owner",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accept_ownership",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "OmniseaError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_token_issuer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset_key",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "issuer",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "OmniseaError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns a prepared send's fee before it has been accrued. Only the bound\\ncore can request a refund, and accrued protocol/issuer liabilities remain\\nfully collateralized.",
+      "name": "refund_pending_fee",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_fee",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "OmniseaError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer_ownership",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "next",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "OmniseaError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "withdraw_issuer_fees",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "issuer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "OmniseaError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "collected_issuer_fees",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "issuer",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "protocol_fee_receiver",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_fixed_protocol_fee",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "fee",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "OmniseaError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "withdraw_protocol_fees",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "OmniseaError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "collected_protocol_fees",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The core transfers the fee token here first. Distribution is accrued, matching\\nStarknet's failure-safe accounting and preserving the issuer's 25% share.",
+      "name": "distribute_protocol_fee",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset_key",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "total_fee",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "OmniseaError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_protocol_fee_receiver",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "OmniseaError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Origin",
+      "fields": [
+        {
+          "doc": "",
+          "name": "nonce",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "src_eid",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AssetOrigin",
+      "fields": [
+        {
+          "doc": "",
+          "name": "exists",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "original_eid",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "original_token",
+          "type_": "bytes"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FeatureState",
+      "fields": [
+        {
+          "doc": "",
+          "name": "enabled",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "requested",
+          "type_": "bool"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MessagingFee",
+      "fields": [
+        {
+          "doc": "",
+          "name": "native_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "zro_fee",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OmniseaError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "InvalidAddress",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidPayload",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidPayloadVersion",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidMessageKind",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "MessageTooLarge",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidMetadata",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "AlreadyBound",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "NotBound",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "PeerNotSet",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "PeerNotActive",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "PeerImmutable",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "UntrustedPeer",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "InsufficientBacking",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "InsufficientSurplus",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "RepresentationNotFound",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "OriginalNotFound",
+          "value": 19
+        },
+        {
+          "doc": "",
+          "name": "AmountOverflow",
+          "value": 20
+        },
+        {
+          "doc": "",
+          "name": "PendingNotFound",
+          "value": 21
+        },
+        {
+          "doc": "",
+          "name": "PendingAlreadyExists",
+          "value": 22
+        },
+        {
+          "doc": "",
+          "name": "ReentrantCall",
+          "value": 23
+        },
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 24
+        },
+        {
+          "doc": "",
+          "name": "Blacklisted",
+          "value": 25
+        },
+        {
+          "doc": "",
+          "name": "NonCompliant",
+          "value": 26
+        },
+        {
+          "doc": "",
+          "name": "FeatureNotEnabled",
+          "value": 27
+        },
+        {
+          "doc": "",
+          "name": "FeatureAlreadyEnabled",
+          "value": 28
+        },
+        {
+          "doc": "",
+          "name": "InvalidFeature",
+          "value": 29
+        },
+        {
+          "doc": "",
+          "name": "OwnerUnavailable",
+          "value": 30
+        },
+        {
+          "doc": "",
+          "name": "ComplianceAlreadySet",
+          "value": 31
+        },
+        {
+          "doc": "",
+          "name": "ProtocolFeeTooHigh",
+          "value": 32
+        },
+        {
+          "doc": "",
+          "name": "InsufficientFees",
+          "value": 33
+        },
+        {
+          "doc": "",
+          "name": "InvalidUtf8",
+          "value": 34
+        },
+        {
+          "doc": "",
+          "name": "ArithmeticOverflow",
+          "value": 35
+        },
+        {
+          "doc": "",
+          "name": "AlreadyProcessed",
+          "value": 36
+        },
+        {
+          "doc": "",
+          "name": "InvalidOrigin",
+          "value": 37
+        },
+        {
+          "doc": "",
+          "name": "OwnerSyncNotAllowed",
+          "value": 38
+        },
+        {
+          "doc": "",
+          "name": "ActivationPeriodTooShort",
+          "value": 39
+        },
+        {
+          "doc": "",
+          "name": "PendingAlreadySent",
+          "value": 40
+        },
+        {
+          "doc": "",
+          "name": "PendingNotSent",
+          "value": 41
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TokenPayload",
+      "fields": [
+        {
+          "doc": "Unsigned 256-bit amount, stored big-endian to preserve EVM wire semantics.",
+          "name": "amount",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "compose",
+          "type_": {
+            "udt": {
+              "name": "ComposeParams"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "contract_owner",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "contract_uri",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "has_contract_owner",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "message_kind",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "original_eid",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "original_token",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "payload_version",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "token_decimals",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "token_name",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "token_symbol",
+          "type_": "bytes"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AssetMetadata",
+      "fields": [
+        {
+          "doc": "",
+          "name": "contract_owner",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "contract_uri",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "decimals",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "exists",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "has_contract_owner",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "token_name",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "token_symbol",
+          "type_": "bytes"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BridgeReceipt",
+      "fields": [
+        {
+          "doc": "",
+          "name": "messaging",
+          "type_": {
+            "udt": {
+              "name": "MessagingReceipt"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "protocol_fee",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ComposeParams",
+      "fields": [
+        {
+          "doc": "",
+          "name": "composer",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "gas_limit",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "message",
+          "type_": "bytes"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PendingMessage",
+      "fields": [
+        {
+          "doc": "",
+          "name": "executor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "exists",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "extra_data",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "failed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "guid",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "message",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "origin",
+          "type_": {
+            "udt": {
+              "name": "Origin"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "received_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "value",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MessagingParams",
+      "fields": [
+        {
+          "doc": "",
+          "name": "dst_eid",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "message",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "options",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "pay_in_zro",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SendTokenParams",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "compose",
+          "type_": {
+            "udt": {
+              "name": "ComposeParams"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "dst_eid",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "is_first_transfer",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "options",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "pay_in_zro",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "refund_address",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MessagingReceipt",
+      "fields": [
+        {
+          "doc": "",
+          "name": "fee",
+          "type_": {
+            "udt": {
+              "name": "MessagingFee"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "guid",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "nonce",
+          "type_": "u64"
+        }
+      ]
+    }
+  }
+]

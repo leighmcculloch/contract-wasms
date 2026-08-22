@@ -1,0 +1,1141 @@
+[
+  {
+    "event_v0": {
+      "doc": "Emitted when deposits are paused / unpaused.",
+      "lib": "",
+      "name": "PauseEvent",
+      "prefix_topics": [
+        "pause_event"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "strategy_name",
+          "type_": "string",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when the keeper is rotated.",
+      "lib": "",
+      "name": "SetKeeperEvent",
+      "prefix_topics": [
+        "set_keeper_event"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "strategy_name",
+          "type_": "string",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "old_keeper",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_keeper",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted on harvest when the held RWA can't be priced (sources disagree / oracle stale).\\nTelemetry only \\xe2\\x80\\x94 harvest does not revert on a pricing failure.",
+      "lib": "",
+      "name": "SpreadAlertEvent",
+      "prefix_topics": [
+        "spread_alert_event"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "strategy_name",
+          "type_": "string",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when a depositor is added to (`allowed = true`) or removed from\\n(`allowed = false`) the deposit allowlist.",
+      "lib": "",
+      "name": "SetDepositorEvent",
+      "prefix_topics": [
+        "set_depositor_event"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "strategy_name",
+          "type_": "string",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "depositor",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "allowed",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when a keeper-tunable cap or pricing parameter changes.",
+      "lib": "",
+      "name": "ParamsUpdatedEvent",
+      "prefix_topics": [
+        "params_updated_event"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "strategy_name",
+          "type_": "string",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "field",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "old_value",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_value",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when a depositor *code hash* is added to (`allowed = true`) or removed from\\n(`allowed = false`) the wasm-hash deposit allowlist.",
+      "lib": "",
+      "name": "SetAllowedHashEvent",
+      "prefix_topics": [
+        "set_allowed_hash_event"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "strategy_name",
+          "type_": "string",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "allowed",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "asset",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deposits `amount` USDC, swaps it to the RWA on Aqua, and mints shares against the\\nUSDC amount-in (NOT the RWA received \\xe2\\x80\\x94 \\xc2\\xa73.2). Returns the vault's USDC balance.",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "No-op telemetry harvest. Keeper-gated (dual check). On a successful price it emits a\\n`HarvestEvent` carrying the current price-per-share; on a pricing failure it emits a\\n`SpreadAlertEvent` instead of reverting (there is nothing to claim either way).",
+      "name": "harvest",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "data",
+          "type_": {
+            "option": {
+              "value_type": "bytes"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Withdraws `amount` USDC to `to` by selling RWA on Aqua, burning the matching shares.\\nReverts if the held RWA can't source `amount` USDC (\\xc2\\xa73.3 revert-on-shortfall).",
+      "name": "withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_keeper",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_params",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Params"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Rotates the keeper. Only the current keeper can authorize the change.",
+      "name": "set_keeper",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_keeper",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Adjusts the strategy TVL cap. Keeper-gated.",
+      "name": "set_tvl_cap",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_cap",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Whether `depositor` is currently on the address deposit allowlist.",
+      "name": "is_depositor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "depositor",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "bool",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initializes the strategy.\\n\\n`asset` is the underlying (USDC). `init_args` (11, in order):\\n0. `rwa_asset: Address`\\n1. `aqua_router: Address`\\n2. `aqua_tokens: Vec<Address>` \\xe2\\x80\\x94 the pool's token set, sorted ascending by address\\n3. `aqua_pool_index: BytesN<32>`\\n4. `oracle: Address` \\xe2\\x80\\x94 SEP-40 price feed for `rwa_asset`\\n5. `keeper: Address`\\n6. `max_deposit: i128` \\xe2\\x80\\x94 per-tx cap (USDC)\\n7. `max_tvl: i128` \\xe2\\x80\\x94 strategy NAV cap (USDC)\\n8. `max_spread_bps: u32` \\xe2\\x80\\x94 oracle/Aqua disagreement tolerance\\n9. `quote_ttl_seconds: u64` \\xe2\\x80\\x94 oracle staleness window\\n10. `slippage_bps: u32` \\xe2\\x80\\x94 execution slippage tolerance\\n\\nConstruction-time panics (`.expect(...)` on a missing/malformed `init_args` slot,\\n`assert!` on an out-of-range value) are deliberate: they abort a bad deploy before any\\nstate is persisted, rather than leaving the strategy live with an invalid `Config`.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "init_args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Adds `depositor` to the deposit allowlist. Keeper-gated; idempotent. The allowlist\\nstarts empty at construction, so the keeper must add the DeFindex vault before it\\ncan deposit.",
+      "name": "add_depositor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "depositor",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pauses / unpauses new deposits. Withdrawals are never paused. Keeper-gated.",
+      "name": "pause_deposits",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Whether `hash` is currently on the wasm-hash deposit allowlist.",
+      "name": "is_allowed_hash",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "bool",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Adjusts the per-tx deposit cap. Keeper-gated.",
+      "name": "set_deposit_cap",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_cap",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Adds a contract `hash` (wasm code hash) to the deposit allowlist. Keeper-gated;\\nidempotent. Any contract whose code hash matches may then deposit, regardless of its\\naddress \\xe2\\x80\\x94 bless a vault's wasm once and every instance of it is allowed. Because vault\\ncode hashes are known at build/upload time, the keeper can allowlist a hash before any\\nsuch vault is deployed. Note: a vault that upgrades its wasm changes hash and must be\\nre-blessed.",
+      "name": "add_allowed_hash",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Removes `depositor` from the deposit allowlist. Keeper-gated; idempotent. This blocks\\nonly *future* deposits from `depositor` \\xe2\\x80\\x94 it never affects its ability to withdraw\\nfunds it already holds.",
+      "name": "remove_depositor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "depositor",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Updates the pricing knobs (spread tolerance, oracle staleness window, execution\\nslippage). Keeper-gated; same validation bounds as construction.",
+      "name": "set_pricing_params",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "max_spread_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "quote_ttl_seconds",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "slippage_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Removes a contract `hash` from the deposit allowlist. Keeper-gated; idempotent. Blocks\\nonly *future* deposits from contracts running that code \\xe2\\x80\\x94 never affects withdrawals.",
+      "name": "remove_allowed_hash",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "StrategyError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when the per-unit RWA price moves more than `max_spread_bps` between two\\ninteractions. Monitoring signal only \\xe2\\x80\\x94 it never reverts. (research \\xc2\\xa72.2, \\xc2\\xa78)",
+      "lib": "",
+      "name": "PriceJumpEvent",
+      "prefix_topics": [
+        "price_jump_event"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "strategy_name",
+          "type_": "string",
+          "location": "topic_list"
+        },
+        {
+          "doc": "Previous USDC-per-RWA rate, scaled by `SCALAR_12`.",
+          "name": "last_rate",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "New USDC-per-RWA rate, scaled by `SCALAR_12`.",
+          "name": "new_rate",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Immutable configuration, set once at construction.\\n\\nDecimals are cached here (read once from the token / oracle contracts) so the per-call\\npricing math doesn't pay repeated cross-contract `decimals()` reads.",
+      "lib": "",
+      "name": "Config",
+      "fields": [
+        {
+          "doc": "Pool selector hash within `aqua_tokens` (Aqua addresses pools by (tokens, index)).",
+          "name": "aqua_pool_index",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "Aquarius AMM router used for both the executed swap and the non-mutating quote.",
+          "name": "aqua_router",
+          "type_": "address"
+        },
+        {
+          "doc": "The pool's token set, sorted ascending by address (Aqua requires sorted tokens).",
+          "name": "aqua_tokens",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "Underlying asset the vault deposits/withdraws (USDC).",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "Decimals of `asset` (USDC), cached.",
+          "name": "asset_decimals",
+          "type_": "u32"
+        },
+        {
+          "doc": "SEP-40 price feed (Reflector-shaped) used to cross-check the Aqua quote.",
+          "name": "oracle",
+          "type_": "address"
+        },
+        {
+          "doc": "Decimals the oracle reports prices in, cached.",
+          "name": "oracle_decimals",
+          "type_": "u32"
+        },
+        {
+          "doc": "Value-accruing RWA the strategy swaps into and holds (e.g. CETES).",
+          "name": "rwa_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "Decimals of `rwa_asset`, cached.",
+          "name": "rwa_decimals",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Keeper-tunable parameters. Updated wholesale by the keeper-gated extension methods so\\nevery change is a single atomic instance write.",
+      "lib": "",
+      "name": "Params",
+      "fields": [
+        {
+          "doc": "The only address allowed to harvest and to call the extension/admin methods.",
+          "name": "keeper",
+          "type_": "address"
+        },
+        {
+          "doc": "Per-deposit cap (USDC). Bounds our own swap impact on the Aqua pool. (\\xc2\\xa76.4)",
+          "name": "max_deposit",
+          "type_": "i128"
+        },
+        {
+          "doc": "Max tolerated disagreement between the oracle and Aqua quotes, in bps. (\\xc2\\xa76.2)",
+          "name": "max_spread_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "Strategy-level NAV cap (USDC). Bounds the share of the pool we can own. (\\xc2\\xa76.5)",
+          "name": "max_tvl",
+          "type_": "i128"
+        },
+        {
+          "doc": "When true, new deposits are refused; withdrawals stay open. (\\xc2\\xa76.13)",
+          "name": "paused",
+          "type_": "bool"
+        },
+        {
+          "doc": "Oracle staleness window: reject a price older than this many seconds. (\\xc2\\xa75.4)",
+          "name": "quote_ttl_seconds",
+          "type_": "u64"
+        },
+        {
+          "doc": "Execution slippage tolerance applied to swap `min_out` / `max_in`, in bps. (\\xc2\\xa76.6)",
+          "name": "slippage_bps",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Config"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Params"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalShares"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Last multi-source-agreed USDC-per-RWA rate (scaled by `SCALAR_12`) \\xe2\\x80\\x94 jump tripwire.",
+            "name": "LastValidPrice"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "VaultPos",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Allowlisted depositor by exact address (a specific DeFindex vault). Absent = not\\nallowed. See also `AllowedHash` for code-identity allowlisting.",
+            "name": "Depositor",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Allowlisted depositor by contract *code hash*: any contract whose wasm hash matches\\nmay deposit, regardless of its address. Absent = not allowed. Lets every instance of\\na blessed vault wasm deposit without per-address curation.",
+            "name": "AllowedHash",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StrategyError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 401
+        },
+        {
+          "doc": "",
+          "name": "NegativeNotAllowed",
+          "value": 410
+        },
+        {
+          "doc": "",
+          "name": "InvalidArgument",
+          "value": 411
+        },
+        {
+          "doc": "",
+          "name": "InsufficientBalance",
+          "value": 412
+        },
+        {
+          "doc": "",
+          "name": "UnderflowOverflow",
+          "value": 413
+        },
+        {
+          "doc": "",
+          "name": "ArithmeticError",
+          "value": 414
+        },
+        {
+          "doc": "",
+          "name": "DivisionByZero",
+          "value": 415
+        },
+        {
+          "doc": "",
+          "name": "InvalidSharesMinted",
+          "value": 416
+        },
+        {
+          "doc": "",
+          "name": "OnlyPositiveAmountAllowed",
+          "value": 417
+        },
+        {
+          "doc": "",
+          "name": "NotAuthorized",
+          "value": 418
+        },
+        {
+          "doc": "",
+          "name": "ProtocolAddressNotFound",
+          "value": 420
+        },
+        {
+          "doc": "",
+          "name": "DeadlineExpired",
+          "value": 421
+        },
+        {
+          "doc": "",
+          "name": "ExternalError",
+          "value": 422
+        },
+        {
+          "doc": "",
+          "name": "SoroswapPairError",
+          "value": 423
+        },
+        {
+          "doc": "",
+          "name": "AmountBelowMinDust",
+          "value": 451
+        },
+        {
+          "doc": "",
+          "name": "UnderlyingAmountBelowMin",
+          "value": 452
+        },
+        {
+          "doc": "",
+          "name": "BTokensAmountBelowMin",
+          "value": 453
+        },
+        {
+          "doc": "",
+          "name": "InternalSwapError",
+          "value": 454
+        },
+        {
+          "doc": "",
+          "name": "SupplyNotFound",
+          "value": 455
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DepositEvent",
+      "prefix_topics": [
+        "deposit_event"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "strategy_name",
+          "type_": "string",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "HarvestEvent",
+      "prefix_topics": [
+        "harvest_event"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "strategy_name",
+          "type_": "string",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "price_per_share",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WithdrawEvent",
+      "prefix_topics": [
+        "withdraw_event"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "strategy_name",
+          "type_": "string",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Asset type",
+      "lib": "",
+      "name": "Asset",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Stellar",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Other",
+            "type_": [
+              "symbol"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Price data for an asset at a specific timestamp",
+      "lib": "",
+      "name": "PriceData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  }
+]

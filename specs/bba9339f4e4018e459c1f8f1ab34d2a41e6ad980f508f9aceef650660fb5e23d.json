@@ -1,0 +1,595 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "WorkerExists",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "WorkerNotFound",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidLimit",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidStatus",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InsufficientAccrued",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "LimitExceeded",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "DrawAlreadyProcessed",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "RepaymentAlreadyProcessed",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "RepaymentExceedsOutstanding",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "OutstandingBalance",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "InsufficientFunds",
+          "value": 14
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Policy",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_disbursed",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_funded",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_repaid",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Worker",
+      "fields": [
+        {
+          "doc": "",
+          "name": "accrued",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "advance_limit",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "employer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "outstanding",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "WorkerStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "total_drawn",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_repaid",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PoolFunded",
+      "prefix_topics": [
+        "pool_funded"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "funder",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WorkerStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Active"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Closed"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AdvanceDrawn",
+      "prefix_topics": [
+        "advance_drawn"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "worker",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "draw_id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WagesAccrued",
+      "prefix_topics": [
+        "wages_accrued"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "worker",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WorkerClosed",
+      "prefix_topics": [
+        "worker_closed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "worker",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AdvanceRepaid",
+      "prefix_topics": [
+        "advance_repaid"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "worker",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "repayment_id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WorkerRegistered",
+      "prefix_topics": [
+        "worker_registered"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "worker",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "employer",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PolicyInitialized",
+      "prefix_topics": [
+        "policy_initialized"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "draw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "worker",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "draw_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "close",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "worker",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "repay",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "worker",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "repayment_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accrue",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "worker",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "fund_pool",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "funder",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_policy",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Policy"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_worker",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "worker",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Worker"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "init_policy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "register_worker",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "worker",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "employer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "advance_limit",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

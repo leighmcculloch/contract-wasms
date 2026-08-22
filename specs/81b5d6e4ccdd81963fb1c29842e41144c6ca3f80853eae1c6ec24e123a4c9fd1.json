@@ -1,0 +1,324 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "Storage key types",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "KycRecord",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "BridgeHeader",
+            "type_": [
+              "symbol",
+              "u64"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalKycVerified"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalBridgeVerified"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Stored per applicant: tracks KYC credential verification",
+      "lib": "",
+      "name": "KycRecord",
+      "fields": [
+        {
+          "doc": "",
+          "name": "applicant_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "credential_type",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "proof_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "verified_at_ledger",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Query whether an applicant is KYC-verified for a given credential type.\\nReturns true if the proof was previously confirmed on this contract.",
+      "name": "is_kyc_verified",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "applicant_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VerifierError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidProof",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "ProgramNotFound",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidInputs",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "AlreadyVerified",
+          "value": 4
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Verify a ZK KYC credential proof off-chain and register the result on ledger.\\n\\nArguments:\\n- `applicant_hash`: SHA-256(applicant_id), 32 bytes. The actual identity stays private.\\n- `credential_type`: one of \"accredited\", \"kyc_aml\", \"age_18plus\"\\n- `proof_hash`: SHA-256 of the RISC Zero receipt bytes \\xe2\\x80\\x94 proves the computation\\n- `public_inputs`: serialized public journal from the ZK receipt (compact, no private data)",
+      "name": "verify_kyc_proof",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "applicant_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "credential_type",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "proof_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "public_inputs",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "bool",
+            "error_type": {
+              "udt": {
+                "name": "VerifierError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Stats",
+      "name": "total_kyc_verified",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Verify a ZK block-header proof and register the confirmed state root on ledger.\\n\\nArguments:\\n- `chain`: \"eth\" or \"btc\"\\n- `block_number`: block height proven\\n- `state_root`: 32-byte Merkle state root from the proven block\\n- `proof_hash`: SHA-256 of the RISC Zero receipt\\n- `public_inputs`: serialized public journal",
+      "name": "verify_bridge_header",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "chain",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "block_number",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "state_root",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "proof_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "public_inputs",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "bool",
+            "error_type": {
+              "udt": {
+                "name": "VerifierError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Stored per (chain, block_number): tracks verified block headers",
+      "lib": "",
+      "name": "BridgeHeaderRecord",
+      "fields": [
+        {
+          "doc": "",
+          "name": "block_number",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "chain",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "proof_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "state_root",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "verified_at_ledger",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Query the confirmed state root for a given (chain, block_number).\\nReturns None if not yet verified.",
+      "name": "get_bridge_state_root",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "chain",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "block_number",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "BridgeHeaderRecord"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_bridge_verified",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  }
+]

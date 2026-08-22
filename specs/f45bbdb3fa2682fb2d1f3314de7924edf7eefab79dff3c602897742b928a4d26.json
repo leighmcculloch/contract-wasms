@@ -1,0 +1,492 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WalletConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "guardians",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "= wallet (\\xc4\\x91\\xe1\\xbb\\x8ba ch\\xe1\\xbb\\x89 v\\xc3\\xad KH\\xc3\\x94NG \\xc4\\x91\\xe1\\xbb\\x95i sau kh\\xc3\\xb4i ph\\xe1\\xbb\\xa5c \\xe2\\x80\\x94 kho\\xc3\\xa1 \\xc4\\x91\\xe1\\xbb\\x95i b\\xc3\\xaan trong).\\nGi\\xe1\\xbb\\xaf field cho t\\xc6\\xb0\\xc6\\xa1ng th\\xc3\\xadch shape v1 m\\xc3\\xa0 BE \\xc4\\x91\\xc3\\xa3 \\xc4\\x91\\xe1\\xbb\\x8dc.",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "timelock_secs",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Gi\\xe1\\xbb\\xaf nguy\\xc3\\xaan b\\xe1\\xba\\xa3ng m\\xc3\\xa3 v1 (1..16) \\xe2\\x80\\x94 BE d\\xe1\\xbb\\x8bch `Error(Contract, #N)` theo t\\xc3\\xaan n\\xc3\\xa0y.",
+      "lib": "",
+      "name": "RegistryError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyRegistered",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotRegistered",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidThreshold",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "TooFewGuardians",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "TooManyGuardians",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "NotAGuardian",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "RecoveryInProgress",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "NoActiveRecovery",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "ThresholdNotMet",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "TimelockNotElapsed",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "AlreadyApproved",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "RecoveryCancelled",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "AlreadyFinalized",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "GuardianExists",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "GuardianNotFound",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "DuplicateGuardian",
+          "value": 16
+        },
+        {
+          "doc": "Th\\xe1\\xbb\\x9di gian ch\\xe1\\xbb\\x9d ng\\xe1\\xba\\xafn h\\xc6\\xa1n s\\xc3\\xa0n `MIN_TIMELOCK_SECS` (audit P0-2).",
+          "name": "TimelockTooShort",
+          "value": 17
+        },
+        {
+          "doc": "Y\\xc3\\xaau c\\xe1\\xba\\xa7u \\xc4\\x91\\xc3\\xa3 qu\\xc3\\xa1 `expires_at` \\xe2\\x80\\x94 kh\\xc3\\xb4ng finalize \\xc4\\x91\\xc6\\xb0\\xe1\\xbb\\xa3c n\\xe1\\xbb\\xafa (audit P0-3).",
+          "name": "RequestExpired",
+          "value": 18
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RecoveryStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Pending"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Approved"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Finalized"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cancelled"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RecoveryRequest",
+      "fields": [
+        {
+          "doc": "",
+          "name": "approvals",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "H\\xe1\\xba\\xbft h\\xe1\\xba\\xa1n (unix gi\\xc3\\xa2y). Qu\\xc3\\xa1 m\\xe1\\xbb\\x91c n\\xc3\\xa0y request coi nh\\xc6\\xb0 CH\\xe1\\xba\\xbeT: kh\\xc3\\xb4ng finalize\\n\\xc4\\x91\\xc6\\xb0\\xe1\\xbb\\xa3c n\\xe1\\xbb\\xafa, v\\xc3\\xa0 kh\\xc3\\xb4ng c\\xc3\\xb2n ch\\xe1\\xba\\xb7n request m\\xe1\\xbb\\x9bi. Xem `REQUEST_GRACE_SECS`.",
+          "name": "expires_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "Kho\\xc3\\xa1 m\\xe1\\xbb\\x9bi s\\xe1\\xba\\xbd \\xc4\\x91\\xc6\\xb0\\xe1\\xbb\\xa3c c\\xc3\\xa0i v\\xc3\\xa0o v\\xc3\\xad khi finalize \\xe2\\x80\\x94 guardian ph\\xc3\\xaa duy\\xe1\\xbb\\x87t \\xc4\\x90\\xc3\\x9aNG n\\xc3\\xb3.",
+          "name": "new_signer",
+          "type_": {
+            "udt": {
+              "name": "Signer"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "started_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "RecoveryStatus"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "GIA H\\xe1\\xba\\xa0N TTL cho v\\xc3\\xad n\\xe1\\xba\\xb1m im \\xe2\\x80\\x94 cron v\\xc3\\xad ph\\xc3\\xad g\\xe1\\xbb\\x8di (`be/src/jobs/ttl-keeper.ts`).\\nKh\\xc3\\xb4ng \\xc4\\x91\\xc3\\xb2i auth: gia h\\xe1\\xba\\xa1n kh\\xc3\\xb4ng \\xc4\\x91\\xe1\\xbb\\x95i \\xc4\\x91\\xc6\\xb0\\xe1\\xbb\\xa3c g\\xc3\\xac, ch\\xe1\\xbb\\x89 t\\xe1\\xbb\\x91n ph\\xc3\\xad ng\\xc6\\xb0\\xe1\\xbb\\x9di g\\xe1\\xbb\\x8di.\\n\\xc4\\x90\\xe1\\xbb\\x8dc `config` b\\xc3\\xaan trong n\\xc3\\xaan ch\\xc3\\xadnh n\\xc3\\xb3 \\xc4\\x91\\xc3\\xa3 gia h\\xe1\\xba\\xa1n; g\\xe1\\xbb\\x8di c\\xe1\\xba\\xa3 instance c\\xe1\\xbb\\xa7a\\nregistry \\xc4\\x91\\xe1\\xbb\\x83 b\\xe1\\xba\\xa3n th\\xc3\\xa2n registry kh\\xc3\\xb4ng archive.",
+      "name": "extend_ttl",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "add_guardian",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_guardian",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_registered",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "VETO \\xe2\\x80\\x94 ch\\xc3\\xadnh v\\xc3\\xad k\\xc3\\xbd (kho\\xc3\\xa1 c\\xc3\\xb2n s\\xe1\\xbb\\x91ng n\\xc3\\xa0o c\\xc5\\xa9ng ch\\xe1\\xba\\xb7n \\xc4\\x91\\xc6\\xb0\\xe1\\xbb\\xa3c, qua __check_auth).",
+      "name": "cancel_recovery",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "V\\xc3\\xad T\\xe1\\xbb\\xb0 \\xc4\\x91\\xc4\\x83ng k\\xc3\\xbd (passkey k\\xc3\\xbd qua __check_auth). Ch\\xe1\\xbb\\x91ng lockout t\\xe1\\xbb\\xab g\\xe1\\xbb\\x91c:\\nthreshold \\xe2\\x88\\x88 [1, s\\xe1\\xbb\\x91 guardian], guardian kh\\xc3\\xb4ng tr\\xc3\\xb9ng, kh\\xc3\\xb4ng ph\\xe1\\xba\\xa3i ch\\xc3\\xadnh v\\xc3\\xad.",
+      "name": "register_wallet",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "guardians",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "timelock_secs",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "CH\\xe1\\xbb\\x90NG LOCKOUT: kh\\xc3\\xb4ng cho r\\xe1\\xbb\\x9bt xu\\xe1\\xbb\\x91ng d\\xc6\\xb0\\xe1\\xbb\\x9bi threshold (\\xc4\\x91\\xe1\\xbb\\x95i threshold tr\\xc6\\xb0\\xe1\\xbb\\x9bc \\xc4\\x91\\xc3\\xa3).",
+      "name": "remove_guardian",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "guardian",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "approve_recovery",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "guardian",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Ai crank c\\xc5\\xa9ng \\xc4\\x91\\xc6\\xb0\\xe1\\xbb\\xa3c SAU timelock (kh\\xc3\\xb4ng \\xc4\\x91\\xc3\\xb2i auth ng\\xc6\\xb0\\xe1\\xbb\\x9di d\\xc3\\xb9ng) \\xe2\\x80\\x94 timelock\\non-chain l\\xc3\\xa0 ng\\xc6\\xb0\\xe1\\xbb\\x9di g\\xc3\\xa1c. XOAY KHO\\xc3\\x81 TH\\xe1\\xba\\xacT tr\\xc3\\xaan smart account r\\xe1\\xbb\\x93i m\\xe1\\xbb\\x9bi Finalized.",
+      "name": "finalize_recovery",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_wallet_config",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "WalletConfig"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Guardian m\\xe1\\xbb\\x9f kh\\xc3\\xb4i ph\\xe1\\xbb\\xa5c, CH\\xe1\\xbb\\x9e KHO\\xc3\\x81 M\\xe1\\xbb\\x9aI th\\xe1\\xba\\xadt (phi\\xe1\\xba\\xbfu = ph\\xc3\\xaa duy\\xe1\\xbb\\x87t \\xc4\\x91\\xc3\\xbang kho\\xc3\\xa1 n\\xc3\\xa0y).\\nInitiator \\xc4\\x91\\xc6\\xb0\\xe1\\xbb\\xa3c \\xc4\\x91\\xe1\\xba\\xbfm l\\xc3\\xa0 phi\\xe1\\xba\\xbfu \\xc4\\x91\\xe1\\xba\\xa7u ti\\xc3\\xaan.",
+      "name": "initiate_recovery",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_signer",
+          "type_": {
+            "udt": {
+              "name": "Signer"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "initiator",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "0 = h\\xe1\\xba\\xbft timelock (finalize \\xc4\\x91\\xc6\\xb0\\xe1\\xbb\\xa3c n\\xe1\\xba\\xbfu \\xc4\\x91\\xe1\\xbb\\xa7 phi\\xe1\\xba\\xbfu). Panic n\\xe1\\xba\\xbfu kh\\xc3\\xb4ng c\\xc3\\xb3 request.",
+      "name": "timelock_remaining",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_recovery_status",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "RecoveryRequest"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "VETO \\xc4\\x90\\xe1\\xbb\\x94I REGISTRY \\xe2\\x80\\x94 ng\\xc6\\xb0\\xe1\\xbb\\x9di th\\xc3\\xa2n ch\\xe1\\xba\\xb7n vi\\xe1\\xbb\\x87c v\\xc3\\xad b\\xe1\\xbb\\x8b tr\\xe1\\xbb\\x8f sang registry kh\\xc3\\xa1c.\\n\\nV\\xc3\\xac sao \\xc4\\x91\\xc6\\xb0\\xe1\\xbb\\x9dng n\\xc3\\xa0y ph\\xe1\\xba\\xa3i \\xc4\\x91i qua registry ch\\xe1\\xbb\\xa9 kh\\xc3\\xb4ng g\\xe1\\xbb\\x8di th\\xe1\\xba\\xb3ng v\\xc3\\xa0o v\\xc3\\xad: v\\xc3\\xad\\nkh\\xc3\\xb4ng gi\\xe1\\xbb\\xaf danh s\\xc3\\xa1ch guardian (registry gi\\xe1\\xbb\\xaf), n\\xc3\\xaan v\\xc3\\xad kh\\xc3\\xb4ng t\\xe1\\xbb\\xb1 bi\\xe1\\xba\\xbft ai c\\xc3\\xb3\\nquy\\xe1\\xbb\\x81n ch\\xe1\\xba\\xb7n. Registry ki\\xe1\\xbb\\x83m t\\xc6\\xb0 c\\xc3\\xa1ch r\\xe1\\xbb\\x93i g\\xe1\\xbb\\x8di v\\xc3\\xa0o v\\xc3\\xad v\\xe1\\xbb\\x9bi t\\xc6\\xb0 c\\xc3\\xa1ch INVOKER \\xe2\\x80\\x94\\nc\\xc3\\xb9ng khu\\xc3\\xb4n auth \\xc4\\x91\\xc3\\xa3 ch\\xe1\\xbb\\xa9ng minh \\xe1\\xbb\\x9f `recovery_rotate`.\\n\\n\\xc4\\x90\\xc3\\xa2y l\\xc3\\xa0 \\xc4\\x91\\xc3\\xb2n \\xc4\\x91\\xe1\\xbb\\xa1 cho k\\xe1\\xbb\\x8bch b\\xe1\\xba\\xa3n: passkey ch\\xe1\\xbb\\xa7 v\\xc3\\xad b\\xe1\\xbb\\x8b chi\\xe1\\xba\\xbfm \\xe2\\x86\\x92 k\\xe1\\xba\\xbb t\\xe1\\xba\\xa5n c\\xc3\\xb4ng xin\\n\\xc4\\x91\\xe1\\xbb\\x95i registry \\xc4\\x91\\xe1\\xbb\\x83 c\\xe1\\xba\\xaft \\xc4\\x91\\xe1\\xbb\\xa9t \\xc4\\x91\\xc6\\xb0\\xe1\\xbb\\x9dng c\\xe1\\xbb\\xa9u. Timelock cho ng\\xc6\\xb0\\xe1\\xbb\\x9di th\\xc3\\xa2n th\\xe1\\xba\\xa5y, h\\xc3\\xa0m n\\xc3\\xa0y\\ncho h\\xe1\\xbb\\x8d ch\\xe1\\xba\\xb7n.",
+      "name": "veto_registry_change",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "guardian",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Represents different types of signers in the smart account system.",
+      "lib": "",
+      "name": "Signer",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "A delegated signer that uses built-in signature verification.",
+            "name": "Delegated",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "An external signer with custom verification logic.\\nContains the verifier contract address and the public key data.",
+            "name": "External",
+            "type_": [
+              "address",
+              "bytes"
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

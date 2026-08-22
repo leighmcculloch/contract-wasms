@@ -1,0 +1,1283 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys used by the rollup contract.",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LatestBlockHash"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "CollateralToken"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "WithdrawalAllowances",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Fees"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalWithdrawable"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns currently accrued protocol fees.",
+      "name": "fees",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the current owner.",
+      "name": "owner",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when collateral is deposited into the rollup.",
+      "lib": "",
+      "name": "DepositEvent",
+      "prefix_topics": [
+        "deposit_event"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Errors returned by the rollup contract.",
+      "lib": "",
+      "name": "ContractError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "DepositAmountMustBePositive",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NewBlockHashEmpty",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "OldBlockHashMismatch",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "BlockHashUnchanged",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "ArrayLengthMismatch",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "ArrayLengthExceedsLimit",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "WithdrawalSumMismatch",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "InsufficientBalance",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "WithdrawalAmountMustBeNonNegative",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "FeesMustBeNonNegative",
+          "value": 19
+        },
+        {
+          "doc": "",
+          "name": "NoWithdrawalAllowance",
+          "value": 31
+        },
+        {
+          "doc": "",
+          "name": "NoFeesToCollect",
+          "value": 41
+        },
+        {
+          "doc": "",
+          "name": "CannotRecoverCollateral",
+          "value": 51
+        },
+        {
+          "doc": "",
+          "name": "RecoverAmountMustBePositive",
+          "value": 52
+        },
+        {
+          "doc": "",
+          "name": "RenounceOwnershipDisabled",
+          "value": 61
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 62
+        },
+        {
+          "doc": "",
+          "name": "ArithmeticOverflow",
+          "value": 71
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Advances the rollup state to a new block hash and posts new withdrawable\\nbalances plus fees.\\n\\n# Arguments\\n\\n* `env` - Access to the Soroban environment.\\n* `old_block_hash` - Expected current block hash.\\n* `new_block_hash` - New block hash to commit.\\n* `new_withdrawal_addresses` - Addresses receiving newly posted\\nwithdrawal allowances.\\n* `new_withdrawal_amounts` - Amounts paired by index with\\n`new_withdrawal_addresses`.\\n* `new_withdrawal_sum` - Sum of all new withdrawal amounts.\\n* `new_fees` - Fees accrued in the new rollup block.\\n\\n# Errors\\n\\n* [`ContractError::NewBlockHashEmpty`] - If `new_block_hash` is zero.\\n* [`ContractError::OldBlockHashMismatch`] - If `old_block_hash` does not\\nmatch the currently stored block hash.\\n* [`ContractError::BlockHashUnchanged`] - If the new block hash is equal\\nto the old block hash.\\n* [`ContractError::ArrayLengthMismatch`] - If the address and amount\\narrays have different lengths.\\n* [`ContractError::ArrayLengthExceedsLimit`] - If more than 100\\nwithdrawal entries are posted.\\n* [`C",
+      "name": "rollup",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "old_block_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "new_block_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "new_withdrawal_addresses",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "new_withdrawal_amounts",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "new_withdrawal_sum",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "new_fees",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the owner posts a new rollup block.",
+      "lib": "",
+      "name": "NewBlockEvent",
+      "prefix_topics": [
+        "new_block_event"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_block_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_withdrawal_sum",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_fees",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deposits collateral into the rollup.\\n\\n# Arguments\\n\\n* `env` - Access to the Soroban environment.\\n* `user` - Address providing the deposit.\\n* `amount` - Amount of collateral token to deposit.\\n\\n# Errors\\n\\n* [`ContractError::DepositAmountMustBePositive`] - If `amount <= 0`.\\n\\n# Notes\\n\\n* Authorization from `user` is required.",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Recovers non-collateral tokens that were sent to the contract.\\n\\n# Arguments\\n\\n* `env` - Access to the Soroban environment.\\n* `token_address` - Token contract to recover.\\n* `to` - Recipient of the recovered tokens.\\n* `amount` - Amount to recover.\\n\\n# Errors\\n\\n* [`ContractError::CannotRecoverCollateral`] - If `token_address` is the\\nconfigured collateral token.\\n* [`ContractError::RecoverAmountMustBePositive`] - If `amount <= 0`.\\n\\n# Notes\\n\\n* Owner authorization is required.",
+      "name": "recover",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Withdraws the full posted allowance for `user`.\\n\\n# Arguments\\n\\n* `env` - Access to the Soroban environment.\\n* `user` - Address withdrawing its allowance.\\n\\n# Errors\\n\\n* [`ContractError::NoWithdrawalAllowance`] - If no positive allowance is\\navailable for `user`.\\n\\n# Notes\\n\\n* Authorization from `user` is required.\\n* This method withdraws the full stored allowance and resets it to zero.",
+      "name": "withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a user withdraws their allowance.",
+      "lib": "",
+      "name": "WithdrawalEvent",
+      "prefix_topics": [
+        "withdrawal_event"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when accumulated fees are collected.",
+      "lib": "",
+      "name": "FeesCollectedEvent",
+      "prefix_topics": [
+        "fees_collected_event"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Collects all currently accrued protocol fees.\\n\\n# Arguments\\n\\n* `env` - Access to the Soroban environment.\\n* `to` - Recipient of collected fees.\\n\\n# Errors\\n\\n* [`ContractError::NoFeesToCollect`] - If no positive fee balance is\\navailable.\\n\\n# Notes\\n\\n* Owner authorization is required.\\n* Collected fees are removed from both `Fees` and `TotalWithdrawable`.",
+      "name": "collect_fees",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initializes the rollup contract.\\n\\n# Arguments\\n\\n* `env` - Access to the Soroban environment.\\n* `collateral_token` - Token contract used for deposits, withdrawals,\\nand fees.\\n* `owner` - Upgrade and admin authority for rollup updates and fee\\ncollection.\\n\\n# Notes\\n\\n* The latest block hash is initialized to the zero hash.\\n* Fees and total withdrawable balances are initialized to zero.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "collateral_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Accepts a pending ownership transfer.\\n\\n# Arguments\\n\\n* `env` - Access to the Soroban environment.",
+      "name": "accept_ownership",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the latest committed rollup block hash.",
+      "name": "latest_block_hash",
+      "inputs": [],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the current collateral-token balance held by the contract.",
+      "name": "collateral_balance",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Rejects ownership renunciation.\\n\\n# Errors\\n\\n* [`ContractError::RenounceOwnershipDisabled`] - Always returned.",
+      "name": "renounce_ownership",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the total amount currently reserved for user withdrawals plus\\naccrued fees.",
+      "name": "total_withdrawable",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initiates a 2-step ownership transfer.\\n\\nThe proposed new owner must later call [`Self::accept_ownership`] to\\ncomplete the transfer.\\n\\n# Arguments\\n\\n* `env` - Access to the Soroban environment.\\n* `new_owner` - Proposed new owner.\\n* `live_until_ledger` - Ledger until which the pending transfer can be\\naccepted.\\n\\n# Notes\\n\\n* Authorization is enforced internally by the ownable library.",
+      "name": "transfer_ownership",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the current withdrawal allowance for `user`.",
+      "name": "withdrawal_allowances",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RoleTransferError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NoPendingTransfer",
+          "value": 2200
+        },
+        {
+          "doc": "",
+          "name": "InvalidLiveUntilLedger",
+          "value": 2201
+        },
+        {
+          "doc": "",
+          "name": "InvalidPendingAccount",
+          "value": 2202
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a role is granted.",
+      "lib": "",
+      "name": "RoleGranted",
+      "prefix_topics": [
+        "role_granted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a role is revoked.",
+      "lib": "",
+      "name": "RoleRevoked",
+      "prefix_topics": [
+        "role_revoked"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the admin role is renounced.",
+      "lib": "",
+      "name": "AdminRenounced",
+      "prefix_topics": [
+        "admin_renounced"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a role admin is changed.",
+      "lib": "",
+      "name": "RoleAdminChanged",
+      "prefix_topics": [
+        "role_admin_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "previous_admin_role",
+          "type_": "symbol",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_admin_role",
+          "type_": "symbol",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccessControlError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 2000
+        },
+        {
+          "doc": "",
+          "name": "AdminNotSet",
+          "value": 2001
+        },
+        {
+          "doc": "",
+          "name": "IndexOutOfBounds",
+          "value": 2002
+        },
+        {
+          "doc": "",
+          "name": "AdminRoleNotFound",
+          "value": 2003
+        },
+        {
+          "doc": "",
+          "name": "RoleCountIsNotZero",
+          "value": 2004
+        },
+        {
+          "doc": "",
+          "name": "RoleNotFound",
+          "value": 2005
+        },
+        {
+          "doc": "",
+          "name": "AdminAlreadySet",
+          "value": 2006
+        },
+        {
+          "doc": "",
+          "name": "RoleNotHeld",
+          "value": 2007
+        },
+        {
+          "doc": "",
+          "name": "RoleIsEmpty",
+          "value": 2008
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an admin transfer is completed.",
+      "lib": "",
+      "name": "AdminTransferCompleted",
+      "prefix_topics": [
+        "admin_transfer_completed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "previous_admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an admin transfer is initiated.",
+      "lib": "",
+      "name": "AdminTransferInitiated",
+      "prefix_topics": [
+        "admin_transfer_initiated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "current_admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Storage key for enumeration of accounts per role.",
+      "lib": "",
+      "name": "RoleAccountKey",
+      "fields": [
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys for the data associated with the access control",
+      "lib": "",
+      "name": "AccessControlStorageKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "RoleAccounts",
+            "type_": [
+              {
+                "udt": {
+                  "name": "RoleAccountKey"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "HasRole",
+            "type_": [
+              "address",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "RoleAccountsCount",
+            "type_": [
+              "symbol"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "RoleAdmin",
+            "type_": [
+              "symbol"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PendingAdmin"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OwnableError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "OwnerNotSet",
+          "value": 2100
+        },
+        {
+          "doc": "",
+          "name": "TransferInProgress",
+          "value": 2101
+        },
+        {
+          "doc": "",
+          "name": "OwnerAlreadySet",
+          "value": 2102
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an ownership transfer is initiated.",
+      "lib": "",
+      "name": "OwnershipTransfer",
+      "prefix_topics": [
+        "ownership_transfer"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when ownership is renounced.",
+      "lib": "",
+      "name": "OwnershipRenounced",
+      "prefix_topics": [
+        "ownership_renounced"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an ownership transfer is completed.",
+      "lib": "",
+      "name": "OwnershipTransferCompleted",
+      "prefix_topics": [
+        "ownership_transfer_completed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys for `Ownable` utility.",
+      "lib": "",
+      "name": "OwnableStorageKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Owner"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PendingOwner"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UpgradeableError",
+      "cases": [
+        {
+          "doc": "When migration is attempted but not allowed due to upgrade state.",
+          "name": "MigrationNotAllowed",
+          "value": 1100
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the merkle root is set.",
+      "lib": "",
+      "name": "SetRoot",
+      "prefix_topics": [
+        "set_root"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "root",
+          "type_": "bytes",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an index is claimed.",
+      "lib": "",
+      "name": "SetClaimed",
+      "prefix_topics": [
+        "set_claimed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "val",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MerkleDistributorError",
+      "cases": [
+        {
+          "doc": "The merkle root is not set.",
+          "name": "RootNotSet",
+          "value": 1300
+        },
+        {
+          "doc": "The provided index was already claimed.",
+          "name": "IndexAlreadyClaimed",
+          "value": 1301
+        },
+        {
+          "doc": "The proof is invalid.",
+          "name": "InvalidProof",
+          "value": 1302
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys for the data associated with `MerkleDistributor`",
+      "lib": "",
+      "name": "MerkleDistributorStorageKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "The Merkle root of the distribution tree",
+            "name": "Root"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Maps an index to its claimed status",
+            "name": "Claimed",
+            "type_": [
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Rounding",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Floor"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Ceil"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SorobanFixedPointError",
+      "cases": [
+        {
+          "doc": "The operation failed because the denominator is 0.",
+          "name": "ZeroDenominator",
+          "value": 1500
+        },
+        {
+          "doc": "The operation failed because a phantom overflow occurred.",
+          "name": "PhantomOverflow",
+          "value": 1501
+        },
+        {
+          "doc": "The operation failed because the result does not fit in Self.",
+          "name": "ResultOverflow",
+          "value": 1502
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CryptoError",
+      "cases": [
+        {
+          "doc": "The merkle proof length is out of bounds.",
+          "name": "MerkleProofOutOfBounds",
+          "value": 1400
+        },
+        {
+          "doc": "The index of the leaf is out of bounds.",
+          "name": "MerkleIndexOutOfBounds",
+          "value": 1401
+        },
+        {
+          "doc": "No data in hasher state.",
+          "name": "HasherEmptyState",
+          "value": 1402
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the contract is paused.",
+      "lib": "",
+      "name": "Paused",
+      "prefix_topics": [
+        "paused"
+      ],
+      "params": [],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the contract is unpaused.",
+      "lib": "",
+      "name": "Unpaused",
+      "prefix_topics": [
+        "unpaused"
+      ],
+      "params": [],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PausableError",
+      "cases": [
+        {
+          "doc": "The operation failed because the contract is paused.",
+          "name": "EnforcedPause",
+          "value": 1000
+        },
+        {
+          "doc": "The operation failed because the contract is not paused.",
+          "name": "ExpectedPause",
+          "value": 1001
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage key for the pausable state",
+      "lib": "",
+      "name": "PausableStorageKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Indicates whether the contract is in paused state.",
+            "name": "Paused"
+          }
+        }
+      ]
+    }
+  }
+]
