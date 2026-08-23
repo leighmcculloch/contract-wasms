@@ -1,0 +1,722 @@
+[
+  {
+    "function_v0": {
+      "doc": "Enforce the spending limit policy.\\n\\nValidates that the transaction amount does not exceed the remaining\\nspending limit, records the transaction amount and updates the\\nspending history.",
+      "name": "enforce",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context",
+          "type_": {
+            "udt": {
+              "name": "Context"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "authenticated_signers",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Signer"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "context_rule",
+          "type_": {
+            "udt": {
+              "name": "ContextRule"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Install the spending limit policy for a smart account.\\n\\nStores the spending limit configuration for the given context rule.",
+      "name": "install",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "install_params",
+          "type_": {
+            "udt": {
+              "name": "SpendingLimitAccountParams"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "context_rule",
+          "type_": {
+            "udt": {
+              "name": "ContextRule"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Uninstall the spending limit policy for a smart account.\\n\\nRemoves the spending limit configuration and history for the given\\ncontext rule.",
+      "name": "uninstall",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_rule",
+          "type_": {
+            "udt": {
+              "name": "ContextRule"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set a new spending limit for a smart account",
+      "name": "set_spending_limit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "spending_limit",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "context_rule",
+          "type_": {
+            "udt": {
+              "name": "ContextRule"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get the current spending limit data for a smart account",
+      "name": "get_spending_limit_data",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "SpendingLimitData"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Context of a single authorized call performed by an address.\\n\\nCustom account contracts that implement `__check_auth` special function\\nreceive a list of `Context` values corresponding to all the calls that\\nneed to be authorized.",
+      "lib": "",
+      "name": "Context",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "Contract invocation.",
+            "name": "Contract",
+            "type_": [
+              {
+                "udt": {
+                  "name": "ContractContext"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Contract that has a constructor with no arguments is created.",
+            "name": "CreateContractHostFn",
+            "type_": [
+              {
+                "udt": {
+                  "name": "CreateContractHostFnContext"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Contract that has a constructor with 1 or more arguments is created.",
+            "name": "CreateContractWithCtorHostFn",
+            "type_": [
+              {
+                "udt": {
+                  "name": "CreateContractWithConstructorHostFnContext"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Authorization context of a single contract call.\\n\\nThis struct corresponds to a `require_auth_for_args` call for an address\\nfrom `contract` function with `fn_name` name and `args` arguments.",
+      "lib": "",
+      "name": "ContractContext",
+      "fields": [
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fn_name",
+          "type_": "symbol"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Contract executable used for creating a new contract and used in\\n`CreateContractHostFnContext`.",
+      "lib": "",
+      "name": "ContractExecutable",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Wasm",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Authorization context for `create_contract` host function that creates a\\nnew contract on behalf of authorizer address.",
+      "lib": "",
+      "name": "CreateContractHostFnContext",
+      "fields": [
+        {
+          "doc": "",
+          "name": "executable",
+          "type_": {
+            "udt": {
+              "name": "ContractExecutable"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Authorization context for `create_contract` host function that creates a\\nnew contract on behalf of authorizer address.\\nThis is the same as `CreateContractHostFnContext`, but also has\\ncontract constructor arguments.",
+      "lib": "",
+      "name": "CreateContractWithConstructorHostFnContext",
+      "fields": [
+        {
+          "doc": "",
+          "name": "constructor_args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "executable",
+          "type_": {
+            "udt": {
+              "name": "ContractExecutable"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Represents different types of signers in the smart account system.",
+      "lib": "",
+      "name": "Signer",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "A delegated signer that uses built-in signature verification.",
+            "name": "Delegated",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "An external signer with custom verification logic.\\nContains the verifier contract address and the public key data.",
+            "name": "External",
+            "type_": [
+              "address",
+              "bytes"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A complete context rule defining authorization requirements.",
+      "lib": "",
+      "name": "ContextRule",
+      "fields": [
+        {
+          "doc": "The type of context this rule applies to.",
+          "name": "context_type",
+          "type_": {
+            "udt": {
+              "name": "ContextRuleType"
+            }
+          }
+        },
+        {
+          "doc": "Unique identifier for the context rule.",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "Human-readable name for the context rule.",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "List of policy contracts that must be satisfied.",
+          "name": "policies",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "Global registry IDs for each policy, positionally aligned with\\n`policies`.",
+          "name": "policy_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "Global registry IDs for each signer, positionally aligned with\\n`signers`.",
+          "name": "signer_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "List of signers authorized by this rule.",
+          "name": "signers",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Signer"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "Optional expiration ledger sequence for the rule.",
+          "name": "valid_until",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Types of contexts that can be authorized by smart account rules.",
+      "lib": "",
+      "name": "ContextRuleType",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Default rules that can authorize any context.",
+            "name": "Default"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Rules specific to calling a particular contract.",
+            "name": "CallContract",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Rules specific to creating a contract with a particular WASM hash.",
+            "name": "CreateContract",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Individual spending entry for tracking purposes.",
+      "lib": "",
+      "name": "SpendingEntry",
+      "fields": [
+        {
+          "doc": "The amount spent in this transaction.",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "The ledger sequence when this transaction occurred.",
+          "name": "ledger_sequence",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Internal storage structure for spending limit tracking.",
+      "lib": "",
+      "name": "SpendingLimitData",
+      "fields": [
+        {
+          "doc": "Cached total of all amounts in spending_history.",
+          "name": "cached_total_spent",
+          "type_": "i128"
+        },
+        {
+          "doc": "The period in ledgers over which the spending limit applies.",
+          "name": "period_ledgers",
+          "type_": "u32"
+        },
+        {
+          "doc": "History of spending transactions with their ledger sequences.",
+          "name": "spending_history",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "SpendingEntry"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "The spending limit for the period.",
+          "name": "spending_limit",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Error codes for spending limit policy operations.",
+      "lib": "",
+      "name": "SpendingLimitError",
+      "cases": [
+        {
+          "doc": "The smart account does not have a spending limit policy installed.",
+          "name": "SmartAccountNotInstalled",
+          "value": 3220
+        },
+        {
+          "doc": "The spending limit has been exceeded.",
+          "name": "SpendingLimitExceeded",
+          "value": 3221
+        },
+        {
+          "doc": "The spending limit or period is invalid.",
+          "name": "InvalidLimitOrPeriod",
+          "value": 3222
+        },
+        {
+          "doc": "The transaction is not allowed by this policy.",
+          "name": "NotAllowed",
+          "value": 3223
+        },
+        {
+          "doc": "The spending history has reached maximum capacity.",
+          "name": "HistoryCapacityExceeded",
+          "value": 3224
+        },
+        {
+          "doc": "The context rule for the smart account has been already installed.",
+          "name": "AlreadyInstalled",
+          "value": 3225
+        },
+        {
+          "doc": "The transfer amount is negative.",
+          "name": "LessThanZero",
+          "value": 3226
+        },
+        {
+          "doc": "Only the `CallContract` context rule type is allowed.",
+          "name": "OnlyCallContractAllowed",
+          "value": 3227
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the spending limit value is changed.",
+      "lib": "",
+      "name": "SpendingLimitChanged",
+      "prefix_topics": [
+        "spending_limit_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "spending_limit",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a spending limit policy is enforced.",
+      "lib": "",
+      "name": "SpendingLimitEnforced",
+      "prefix_topics": [
+        "spending_limit_enforced"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context",
+          "type_": {
+            "udt": {
+              "name": "Context"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "total_spent_in_period",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a spending limit policy is installed.",
+      "lib": "",
+      "name": "SpendingLimitInstalled",
+      "prefix_topics": [
+        "spending_limit_installed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "spending_limit",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "period_ledgers",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a spending limit policy is uninstalled.",
+      "lib": "",
+      "name": "SpendingLimitUninstalled",
+      "prefix_topics": [
+        "spending_limit_uninstalled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "smart_account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "context_rule_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Installation parameters for the spending limit policy.",
+      "lib": "",
+      "name": "SpendingLimitAccountParams",
+      "fields": [
+        {
+          "doc": "The period in ledgers over which the spending limit applies.",
+          "name": "period_ledgers",
+          "type_": "u32"
+        },
+        {
+          "doc": "The maximum amount that can be spent within the specified period (in\\nstroops).",
+          "name": "spending_limit",
+          "type_": "i128"
+        }
+      ]
+    }
+  }
+]
