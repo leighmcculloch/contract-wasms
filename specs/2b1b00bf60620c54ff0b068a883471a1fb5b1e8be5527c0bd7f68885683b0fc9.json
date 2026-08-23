@@ -1,0 +1,511 @@
+[
+  {
+    "event_v0": {
+      "doc": "One payout line settled. `pushed` distinguishes the operator batch from a\\nholder claim, so the UI can say \"received\" vs \"claimed\" without heuristics.",
+      "lib": "",
+      "name": "Paid",
+      "prefix_topics": [
+        "paid"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "cycle_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "pushed",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "One distribution round for one asset.",
+      "lib": "",
+      "name": "Cycle",
+      "fields": [
+        {
+          "doc": "Cumulative amount already paid out (push + claims).",
+          "name": "claimed",
+          "type_": "i128"
+        },
+        {
+          "doc": "Unix time after which claims close and `sweep` opens.",
+          "name": "expires_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "Merkle root of the payout list (see [`merkle`]).",
+          "name": "root",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "Ledger at which holder balances were read. Audit trail only.",
+          "name": "snapshot_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "Set once the remainder has been swept; the cycle is then closed.",
+          "name": "swept",
+          "type_": "bool"
+        },
+        {
+          "doc": "RWA token whose holders this cycle pays. Informational + indexed; the\\npayout set itself is fixed by `root`.",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "USDC deposited for this cycle (payment stroops).",
+          "name": "total",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "One payout line of a push batch.",
+      "lib": "",
+      "name": "Entry",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 2
+        },
+        {
+          "doc": "`expires_at` is not in the future at cycle creation.",
+          "name": "InvalidExpiry",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "CycleNotFound",
+          "value": 4
+        },
+        {
+          "doc": "The line's (cycle, holder, amount) does not hash into the cycle root.",
+          "name": "InvalidProof",
+          "value": 5
+        },
+        {
+          "doc": "This holder's line was already paid (pushed or claimed).",
+          "name": "AlreadyPaid",
+          "value": 6
+        },
+        {
+          "doc": "Paying this line would exceed the cycle's deposit \\xe2\\x80\\x94 the root promises\\nmore than was funded. The solvency guard.",
+          "name": "OverTotal",
+          "value": 7
+        },
+        {
+          "doc": "Claims are closed: the cycle passed `expires_at`.",
+          "name": "CycleExpired",
+          "value": 8
+        },
+        {
+          "doc": "`sweep` called before `expires_at`.",
+          "name": "CycleNotExpired",
+          "value": 9
+        },
+        {
+          "doc": "The cycle was swept; no further payouts.",
+          "name": "AlreadySwept",
+          "value": 10
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "A cycle's unpaid remainder was recovered; the cycle is closed.",
+      "lib": "",
+      "name": "Swept",
+      "prefix_topics": [
+        "swept"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "cycle_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Claim one payout line. The holder authorizes the call (their signed\\ninner transaction may be fee-bumped by the platform \\xe2\\x80\\x94 the signature\\nstays theirs). Panics if the line was already paid, the proof does not\\nmatch, or the cycle expired. Returns the amount paid.",
+      "name": "claim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "cycle_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cycle",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "cycle_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Cycle"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin: recover whatever a cycle never paid out, once it has expired.\\nCloses the cycle for good. Returns the swept amount.",
+      "name": "sweep",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "cycle_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_paid",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "cycle_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pay_sac",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "A distribution cycle was opened and funded.",
+      "lib": "",
+      "name": "CycleCreated",
+      "prefix_topics": [
+        "cycle_created"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "cycle_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "total",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "root",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "snapshot_ledger",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "USDC still unpaid in a cycle (0 once swept).",
+      "name": "unclaimed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "cycle_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Anyone: re-extend a cycle's storage TTL. Purely maintenance \\xe2\\x80\\x94 a cycle\\nwith a long claim window must not be archived before it expires.",
+      "name": "bump_cycle",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "cycle_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Number of cycles ever created (ids are `0..cycle_count`).",
+      "name": "cycle_count",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin: open a distribution cycle. Pulls `total` USDC from the admin\\ninto this contract and publishes the payout list's Merkle `root`.\\nReturns the cycle id.",
+      "name": "create_cycle",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "snapshot_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "root",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Runs once at deploy. `pay_sac` is the USDC Stellar Asset Contract.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pay_sac",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin: push a batch of payout lines. Lines already paid are skipped, so\\noverlapping batches are harmless; an invalid proof aborts the whole\\nbatch \\xe2\\x80\\x94 a bad line in an operator batch is a bug, not a holder mistake.\\nReturns the amount actually paid by this batch.\\n\\nDeliberately usable after `expires_at` (until the sweep): expiry closes\\nself-service claims, not the operator settling a laggard.",
+      "name": "distribute_for",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "cycle_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "entries",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Entry"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  }
+]

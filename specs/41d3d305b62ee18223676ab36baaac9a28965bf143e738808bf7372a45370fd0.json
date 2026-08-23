@@ -1,0 +1,223 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MarketContract"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Committee"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ChallengeWindow"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Proposal",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Approved",
+            "type_": [
+              "u64",
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Outcome",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Yes",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "No",
+          "value": 1
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketProposal",
+      "fields": [
+        {
+          "doc": "",
+          "name": "approvals",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "disputed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "finalized",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "proposal_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "proposer",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Approve a proposed outcome. Only callable by registered committee members.\\nReaching a threshold of 3-of-5 approvals triggers immediate finalization and market resolution.",
+      "name": "approve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "committee_member",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Finalize resolution for a market.\\nCan be called by anyone if:\\n1. 3-of-5 committee members have approved, OR\\n2. The challenge window has elapsed with no disputes.",
+      "name": "finalize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initialize the oracle contract with the market contract, committee members, and challenge window duration",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "committee",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "challenge_window",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Dispute a proposed outcome. Anyone can call this before the challenge window elapses.\\nDisputed proposals require committee consensus (3-of-5 approvals) to finalize.",
+      "name": "dispute_outcome",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "disputer",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Propose the outcome of a prediction market. Anyone can call this.\\nInitiates a challenge window during which disputes can be filed.",
+      "name": "propose_outcome",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": {
+            "udt": {
+              "name": "Outcome"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "proposer",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

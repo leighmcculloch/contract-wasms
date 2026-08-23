@@ -1,0 +1,233 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "FeeBps"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Pool",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "LpBalance",
+            "type_": [
+              "address",
+              "u64"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PoolReserves",
+      "fields": [
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "no_reserves",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_lp_shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "yes_reserves",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Read AMM protocol identifier",
+      "name": "name",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Read pool reserves for market",
+      "name": "get_pool",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "PoolReserves"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initialize the AMM contract with admin and default fee in BPS (e.g. 30 = 0.3%)",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Calculate shares received for a buy order under constant-product formula (x*y=k)\\nAlso returns protocol fee and estimated price impact in BPS",
+      "name": "calculate_buy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "yes_reserves",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "no_reserves",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "payment",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "is_yes",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "i128",
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Calculate collateral payout for a sell order",
+      "name": "calculate_sell",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "yes_reserves",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "no_reserves",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "is_yes",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "i128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Calculate outcome probability in BPS (0 to 10,000 basis points)\\nPrice of YES = no_reserves / (yes_reserves + no_reserves) * 10000",
+      "name": "calculate_price",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "yes_reserves",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "no_reserves",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "is_yes",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  }
+]

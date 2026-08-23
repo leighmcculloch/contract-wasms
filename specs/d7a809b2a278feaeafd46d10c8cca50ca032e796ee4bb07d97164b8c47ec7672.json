@@ -1,0 +1,165 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MarketContract"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MarketCounter"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Market",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MarketList"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketMeta",
+      "fields": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "oracle_id",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "question",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "resolution_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "resolved",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "winning_outcome",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Read-only getter to fetch market metadata by market_id",
+      "name": "get_market",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "MarketMeta"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initialize the factory with the core market contract address",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_contract",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Read-only getter to list all market IDs",
+      "name": "list_markets",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "u64"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Creates a new prediction market. Anyone can call this.\\nTriggers downstream contract creation/initialization on the market contract.\\nReturns the newly generated market_id.",
+      "name": "create_market",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "question",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "resolution_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "oracle_id",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  }
+]
