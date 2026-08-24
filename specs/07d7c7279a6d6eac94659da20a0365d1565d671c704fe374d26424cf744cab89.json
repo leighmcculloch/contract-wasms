@@ -1,0 +1,136 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "A non-positive amount, or `usdc_in` already above `max_usdc`.",
+          "name": "BadParams",
+          "value": 1
+        },
+        {
+          "doc": "The join pulled more USDC than `max_usdc` allows.",
+          "name": "SpendCapExceeded",
+          "value": 2
+        },
+        {
+          "doc": "The Comet join minted less LP than `min_lp_out`.",
+          "name": "LpBelowMin",
+          "value": 3
+        },
+        {
+          "doc": "The fill left more LP in the wallet than `max_lp_residual` \\xe2\\x80\\x94 we would\\nbe carrying BLND exposure to the next auction, which is the exact\\nthing this contract exists to prevent.",
+          "name": "LpResidual",
+          "value": 4
+        },
+        {
+          "doc": "The fill returned less lot than `min_lot_out` (we did not actually win,\\nor won less than we priced).",
+          "name": "LotBelowMin",
+          "value": 5
+        },
+        {
+          "doc": "`auction_user` is not the backstop. For a type-2 auction the auction's\\n`user` key IS the backstop contract; a mismatch means the caller built\\nthe request from the wrong template (the type-0 shape puts a borrower\\nthere) and would be filling something we did not price.",
+          "name": "AuctionKeyMismatch",
+          "value": 6
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Blend's `submit` request element. Field names and types must match the\\npool's `Request` exactly; the encoding is a symbol-keyed map, so the\\ndeclaration order here is irrelevant to the wire format.",
+      "lib": "",
+      "name": "Request",
+      "fields": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "request_type",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Mint the bid and win the auction in one invocation.\\n\\n* `filler` \\xe2\\x80\\x94 whose money moves and who receives the lot. Must\\nauthorize; this is the ONLY principal the call can act for.\\n* `usdc` \\xe2\\x80\\x94 the SAC of the asset deposited into the Comet pool\\n(mainnet USDC `CCW67TSZ\\xe2\\x80\\xa6`). Named separately from the lot asset\\nbecause they only happen to coincide.\\n* `usdc_in` \\xe2\\x80\\x94 units to deposit single-sided.\\n* `max_usdc` \\xe2\\x80\\x94 hard ceiling on what the join may actually pull. Checked\\nagainst the measured balance delta, so a Comet that took more than it\\nwas asked for reverts the whole transaction.\\n* `comet` \\xe2\\x80\\x94 the Comet BLND:USDC pool. A Comet pool IS its own LP share\\ntoken (it implements the token interface), so this address is used\\nboth as the join target and as the LP balance oracle.\\n* `min_lp_out` \\xe2\\x80\\x94 slippage floor on the join, doing three jobs: it is\\npassed to Comet as its own `min_pool_amount_out`, re-checked here\\nagainst the measured LP delta, and used verbatim as the LP allowance\\ngranted to the backstop \\xe2\\x80\\x94 so it must be a",
+      "name": "fill_interest",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "filler",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_usdc",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "comet",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "min_lp_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_lp_residual",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "backstop",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "auction_user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "lot_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "min_lot_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  }
+]
