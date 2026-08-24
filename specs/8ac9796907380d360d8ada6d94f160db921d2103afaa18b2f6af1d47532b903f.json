@@ -1,0 +1,379 @@
+[
+  {
+    "function_v0": {
+      "doc": "THE KEY PUBLIC FUNCTION.\\n\\nReturns the Anchor Confidence Ratio (ACR) for an anchor in basis points.\\nThis is now a composite Operational Risk Score, scaled 0 to 10_000.",
+      "name": "get_acr",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "anchor",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "extend_ttl",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Called once at deployment.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "factory",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns all registered anchors and their ACR scores.",
+      "name": "get_all_acr",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "tuple": {
+                "value_types": [
+                  "address",
+                  "i128"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_all_metrics",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "tuple": {
+                "value_types": [
+                  "address",
+                  {
+                    "udt": {
+                      "name": "AnchorMetrics"
+                    }
+                  },
+                  "i128"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Anchor registers itself for a specific market.",
+      "name": "register_anchor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "anchor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "on_market_settled",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "yes_won",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_cover_outstanding",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Update operational metrics for an anchor.\\nThis is called by the off-chain Watcher (Risk Oracle) via the admin key.",
+      "name": "update_anchor_metrics",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "anchor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "success_rate_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "avg_latency_seconds",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "failed_withdrawals",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "oracle_uptime_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "historical_payouts",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "update_cover_outstanding",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "delta",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "increase",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AnchorRegistered",
+      "prefix_topics": [
+        "anchor_registered"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "anchor",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketSettledAnchor",
+      "prefix_topics": [
+        "market_settled_anchor"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "yes_won",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AnchorMetricsUpdated",
+      "prefix_topics": [
+        "anchor_metrics_updated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "anchor",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "acr_bps",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Factory"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Usdc"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Map<Address, AnchorMetrics> \\xe2\\x80\\x94 anchor address \\xe2\\x86\\x92 operational metrics",
+            "name": "AnchorMetricsMap"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Map<u32, i128> \\xe2\\x80\\x94 market_id \\xe2\\x86\\x92 YES tokens outstanding (total cover sold)",
+            "name": "MarketCoverOut"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Map<Address, u32> \\xe2\\x80\\x94 anchor address \\xe2\\x86\\x92 their registered market_id",
+            "name": "AnchorMarket"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Map<u32, bool> \\xe2\\x80\\x94 market_id \\xe2\\x86\\x92 has settled?",
+            "name": "MarketSettled"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AnchorMetrics",
+      "fields": [
+        {
+          "doc": "",
+          "name": "avg_latency_seconds",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "failed_withdrawals",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "historical_payouts",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "oracle_uptime_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "success_rate_bps",
+          "type_": "u32"
+        }
+      ]
+    }
+  }
+]

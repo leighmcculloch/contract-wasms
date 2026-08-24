@@ -1,0 +1,1012 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Permission",
+      "fields": [
+        {
+          "doc": "",
+          "name": "epoch",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "grant",
+          "type_": {
+            "udt": {
+              "name": "PermissionGrant"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "revoked",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "spent",
+          "type_": "u128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UseReceipt",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "delegate",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "payload",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "permission_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "spent_after",
+          "type_": "u128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccountConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "disabled",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "epoch",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "root",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SpendValueKind",
+      "cases": [
+        {
+          "doc": "",
+          "name": "None",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "U128",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "I128",
+          "value": 2
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PermissionGrant",
+      "fields": [
+        {
+          "doc": "",
+          "name": "constraints",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "InvocationConstraint"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "cumulative_limit",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "delegate",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "per_call_limit",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "permission_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "valid_after_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "valid_until_ledger",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RecoveryReceipt",
+      "fields": [
+        {
+          "doc": "",
+          "name": "new_epoch",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "old_epoch",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "recovery_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccountSignature",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Root"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Permission",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "InvocationConstraint",
+      "fields": [
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fn_name",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "spend_arg",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "spend_value_kind",
+          "type_": {
+            "udt": {
+              "name": "SpendValueKind"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PermissionAuthError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AmountOverflow",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AmountUnderflow",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidNetwork",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidAsset",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "ExpiredAuthority",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "IdempotencyConflict",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "DuplicateResult",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "ExactTransferFailed",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "CapacityBindingMismatch",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "DisabledNewWork",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "InvalidSettlementState",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "TtlRestoreConflict",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "NotFound",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "InsufficientBalance",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "BindingMismatch",
+          "value": 19
+        },
+        {
+          "doc": "",
+          "name": "InvalidConfiguredAddress",
+          "value": 20
+        },
+        {
+          "doc": "",
+          "name": "InvalidSignature",
+          "value": 21
+        },
+        {
+          "doc": "",
+          "name": "StaleNonce",
+          "value": 22
+        },
+        {
+          "doc": "",
+          "name": "StaleAmount",
+          "value": 23
+        },
+        {
+          "doc": "",
+          "name": "InvalidTimeWindow",
+          "value": 24
+        },
+        {
+          "doc": "",
+          "name": "NotReady",
+          "value": 25
+        },
+        {
+          "doc": "",
+          "name": "AlreadyFinalized",
+          "value": 26
+        },
+        {
+          "doc": "",
+          "name": "ChallengeActive",
+          "value": 27
+        },
+        {
+          "doc": "",
+          "name": "AlreadyChallenged",
+          "value": 28
+        },
+        {
+          "doc": "",
+          "name": "ChallengeNotFound",
+          "value": 29
+        },
+        {
+          "doc": "",
+          "name": "Cancelled",
+          "value": 30
+        },
+        {
+          "doc": "",
+          "name": "InsufficientCapacity",
+          "value": 31
+        },
+        {
+          "doc": "",
+          "name": "CapacityInUse",
+          "value": 32
+        },
+        {
+          "doc": "",
+          "name": "InvalidProof",
+          "value": 33
+        },
+        {
+          "doc": "",
+          "name": "DuplicateProof",
+          "value": 34
+        },
+        {
+          "doc": "",
+          "name": "NotService",
+          "value": 35
+        },
+        {
+          "doc": "",
+          "name": "AlreadyExists",
+          "value": 36
+        },
+        {
+          "doc": "",
+          "name": "InvalidMultiplier",
+          "value": 37
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "config",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "AccountConfig"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "recover",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "root",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "recovery_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "RecoveryReceipt"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "root",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "permission",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "permission_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Permission"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "use_receipt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "payload",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "UseReceipt"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__check_auth",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signature_payload",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signature",
+          "type_": {
+            "udt": {
+              "name": "AccountSignature"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "auth_contexts",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Context"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "PermissionAuthError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_disabled",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "root",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "disabled",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "touch_recovery",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "root",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "recovery_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "contract_version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "recovery_receipt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "recovery_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "RecoveryReceipt"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "touch_permission",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "root",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "permission_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_permission",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "root",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "grant",
+          "type_": {
+            "udt": {
+              "name": "PermissionGrant"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Permission"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "revoke_permission",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "root",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "permission_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Permission"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "touch_use_receipt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "root",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "payload",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccountDisabled",
+      "prefix_topics": [
+        "account_disabled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "disabled",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PermissionCreated",
+      "prefix_topics": [
+        "permission_created"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "permission_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "grant",
+          "type_": {
+            "udt": {
+              "name": "PermissionGrant"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "epoch",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PermissionRevoked",
+      "prefix_topics": [
+        "permission_revoked"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "permission_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "epoch",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccountInitialized",
+      "prefix_topics": [
+        "account_initialized"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "root",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PermissionConsumed",
+      "prefix_topics": [
+        "permission_consumed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "permission_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "payload",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "delegate",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "spent_after",
+          "type_": "u128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PermissionsRecovered",
+      "prefix_topics": [
+        "permissions_recovered"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "recovery_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "old_epoch",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_epoch",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  }
+]

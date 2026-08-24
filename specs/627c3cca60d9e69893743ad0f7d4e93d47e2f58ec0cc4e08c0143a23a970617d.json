@@ -1,0 +1,1643 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "Mirrors Blend's `Request`.",
+      "lib": "",
+      "name": "Request",
+      "fields": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "request_type",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Blend's Reserve return type from `get_reserve`.",
+      "lib": "",
+      "name": "Reserve",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "config",
+          "type_": {
+            "udt": {
+              "name": "ReserveConfig"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "data",
+          "type_": {
+            "udt": {
+              "name": "ReserveData"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "scalar",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Executed",
+      "prefix_topics": [
+        "executed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "beneficiary",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "ops",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "produced",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Blend's `Positions`.\\n\\nAll three maps use `u32` reserve index keys \\xe2\\x80\\x94 NOT asset addresses. Blend v2\\nstores positions by the reserve's index in the pool (from `get_reserve`).\\nThis matches the deployed pool's actual return type from `get_positions`.\\n\\nAll three maps are declared because a `#[contracttype]` struct decodes\\nstrictly \\xe2\\x80\\x94 a mirror missing a field the pool returns fails at the XDR\\nboundary. This adapter genuinely reads all three.",
+      "lib": "",
+      "name": "Positions",
+      "fields": [
+        {
+          "doc": "",
+          "name": "collateral",
+          "type_": {
+            "map": {
+              "key_type": "u32",
+              "value_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "liabilities",
+          "type_": {
+            "map": {
+              "key_type": "u32",
+              "value_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "supply",
+          "type_": {
+            "map": {
+              "key_type": "u32",
+              "value_type": "i128"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Partial mirror of Blend's ReserveData.",
+      "lib": "",
+      "name": "ReserveData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "b_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "b_supply",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "backstop_credit",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "d_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "d_supply",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "ir_mod",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "last_time",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Partial mirror of Blend's ReserveConfig \\xe2\\x80\\x94 only the fields we need.",
+      "lib": "",
+      "name": "ReserveConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "c_factor",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "decimals",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "enabled",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "l_factor",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_util",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "r_base",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "r_one",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "r_three",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "r_two",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "reactivity",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "supply_cap",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "util",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "caps",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "AdapterCaps"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The address that administers this adapter's allowlist.\\n\\nA view, added in Phase 11 alongside `caller()` and for the same reason\\n(ADR-037): `scripts/verify_deployment.sh` has to read the owner off the\\nchain rather than trust the deploy script's variable. The value was\\nalways stored \\xe2\\x80\\x94 `initialize` takes it \\xe2\\x80\\x94 but nothing exposed it, so the\\none check that would catch an adapter initialized by the wrong key was\\nthe one check that could not be made.",
+      "name": "owner",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": {
+              "udt": {
+                "name": "AdapterError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pools",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The one contract permitted to invoke this adapter.\\n\\nA view, added in Phase 11 for `scripts/verify_deployment.sh`. The binding\\nis the single most error-prone fact in a deployment \\xe2\\x80\\x94 a venue reachable\\nfrom three contracts needs three adapter instances, and one bound to the\\nwrong caller passes every other check and fails on the first user call.\\nA deployment invariant that cannot be read cannot be verified.",
+      "name": "caller",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": {
+              "udt": {
+                "name": "AdapterError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "# Verification\\n\\nThe measured quantity follows `action`, never the op list: a batch that\\nsupplies collateral *and* borrows is measured on whichever of the two the\\ncaller said it was doing, and `min_out` bounds that one. The other legs\\nstill happen \\xe2\\x80\\x94 they are simply not what this call promised.\\n\\nEvery measurement is a before/after read of the pool by this adapter.\\n`submit` returns `Positions` and it is ignored (ADR-007).",
+      "name": "execute",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "action",
+          "type_": {
+            "udt": {
+              "name": "Action"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "beneficiary",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "min_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "params",
+          "type_": {
+            "udt": {
+              "name": "AdapterParams"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Outcome"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "AdapterError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Owner-gated. Permits this adapter to interact with `pool`.",
+      "name": "allow_pool",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "AdapterError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "`caller` is the vault or executor this adapter serves; `owner`\\nadministers the pool allowlist.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "AdapterError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Owner-gated.",
+      "name": "revoke_pool",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "AdapterError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "authorized_caller",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": {
+              "udt": {
+                "name": "AdapterError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "What an adapter is being asked to do.",
+      "lib": "",
+      "name": "Action",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Convert `token_in` to another token.",
+            "name": "Swap"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Supply to a yield venue.",
+            "name": "Supply"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Redeem from a yield venue.",
+            "name": "Withdraw"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Supply as borrowable collateral.",
+            "name": "SupplyCollateral"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Withdraw collateral.",
+            "name": "WithdrawCollateral"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Borrow against collateral. Takes no input transfer.",
+            "name": "Borrow"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Repay debt.",
+            "name": "Repay"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Add liquidity to an AMM pool.",
+            "name": "AddLiquidity"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Remove liquidity from an AMM pool.",
+            "name": "RemoveLiquidity"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Claim accrued incentives. Takes no input transfer.",
+            "name": "ClaimRewards"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "One Blend request, with the amount described rather than supplied.",
+      "lib": "",
+      "name": "BlendOp",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": {
+            "udt": {
+              "name": "AmountSource"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "Matches Blend's `RequestType` discriminant.",
+          "name": "request_type",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "What an adapter reports having produced.",
+      "lib": "",
+      "name": "Outcome",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "kind",
+          "type_": {
+            "udt": {
+              "name": "ValueKind"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Whether a backend lets the caller name a receiver, or pays whoever acts.",
+      "lib": "",
+      "name": "AuthClass",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Backend takes a receiver parameter. Output goes straight to the user.",
+            "name": "DirectReceiver"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "No receiver parameter \\xe2\\x80\\x94 the actor is also the recipient. The adapter acts\\nas itself, then transfers to the beneficiary.",
+            "name": "ActorOnly"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "The form value takes on one side of an adapter call.",
+      "lib": "",
+      "name": "ValueKind",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "A transferable token. The caller can measure it by balance delta.",
+            "name": "Token"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Venue-internal accounting \\xe2\\x80\\x94 a Blend position, a lending balance.",
+            "name": "Position"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Nothing moves on this side of the call.",
+            "name": "None"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A backend identified by a single pool address.",
+      "lib": "",
+      "name": "PoolParams",
+      "fields": [
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "What an adapter declares about itself.",
+      "lib": "",
+      "name": "AdapterCaps",
+      "fields": [
+        {
+          "doc": "",
+          "name": "actions",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Action"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "auth_class",
+          "type_": {
+            "udt": {
+              "name": "AuthClass"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Shared adapter errors. Codes 600\\xe2\\x80\\x93699.",
+      "lib": "",
+      "name": "AdapterError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "UnauthorizedCaller",
+          "value": 600
+        },
+        {
+          "doc": "",
+          "name": "UnsupportedAction",
+          "value": 601
+        },
+        {
+          "doc": "",
+          "name": "WrongParams",
+          "value": 602
+        },
+        {
+          "doc": "",
+          "name": "SlippageExceeded",
+          "value": 603
+        },
+        {
+          "doc": "",
+          "name": "ZeroOutput",
+          "value": 604
+        },
+        {
+          "doc": "",
+          "name": "VenueNotAllowed",
+          "value": 605
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 606
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 607
+        },
+        {
+          "doc": "",
+          "name": "AmountConversion",
+          "value": 608
+        },
+        {
+          "doc": "",
+          "name": "ResidualBalance",
+          "value": 609
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "How an adapter should derive an amount it passes to a backend.\\n\\nInvariant I6 encoded in the type system: no caller-supplied `i128` reaches a\\nbackend. See ADR-005.",
+      "lib": "",
+      "name": "AmountSource",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "The full `amount` passed to `execute`.",
+            "name": "FromInput"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "A basis-point fraction of `amount`.",
+            "name": "Bps",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "The adapter's entire balance of the relevant token.",
+            "name": "Full"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Aquarius pool identity.",
+      "lib": "",
+      "name": "AquaLpParams",
+      "fields": [
+        {
+          "doc": "The token this call is measured and bounded on.",
+          "name": "measured",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool_index",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "tokens",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Registry entry naming an adapter.",
+      "lib": "",
+      "name": "ProtocolInfo",
+      "fields": [
+        {
+          "doc": "",
+          "name": "adapter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "enabled",
+          "type_": "bool"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Protocol-specific parameters, one variant per adapter.",
+      "lib": "",
+      "name": "AdapterParams",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "No protocol-specific parameters.",
+            "name": "None"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "A Soroswap router swap.",
+            "name": "Soroswap",
+            "type_": [
+              {
+                "udt": {
+                  "name": "SoroswapParams"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Blend supply or withdraw against a named pool.",
+            "name": "BlendSupply",
+            "type_": [
+              {
+                "udt": {
+                  "name": "PoolParams"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Blend collateral and debt operations.",
+            "name": "BlendStrategy",
+            "type_": [
+              {
+                "udt": {
+                  "name": "BlendStrategyParams"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Aquarius pool.",
+            "name": "AquaLp",
+            "type_": [
+              {
+                "udt": {
+                  "name": "AquaLpParams"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A Soroswap router swap.",
+      "lib": "",
+      "name": "SoroswapParams",
+      "fields": [
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        },
+        {
+          "doc": "Token path. First element is the input, last the output.",
+          "name": "path",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "The router contract.",
+          "name": "router",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Blend collateral and debt operations against one pool.",
+      "lib": "",
+      "name": "BlendStrategyParams",
+      "fields": [
+        {
+          "doc": "",
+          "name": "ops",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "BlendOp"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys owned by the adapter base.\\n\\n`Fa` prefix for the same reason `fort-common` uses `Fc`: a `#[contracttype]`\\nenum encodes to XDR by variant name, so unprefixed keys would collide with an\\nadapter's own key enum.",
+      "lib": "",
+      "name": "BaseKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "The single vault or executor permitted to call `execute`. `Address`.",
+            "name": "FaCaller"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Permitted pools, markets or vaults. `Vec<Address>`.",
+            "name": "FaVenues"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Reserved contract-error code ranges.\\n\\nCodes are a public interface: an integrator matching on `Error(Contract, #N)`\\nrelies on N never being reused for something else. Each crate owns a block and\\nnever allocates outside it.\\n\\n| Range | Owner |\\n|---|---|\\n| 1\\xe2\\x80\\x9399 | `fort-common` (this crate) |\\n| 100\\xe2\\x80\\x93199 | `fort-vault` |\\n| 200\\xe2\\x80\\x93299 | `fort-swap-router` |\\n| 300\\xe2\\x80\\x93399 | `fort-strategy-executor` |\\n| 400\\xe2\\x80\\x93499 | `fort-cross-chain-router` |\\n| 500\\xe2\\x80\\x93549 | `leverage-executor` |\\n| 550\\xe2\\x80\\x93599 | `exit-executor` |\\n| 600\\xe2\\x80\\x93699 | `fort-interfaces` (shared adapter errors) |\\n| 700\\xe2\\x80\\x93709 | `soroswap-adapter` |\\n| 710\\xe2\\x80\\x93719 | `blend-supply-adapter` |\\n| 720\\xe2\\x80\\x93729 | `blend-strategy-adapter` |\\n| 730\\xe2\\x80\\x93739 | `blend-flashloan-adapter` |\\n| 740\\xe2\\x80\\x93749 | `defindex-vault-adapter` |\\n| 750\\xe2\\x80\\x93759 | `aqua-lp-adapter` |\\n| 760\\xe2\\x80\\x93769 | `bridge-adapter` |\\n| 770\\xe2\\x80\\x93779 | `blend-flash-receiver` |\\n| 900\\xe2\\x80\\x93999 | reserved for future shared modules |\\n\\n# What is deliberately absent\\n\\nThere is no `NotOwner` variant. Authorization failures are raised by\\n`Ad",
+      "lib": "",
+      "name": "CommonError",
+      "cases": [
+        {
+          "doc": "Owner is already set; initialisation may not run twice.",
+          "name": "AlreadyInitialized",
+          "value": 10
+        },
+        {
+          "doc": "Contract has not been initialised.",
+          "name": "NotInitialized",
+          "value": 11
+        },
+        {
+          "doc": "No ownership transfer is currently proposed.",
+          "name": "NoPendingOwner",
+          "value": 12
+        },
+        {
+          "doc": "Entry point is disabled while the contract is paused.",
+          "name": "Paused",
+          "value": 20
+        },
+        {
+          "doc": "Contract is not paused.",
+          "name": "NotPaused",
+          "value": 21
+        },
+        {
+          "doc": "An action is already queued; only one may be pending at a time.",
+          "name": "ActionAlreadyQueued",
+          "value": 30
+        },
+        {
+          "doc": "No action is queued.",
+          "name": "NoActionQueued",
+          "value": 31
+        },
+        {
+          "doc": "The presented action hash does not match the queued one.",
+          "name": "ActionHashMismatch",
+          "value": 32
+        },
+        {
+          "doc": "The configured delay has not yet elapsed.",
+          "name": "TimelockNotElapsed",
+          "value": 33
+        },
+        {
+          "doc": "The execution window closed; the queued action has expired.",
+          "name": "TimelockExpired",
+          "value": 34
+        },
+        {
+          "doc": "Requested delay falls outside the configured minimum and maximum.",
+          "name": "DelayOutOfBounds",
+          "value": 35
+        },
+        {
+          "doc": "Stored storage version is not one this build knows how to migrate from.",
+          "name": "StorageVersionMismatch",
+          "value": 40
+        },
+        {
+          "doc": "Target address is not allowlisted.",
+          "name": "TargetNotAllowed",
+          "value": 50
+        },
+        {
+          "doc": "Target is allowlisted but this entry point on it is not.",
+          "name": "EntryPointNotAllowed",
+          "value": 51
+        },
+        {
+          "doc": "Checked arithmetic overflowed.",
+          "name": "MathOverflow",
+          "value": 60
+        },
+        {
+          "doc": "Checked arithmetic underflowed.",
+          "name": "MathUnderflow",
+          "value": 61
+        },
+        {
+          "doc": "Division by zero.",
+          "name": "DivideByZero",
+          "value": 62
+        },
+        {
+          "doc": "A basis-points value exceeded 10_000.",
+          "name": "BpsOutOfRange",
+          "value": 63
+        },
+        {
+          "doc": "A set of basis-points values did not sum to exactly 10_000.",
+          "name": "BpsSumMismatch",
+          "value": 64
+        },
+        {
+          "doc": "A conversion between integer widths would have changed the value.\\nGuards the `u128` surfaces on Aquarius and Allbridge.",
+          "name": "IntegerConversion",
+          "value": 65
+        },
+        {
+          "doc": "A value that must be strictly positive was zero or negative.",
+          "name": "NonPositiveAmount",
+          "value": 66
+        },
+        {
+          "doc": "A value that must not be negative was negative. Distinct from\\n[`CommonError::NonPositiveAmount`] because zero is legitimate for a\\nproportional split and is not for a transfer.",
+          "name": "NegativeAmount",
+          "value": 67
+        },
+        {
+          "doc": "A residual balance remained after a sweep that should have emptied it.\\nInvariant I1 asserted at runtime, not merely in tests.",
+          "name": "ResidualBalance",
+          "value": 70
+        },
+        {
+          "doc": "An address argument was not acceptable in this position.",
+          "name": "InvalidAddress",
+          "value": 80
+        },
+        {
+          "doc": "A caller-supplied deadline has already passed.",
+          "name": "DeadlineExpired",
+          "value": 81
+        },
+        {
+          "doc": "A collection argument was empty where at least one element is required.",
+          "name": "EmptyInput",
+          "value": 82
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DelaySet",
+      "prefix_topics": [
+        "delay_set"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "delay_seconds",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Migrated",
+      "prefix_topics": [
+        "migrated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "from_version",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "to_version",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "An action entered the timelock. `ready_at` and `expires_at` are published so\\nobservers can compute their exit window without reading contract storage.",
+      "lib": "",
+      "name": "ActionQueued",
+      "prefix_topics": [
+        "action_queued"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "ready_at",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Step 2. Ownership has moved.",
+      "lib": "",
+      "name": "OwnerAccepted",
+      "prefix_topics": [
+        "owner_accepted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "previous",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Step 1 of a two-step transfer. Ownership has **not** moved.",
+      "lib": "",
+      "name": "OwnerProposed",
+      "prefix_topics": [
+        "owner_proposed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "proposed",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TargetRevoked",
+      "prefix_topics": [
+        "target_revoked"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UpgradeQueued",
+      "prefix_topics": [
+        "upgrade_queued"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ContractPaused",
+      "prefix_topics": [
+        "contract_paused"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ActionCancelled",
+      "prefix_topics": [
+        "action_cancelled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted by the **old** code, immediately before the WASM is replaced. The new\\ncode never gets the chance to announce its own arrival, which is precisely\\nwhy this must be emitted here.",
+      "lib": "",
+      "name": "UpgradeExecuted",
+      "prefix_topics": [
+        "upgrade_executed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ContractUnpaused",
+      "prefix_topics": [
+        "contract_unpaused"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "The initial owner was set. Emitted exactly once in a contract's lifetime.",
+      "lib": "",
+      "name": "OwnerInitialized",
+      "prefix_topics": [
+        "owner_initialized"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "`target` is a topic as well as `owner`: operators audit allowlists by target,\\nnot by who changed them.",
+      "lib": "",
+      "name": "EntryPointAllowed",
+      "prefix_topics": [
+        "entry_point_allowed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "entry_point",
+          "type_": "symbol",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "EntryPointRevoked",
+      "prefix_topics": [
+        "entry_point_revoked"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "entry_point",
+          "type_": "symbol",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "A pending proposal was withdrawn by the current owner.",
+      "lib": "",
+      "name": "OwnerProposalCancelled",
+      "prefix_topics": [
+        "owner_proposal_cancelled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "cancelled",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CommonKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Current owner. `Address`.",
+            "name": "FcOwner"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Proposed owner awaiting acceptance. `Address`.",
+            "name": "FcPendingOwner"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Pause flag. `bool`.",
+            "name": "FcPaused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Storage layout version. `u32`.",
+            "name": "FcStorageVersion"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Configured timelock delay in seconds. `u64`.",
+            "name": "FcDelay"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "The single pending timelocked action. [`QueuedAction`].",
+            "name": "FcQueued"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Every allowlisted target address. `Vec<Address>`.",
+            "name": "FcAllowTargets"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Entry points permitted on one target. `Vec<Symbol>`.",
+            "name": "FcAllowEntries",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A queued timelocked action.\\n\\n`expires_at` is stored rather than derived so that changing\\n[`crate::timelock::EXECUTION_WINDOW_SECONDS`] in a future build cannot\\nretroactively extend or shorten a window someone is already relying on.",
+      "lib": "",
+      "name": "QueuedAction",
+      "fields": [
+        {
+          "doc": "Ledger timestamp after which the action can no longer be executed.",
+          "name": "expires_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "Hash identifying the action. The caller decides what it commits to.",
+          "name": "hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "Ledger timestamp at which the action becomes executable.",
+          "name": "ready_at",
+          "type_": "u64"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,376 @@
+[
+  {
+    "function_v0": {
+      "doc": "Returns the factory admin address.",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Bumps instance TTL. Anyone can call this to keep the contract alive.",
+      "name": "extend_ttl",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the full MarketConfig for a given market_id.",
+      "name": "get_market",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "MarketConfig"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Called once at deployment.\\n\\ninsurance_market_wasm_hash: the WASM hash returned by `stellar contract upload`\\nfor the insurance-market contract. Factory uses this to deploy fresh instances.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "insurance_market_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "anchor_stake_contract",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns all market IDs that have been created.",
+      "name": "list_markets",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "u32"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Creates a new insurance market by deploying a fresh insurance-market contract\\ninstance and initializing it with the provided parameters.\\n\\nOnly the factory admin can call this.\\nReturns the new market_id (increments monotonically from 0).\\n\\nDeployment uses a deterministic salt based on market_id, so each\\nmarket has a predictable contract address.",
+      "name": "create_market",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "label",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "collateral_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "covered_asset",
+          "type_": {
+            "udt": {
+              "name": "Asset"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "oracle_contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "depeg_threshold",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "breach_duration_seconds",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "expiry_timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "anchor_id",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Allows admin to remove a market from the factory registry.",
+      "name": "delete_market",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Allows admin to update the WASM hash (e.g., for contract upgrades).\\nAll subsequent markets will use the new WASM. Existing markets are unaffected.",
+      "name": "update_wasm_hash",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns just the contract address for a given market_id.",
+      "name": "get_market_contract",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the anchor-stake contract address.",
+      "name": "get_anchor_stake_contract",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketCreated",
+      "prefix_topics": [
+        "market_created"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "market_contract",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Address \\xe2\\x80\\x94 factory admin (only they can create markets)",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Map<u32, MarketConfig> \\xe2\\x80\\x94 market_id \\xe2\\x86\\x92 config",
+            "name": "Markets"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "u32 \\xe2\\x80\\x94 next market ID to assign",
+            "name": "NextMarketId"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "BytesN<32> \\xe2\\x80\\x94 WASM hash of the insurance-market contract\\nStored after `stellar contract upload`, used by factory to deploy instances",
+            "name": "InsuranceMarketHash"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Address \\xe2\\x80\\x94 the single shared anchor-stake contract",
+            "name": "AnchorStakeContract"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Full configuration for one market instance.\\nStored in the factory and also passed to the insurance-market on initialization.",
+      "lib": "",
+      "name": "MarketConfig",
+      "fields": [
+        {
+          "doc": "Some(address) for anchor-specific markets; None for generic stablecoin markets",
+          "name": "anchor_id",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "How long the price must stay below threshold before settlement triggers (seconds)",
+          "name": "breach_duration_seconds",
+          "type_": "u64"
+        },
+        {
+          "doc": "SAC address of the collateral token (USDC, EURC, etc.)",
+          "name": "collateral_token",
+          "type_": "address"
+        },
+        {
+          "doc": "SEP-40 oracle asset: Asset::Other(Symbol) for USDC/EURC etc.",
+          "name": "covered_asset",
+          "type_": {
+            "udt": {
+              "name": "Asset"
+            }
+          }
+        },
+        {
+          "doc": "Price below which a depeg is detected, 14-decimal fixed point\\n$0.995 = 9_950_000_000_000_0 (i.e. 0.995 * 1e14)",
+          "name": "depeg_threshold",
+          "type_": "i128"
+        },
+        {
+          "doc": "Unix timestamp when market expires and NO winners can claim",
+          "name": "expiry_timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "Human-readable label, e.g. \"USDC depeg < $0.995 for 1hr\"",
+          "name": "label",
+          "type_": "string"
+        },
+        {
+          "doc": "Address of the deployed insurance-market contract for this market\\n(populated after create_market runs)",
+          "name": "market_contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "SEP-40 oracle contract address",
+          "name": "oracle_contract",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "SEP-40 oracle standard interface.\\n\\nPrice is 14-decimal fixed point: 100_000_000_000_000 = $1.00\\nTimestamp is Unix seconds (u64).",
+      "lib": "",
+      "name": "Asset",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Stellar",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Other",
+            "type_": [
+              "symbol"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PriceData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  }
+]

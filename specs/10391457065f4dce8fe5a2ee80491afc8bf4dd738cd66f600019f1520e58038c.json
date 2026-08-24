@@ -1,0 +1,745 @@
+[
+  {
+    "function_v0": {
+      "doc": "After settlement, token holders redeem their winning tokens for $1 USDC each.\\n\\nYES wins (Settled state): YES holders get $1 USDC per YES token\\nNO wins (Expired state): NO holders get $1 USDC per NO token\\n\\nTokens are burned (balance set to 0) on claim \\xe2\\x80\\x94 cannot double-claim.",
+      "name": "claim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_state",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "MarketState"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Bumps instance TTL. Anyone can call this to keep the contract alive.",
+      "name": "extend_ttl",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_orders",
+      "inputs": [],
+      "outputs": [
+        {
+          "map": {
+            "key_type": "u64",
+            "value_type": {
+              "udt": {
+                "name": "Order"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Called once by the factory immediately after deployment.\\n\\nParameters mirror the spec's MarketConfig struct.\\ndepeg_threshold uses 14-decimal fixed point:\\n$0.995 = 9_950_000_000_000_0  (14 zeros after decimal = 1e14)",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "label",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "collateral_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "covered_asset",
+          "type_": {
+            "udt": {
+              "name": "Asset"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "oracle_contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "depeg_threshold",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "breach_duration_seconds",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "expiry_timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "anchor_id",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "anchor_stake_contract",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Attempt to settle the market by reading the oracle price.\\n\\nAnyone can call this \\xe2\\x80\\x94 it is permissionless. The watcher calls it every 60s.\\nThe contract's settlement logic (settlement.rs) handles:\\n- Expiry detection \\xe2\\x86\\x92 NO wins\\n- Depeg detection + breach timer \\xe2\\x86\\x92 YES wins\\n- Freshness checks on oracle data",
+      "name": "try_settle",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Match open buy and sell orders.\\n\\nCalled by the watcher bot every 60 seconds and by users directly.\\nFills up to max_fills matches per call to bound gas usage.",
+      "name": "fill_orders",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "max_fills",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Place a limit order.\\n\\nis_buy=true  \\xe2\\x86\\x92 buying YES tokens (buying insurance cover), pays USDC\\nis_buy=false \\xe2\\x86\\x92 selling YES tokens (underwriter collecting premium), locks YES\\n\\nprice_bps: 1\\xe2\\x80\\x939999 basis points (1 = 0.01%, 9999 = 99.99%)\\ne.g. 150 bps = buyer pays 1.5 USDC for 100 YES tokens (1.5% premium)",
+      "name": "place_order",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "is_buy",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "price_bps",
+          "type_": "i64"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Cancel an existing order. Only the order owner can cancel.\\nEscrowed assets (USDC or YES tokens) are returned proportional to unfilled amount.",
+      "name": "cancel_order",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns (yes_balance, no_balance) for a holder.",
+      "name": "get_balances",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "i128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_market_id",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_total_yes",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin function to configure a yield vault (DeFindex / Blend)",
+      "name": "set_yield_vault",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "vault",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Underwriter deposits `amount` USDC and receives `amount` YES + `amount` NO tokens.\\n\\nThe complete set invariant: every YES token has exactly one paired NO token,\\nand together they are always worth exactly $1 USDC (after settlement).\\n\\nTypical underwriter flow:\\n1. mint_complete_set(amount)\\n2. place_order(is_buy=false, price_bps=150, amount)  // sell YES at 1.5% premium\\n3. Keep NO tokens \\xe2\\x80\\x94 collect if market expires without failure",
+      "name": "mint_complete_set",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "underwriter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_total_collateral",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_breach_started_at",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "u64"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Minted",
+      "prefix_topics": [
+        "minted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "underwriter",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Claimed",
+      "prefix_topics": [
+        "claimed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "yes_wins",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Settled",
+      "prefix_topics": [
+        "settled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "yes_wins",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OrderFilled",
+      "prefix_topics": [
+        "order_filled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "buy_id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "sell_id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "fill_amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "execution_price_bps",
+          "type_": "i64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OrderPlaced",
+      "prefix_topics": [
+        "order_placed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "is_buy",
+          "type_": "bool",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "price_bps",
+          "type_": "i64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OrderCancelled",
+      "prefix_topics": [
+        "order_cancelled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Order",
+      "fields": [
+        {
+          "doc": "Total number of YES tokens in this order",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "How many tokens have already been filled",
+          "name": "filled",
+          "type_": "i128"
+        },
+        {
+          "doc": "true = buying YES tokens (buying insurance cover), paying USDC\\nfalse = selling YES tokens (underwriter collecting premium)",
+          "name": "is_buy",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "Price in basis points: 0\\xe2\\x80\\x9310000, where 10000 = $1.00 USDC per YES token\\ne.g. price_bps = 150 means the buyer pays $0.015 per token = 1.5% premium",
+          "name": "price_bps",
+          "type_": "i64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MarketId"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Label"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "CollateralToken"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "CoveredAsset"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "OracleContract"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "DepegThreshold"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "BreachDurationSeconds"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExpiryTimestamp"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AnchorId"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AnchorStakeContract"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "State"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalCollateral"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalYes"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalNo"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "BreachStartedAt"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SettledFor"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "FinalYield"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "YesBalance",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "NoBalance",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Orders"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "NextOrderId"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "YieldVault"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "DefindexShares"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketState",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Market is active \\xe2\\x80\\x94 underwriting and trading are open",
+            "name": "Open"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "YES won: depeg breach confirmed \\xe2\\x80\\x94 YES holders claim $1 USDC per token",
+            "name": "Settled"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "NO won: market expired without breach \\xe2\\x80\\x94 NO holders claim $1 USDC per token",
+            "name": "Expired"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "SEP-40 oracle standard interface.\\n\\nPrice is 14-decimal fixed point: 100_000_000_000_000 = $1.00\\nTimestamp is Unix seconds (u64).",
+      "lib": "",
+      "name": "Asset",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Stellar",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Other",
+            "type_": [
+              "symbol"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PriceData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  }
+]

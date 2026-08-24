@@ -1,0 +1,1565 @@
+[
+  {
+    "function_v0": {
+      "doc": "Swap `amount_in` of `token_in` for `token_out`, returning the output.",
+      "name": "swap",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "min_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "OrbswapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Quote the output of an exact-in swap without executing (view).",
+      "name": "quote",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "OrbswapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "paused",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Paused"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deposit `amounts` (parallel to `tokens`), minting LP shares (`\\xe2\\x88\\x9d \\xce\\x94s`).\\nThe first deposit must be balanced; later deposits must be proportional.",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amounts",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "min_shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "OrbswapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Burn `shares`, returning proportional reserves.",
+      "name": "withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_amounts",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "vec": {
+                "element_type": "i128"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "OrbswapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Emergency: pause every mutating entrypoint at once.",
+      "name": "pause_all",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pause",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "OrbswapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "shares_of",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "who",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Whether concentrated-liquidity tick mode is enabled.",
+      "name": "tick_mode",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_config",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Config"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "OrbswapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "One-time configuration. `alpha`/`beta` are WAD shape params; for `Circular`\\nboth must equal `2+\\xe2\\x88\\x9a2`. Token decimals are read from each token contract.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "tokens",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "mode",
+          "type_": {
+            "udt": {
+              "name": "PoolMode"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "alpha",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "beta",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "OrbswapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_allowed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "bool",
+            "error_type": {
+              "udt": {
+                "name": "OrbswapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Current price as `[cos \\xce\\xb8c, sin \\xce\\xb8c]` (WAD).",
+      "name": "tick_price",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "i128"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause_swaps",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pause",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "OrbswapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Allow/disallow a token. A disallowed token cannot be swapped **in** and\\ndeposits freeze; swapping it **out** and withdrawals stay open, so LPs can\\nexit and arbitrage can drain the depegged coin. Admin-gated.",
+      "name": "set_allowed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "allowed",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "OrbswapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Current integer tick (floor of the price angle, `0..=90`).",
+      "name": "current_tick",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Enable concentrated-liquidity tick mode. Circular pools only, before any\\nliquidity is added; admin-gated and irreversible.",
+      "name": "enable_ticks",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "OrbswapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_reserves",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "i128"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "LP fees accrued outside the curve, parallel to tokens. Paid out pro-rata to\\nLPs on withdraw; not part of the swap curve.",
+      "name": "lp_fees_owed",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "i128"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_shares",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Add concentrated liquidity over `[lower, upper]` (integer degrees, arc\\n`[0,90]`), pulling **at most** `amounts = [x_max, y_max]`. The first add must\\nbe full-range `[0,90]` balanced (sets `\\xce\\xb8c = 45\\xc2\\xb0`, locks `MINIMUM_LIQUIDITY`).\\nReturns the liquidity `L` credited to the caller's position.",
+      "name": "add_liquidity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amounts",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "lower",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "upper",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "min_liquidity",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "OrbswapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "protocol_owed",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "i128"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Marginal price of token0 in token1 (decimal-normalized, WAD; 1.0 at balance).\\n`i128::MAX` if at a price boundary or uninitialized.",
+      "name": "get_spot_price",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause_deposits",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pause",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "OrbswapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Swap for an **exact** `amount_out` of `token_out`, pulling at most `max_in`\\nof `token_in`. Returns the input actually charged.",
+      "name": "swap_exact_out",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "OrbswapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Quote the input required for an exact-out swap (view).",
+      "name": "quote_exact_out",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "OrbswapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Move `amount` LP shares from `from` to `to`.",
+      "name": "transfer_shares",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "OrbswapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Active liquidity `L` spanning the current price.",
+      "name": "active_liquidity",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Oracle accumulator `(\\xce\\xa3 price\\xc2\\xb7\\xce\\x94t, last_update_time)`. TWAP over `[t0,t1]` =\\n`(cum1 \\xe2\\x88\\x92 cum0) / (t1 \\xe2\\x88\\x92 t0)` computed off-chain (v2-style).",
+      "name": "price_cumulative",
+      "inputs": [],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "u64"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "protocol_fee_bps",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Remove `liquidity` from the caller's `[lower, upper]` position, returning the\\ntokens released at the current angle. Returns `[x_out, y_out]`.",
+      "name": "remove_liquidity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "lower",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "upper",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "liquidity",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_amounts",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "vec": {
+                "element_type": "i128"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "OrbswapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause_withdrawals",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pause",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "OrbswapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Liquidity of a caller's `[lower, upper]` position (0 if none).",
+      "name": "position_liquidity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "lower",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "upper",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_liquidity_scale",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set the protocol's cut of the swap fee (bps of the fee, 0\\xe2\\x80\\x9310000). Admin only.",
+      "name": "set_protocol_fee_bps",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "bps",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "OrbswapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Transfer all accrued protocol fees to `to`, zeroing the accrual. Admin only.",
+      "name": "collect_protocol_fees",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "vec": {
+                "element_type": "i128"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "OrbswapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Per-operation pause flags (all default `false`). Withdrawals ideally stay open.",
+      "lib": "",
+      "name": "Paused",
+      "fields": [
+        {
+          "doc": "",
+          "name": "deposits",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "swaps",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "withdrawals",
+          "type_": "bool"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A concentrated-liquidity position (Circular pools only): `liquidity` `L` spread\\nover the owner's `[lower, upper]` tick range, with the fee-growth snapshot taken\\nat the last interaction (used to settle owed fees on the next touch).",
+      "lib": "",
+      "name": "Position",
+      "fields": [
+        {
+          "doc": "",
+          "name": "fee_growth_inside_last",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "liquidity",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OrbswapError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "SlippageExceeded",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "Expired",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InsufficientLiquidity",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "MinimumLiquidity",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "TokenNotAllowed",
+          "value": 9
+        },
+        {
+          "doc": "Bad initialize params (token count, duplicate, shape, mode mismatch, fee).",
+          "name": "InvalidConfig",
+          "value": 10
+        },
+        {
+          "doc": "A swap/deposit amount was non-positive, or slice length mismatched.",
+          "name": "InvalidAmount",
+          "value": 11
+        },
+        {
+          "doc": "Token address is not a member of the pool.",
+          "name": "UnknownToken",
+          "value": 12
+        },
+        {
+          "doc": "Deposit ratios were not proportional to current reserves.",
+          "name": "ImbalancedDeposit",
+          "value": 13
+        },
+        {
+          "doc": "Trade would push a reserve past its extent (negative-price fold).",
+          "name": "PriceOutOfRange",
+          "value": 14
+        },
+        {
+          "doc": "Math domain error (e.g. off-arc, shape < 2).",
+          "name": "MathDomain",
+          "value": 15
+        },
+        {
+          "doc": "Fixed-point overflow.",
+          "name": "Overflow",
+          "value": 16
+        },
+        {
+          "doc": "Post-swap invariant drifted off-curve (csemm near-asymptote guard).",
+          "name": "InvariantViolation",
+          "value": 17
+        },
+        {
+          "doc": "Trade smaller than the configured minimum.",
+          "name": "BelowMinTrade",
+          "value": 18
+        },
+        {
+          "doc": "Operation requires concentrated-liquidity tick mode (Circular + enabled).",
+          "name": "TickModeOnly",
+          "value": 19
+        },
+        {
+          "doc": "Share-based deposit/withdraw are disabled once tick mode is enabled.",
+          "name": "TickModeActive",
+          "value": 20
+        },
+        {
+          "doc": "Tick range invalid (`lower`/`upper` outside `[0,90]` or `lower >= upper`).",
+          "name": "InvalidTickRange",
+          "value": 21
+        },
+        {
+          "doc": "No position exists for this (owner, range).",
+          "name": "PositionNotFound",
+          "value": 22
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Swap",
+      "prefix_topics": [
+        "swap"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount_out",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Deposit",
+      "prefix_topics": [
+        "deposit"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amounts",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Withdraw",
+      "prefix_topics": [
+        "withdraw"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amounts",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TickCrossed",
+      "prefix_topics": [
+        "tick_crossed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "tick",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "up",
+          "type_": "bool",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "active_liquidity",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PauseChanged",
+      "prefix_topics": [
+        "pause_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "what",
+          "type_": "symbol",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TokenAllowed",
+      "prefix_topics": [
+        "token_allowed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "allowed",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SharesTransferred",
+      "prefix_topics": [
+        "shares_transferred"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProtocolFeeCollected",
+      "prefix_topics": [
+        "protocol_fee_collected"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amounts",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Immutable [`Config`] (instance).",
+            "name": "Config"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Native reserves, parallel to `Config.tokens` (instance).",
+            "name": "Reserves"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Liquidity scale `s`, WAD (instance).",
+            "name": "S"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Total LP shares outstanding, incl. the locked minimum (instance).",
+            "name": "TotalShares"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Per-operation pause flags (instance).",
+            "name": "Paused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Cumulative price accumulator (\\xce\\xa3 price\\xc2\\xb7\\xce\\x94t), token0-in-token1, WAD (instance).",
+            "name": "OracleCumulative"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Ledger timestamp of the last oracle update (instance).",
+            "name": "OracleLastTime"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Protocol's share of the swap fee, bps of the fee (instance; default 0).",
+            "name": "ProtocolFeeBps"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Protocol fees collected so far, native units, parallel to tokens (instance).",
+            "name": "ProtocolOwed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "LP fees accrued outside the curve, native units, parallel to tokens\\n(instance). Distributed to LPs proportionally on withdraw. Kept OUT of the\\ncurve reserves so the invariant stays exact and swaps price per the paper.",
+            "name": "LpFeesOwed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Per-token allowed flags (depeg eject), parallel to tokens (instance).",
+            "name": "Allowed"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Per-LP share balance (persistent).",
+            "name": "Shares",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Opt-in flag: concentrated-liquidity tick mode enabled (default false).",
+            "name": "TickMode"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Current segment's reference tick (integer degree the polar math anchors on).",
+            "name": "TickRef"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Continuous y-input consumed within the current segment (native units).",
+            "name": "TickYProg"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Active liquidity `L` spanning the current angle (instance).",
+            "name": "ActiveLiq"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Initialized-tick bitmap: bit `d` set \\xe2\\x87\\x92 a position boundary at degree `d`.",
+            "name": "TickBitmap"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Global fee growth per token, WAD per unit of `L` (Vec<i128>, len = tokens).",
+            "name": "FeeGrowthGlobal"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Per-tick net liquidity applied on an upward cross (angle degree \\xe2\\x86\\x92 i128).",
+            "name": "TickNet",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Per-tick fee-growth-outside per token (v3 bookkeeping), Vec<i128>.",
+            "name": "TickFeeOutside",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Per-LP concentrated position keyed by (owner, lower\\xc2\\xb0, upper\\xc2\\xb0) (persistent).",
+            "name": "Position",
+            "type_": [
+              "address",
+              "u32",
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Immutable pool configuration.",
+      "lib": "",
+      "name": "Config",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "alpha",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "beta",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "mode",
+          "type_": {
+            "udt": {
+              "name": "PoolMode"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "scales",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "tokens",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Which concentration mechanism the pool uses.",
+      "lib": "",
+      "name": "PoolMode",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Circular"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SuperElliptical"
+          }
+        }
+      ]
+    }
+  }
+]

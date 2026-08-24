@@ -1,0 +1,2289 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "info",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "PaymentVaultInfo"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "action",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "action_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "PaymentActionRecord"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "source",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "action_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "transition",
+          "type_": {
+            "udt": {
+              "name": "PaymentTransition"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "PaymentActionRecord"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "action_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "fee_epoch",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "quote",
+          "type_": {
+            "udt": {
+              "name": "RelayQuote"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "transition",
+          "type_": {
+            "udt": {
+              "name": "PaymentTransition"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "PaymentActionRecord"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "destination",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "action_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "emergency",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "fee_epoch",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "quote",
+          "type_": {
+            "option": {
+              "value_type": {
+                "udt": {
+                  "name": "RelayQuote"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "transition",
+          "type_": {
+            "udt": {
+              "name": "PaymentTransition"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "PaymentActionRecord"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "add_relay",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "signing_key",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "keep_alive",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "roots",
+          "type_": {
+            "vec": {
+              "element_type": "u256"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "nullifiers",
+          "type_": {
+            "vec": {
+              "element_type": "u256"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "commitments",
+          "type_": {
+            "vec": {
+              "element_type": "u256"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "actions",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_paused",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PaymentVaultInfo",
+      "fields": [
+        {
+          "doc": "",
+          "name": "current_root",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "fee",
+          "type_": {
+            "udt": {
+              "name": "PaymentFeeConfig"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "liabilities",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "network_domain",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "next_leaf_index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "relay_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "root_history_size",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tree_levels",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "verifier_domain",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PendingFeeConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "activates_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "config",
+          "type_": {
+            "udt": {
+              "name": "PaymentFeeConfig"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PaymentVaultError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidConfiguration",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidAction",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "Expired",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "DuplicateAction",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidRoot",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidNullifier",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "SpentNullifier",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "InvalidCommitment",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "DuplicateCommitment",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "InvalidEnvelope",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "InvalidAttachment",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "InvalidProof",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "Capacity",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "InvalidFee",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "InvalidRelay",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "InsufficientBacking",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "Arithmetic",
+          "value": 19
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PreviousFeeConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "config",
+          "type_": {
+            "udt": {
+              "name": "PaymentFeeConfig"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "valid_until",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "activate_fee",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "PaymentFeeConfig"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "remove_relay",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "signing_key",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "schedule_fee",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "protocol_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "protocol_identity",
+          "type_": {
+            "udt": {
+              "name": "PaymentIdentity"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "activates_at",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "PaymentFeeConfig"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "network_domain",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "tree_levels",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "root_history_size",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "protocol_identity",
+          "type_": {
+            "udt": {
+              "name": "PaymentIdentity"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "relay_keys",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "root_accepted",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "root",
+          "type_": "u256"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PaymentActionRecord",
+      "fields": [
+        {
+          "doc": "",
+          "name": "action",
+          "type_": {
+            "udt": {
+              "name": "PaymentAction"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "completed_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "context_digest",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "first_leaf_index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "new_root",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "output_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "public_amount",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PaymentPauseChanged",
+      "prefix_topics": [
+        "payment_paused"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "nullifier_spent",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "nullifier",
+          "type_": "u256"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PaymentOutputCreated",
+      "prefix_topics": [
+        "payment_output"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "action_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "output_index",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "leaf_index",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "commitment",
+          "type_": "u256",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "encrypted_output",
+          "type_": "bytes",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PaymentActionCompleted",
+      "prefix_topics": [
+        "payment_action"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "action_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "action",
+          "type_": {
+            "udt": {
+              "name": "PaymentAction"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "first_leaf_index",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "output_count",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_root",
+          "type_": "u256",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "public_amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PaymentAttachmentCreated",
+      "prefix_topics": [
+        "payment_attachment"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "action_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "attachment_hash",
+          "type_": "u256",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "encrypted_attachment",
+          "type_": "bytes",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RelayQuote",
+      "fields": [
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "payment_identity",
+          "type_": {
+            "udt": {
+              "name": "PaymentIdentity"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "quote_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signature",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signing_key",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PaymentAction",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Deposit"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Transfer"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Withdraw"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PaymentCircuit",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Deposit"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TransferOne"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TransferTwo"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TransferFour"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "WithdrawOne"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "WithdrawTwo"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "WithdrawFour"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PaymentContext",
+      "fields": [
+        {
+          "doc": "",
+          "name": "action",
+          "type_": {
+            "udt": {
+              "name": "PaymentAction"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "action_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "append_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "attachment_hash",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "emergency",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "fee",
+          "type_": {
+            "udt": {
+              "name": "PaymentFeeConfig"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "network_domain",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "output_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "public_account",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "public_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "relay_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "relay_identity",
+          "type_": {
+            "udt": {
+              "name": "PaymentIdentity"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "relay_quote_digest",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "verifier_domain",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PaymentIdentity",
+      "fields": [
+        {
+          "doc": "",
+          "name": "spend_public_key",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "viewing_public_key_x",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "viewing_public_key_y",
+          "type_": "u256"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PaymentFeeConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "epoch",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "protocol_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "protocol_identity",
+          "type_": {
+            "udt": {
+              "name": "PaymentIdentity"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PaymentCircuitKey",
+      "fields": [
+        {
+          "doc": "",
+          "name": "circuit",
+          "type_": {
+            "udt": {
+              "name": "PaymentCircuit"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "schema_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "verification_key",
+          "type_": {
+            "udt": {
+              "name": "VerificationKeyBytes"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PaymentTransition",
+      "fields": [
+        {
+          "doc": "",
+          "name": "attachment",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "encrypted_outputs",
+          "type_": {
+            "vec": {
+              "element_type": "bytes"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "statement",
+          "type_": {
+            "udt": {
+              "name": "PaymentProofStatement"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PaymentSignalError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidShape",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NonCanonicalField",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidContext",
+          "value": 4
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UnsignedRelayQuote",
+      "fields": [
+        {
+          "doc": "",
+          "name": "action_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "network_domain",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payment_identity",
+          "type_": {
+            "udt": {
+              "name": "PaymentIdentity"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "quote_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signing_key",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "vault",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PaymentProofStatement",
+      "fields": [
+        {
+          "doc": "",
+          "name": "action",
+          "type_": {
+            "udt": {
+              "name": "PaymentAction"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "attachment_hash",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "circuit",
+          "type_": {
+            "udt": {
+              "name": "PaymentCircuit"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "context_digest",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "input_nullifiers",
+          "type_": {
+            "vec": {
+              "element_type": "u256"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "membership_root",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "output_commitments",
+          "type_": {
+            "vec": {
+              "element_type": "u256"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "output_envelope_hashes",
+          "type_": {
+            "vec": {
+              "element_type": "u256"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "public_amount",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BatchQuote",
+      "fields": [
+        {
+          "doc": "",
+          "name": "aggregate_market_charge",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "batch_size",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "conditional_lp_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "conditional_protocol_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee_escrow",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee_per_position",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "no_charge_per_position",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "no_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "no_market_cost",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "no_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "post_yes_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "pre_yes_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "rounding_contribution",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "state_version",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "yes_charge_per_position",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "yes_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "yes_market_cost",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "yes_price",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CircuitKey",
+      "fields": [
+        {
+          "doc": "",
+          "name": "circuit",
+          "type_": {
+            "udt": {
+              "name": "ProofCircuit"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "schema_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "verification_key",
+          "type_": {
+            "udt": {
+              "name": "VerificationKeyBytes"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BindingKind",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Empty"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Liquidity"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Order"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Refund"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Allocation"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Treasury"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExitRequest"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExitCancel"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExitMatch"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProofAction",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Deposit"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Transfer"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Withdraw"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Order"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Claim"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Refund"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LiquidityFund"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LiquidityExit"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LiquidityRedeem"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExecutionChange"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Treasury"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExitRequest"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExitCancel"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExitMatch"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SignalError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidShape",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NonCanonicalField",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "NegativeBatchValue",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "MalformedProof",
+          "value": 4
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProofCircuit",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Deposit"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Transfer"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Withdraw"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Order"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Claim"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Refund"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LiquidityFund"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LiquidityExit"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LiquidityRedeem"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExecutionChange"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Treasury"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExitRequest"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExitCancel"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExitMatch"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Batch"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "KeyDomainStep",
+      "fields": [
+        {
+          "doc": "",
+          "name": "key",
+          "type_": {
+            "udt": {
+              "name": "CircuitKey"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "prior",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProofStatement",
+      "fields": [
+        {
+          "doc": "",
+          "name": "action",
+          "type_": {
+            "udt": {
+              "name": "ProofAction"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "append_root",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "context_digest",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "first_leaf_index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "input_nullifiers",
+          "type_": {
+            "vec": {
+              "element_type": "u256"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "membership_root",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "new_root",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "output_commitments",
+          "type_": {
+            "vec": {
+              "element_type": "u256"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "output_envelope_hashes",
+          "type_": {
+            "vec": {
+              "element_type": "u256"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "public_amount",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OperationBinding",
+      "fields": [
+        {
+          "doc": "",
+          "name": "fields",
+          "type_": {
+            "vec": {
+              "element_type": "u256"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "kind",
+          "type_": {
+            "udt": {
+              "name": "BindingKind"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OperationContext",
+      "fields": [
+        {
+          "doc": "",
+          "name": "action",
+          "type_": {
+            "udt": {
+              "name": "ProofAction"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "action_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "binding",
+          "type_": {
+            "udt": {
+              "name": "OperationBinding"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "market",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "network_domain",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "public_account",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "public_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "verifier_domain",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BatchProofStatement",
+      "fields": [
+        {
+          "doc": "",
+          "name": "accepted_count",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "accepted_root",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "aggregate_ciphertext",
+          "type_": {
+            "vec": {
+              "element_type": "u256"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "allocation_root",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "committee_config_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "committee_epoch",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "committee_public_key_x",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "committee_public_key_y",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "committee_statement_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "decryption_proof_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "epoch",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "first_sequence",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "included_root",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "last_sequence",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "lot_size",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "market",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "network_domain",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "quote",
+          "type_": {
+            "udt": {
+              "name": "BatchQuote"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vault",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VerificationKeyBytes",
+      "fields": [
+        {
+          "doc": "",
+          "name": "alpha",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "beta",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "delta",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "gamma",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "ic",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 64
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

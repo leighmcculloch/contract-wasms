@@ -1,0 +1,2192 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Config",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "review_lock_ledgers",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "GitRef",
+      "fields": [
+        {
+          "doc": "",
+          "name": "commit",
+          "type_": {
+            "udt": {
+              "name": "CommitId"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "repo",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "tree_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Project",
+      "fields": [
+        {
+          "doc": "",
+          "name": "baseline",
+          "type_": {
+            "udt": {
+              "name": "GitRef"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "baseline_score",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "clone_url",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "current_best",
+          "type_": {
+            "udt": {
+              "name": "GitRefSlot"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "current_best_miner",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "current_best_score",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "direction",
+          "type_": {
+            "udt": {
+              "name": "Direction"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "frozen",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "metric_scale",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "min_improvement_bips",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "minimum_stake",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "protocol_epoch",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "protocol_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "reward_per_approval",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "reward_pool_balance",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CommitId",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Sha1",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 20
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Sha256",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Identity",
+      "fields": [
+        {
+          "doc": "",
+          "name": "handle",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "platform",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Proposal",
+      "fields": [
+        {
+          "doc": "",
+          "name": "base_commit",
+          "type_": {
+            "udt": {
+              "name": "CommitId"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "candidate",
+          "type_": {
+            "udt": {
+              "name": "GitRef"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "claimed_score",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "clone_url",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "merged_commit",
+          "type_": {
+            "udt": {
+              "name": "CommitSlot"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "miner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "protocol_epoch",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "review_lock_until",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "reviewer",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "reward_recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "stake",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "ProposalStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "verified_score",
+          "type_": {
+            "option": {
+              "value_type": "i128"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Verifier",
+      "fields": [
+        {
+          "doc": "",
+          "name": "active",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "attestation",
+          "type_": {
+            "option": {
+              "value_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Direction",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Maximize"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Minimize"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "SDK 27 cannot encode `Option<CommitId>` in a contract record.",
+      "lib": "",
+      "name": "CommitSlot",
+      "fields": [
+        {
+          "doc": "",
+          "name": "present",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "value",
+          "type_": {
+            "udt": {
+              "name": "CommitId"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "SDK 27 cannot encode `Option<GitRef>` in a contract record.",
+      "lib": "",
+      "name": "GitRefSlot",
+      "fields": [
+        {
+          "doc": "",
+          "name": "present",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "value",
+          "type_": {
+            "udt": {
+              "name": "GitRef"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SubmitInput",
+      "fields": [
+        {
+          "doc": "",
+          "name": "base_commit",
+          "type_": {
+            "udt": {
+              "name": "CommitId"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "candidate",
+          "type_": {
+            "udt": {
+              "name": "GitRef"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "claimed_score",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "clone_url",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "reward_recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "stake",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProposalStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Submitted"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Claimed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Approved"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Rejected"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Released"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Expired"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CreateProjectInput",
+      "fields": [
+        {
+          "doc": "",
+          "name": "baseline",
+          "type_": {
+            "udt": {
+              "name": "GitRef"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "baseline_score",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "clone_url",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "direction",
+          "type_": {
+            "udt": {
+              "name": "Direction"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "metric_scale",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "min_improvement_bips",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "minimum_stake",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "protocol_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "reward_per_approval",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "reward_pool_funding",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidConfig",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotAdmin",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "NotVerifier",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "VerifierAlreadyExists",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "VerifierNotFound",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "IdentityNotFound",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidHandle",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidPlatform",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "ProjectNotFound",
+          "value": 100
+        },
+        {
+          "doc": "",
+          "name": "ProposalNotFound",
+          "value": 101
+        },
+        {
+          "doc": "",
+          "name": "InvalidGitRef",
+          "value": 102
+        },
+        {
+          "doc": "",
+          "name": "InvalidProtocolHash",
+          "value": 103
+        },
+        {
+          "doc": "",
+          "name": "InvalidMetricScale",
+          "value": 104
+        },
+        {
+          "doc": "",
+          "name": "InvalidCloneUrl",
+          "value": 105
+        },
+        {
+          "doc": "",
+          "name": "InvalidImprovementBips",
+          "value": 106
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 108
+        },
+        {
+          "doc": "",
+          "name": "ArithmeticOverflow",
+          "value": 109
+        },
+        {
+          "doc": "",
+          "name": "ProjectFrozen",
+          "value": 110
+        },
+        {
+          "doc": "",
+          "name": "ProjectAlreadyFrozen",
+          "value": 111
+        },
+        {
+          "doc": "",
+          "name": "ProtocolEpochMismatch",
+          "value": 112
+        },
+        {
+          "doc": "",
+          "name": "NotProjectCreator",
+          "value": 113
+        },
+        {
+          "doc": "",
+          "name": "StakeTooLow",
+          "value": 200
+        },
+        {
+          "doc": "",
+          "name": "QueueFull",
+          "value": 201
+        },
+        {
+          "doc": "",
+          "name": "BaseCommitMismatch",
+          "value": 202
+        },
+        {
+          "doc": "",
+          "name": "InvalidStatus",
+          "value": 203
+        },
+        {
+          "doc": "",
+          "name": "NotClaimOwner",
+          "value": 204
+        },
+        {
+          "doc": "",
+          "name": "ReviewLockActive",
+          "value": 205
+        },
+        {
+          "doc": "",
+          "name": "ProposalCannotExpire",
+          "value": 206
+        },
+        {
+          "doc": "",
+          "name": "InsufficientImprovement",
+          "value": 208
+        },
+        {
+          "doc": "",
+          "name": "ReviewLockExpired",
+          "value": 209
+        },
+        {
+          "doc": "",
+          "name": "MergeAlreadyRecorded",
+          "value": 210
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MergeRecorded",
+      "prefix_topics": [
+        "merge_recorded"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "merged_commit",
+          "type_": {
+            "udt": {
+              "name": "CommitId"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProjectFrozen",
+      "prefix_topics": [
+        "project_frozen"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "reason_code",
+          "type_": "symbol",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ReviewClaimed",
+      "prefix_topics": [
+        "review_claimed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "review_lock_until",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VerifierAdded",
+      "prefix_topics": [
+        "verifier_added"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "attestation",
+          "type_": {
+            "option": {
+              "value_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "IdentityLinked",
+      "prefix_topics": [
+        "identity_linked"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "platform",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "handle",
+          "type_": "string",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProjectCreated",
+      "prefix_topics": [
+        "project_created"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "protocol_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "baseline",
+          "type_": {
+            "udt": {
+              "name": "GitRef"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "clone_url",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "baseline_score",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "direction",
+          "type_": {
+            "udt": {
+              "name": "Direction"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "min_improvement_bips",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "metric_scale",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "minimum_stake",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "reward_per_approval",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "reward_pool_funding",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "protocol_epoch",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProposalExpired",
+      "prefix_topics": [
+        "proposal_expired"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "stake_returned",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProtocolAmended",
+      "prefix_topics": [
+        "protocol_amended"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "protocol_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "baseline",
+          "type_": {
+            "udt": {
+              "name": "GitRef"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "clone_url",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "baseline_score",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "protocol_epoch",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VerifierRemoved",
+      "prefix_topics": [
+        "verifier_removed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FrontierAdvanced",
+      "prefix_topics": [
+        "frontier_advanced"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "miner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "new_best",
+          "type_": {
+            "udt": {
+              "name": "GitRef"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "previous_best_score",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_best_score",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "IdentityUnlinked",
+      "prefix_topics": [
+        "identity_unlinked"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProposalApproved",
+      "prefix_topics": [
+        "proposal_approved"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "miner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "reward_recipient",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "verified_score",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "previous_best_score",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "candidate",
+          "type_": {
+            "udt": {
+              "name": "GitRef"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "reward_amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProposalRejected",
+      "prefix_topics": [
+        "proposal_rejected"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "reason_code",
+          "type_": "symbol",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "stake_slashed",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProposalReleased",
+      "prefix_topics": [
+        "proposal_released"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProposalSubmitted",
+      "prefix_topics": [
+        "proposal_submitted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "miner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "protocol_epoch",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "reward_recipient",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "candidate",
+          "type_": {
+            "udt": {
+              "name": "GitRef"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "clone_url",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "base_commit",
+          "type_": {
+            "udt": {
+              "name": "CommitId"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "claimed_score",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "stake",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Config"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "NextProjectId"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "NextProposalId"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Project",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Proposal",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Verifier",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Identity",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "OpenQueue",
+            "type_": [
+              "u64"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "config",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Config"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "expire",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "reject",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "reason_code",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "submit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "miner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "input",
+          "type_": {
+            "udt": {
+              "name": "SubmitInput"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "approve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "verified_score",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_project",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Project"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_verifier",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "add_verifier",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "bump_project",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "claim_review",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_identity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Identity"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_proposal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Proposal"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_verifier",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Verifier"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "record_merge",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "merged_commit",
+          "type_": {
+            "udt": {
+              "name": "CommitId"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "review_lock_ledgers",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "link_identity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "handle",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "platform",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "amend_protocol",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "protocol_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "baseline",
+          "type_": {
+            "udt": {
+              "name": "GitRef"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "clone_url",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "baseline_score",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_project",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "input",
+          "type_": {
+            "udt": {
+              "name": "CreateProjectInput"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "freeze_project",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "reason_code",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "release_review",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "incumbent_score",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "next_project_id",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "remove_verifier",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unlink_identity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "next_proposal_id",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_open_proposals",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "vec": {
+                "element_type": "u64"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "improvement_threshold",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "project_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

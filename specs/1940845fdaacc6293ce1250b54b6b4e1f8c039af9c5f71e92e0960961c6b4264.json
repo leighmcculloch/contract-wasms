@@ -1,0 +1,769 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Claim",
+      "fields": [
+        {
+          "doc": "Refund amount in stroops (1 XLM = 10_000_000 stroops).",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "claimant",
+          "type_": "address"
+        },
+        {
+          "doc": "ISO-style country code, e.g. `AE`, `FR`.",
+          "name": "country_code",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "government_decision_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "Hash of the government decision (approved/rejected).",
+          "name": "government_decision_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "Hash of the verified submission package sent to the government/tax authority.",
+          "name": "government_submission_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "government_submitted_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "Optional payout tx hash once marked paid (32 zero bytes until set).",
+          "name": "payout_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "Hash of receipt / invoice identifier (keccak256 or app-defined digest).",
+          "name": "receipt_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "ClaimStatus"
+            }
+          }
+        },
+        {
+          "doc": "Ledger timestamp when the claim was submitted.",
+          "name": "submitted_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "treasury_reimbursed_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "Hash reference to the reimbursement settlement back to Gemetra treasury.",
+          "name": "treasury_reimbursement_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "ClaimNotFound",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidStatus",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "WalletBlacklisted",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "AlreadyExists",
+          "value": 7
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Treasury"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Government"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ClaimCount"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Claim",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "WalletBlacklisted",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ClaimStatus",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Pending",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Approved",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Paid",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "GovernmentSubmitted",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "GovernmentApproved",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "GovernmentRejected",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "TreasuryReimbursed",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "Cancelled",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "Blacklisted",
+          "value": 8
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ClaimSubmitted",
+      "prefix_topics": [
+        "claim_submitted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "claim_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "claimant",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "country_code",
+          "type_": "symbol",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WalletBlacklisted",
+      "prefix_topics": [
+        "wallet_blacklisted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "actor",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ClaimStatusChanged",
+      "prefix_topics": [
+        "claim_status_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "claim_id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "ClaimStatus"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "actor",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns contract version.",
+      "name": "version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "treasury",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_claim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "claim_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Claim"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin records that treasury paid this claim (stores payout reference hash).",
+      "name": "mark_paid",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "claim_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "payout_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "government",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "claim_count",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin cancels a pending or approved claim.",
+      "name": "cancel_claim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "claim_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Tourist submits a new claim. Claimant must sign the transaction.",
+      "name": "submit_claim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "claimant",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "receipt_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "country_code",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Runs once at deploy. Sets admin and treasury reference addresses.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "government",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin approves a pending claim for payout.",
+      "name": "approve_claim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "claim_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Admin blacklists a claim and blocks the claimant wallet from future submissions.",
+      "name": "blacklist_claim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "claim_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Government rejects the claim after verification.",
+      "name": "government_reject",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "gov",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "claim_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "government_decision_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Government approves the claim after verification and authorizes reimbursement.",
+      "name": "government_approve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "gov",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "claim_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "government_decision_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Gemetra/admin submits the verified claim package to the government/tax authority.",
+      "name": "submit_to_government",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "claim_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "government_submission_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_wallet_blacklisted",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wallet",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Government settles reimbursement back to Gemetra treasury.\\n(We store the reimbursement reference hash; actual XLM settlement remains external today.)",
+      "name": "mark_treasury_reimbursed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "gov",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "claim_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "treasury_reimbursement_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

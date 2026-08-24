@@ -1,0 +1,3739 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Bond",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "bond_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "pending_unlock_ref",
+          "type_": {
+            "option": {
+              "value_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BondLocked",
+      "prefix_topics": [
+        "bond_locked"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "bond_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "capacity",
+          "type_": "u128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SlashRequest",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "bond_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "cancelled",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "challenged",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "evidence_timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "executed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "reason_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "slash_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BondToppedUp",
+      "prefix_topics": [
+        "bond_topped_up"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "operation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "bond_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BondUnlocked",
+      "prefix_topics": [
+        "bond_unlocked"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "unlock_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "bond_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CapacityBatch",
+      "fields": [
+        {
+          "doc": "",
+          "name": "batch_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "challenge_window",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "data_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "leaf_count",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "nonce",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "payment_vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "policy_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "root",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "valid_after",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "valid_before",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UnlockReceipt",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "bond_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "unlock_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UnlockRequest",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "bond_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "ready_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "unlock_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CapacityConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "disabled",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "hub_signer",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "max_slash_evidence_age",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "multiplier",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "settlement",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "slash_challenge_period",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "unlock_delay",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "vault",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BatchLifecycle",
+      "prefix_topics": [
+        "batch_lifecycle"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "batch_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "state",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "evidence_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SlashLifecycle",
+      "prefix_topics": [
+        "slash_lifecycle"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "slash_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "state",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "evidence_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BondLockReceipt",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "bond_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UnlockRequested",
+      "prefix_topics": [
+        "unlock_requested"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "unlock_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "bond_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "ready_at",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BondTopUpReceipt",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "bond_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "operation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CapacityDisabled",
+      "prefix_topics": [
+        "capacity_disabled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "disabled",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CapacityExecuted",
+      "prefix_topics": [
+        "capacity_executed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "execution_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "obligation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "payout_amount",
+          "type_": "u128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "released_amount",
+          "type_": "u128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CapacityReleased",
+      "prefix_topics": [
+        "capacity_released"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "obligation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CapacityReserved",
+      "prefix_topics": [
+        "capacity_reserved"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "obligation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CapacityRecordKind",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Bond",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Reservation",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Slash",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "Batch",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "DirectExecution",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "DepositExecution",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "TopUp",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "UnlockRequest",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "UnlockReceipt",
+          "value": 9
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CapacityBatchRecord",
+      "fields": [
+        {
+          "doc": "",
+          "name": "batch",
+          "type_": {
+            "udt": {
+              "name": "CapacityBatch"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "cancelled",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "challenge_deadline",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "challenged",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "finalized",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "signature",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CapacityReservation",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "obligation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payment_vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "released_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ObligationClaimState",
+      "cases": [
+        {
+          "doc": "",
+          "name": "LocalReserved",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Consumed",
+          "value": 2
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CapacityReservationReceipt",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "obligation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payment_vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "bond",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "bond_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Bond"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "batch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "batch_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "CapacityBatchRecord"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "slash",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "slash_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "SlashRequest"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "config",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "CapacityConfig"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "lock_bond",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "bond_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "BondLockReceipt"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "settlement",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "hub_signer",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "unlock_delay",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "slash_challenge_period",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "max_slash_evidence_age",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "multiplier",
+          "type_": "u128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "capacity_of",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "leaf_digest",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "leaf",
+          "type_": {
+            "udt": {
+              "name": "CapacityLeaf"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "reservation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "obligation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "CapacityReservation"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "top_up_bond",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "operation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "bond_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "BondTopUpReceipt"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "batch_digest",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "batch",
+          "type_": {
+            "udt": {
+              "name": "CapacityBatch"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_disabled",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "disabled",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "submit_batch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "batch_value",
+          "type_": {
+            "udt": {
+              "name": "CapacityBatch"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signature",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "CapacityBatchRecord"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "touch_record",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "kind",
+          "type_": {
+            "udt": {
+              "name": "CapacityRecordKind"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "record_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execute_slash",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "slash_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "SlashRequest"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "leaf_consumed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "batch_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "leaf_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "request_slash",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "slash_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "reason_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "evidence_timestamp",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "SlashRequest"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "resolve_batch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "batch_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "challenge_upheld",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "resolution_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "CapacityBatchRecord"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "resolve_slash",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "slash_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "slash_upheld",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "resolution_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "SlashRequest"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execute_unlock",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "unlock_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "UnlockReceipt"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "finalize_batch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "batch_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "CapacityBatchRecord"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "request_unlock",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "unlock_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "bond_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "UnlockRequest"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "challenge_batch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "batch_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "evidence_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "CapacityBatchRecord"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "challenge_slash",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "slash_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "evidence_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "SlashRequest"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "contract_version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "direct_execution",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "execution_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "CapacityExecutionReceipt"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "obligation_claim",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "obligation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "ObligationClaimState"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "reserve_capacity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "obligation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "CapacityReservationReceipt"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "used_capacity_of",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "deposit_execution",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "execution_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "CapacityExecutionReceipt"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "touch_batch_nonce",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "nonce",
+          "type_": "u128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "touch_consumed_leaf",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "batch_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "leaf_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "touch_service_asset",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execute_direct_batch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "request",
+          "type_": {
+            "udt": {
+              "name": "DirectExecutionRequest"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "batch_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "leaf",
+          "type_": {
+            "udt": {
+              "name": "CapacityLeaf"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "CapacityExecutionReceipt"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execute_direct_local",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "request",
+          "type_": {
+            "udt": {
+              "name": "DirectExecutionRequest"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "CapacityExecutionReceipt"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "available_capacity_of",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execute_deposit_batch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "request",
+          "type_": {
+            "udt": {
+              "name": "DepositExecutionRequest"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "batch_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "leaf",
+          "type_": {
+            "udt": {
+              "name": "CapacityLeaf"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "CapacityExecutionReceipt"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execute_deposit_local",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "request",
+          "type_": {
+            "udt": {
+              "name": "DepositExecutionRequest"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "CapacityExecutionReceipt"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "touch_consumed_obligation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "obligation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CapacityLeaf",
+      "fields": [
+        {
+          "doc": "",
+          "name": "bond_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "max_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "obligation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payment_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "policy_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BatchExecutionEvidence",
+      "fields": [
+        {
+          "doc": "",
+          "name": "batch_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "leaf",
+          "type_": {
+            "udt": {
+              "name": "CapacityLeaf"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StoredCapacityEvidence",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Local"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Batch",
+            "type_": [
+              {
+                "udt": {
+                  "name": "BatchExecutionEvidence"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StoredExecutionRequest",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Direct",
+            "type_": [
+              {
+                "udt": {
+                  "name": "StoredDirectExecutionRequest"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Deposit",
+            "type_": [
+              {
+                "udt": {
+                  "name": "StoredDepositExecutionRequest"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CapacityExecutionReceipt",
+      "fields": [
+        {
+          "doc": "",
+          "name": "batch_leaf",
+          "type_": {
+            "option": {
+              "value_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "capacity_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "evidence",
+          "type_": {
+            "udt": {
+              "name": "StoredCapacityEvidence"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "execution_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "obligation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payout_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "released_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "request",
+          "type_": {
+            "udt": {
+              "name": "StoredExecutionRequest"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "settlement_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StoredDirectExecutionRequest",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "attempt_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "capacity_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "execution_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fee_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "fee_fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fee_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "obligation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payout_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "refund_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "settlement_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vault_fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vault_operation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StoredDepositExecutionRequest",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "attempt_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "capacity_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "execution_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fee_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "fee_fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fee_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "obligation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payout_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "position_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "released_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "settlement_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vault_fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vault_operation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VaultPosition",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "buyer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "deposited",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "initial_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "position_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "reserved",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "settled",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "withdrawn",
+          "type_": "u128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VaultReservation",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "attempt_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "position_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "remaining",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VaultDirectEscrow",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "attempt_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "buyer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "funded",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "payout",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "refund",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "remaining",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Amount",
+      "fields": [
+        {
+          "doc": "",
+          "name": "0",
+          "type_": "u128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TtlAction",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Unchanged",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Extended",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Restored",
+          "value": 3
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ReplayMode",
+      "cases": [
+        {
+          "doc": "",
+          "name": "SameResult",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AcceptedNoop",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "RejectedDuplicate",
+          "value": 3
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ArchivalState",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Live",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Archived",
+          "value": 2
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SemanticError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AmountOverflow",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AmountUnderflow",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidNetwork",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidAsset",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "ExpiredAuthority",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "IdempotencyConflict",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "DuplicateResult",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "ExactTransferFailed",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "CapacityBindingMismatch",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "DisabledNewWork",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "InvalidSettlementState",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "TtlRestoreConflict",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "NotFound",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "InsufficientBalance",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "BindingMismatch",
+          "value": 19
+        },
+        {
+          "doc": "",
+          "name": "InvalidConfiguredAddress",
+          "value": 20
+        },
+        {
+          "doc": "",
+          "name": "InvalidSignature",
+          "value": 21
+        },
+        {
+          "doc": "",
+          "name": "StaleNonce",
+          "value": 22
+        },
+        {
+          "doc": "",
+          "name": "StaleAmount",
+          "value": 23
+        },
+        {
+          "doc": "",
+          "name": "InvalidTimeWindow",
+          "value": 24
+        },
+        {
+          "doc": "",
+          "name": "NotReady",
+          "value": 25
+        },
+        {
+          "doc": "",
+          "name": "AlreadyFinalized",
+          "value": 26
+        },
+        {
+          "doc": "",
+          "name": "ChallengeActive",
+          "value": 27
+        },
+        {
+          "doc": "",
+          "name": "AlreadyChallenged",
+          "value": 28
+        },
+        {
+          "doc": "",
+          "name": "ChallengeNotFound",
+          "value": 29
+        },
+        {
+          "doc": "",
+          "name": "Cancelled",
+          "value": 30
+        },
+        {
+          "doc": "",
+          "name": "InsufficientCapacity",
+          "value": 31
+        },
+        {
+          "doc": "",
+          "name": "CapacityInUse",
+          "value": 32
+        },
+        {
+          "doc": "",
+          "name": "InvalidProof",
+          "value": 33
+        },
+        {
+          "doc": "",
+          "name": "DuplicateProof",
+          "value": 34
+        },
+        {
+          "doc": "",
+          "name": "NotService",
+          "value": 35
+        },
+        {
+          "doc": "",
+          "name": "AlreadyExists",
+          "value": 36
+        },
+        {
+          "doc": "",
+          "name": "InvalidMultiplier",
+          "value": 37
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TtlExpectation",
+      "fields": [
+        {
+          "doc": "",
+          "name": "action",
+          "type_": {
+            "udt": {
+              "name": "TtlAction"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "key",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": {
+            "udt": {
+              "name": "ResponsibilityOwner"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "restore_replay",
+          "type_": {
+            "udt": {
+              "name": "ReplayMode"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LogicalNetworkRef",
+      "fields": [
+        {
+          "doc": "",
+          "name": "value",
+          "type_": "string"
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StorageDurability",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Persistent",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Instance",
+          "value": 2
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StorageObservation",
+      "fields": [
+        {
+          "doc": "",
+          "name": "archival",
+          "type_": {
+            "udt": {
+              "name": "ArchivalState"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "durability",
+          "type_": {
+            "udt": {
+              "name": "StorageDurability"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "key",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": {
+            "udt": {
+              "name": "ResponsibilityOwner"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ResponsibilityOwner",
+      "cases": [
+        {
+          "doc": "",
+          "name": "PaymentVault",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Settlement",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "SellerCapacity",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "PolicyRegistry",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "Treasury",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "PermissionAccount",
+          "value": 6
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DirectExecutionRequest",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "attempt_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "capacity_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "execution_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fee_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "fee_fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fee_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "obligation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payout_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "refund_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "settlement_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vault_fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vault_operation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DepositExecutionRequest",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "attempt_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "capacity_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "execution_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fee_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "fee_fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fee_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "obligation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payout_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "position_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "released_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "settlement_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vault_fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vault_operation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  }
+]

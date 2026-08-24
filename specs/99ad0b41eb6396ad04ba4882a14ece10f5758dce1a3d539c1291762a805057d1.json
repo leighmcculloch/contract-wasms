@@ -1,0 +1,2544 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Settlement",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "attempt_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "cancelled",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "challenge_window",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "challenged",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "deadline",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "direct_payout",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "direct_refund",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "fee_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "finalized",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "kind",
+          "type_": {
+            "udt": {
+              "name": "SettlementKind"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "position_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "requested_challenge_window",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "settlement_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "snapshot_max_a",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "snapshot_max_b",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "state_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccumulatorA",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "nonce",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "position_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "state_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "valid_after",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "valid_before",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccumulatorB",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "nonce",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "position_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "state_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "valid_after",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "valid_before",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ExecutionRefs",
+      "fields": [
+        {
+          "doc": "",
+          "name": "capacity_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "execution_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fee_fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fee_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "obligation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vault_fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vault_operation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SignerBinding",
+      "fields": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettlementKind",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Direct",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AccumulatorDeposit",
+          "value": 2
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettlementConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "capacity",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "default_challenge_window",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "disabled",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettlementResult",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "attempt_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "consumed_execution_ref",
+          "type_": {
+            "option": {
+              "value_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fee_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "finalized_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "kind",
+          "type_": {
+            "udt": {
+              "name": "SettlementKind"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "max_a",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "max_b",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "payout_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "position_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "refund_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "released_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "settlement_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "state_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ServiceSignerBound",
+      "prefix_topics": [
+        "service_signer_bound"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettlementDisabled",
+      "prefix_topics": [
+        "settlement_disabled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "disabled",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettlementExecuted",
+      "prefix_topics": [
+        "settlement_executed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "execution_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "settlement_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "payout_amount",
+          "type_": "u128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccumulatorAccepted",
+      "prefix_topics": [
+        "accumulator_accepted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "state_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "side",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "nonce",
+          "type_": "u128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PositionSignerBound",
+      "prefix_topics": [
+        "position_signer_bound"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "position_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettlementFinalized",
+      "prefix_topics": [
+        "settlement_finalized"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "settlement_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "payout_amount",
+          "type_": "u128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "fee_amount",
+          "type_": "u128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "released_or_refund_amount",
+          "type_": "u128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettlementLifecycle",
+      "prefix_topics": [
+        "settlement_lifecycle"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "settlement_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "state",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "evidence_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettlementRecordKind",
+      "cases": [
+        {
+          "doc": "",
+          "name": "PositionSigner",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "ServiceSigner",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "AccumulatorA",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "AccumulatorB",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "Settlement",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "Result",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "Execution",
+          "value": 7
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SettlementExecutionReceipt",
+      "fields": [
+        {
+          "doc": "",
+          "name": "capacity_receipt",
+          "type_": {
+            "udt": {
+              "name": "CapacityExecutionReceipt"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "evidence",
+          "type_": {
+            "udt": {
+              "name": "StoredCapacityEvidence"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "execution_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "refs",
+          "type_": {
+            "udt": {
+              "name": "ExecutionRefs"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "result",
+          "type_": {
+            "udt": {
+              "name": "SettlementResult"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "settlement_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "config",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "SettlementConfig"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "result",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "settlement_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "SettlementResult"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "digest_a",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "state",
+          "type_": {
+            "udt": {
+              "name": "AccumulatorA"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "digest_b",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "state",
+          "type_": {
+            "udt": {
+              "name": "AccumulatorB"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "finalize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "settlement_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "SettlementResult"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "submit_a",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "state",
+          "type_": {
+            "udt": {
+              "name": "AccumulatorA"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signature",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "AccumulatorA"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "submit_b",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "state",
+          "type_": {
+            "udt": {
+              "name": "AccumulatorB"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signature",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "AccumulatorB"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "challenge",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "settlement_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "evidence_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Settlement"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execution",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "execution_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "SettlementExecutionReceipt"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "capacity",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "default_challenge_window",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "settlement",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "settlement_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Settlement"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_disabled",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "disabled",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "start_direct",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "settlement_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "attempt_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "payout_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "fee_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "refund_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "challenge_window",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Settlement"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "touch_record",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "kind",
+          "type_": {
+            "udt": {
+              "name": "SettlementRecordKind"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "record_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accumulator_a",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "state_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "AccumulatorA"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accumulator_b",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "state_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "AccumulatorB"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "contract_version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "resolve_challenge",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "settlement_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "challenge_upheld",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "resolution_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Settlement"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "start_accumulator",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "settlement_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "state_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "position_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "attempt_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fee_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "challenge_window",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Settlement"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "bind_service_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "SignerBinding"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "submit_a_authorized",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "state",
+          "type_": {
+            "udt": {
+              "name": "AccumulatorA"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "AccumulatorA"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "submit_b_authorized",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "state",
+          "type_": {
+            "udt": {
+              "name": "AccumulatorB"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "AccumulatorB"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "bind_position_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "position_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "SignerBinding"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execute_direct_batch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "settlement_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "refs",
+          "type_": {
+            "udt": {
+              "name": "ExecutionRefs"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "batch_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "leaf",
+          "type_": {
+            "udt": {
+              "name": "CapacityLeaf"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "SettlementExecutionReceipt"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execute_direct_local",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "settlement_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "refs",
+          "type_": {
+            "udt": {
+              "name": "ExecutionRefs"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "SettlementExecutionReceipt"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "touch_service_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execute_deposit_batch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "settlement_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "refs",
+          "type_": {
+            "udt": {
+              "name": "ExecutionRefs"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "batch_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "leaf",
+          "type_": {
+            "udt": {
+              "name": "CapacityLeaf"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "SettlementExecutionReceipt"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execute_deposit_local",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "hub",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "settlement_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "refs",
+          "type_": {
+            "udt": {
+              "name": "ExecutionRefs"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "SettlementExecutionReceipt"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CapacityLeaf",
+      "fields": [
+        {
+          "doc": "",
+          "name": "bond_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "max_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "obligation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payment_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "policy_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BatchExecutionEvidence",
+      "fields": [
+        {
+          "doc": "",
+          "name": "batch_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "leaf",
+          "type_": {
+            "udt": {
+              "name": "CapacityLeaf"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StoredCapacityEvidence",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Local"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Batch",
+            "type_": [
+              {
+                "udt": {
+                  "name": "BatchExecutionEvidence"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StoredExecutionRequest",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Direct",
+            "type_": [
+              {
+                "udt": {
+                  "name": "StoredDirectExecutionRequest"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Deposit",
+            "type_": [
+              {
+                "udt": {
+                  "name": "StoredDepositExecutionRequest"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CapacityExecutionReceipt",
+      "fields": [
+        {
+          "doc": "",
+          "name": "batch_leaf",
+          "type_": {
+            "option": {
+              "value_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "capacity_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "evidence",
+          "type_": {
+            "udt": {
+              "name": "StoredCapacityEvidence"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "execution_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "obligation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payout_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "released_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "request",
+          "type_": {
+            "udt": {
+              "name": "StoredExecutionRequest"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "settlement_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StoredDirectExecutionRequest",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "attempt_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "capacity_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "execution_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fee_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "fee_fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fee_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "obligation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payout_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "refund_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "settlement_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vault_fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vault_operation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StoredDepositExecutionRequest",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "attempt_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "capacity_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "execution_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fee_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "fee_fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fee_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "obligation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payout_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "position_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "released_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "settlement_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vault_fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vault_operation_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VaultPosition",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "buyer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "deposited",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "initial_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "position_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "reserved",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "settled",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "withdrawn",
+          "type_": "u128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VaultReservation",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "attempt_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "position_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "remaining",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VaultDirectEscrow",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "attempt_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "buyer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "fingerprint",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "funded",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "payout",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "refund",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "remaining",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "service",
+          "type_": "address"
+        }
+      ]
+    }
+  }
+]

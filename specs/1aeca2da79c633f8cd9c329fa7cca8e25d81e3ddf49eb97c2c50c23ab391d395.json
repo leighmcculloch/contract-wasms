@@ -1,0 +1,275 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Drop",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "claimed_at",
+          "type_": {
+            "option": {
+              "value_type": "u64"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "hash_lock",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "DropStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AmountMustBePositive",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "InvalidDuration",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "DropNotFound",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "DropNotPending",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "DropExpired",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidSecret",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "DropNotExpired",
+          "value": 7
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Retrieve drop details by ID",
+      "name": "get_drop",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "drop_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "Drop"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Drop",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "DropCount"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Claims an active drop if provided with the correct preimage secret before expiry.",
+      "name": "claim_drop",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "drop_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "secret",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Creates a new time-locked and hash-locked escrow Drop.\\nSenders deposit tokens into the contract.",
+      "name": "create_drop",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "hash_lock",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "duration_seconds",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Senders can refund their deposit after the expiration timestamp has passed.",
+      "name": "refund_drop",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "drop_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DropStatus",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Pending",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Claimed",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Refunded",
+          "value": 2
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Total drops created",
+      "name": "get_drop_count",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  }
+]
