@@ -1,0 +1,522 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RegistryError",
+      "cases": [
+        {
+          "doc": "NotAuthorized",
+          "name": "NotAuthorized",
+          "value": 2
+        },
+        {
+          "doc": "NotFound",
+          "name": "NotFound",
+          "value": 3
+        },
+        {
+          "doc": "BadParams",
+          "name": "BadParams",
+          "value": 4
+        },
+        {
+          "doc": "Paused",
+          "name": "Paused",
+          "value": 5
+        },
+        {
+          "doc": "OwnerNotSet",
+          "name": "OwnerNotSet",
+          "value": 6
+        },
+        {
+          "doc": "EbioroConfigNotSet",
+          "name": "EbioroConfigNotSet",
+          "value": 7
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Owner"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Version"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "EbioroFeeConfig"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "EscrowWasmHash"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PlatformEscrowVersion"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "DefaultEscrow"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Platform",
+            "type_": [
+              "u128"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Seq"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Platform",
+      "fields": [
+        {
+          "doc": "",
+          "name": "created_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "escrow_address",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ReleasePolicy",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PlatformOnly"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PayeeOnly"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "OperatorOrPayee"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PayerConfirmation"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "OperatorAfterTimeout"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PlatformConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "platform_fee_recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "release_policy",
+          "type_": {
+            "udt": {
+              "name": "ReleasePolicy"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "EbioroFeeConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "config_version",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "fee_wallet",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CreatePlatformData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "platform_fee_recipient",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "platform_owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "release_policy",
+          "type_": {
+            "udt": {
+              "name": "ReleasePolicy"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UpdateEbioroConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "config_version",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fee_wallet",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get contract version.\\nSECURITY: Also acts as a keep-alive for all governance keys (including Paused).\\nThis is unauthenticated, so anyone can call it to prevent TTL expiry while paused.",
+      "name": "version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Register a new entry in the registry",
+      "name": "register",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "platform_data",
+          "type_": {
+            "udt": {
+              "name": "CreatePlatformData"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "u128",
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get an entry from the registry (read-only)",
+      "name": "get_entry",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u128"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Platform"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_config",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "EbioroFeeConfig"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pause/unpause the contract (owner only).\\nSECURITY: Does NOT call ensure_not_paused, so owner can call set_paused(true) while\\npaused to keep governance TTLs alive. Together with version(), prevents silent unpause.",
+      "name": "set_paused",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Constructor \\xe2\\x80\\x94 runs only once (guaranteed by Stellar)\\nNo IsInit guard needed \\xe2\\x80\\x94 __constructor cannot be called again after deploy",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "ebioro_config",
+          "type_": {
+            "udt": {
+              "name": "EbioroFeeConfig"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "escrow_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Remove a platform from the registry",
+      "name": "remove_platform",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "platform_id",
+          "type_": "u128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_escrow_wasm_hash",
+      "inputs": [],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_escrow_wasm_hash",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Update the Ebioro fee configuration in the registry.\\nThis only persists the config locally. Use `push_ebioro_config_to_escrows`\\nto propagate the updated config to platform escrows in bounded batches.",
+      "name": "update_ebioro_config",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "fee_wallet",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Push the current Ebioro config to a bounded range of platform escrows.\\n`start_id` and `end_id` are inclusive. The range is capped at MAX_PUSH_BATCH_SIZE\\nto stay within Soroban transaction budget. Call repeatedly with successive\\nranges to update all platforms (e.g., 1\\xe2\\x80\\x9350, 51\\xe2\\x80\\x93100, \\xe2\\x80\\xa6).",
+      "name": "push_ebioro_config_to_escrows",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "start_id",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "end_id",
+          "type_": "u128"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

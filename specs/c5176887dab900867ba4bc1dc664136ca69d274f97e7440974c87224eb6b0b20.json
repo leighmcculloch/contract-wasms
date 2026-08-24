@@ -1,0 +1,1204 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InsufficientBalance",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "MathOverflow",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InsufficientAllowance",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidExpiration",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "InvalidBlendReserve",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "BlendWithdrawalFailed",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "NotAuthorized",
+          "value": 12
+        },
+        {
+          "doc": "An entry path was called while paused. Exits are never blocked.",
+          "name": "Paused",
+          "value": 13
+        },
+        {
+          "doc": "`accept_admin` called by an address that was not nominated.",
+          "name": "NotPendingAdmin",
+          "value": 14
+        },
+        {
+          "doc": "`execute_upgrade` called before the timelock expired, or with nothing\\nproposed.",
+          "name": "UpgradeNotReady",
+          "value": 15
+        },
+        {
+          "doc": "A deposit would exceed the Blend reserve's supply cap. Surfaced before\\ncalling Blend so callers get a typed error instead of an opaque trap.",
+          "name": "SupplyCapExceeded",
+          "value": 16
+        },
+        {
+          "doc": "The market is in emergency wind-down: deposits are closed permanently.",
+          "name": "EmergencyModeActive",
+          "value": 17
+        },
+        {
+          "doc": "`emergency_withdraw_all` called when already wound down.",
+          "name": "AlreadyInEmergencyMode",
+          "value": 18
+        },
+        {
+          "doc": "A sweep targeted an asset the protocol depends on.",
+          "name": "ProtectedAsset",
+          "value": 19
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Config",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "reserve_index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "underlying",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when SY shares are redeemed for underlying.",
+      "lib": "",
+      "name": "Redeem",
+      "prefix_topics": [
+        "redeem"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "shares_burned",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "underlying_amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "name",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when underlying is deposited and SY shares are minted.",
+      "lib": "",
+      "name": "Deposit",
+      "prefix_topics": [
+        "deposit"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "underlying_amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "shares_minted",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Halts deposits. Callable by the guardian OR the admin \\xe2\\x80\\x94 deliberately the\\ncheap half of an asymmetric pair, because stopping a live exploit must\\nnot wait on a multisig.\\n\\nThis never blocks an exit. `redeem`, every SEP-41 `transfer`, and the\\ntokenizer paths that read `exchange_rate` all keep working while paused.\\nA pause that traps user funds is worse than no pause at all.",
+      "name": "pause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Moves a non-protocol token out of this contract. The underlying can\\nnever be swept \\xe2\\x80\\x94 it is either backing SY or, in wind-down, the entire\\nredemption pool.",
+      "name": "sweep",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "config",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Config"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "redeem",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sy_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "symbol",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "approve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expiration_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Resumes deposits. Admin only \\xe2\\x80\\x94 the expensive half. Cheap to stop,\\ndeliberate to restart.",
+      "name": "unpause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "decimals",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The guardian, defaulting to the admin when none has been set.",
+      "name": "guardian",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "allowance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when an admin transfer completes.",
+      "lib": "",
+      "name": "AdminChanged",
+      "prefix_topics": [
+        "admin_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "previous",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "current",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted on pause and unpause.",
+      "lib": "",
+      "name": "PauseChanged",
+      "prefix_topics": [
+        "pause_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "underlying",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when a new admin is nominated.",
+      "lib": "",
+      "name": "AdminProposed",
+      "prefix_topics": [
+        "admin_proposed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AllowanceValue",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expiration_ledger",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when governance is permanently renounced.",
+      "lib": "",
+      "name": "AdminRenounced",
+      "prefix_topics": [
+        "admin_renounced"
+      ],
+      "params": [],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Completes a transfer started by `propose_admin`.",
+      "name": "accept_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_emergency",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_renounced",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sets the guardian, which may pause but never unpause.",
+      "name": "set_guardian",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "guardian",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_shares",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_supply",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when an admin re-syncs the stored Blend reserve index after the pool\\nreindexed the underlying. Both indices are carried so integrators can audit\\nthe move.",
+      "lib": "",
+      "name": "ReserveMigrated",
+      "prefix_topics": [
+        "reserve_migrated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_index",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_index",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when an upgrade is scheduled. `eta` is the earliest timestamp it can\\nexecute; holders who object have until then to exit.",
+      "lib": "",
+      "name": "UpgradeProposed",
+      "prefix_topics": [
+        "upgrade_proposed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "eta",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accrued_yield",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "exchange_rate",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pending_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Nominates a new admin. Takes effect only when the nominee calls\\n`accept_admin`, so a mistyped address cannot orphan governance.",
+      "name": "propose_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "share_balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer_from",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel_upgrade",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Permanently renounces governance: no more pause, upgrade, sweep, or\\nreserve migration, ever. The escape hatch from upgradeability once the\\nmarket has proven itself and an audit is in hand.",
+      "name": "renounce_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Applies a proposed upgrade once its timelock has elapsed.",
+      "name": "execute_upgrade",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pending_upgrade",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "tuple": {
+                "value_types": [
+                  {
+                    "bytes_n": {
+                      "n": 32
+                    }
+                  },
+                  "u64"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Schedules an upgrade. Cannot execute for `UPGRADE_TIMELOCK_SECONDS`, and\\nemits an event on proposal, so holders who dislike the new code have a\\nbounded, advertised window to exit first.",
+      "name": "propose_upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initializes a production wrapper whose custody and exchange rate are\\nbacked by a Blend v2 plain-supply position.",
+      "name": "initialize_blend",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "underlying",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when the Blend position is wound down into idle custody.",
+      "lib": "",
+      "name": "EmergencyWithdrawal",
+      "prefix_topics": [
+        "emergency_withdrawal"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "requested",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "recovered",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Recovers from a Blend reserve reindex.\\n\\n`config.reserve_index` is fixed at init and the rate path traps with\\n`InvalidBlendReserve` whenever Blend has since moved the underlying to a\\ndifferent reserve slot. That fail-closed trap is correct (pricing the\\nwrong reserve would be worse), but on its own it is unrecoverable: every\\nrate read, and therefore every deposit/redeem/split/recombine, stays\\nbricked for the life of the market. This admin entrypoint re-syncs the\\nstored index to wherever the pool now keeps this wrapper's underlying.\\n\\nIt does NOT trust a caller-supplied index. It re-derives the index the\\nsame way `initialize_blend` does: it finds the underlying's position in\\nthe pool's reserve list and cross-checks that against the pool's own\\n`get_reserve(underlying).config.index`, and requires the reserve decimals\\nto still match. The new index is accepted only if the asset actually\\nsitting there is `config.underlying`. So the strongest thing an admin can\\ndo here is re-point the wrapper at the same underlying und",
+      "name": "migrate_reserve_index",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Withdraws the entire Blend position into idle custody and closes the\\nmarket permanently.\\n\\nThis exists because `config.pool` is fixed at init with no rotation. If\\nBlend pauses the reserve, deprecates it, or the wrapper's position\\nbecomes unreadable, then `exchange_rate` traps \\xe2\\x80\\x94 and with it deposit,\\nredeem, split, recombine, redeem_at_maturity and every AMM swap, since\\nthey all read it. Without this, that state is unrecoverable and user\\nfunds are stranded.\\n\\nAfterwards the rate is derived from idle custody exactly the way it was\\nderived from the Blend position (`assets * WAD / supply`), so it needs no\\nfrozen snapshot and no new failure mode, and `redeem` pays out pro-rata\\nfrom the recovered balance. Deposits are closed forever.\\n\\nIrreversible on purpose: allowing a return to Blend would make this a\\nrate-manipulation lever rather than a safety valve.",
+      "name": "emergency_withdraw_all",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Request",
+      "fields": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "request_type",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Reserve",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "config",
+          "type_": {
+            "udt": {
+              "name": "ReserveConfig"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "data",
+          "type_": {
+            "udt": {
+              "name": "ReserveData"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "scalar",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Positions",
+      "fields": [
+        {
+          "doc": "",
+          "name": "collateral",
+          "type_": {
+            "map": {
+              "key_type": "u32",
+              "value_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "liabilities",
+          "type_": {
+            "map": {
+              "key_type": "u32",
+              "value_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "supply",
+          "type_": {
+            "map": {
+              "key_type": "u32",
+              "value_type": "i128"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ReserveData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "b_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "b_supply",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "backstop_credit",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "d_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "d_supply",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "ir_mod",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "last_time",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ReserveConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "c_factor",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "decimals",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "enabled",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "l_factor",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_util",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "r_base",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "r_one",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "r_three",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "r_two",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "reactivity",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "supply_cap",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "util",
+          "type_": "u32"
+        }
+      ]
+    }
+  }
+]

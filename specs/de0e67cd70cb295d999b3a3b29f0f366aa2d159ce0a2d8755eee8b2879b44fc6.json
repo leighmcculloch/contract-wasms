@@ -1,0 +1,1391 @@
+[
+  {
+    "event_v0": {
+      "doc": "Emitted on any AMM swap (PT<->SY direct, SY<->YT via flash route).",
+      "lib": "",
+      "name": "Swap",
+      "prefix_topics": [
+        "swap"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "trader",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "route",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount_out",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidMaturity",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidScalarRoot",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidAnchor",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidFee",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidTwapWindow",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "MarketNotSeeded",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "MarketMatured",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "SlippageExceeded",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "InsufficientLiquidity",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "MathOverflow",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "MarketProportionTooHigh",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "ExchangeRateBelowOne",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "UnsupportedRoute",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "TradeNotFound",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "InputOutOfBounds",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "InvalidSyRate",
+          "value": 19
+        },
+        {
+          "doc": "An entry path was called while paused. remove_liquidity is never blocked.",
+          "name": "Paused",
+          "value": 20
+        },
+        {
+          "doc": "",
+          "name": "NotAuthorized",
+          "value": 21
+        },
+        {
+          "doc": "",
+          "name": "NotPendingAdmin",
+          "value": 22
+        },
+        {
+          "doc": "",
+          "name": "UpgradeNotReady",
+          "value": 23
+        },
+        {
+          "doc": "",
+          "name": "ProtectedAsset",
+          "value": 24
+        },
+        {
+          "doc": "Protocol fee share above MAX_PROTOCOL_FEE_SHARE_BPS, or no treasury set.",
+          "name": "InvalidProtocolFee",
+          "value": 25
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "State",
+      "fields": [
+        {
+          "doc": "",
+          "name": "last_ln_implied_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "last_observation",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "total_lp",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_pt",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total_sy",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "twap_ln_implied_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "warmup_until",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Config",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "initial_anchor",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "maturity",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "pt_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "scalar_root",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "sy_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tokenizer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "twap_window",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "yt_token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Halts all four swaps and `add_liquidity`. Guardian or admin.\\n\\n`remove_liquidity` is deliberately never blocked: an LP must always be\\nable to withdraw. Quotes stay readable too, so a paused market is still\\nlegible rather than opaque.",
+      "name": "pause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "state",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "State"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Moves a non-protocol token out of the pool. PT and SY are refused:\\nthey are the reserves.",
+      "name": "sweep",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "config",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Config"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unpause",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "bump_ttl",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "guardian",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "maturity",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "spot_apy",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_lp",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "twap_apy",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pt_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sy_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "yt_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tokenizer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "maturity",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "scalar_root",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "initial_anchor",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "twap_window",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "lp_balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "PT backing the curve. This is accounted state, not `balanceOf(amm)`:\\ntokens donated straight to this contract are deliberately excluded, so\\nnobody can move the curve by transferring to it.",
+      "name": "reserve_pt",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "SY backing the curve. Same accounting rule as `reserve_pt`.",
+      "name": "reserve_sy",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when liquidity is added to the pool.",
+      "lib": "",
+      "name": "AddLiquidity",
+      "prefix_topics": [
+        "add_liquidity"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "pt_in",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "sy_in",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "lp_out",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when an admin transfer completes.",
+      "lib": "",
+      "name": "AdminChanged",
+      "prefix_topics": [
+        "admin_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "previous",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "current",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted on pause and unpause.",
+      "lib": "",
+      "name": "PauseChanged",
+      "prefix_topics": [
+        "pause_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "bump_lp_ttl",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "holder",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "implied_apy",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when a new admin is nominated.",
+      "lib": "",
+      "name": "AdminProposed",
+      "prefix_topics": [
+        "admin_proposed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accept_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_renounced",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_guardian",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "guardian",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "add_liquidity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pt_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "sy_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_lp_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pending_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "propose_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when liquidity is removed from the pool.",
+      "lib": "",
+      "name": "RemoveLiquidity",
+      "prefix_topics": [
+        "remove_liquidity"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "provider",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "lp_in",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "pt_out",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "sy_out",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when an upgrade is scheduled; `eta` is the earliest it can execute.",
+      "lib": "",
+      "name": "UpgradeProposed",
+      "prefix_topics": [
+        "upgrade_proposed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "eta",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel_upgrade",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "renounce_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "swap_pt_for_sy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pt_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_sy_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "swap_sy_for_pt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sy_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_pt_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "swap_sy_for_yt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sy_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_yt_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "swap_yt_for_sy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "yt_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_sy_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execute_upgrade",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pending_upgrade",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "tuple": {
+                "value_types": [
+                  {
+                    "bytes_n": {
+                      "n": 32
+                    }
+                  },
+                  "u64"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "propose_upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "quote_pt_for_sy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pt_in",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "quote_sy_for_pt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sy_in",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "quote_sy_for_yt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sy_in",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "quote_yt_for_sy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "yt_in",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "twap_warming_up",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "bool",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "remove_liquidity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "lp_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_pt_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_sy_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "i128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Routes `share_bps` of the *swap fee* (not of the trade) to `treasury`.\\n\\nShips at 0, so launch economics are byte-identical to having no switch\\nat all. It exists because the alternative \\xe2\\x80\\x94 adding it later \\xe2\\x80\\x94 is\\nimpossible once governance is renounced, and a protocol with no revenue\\npath is not a business. Capped at 50% of the fee so LPs always keep the\\nmajority of what they earn.",
+      "name": "set_protocol_fee",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "share_bps",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when the protocol fee split changes.",
+      "lib": "",
+      "name": "ProtocolFeeChanged",
+      "prefix_topics": [
+        "protocol_fee_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "share_bps",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "`(pt, sy)` this contract custodies beyond what backs the curve \\xe2\\x80\\x94\\ndonations, and any token sent here by mistake. Always >= 0 in a healthy\\nmarket; a negative value would mean custody is short of the reserves the\\ncurve believes it has, so it is surfaced rather than saturated.",
+      "name": "untracked_balance",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": [
+                  "i128",
+                  "i128"
+                ]
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "`(pt_out, sy_used)` for an exact-SY-in PT buy. `sy_used <= sy_in`, and\\n`sy_used` is what the swap will actually debit \\xe2\\x80\\x94 the solver is bounded by\\nthe curve, so past the saturation point extra input buys nothing and is\\nsimply not charged. Callers should surface `sy_used` and warn when it is\\nmaterially below `sy_in`, because that means the market cannot absorb the\\nrequested size.",
+      "name": "quote_sy_for_pt_cost",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sy_in",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": [
+                  "i128",
+                  "i128"
+                ]
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "`(yt_out, sy_used)` for an exact-SY-in YT buy. Same contract as\\n`quote_sy_for_pt_cost`: `sy_used` is the shortfall the pool cannot fund\\nfrom selling the PT leg into its own curve, and is exactly what the swap\\nwill debit.",
+      "name": "quote_sy_for_yt_cost",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sy_in",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": [
+                  "i128",
+                  "i128"
+                ]
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "protocol_fees_accrued",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "protocol_fee_share_bps",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pays accrued protocol fees out to the treasury. Treasury-authorized, so\\na compromised admin cannot redirect an already-accrued balance.",
+      "name": "withdraw_protocol_fees",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

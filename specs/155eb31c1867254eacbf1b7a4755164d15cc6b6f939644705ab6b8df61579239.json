@@ -1,0 +1,664 @@
+[
+  {
+    "function_v0": {
+      "doc": "Agent-initiated payment, bounded by the policy.\\n\\nThe returned error is the product: it says exactly why the human-in-the-loop path\\nshould take over, in a form the caller can match on rather than parse.",
+      "name": "pay",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "owner",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The current UTC day index, as the contract computes it.",
+      "name": "today",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "token",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "frozen",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "balance",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "decimals",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "operator",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Move funds out of the vault. Owner only, and not counted against the day, because\\na withdrawal is the owner reclaiming their own money rather than the agent\\nspending it.",
+      "name": "withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "daily_cap",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The owner settles a payment they approved out of band. Bypasses the ceiling, the\\nallowlist and the freeze, because it is a human act. Still counts toward the daily\\ncap, so the on-chain record of total outflow stays honest.",
+      "name": "owner_pay",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_allowed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "payee",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_frozen",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "frozen",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_policy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "daily_cap",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "auto_approve_max",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "allowlist_enabled",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_allowed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "payee",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "ok",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "spent_today",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_operator",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deploy-time initialization. Runs once, atomically, and cannot be re-run.\\n\\nReading `decimals()` from the token here does double duty: it keeps the hot path\\nfree of a cross-contract call, and it means a token address that does not actually\\nimplement SEP-41 fails at deploy, before the vault has ever held anything.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "daily_cap",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "auto_approve_max",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "auto_approve_max",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "allowlist_enabled",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "session_key_expiry",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Grant, extend or revoke the session key by setting the Unix time after which the\\nagent's `pay` stops working. A future time grants or extends, a past time (or the\\ncurrent one) revokes immediately, and 0 removes the time bound entirely.\\n`owner_pay` is never time-bound.",
+      "name": "set_session_key_expiry",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "The owner froze the vault. The agent cannot spend at all; `owner_pay` still works.",
+          "name": "Frozen",
+          "value": 1
+        },
+        {
+          "doc": "The session key's expiry has passed. The owner can extend, re-grant, or override.",
+          "name": "SessionKeyExpired",
+          "value": 2
+        },
+        {
+          "doc": "The allowlist is on and this payee is not on it.",
+          "name": "PayeeNotAllowed",
+          "value": 3
+        },
+        {
+          "doc": "A single payment above the auto-approve ceiling. This is the human-approval line.",
+          "name": "AboveAutoApprove",
+          "value": 4
+        },
+        {
+          "doc": "This payment would take the UTC day's cumulative spend over the cap.",
+          "name": "DailyCapExceeded",
+          "value": 5
+        },
+        {
+          "doc": "Amount is zero or negative. No Solidity analogue: `uint256` ruled it out.",
+          "name": "InvalidAmount",
+          "value": 6
+        },
+        {
+          "doc": "Payee is the vault itself or the settlement token. No Solidity analogue.",
+          "name": "InvalidPayee",
+          "value": 7
+        },
+        {
+          "doc": "The day accumulator would overflow. Reached through `checked_add`, never a panic.",
+          "name": "MathOverflow",
+          "value": 8
+        },
+        {
+          "doc": "The vault does not hold enough to make this payment. Named here so an underfunded\\nvault gives a reason the human path can act on, instead of an opaque token panic.",
+          "name": "InsufficientBalance",
+          "value": 9
+        },
+        {
+          "doc": "Owner and operator are the same address. Refused at construction and on\\n`set_operator`, because a single compromised key would then be able to both spend\\npast the policy and lift the policy. The TypeScript vault path already refuses\\nthis (`mcp/src/platform/vault.ts`); enforcing it here makes it unbypassable.",
+          "name": "OwnerIsOperator",
+          "value": 10
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Paid",
+      "prefix_topics": [
+        "paid"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "day",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "True when the owner settled it out of band, false when the agent spent it inside\\nthe policy. Both count toward the day, so this flag is the only thing that\\ndistinguishes them after the fact.",
+          "name": "by_owner",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FrozenSet",
+      "prefix_topics": [
+        "frozen_set"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "frozen",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Withdrawn",
+      "prefix_topics": [
+        "withdrawn"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OperatorSet",
+      "prefix_topics": [
+        "operator_set"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AllowlistSet",
+      "prefix_topics": [
+        "allowlist_set"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "payee",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "allowed",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PolicyUpdated",
+      "prefix_topics": [
+        "policy_updated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "daily_cap",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "auto_approve_max",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "allowlist_enabled",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SessionKeyExpirySet",
+      "prefix_topics": [
+        "session_key_expiry_set"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Owner"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Operator"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Token"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Read once from the token at construction and stored, so the hot path makes no\\ncross-contract call for it and nothing assumes Stellar USDC's 7 decimals.",
+            "name": "Decimals"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "DailyCap"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AutoApproveMax"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Frozen"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AllowlistEnabled"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SessionKeyExpiry"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Allowed",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "SpentOnDay",
+            "type_": [
+              "u64"
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

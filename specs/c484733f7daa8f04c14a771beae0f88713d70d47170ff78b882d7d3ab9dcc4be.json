@@ -1,0 +1,122 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "`recipients` and `amounts` must line up one-to-one.",
+          "name": "LengthMismatch",
+          "value": 1
+        },
+        {
+          "doc": "A payroll run must contain at least one line.",
+          "name": "EmptyBatch",
+          "value": 2
+        },
+        {
+          "doc": "Amounts must be positive.",
+          "name": "NonPositiveAmount",
+          "value": 3
+        },
+        {
+          "doc": "The batch exceeds [`MAX_RECIPIENTS`].",
+          "name": "BatchTooLarge",
+          "value": 4
+        },
+        {
+          "doc": "The same recipient appears twice: one payroll line per payee.",
+          "name": "DuplicateRecipient",
+          "value": 5
+        },
+        {
+          "doc": "The batch total does not fit in an i128.",
+          "name": "TotalOverflow",
+          "value": 6
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Published once per successful batch: `(\"disburse\", from, token)` topics\\ncarrying the batch total and recipient count, so a payroll batch can be\\nfound and reconciled from chain data alone. One event per batch, not per\\nline \\xe2\\x80\\x94 per-line detail is already in the SAC transfer events, and event\\nbytes are the resource that caps batch size.",
+      "lib": "",
+      "name": "DisburseEvent",
+      "prefix_topics": [
+        "disburse"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "total",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "count",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Transfers `amounts[i]` of `token` from `from` to `recipients[i]`.\\n\\nRecipients may be classic accounts or contract accounts (such as passkey\\nsmart wallets), since the token contract credits either the trustline or\\na contract balance entry as appropriate.\\n\\nThe batch is validated in full before `from` is asked to authorize and\\nbefore any transfer runs, so a bad batch fails during simulation without\\nmoving anything. On success one [`DisburseEvent`] is published.",
+      "name": "disburse",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "recipients",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amounts",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]

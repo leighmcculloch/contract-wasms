@@ -1,0 +1,2270 @@
+[
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Listed",
+      "prefix_topics": [
+        "listed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "seller",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "prices",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "PriceEntry"
+                }
+              }
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Off-chain-media descriptor returned by [`ArtNft::art_meta`] for a single\\ntoken \\xe2\\x80\\x94 synthesized from that token's edition, not stored per-token.\\nRoyalty basis points are deliberately absent \\xe2\\x80\\x94 [`ArtNft::royalty_info`]\\nstays the single source of truth for any marketplace reading this\\ncollection.",
+      "lib": "",
+      "name": "ArtMeta",
+      "fields": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "description",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "media_type",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "media_url",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "thumbnail_url",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "title",
+          "type_": "string"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "At most one listing per token, since a specific minted copy has exactly\\none owner who could be selling it. Purely secondary-market: an edition's\\nprimary sale is priced via `EditionPrices`, not a `Listing`. A reseller\\nprices their own copy independently of whatever currencies the creator\\noriginally offered \\xe2\\x80\\x94 `prices` is the same shape as `EditionPrices`, just\\nscoped to one token instead of a whole edition, so a buyer picks which\\ncurrency to pay in exactly like a primary purchase does.",
+      "lib": "",
+      "name": "Listing",
+      "fields": [
+        {
+          "doc": "",
+          "name": "prices",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "PriceEntry"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "seller",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ArtError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 300
+        },
+        {
+          "doc": "",
+          "name": "InvalidFee",
+          "value": 301
+        },
+        {
+          "doc": "",
+          "name": "InvalidRoyalty",
+          "value": 302
+        },
+        {
+          "doc": "",
+          "name": "NameTooLong",
+          "value": 303
+        },
+        {
+          "doc": "",
+          "name": "DescriptionTooLong",
+          "value": 304
+        },
+        {
+          "doc": "",
+          "name": "InvalidUri",
+          "value": 305
+        },
+        {
+          "doc": "",
+          "name": "ListingNotFound",
+          "value": 306
+        },
+        {
+          "doc": "",
+          "name": "SelfPurchase",
+          "value": 307
+        },
+        {
+          "doc": "",
+          "name": "NotSeller",
+          "value": 308
+        },
+        {
+          "doc": "The listing's seller no longer owns the token \\xe2\\x80\\x94 it was transferred or\\nburned out from under the listing.",
+          "name": "ListingStale",
+          "value": 309
+        },
+        {
+          "doc": "This `edition_ref` already registered an edition \\xe2\\x80\\x94 guards against\\ndouble-registering the same off-chain record.",
+          "name": "DuplicateRef",
+          "value": 311
+        },
+        {
+          "doc": "",
+          "name": "RefTooLong",
+          "value": 312
+        },
+        {
+          "doc": "",
+          "name": "InvalidSupply",
+          "value": 313
+        },
+        {
+          "doc": "An edition's price grid is empty or has more currencies than\\n`MAX_PRICE_ENTRIES`.",
+          "name": "TooManyPriceEntries",
+          "value": 314
+        },
+        {
+          "doc": "",
+          "name": "DuplicatePaymentToken",
+          "value": 315
+        },
+        {
+          "doc": "",
+          "name": "InvalidPrice",
+          "value": 316
+        },
+        {
+          "doc": "`payment_token` isn't one of the currencies this edition is priced in.",
+          "name": "PaymentTokenNotAccepted",
+          "value": 317
+        },
+        {
+          "doc": "This purchase would mint more copies than the edition has left.",
+          "name": "SupplyExhausted",
+          "value": 318
+        },
+        {
+          "doc": "`quantity` is 0 or exceeds `MAX_QUANTITY_PER_BUY`.",
+          "name": "QuantityTooLarge",
+          "value": 319
+        },
+        {
+          "doc": "",
+          "name": "EditionNotFound",
+          "value": 320
+        },
+        {
+          "doc": "This `purchase_ref` was already used \\xe2\\x80\\x94 guards against double-applying\\nthe same purchase attempt.",
+          "name": "DuplicatePurchaseRef",
+          "value": 321
+        },
+        {
+          "doc": "",
+          "name": "PurchaseRefTooLong",
+          "value": 322
+        },
+        {
+          "doc": "The caller of `unlock_item_for` isn't the registered unlock\\nauthority (or none has been set yet).",
+          "name": "NotUnlockAuthority",
+          "value": 323
+        },
+        {
+          "doc": "The caller of `update_edition` isn't the registered price\\nauthority (or none has been set yet since the last upgrade \\xe2\\x80\\x94\\n`set_price_authority` must be called once after every upgrade that\\nintroduces this key, since `__constructor` only runs at deploy).",
+          "name": "NotPriceAuthority",
+          "value": 324
+        },
+        {
+          "doc": "`keep_alive` was given more edition or token ids than\\n`MAX_KEEP_ALIVE_IDS` in one call.",
+          "name": "TooManyKeepAliveIds",
+          "value": 325
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Purchased",
+      "prefix_topics": [
+        "purchased"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "buyer",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "seller",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "payment_token",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "royalty_paid",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "platform_fee_paid",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "Reimbursement collected from the buyer on top of `price`, covering\\ntreasury's real cost of fee-bumping this buyer's transaction (see\\n`src/lib/stellar/oz/nft.ts`). Folded into the same transfer as\\n`price`'s platform-fee cut rather than a separate `TokenClient` call\\n\\xe2\\x80\\x94 recorded here so the buyer's true total is auditable from this one\\nevent. Always 0 for a token settled via `buy_batch`'s per-token\\n`do_buy` call \\xe2\\x80\\x94 that function charges the batch's fee once, in its\\nown aggregate transfer, not per token (see `Self::buy_batch`).",
+          "name": "inclusion_fee_paid",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "network_fee_paid",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "One accepted currency and its price for one copy of an edition.",
+      "lib": "",
+      "name": "PriceEntry",
+      "fields": [
+        {
+          "doc": "SEP-41 token address (the native XLM SAC, the platform asset's SAC,\\nor any other Stellar Asset Contract added later).",
+          "name": "payment_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A creator's submission: bounded artwork with a fixed supply, minted\\nlazily as copies sell rather than up front.",
+      "lib": "",
+      "name": "EditionMeta",
+      "fields": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "description",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "media_type",
+          "type_": "string"
+        },
+        {
+          "doc": "The locked/gated content \\xe2\\x80\\x94 visible to the storefront, but only\\nmeaningful once a copy is owned.",
+          "name": "media_url",
+          "type_": "string"
+        },
+        {
+          "doc": "Copies minted so far, always `<= supply`.",
+          "name": "minted",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "royalty_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "Total copies this edition will ever mint.",
+          "name": "supply",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "thumbnail_url",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "title",
+          "type_": "string"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Author-supplied fields for a new edition, grouped into one argument so\\n`buy_edition` (which also needs `purchase_ref`, `payment_token` and\\n`quantity`) stays under Soroban's 10-parameter-per-function cap\\n(`SCSpecFunctionV0.inputs<10>`).",
+      "lib": "",
+      "name": "EditionInput",
+      "fields": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "description",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "media_type",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "media_url",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "prices",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "PriceEntry"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "royalty_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "supply",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "thumbnail_url",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "title",
+          "type_": "string"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "What a buyer will actually be charged, broken out so the UI can show the\\nsplit before asking for a signature.",
+      "lib": "",
+      "name": "SaleBreakdown",
+      "fields": [
+        {
+          "doc": "",
+          "name": "platform_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "royalty",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "royalty_receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "seller_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "total",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "EditionMinted",
+      "prefix_topics": [
+        "edition_minted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "edition_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "buyer",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "first_token_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "last_token_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "quantity",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "payment_token",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "unit_price",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "Reimbursement collected from the buyer alongside `unit_price *\\nquantity`, covering treasury's real cost of fee-bumping this buyer's\\ntransaction (see `src/lib/stellar/oz/nft.ts`). Folded into the same\\ntransfer as `unit_price * quantity`'s platform-fee cut rather than a\\nseparate `TokenClient` call \\xe2\\x80\\x94 recorded here so the buyer's true\\ntotal is auditable from this one event.",
+          "name": "inclusion_fee_paid",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "network_fee_paid",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "EditionCreated",
+      "prefix_topics": [
+        "edition_created"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "edition_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "royalty_bps",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "supply",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "EditionUpdated",
+      "prefix_topics": [
+        "edition_updated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "edition_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "old_title",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_title",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "old_description",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_description",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "old_thumbnail_url",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_thumbnail_url",
+          "type_": "string",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "old_supply",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_supply",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "old_prices",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "PriceEntry"
+                }
+              }
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_prices",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "PriceEntry"
+                }
+              }
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "What a single `buy_edition` call minted, recorded so the caller can\\nresolve exactly which token ids they were assigned after the fact \\xe2\\x80\\x94 see\\nthe doc comment on [`ArtNft::buy_edition`] for why this exists instead of\\nreading the call's return value back off a confirmed transaction.",
+      "lib": "",
+      "name": "PurchaseReceipt",
+      "fields": [
+        {
+          "doc": "",
+          "name": "buyer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "edition_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "first_token_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "last_token_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "payment_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "quantity",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "unit_price",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ContentUnlocked",
+      "prefix_topics": [
+        "content_unlocked"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "Which locked-content item on this token was just unlocked \\xe2\\x80\\x94 see\\n`DataKey::Unlocked`'s doc comment.",
+          "name": "media_index",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ListingCancelled",
+      "prefix_topics": [
+        "listing_cancelled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "seller",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PlatformFeeUpdated",
+      "prefix_topics": [
+        "platform_fee_updated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Buys a listed (already-minted) token in a single invocation: payment\\nout, token in. `payment_token` selects which of the listing's prices\\nto pay \\xe2\\x80\\x94 must be one the seller actually offered.\\n\\nOnly the buyer signs. The seller's consent was given when they created\\nthe listing, and the token moves via [`Consecutive::update`] (the\\nlow-level, no-auth path) rather than a full `transfer`, which would\\ndemand the seller's signature at purchase time.",
+      "name": "buy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "buyer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "payment_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "inclusion_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "network_fee",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Destroys the token with `token_id` from `from`.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `from` - The account whose token is destroyed.\\n* `token_id` - The identifier of the token to burn.\\n\\n# Errors\\n\\n* [`crate::non_fungible::NonFungibleTokenError::NonExistentToken`] -\\nWhen attempting to burn a token that does not exist.\\n* [`crate::non_fungible::NonFungibleTokenError::IncorrectOwner`] - If\\nthe current owner (before calling this function) is not `from`.\\n\\n# Events\\n\\n* topics - `[\"burn\", from: Address]`\\n* data - `[token_id: u32]`",
+      "name": "burn",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Lists the caller's token for sale in one or more currencies, same\\nshape as an edition's own price grid \\xe2\\x80\\x94 a reseller isn't limited to\\nwhichever currencies the creator originally offered. Listing does not\\nescrow the token \\xe2\\x80\\x94 the owner keeps it and can still transfer or burn\\nit, which is why `buy` re-checks ownership rather than trusting the\\nstored seller.",
+      "name": "list",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "seller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "prices",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "PriceEntry"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the token collection name.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.",
+      "name": "name",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Emergency stop for `buy_edition`, `list`, `buy`, and\\n`unlock_token_for`. Transfers, approvals, and `cancel_listing` stay\\nopen so holders can always exit a position while the platform is\\nhalted.",
+      "name": "pause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns true if the contract is paused, and false otherwise.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.",
+      "name": "paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the token collection symbol.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.",
+      "name": "symbol",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Gives permission to `approved` to transfer the token with `token_id` to\\nanother account. The approval is cleared when the token is\\ntransferred.\\n\\nOnly a single account can be approved at a time for a `token_id`.\\nTo remove an approval, the approver can approve their own address,\\neffectively removing the previous approved address. Alternatively,\\nsetting the `live_until_ledger` to `0` will also revoke the approval.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n* `approver` - The address of the approver (should be `owner` or\\n`operator`).\\n* `approved` - The address receiving the approval.\\n* `token_id` - Token ID as a number.\\n* `live_until_ledger` - The ledger number at which the allowance\\nexpires. If `live_until_ledger` is `0`, the approval is revoked.\\n\\n# Errors\\n\\n* [`NonFungibleTokenError::NonExistentToken`] - If the token does not\\nexist.\\n* [`NonFungibleTokenError::InvalidApprover`] - If the owner address is\\nnot the actual owner of the token.\\n* [`NonFungibleTokenError::InvalidLiveUntilLedger`] - If the ledge",
+      "name": "approve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "approver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "approved",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the number of tokens owned by `account`.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `account` - The address for which the balance is being queried.",
+      "name": "balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "listing",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "Listing"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unpause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Replaces this contract's executable code in place \\xe2\\x80\\x94 same address,\\nsame storage, so the platform can ship behavior changes (or fix a\\nbug) without a redeploy and without anyone needing to be pointed at a\\nnew contract id. `#[only_owner]` ignores whatever address is passed\\nas `_operator` and enforces the real owner from storage instead \\xe2\\x80\\x94 see\\n`stellar-macros`' docs on the macro.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The contract build currently running on-chain \\xe2\\x80\\x94 bump\\n`CONTRACT_VERSION` on every release that changes behavior so this\\nstays truthful after an `upgrade`.",
+      "name": "version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Synthesizes a single token's metadata from the edition it was minted\\nfrom \\xe2\\x80\\x94 editions store their descriptive fields once, not once per\\ncopy, so this is an indirection rather than a direct read.",
+      "name": "art_meta",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "ArtMeta"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the owner of the token with `token_id`.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `token_id` - Token ID as a number.\\n\\n# Errors\\n\\n* [`NonFungibleTokenError::NonExistentToken`] - If the token does not\\nexist.",
+      "name": "owner_of",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Transfers the token with `token_id` from `from` to `to`.\\n\\nWARNING: Confirmation that the recipient is capable of receiving the\\n`Non-Fungible` is the caller's responsibility; otherwise the NFT may be\\npermanently lost.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `from` - Account of the sender.\\n* `to` - Account of the recipient.\\n* `token_id` - Token ID as a number.\\n\\n# Errors\\n\\n* [`NonFungibleTokenError::IncorrectOwner`] - If the current owner\\n(before calling this function) is not `from`.\\n* [`NonFungibleTokenError::NonExistentToken`] - If the token does not\\nexist.\\n\\n# Events\\n\\n* topics - `[\"transfer\", from: Address, to: Address]`\\n* data - `[token_id: u32]`",
+      "name": "transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "treasury",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Destroys the token with `token_id` from `from`, by using `spender`s\\napproval.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `spender` - The account that is allowed to burn the token on behalf of\\nthe owner.\\n* `from` - The account whose token is destroyed.\\n* `token_id` - The identifier of the token to burn.\\n\\n# Errors\\n\\n* [`crate::non_fungible::NonFungibleTokenError::NonExistentToken`] -\\nWhen attempting to burn a token that does not exist.\\n* [`crate::non_fungible::NonFungibleTokenError::IncorrectOwner`] - If\\nthe current owner (before calling this function) is not `from`.\\n* [`crate::non_fungible::NonFungibleTokenError::InsufficientApproval`] -\\nIf the spender does not have a valid approval.\\n\\n# Events\\n\\n* topics - `[\"burn\", from: Address]`\\n* data - `[token_id: u32]`",
+      "name": "burn_from",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Buys several listed tokens at once, all paid in the same currency \\xe2\\x80\\x94\\none signature instead of one `buy` call per token. The common case:\\na buyer picking N copies pooled across one or more resale listings\\nfor the same edition. Listings can belong to different sellers; each\\ntoken still settles (payment split, ownership transfer, `Purchased`\\nevent) exactly as an individual `buy` would, just in one invocation.\\n\\n`inclusion_fee`/`network_fee` are charged once for the whole batch\\n(there's only one real Soroban transaction underneath, regardless of\\nhow many tokens it settles), not once per token \\xe2\\x80\\x94 capped against the\\nsum of every token's own price, computed up front in a read-only\\npass before any listing is touched.",
+      "name": "buy_batch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "buyer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payment_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "inclusion_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "network_fee",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns `Some(Address)` if ownership is set, or `None` if ownership has\\nbeen renounced.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.",
+      "name": "get_owner",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the Uniform Resource Identifier (URI) for the token with\\n`token_id`.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `token_id` - Token ID as a number.\\n\\n# Notes\\n\\nIf the token does not exist, this function is expected to panic.",
+      "name": "token_uri",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Refreshes this contract's own TTL, plus the `Edition`/`EditionPrices`\\nentries for every id in `edition_ids` and the ownership data for\\nevery id in `token_ids`. Permissionless (no `require_auth` at all) \\xe2\\x80\\x94\\nit only ever extends TTLs, never reads a balance, moves a token, or\\ntouches payment, so there's nothing here for an untrusted caller to\\nabuse; anyone (typically a scheduled off-chain job) can pay to keep\\nthe collection warm.\\n\\nAn `edition_ids` entry that doesn't resolve to anything (never\\nregistered, wrong id) is silently skipped. `token_ids` entries are\\nnot \\xe2\\x80\\x94 same as everywhere else `Consecutive::owner_of` is called in\\nthis contract, an id that was never minted or was since burned\\npanics the whole call, so callers (the off-chain scheduler) should\\nonly pass ids their own records show as actually minted.",
+      "name": "keep_alive",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "edition_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "token_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Lists several of the caller's tokens at once, all at the same price\\ngrid \\xe2\\x80\\x94 one signature instead of one `list` call per token. The common\\ncase: a seller holding a consecutive run from one `buy_edition`\\npurchase relists several of them together. Each token still gets its\\nown independent `Listing` entry (and its own `Listed` event, via\\n`do_list`) \\xe2\\x80\\x94 this is purely a batching of the same per-token effect\\n`list` has, not a new pooled-listing concept.",
+      "name": "list_batch",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "seller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "prices",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "PriceEntry"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Buys `quantity` copies of an edition, minting them straight to\\n`buyer` in the same call that takes payment.\\n\\nThe *first* purchase of a given `edition_ref` also registers the\\nedition from `edition` \\xe2\\x80\\x94 every later purchase of the same ref ignores\\n`edition` entirely and just mints the next range against the already-\\nregistered data. This is why the creator never has to sign anything\\nto \"list\": `edition`'s fields are backend-supplied from the trusted\\ndatabase row (the same trust model `mint_and_list` used to build its\\nXDR server-side under), and `EditionByRef` dedup means only that first\\ncall can ever set them \\xe2\\x80\\x94 nothing here requires the creator's\\nauthorization, only the buyer's.\\n\\n`purchase_ref` is the caller's own identifier for this purchase\\nattempt (a fresh id per attempt, not per edition). It's recorded so\\nthe minted range can be looked up afterwards with\\n[`Self::purchase_by_ref`] \\xe2\\x80\\x94 this repo's pinned `stellar-sdk` cannot\\ndecode protocol-27 transaction meta, so neither the return value nor\\nemitted events",
+      "name": "buy_edition",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "buyer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "edition_ref",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "edition",
+          "type_": {
+            "udt": {
+              "name": "EditionInput"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "purchase_ref",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "payment_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "quantity",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "inclusion_fee",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "network_fee",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "u32",
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "edition_meta",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "edition_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "EditionMeta"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the account approved for the token with `token_id`.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `token_id` - Token ID as a number.\\n\\n# Errors\\n\\n* [`NonFungibleTokenError::NonExistentToken`] - If the token does not\\nexist.",
+      "name": "get_approved",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "ERC2981-shaped royalty lookup, resolved from the token's edition\\nrather than the OZ royalties extension's own storage \\xe2\\x80\\x94 see the doc\\ncomment in `buy_edition` for why. A token with no edition (shouldn't\\nhappen for anything this contract minted) reports no royalty rather\\nthan panicking, matching the OZ default's own \"nothing set\" behavior.",
+      "name": "royalty_info",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "sale_price",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "address",
+              "i128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Runs exactly once, at deploy. Using a constructor rather than an\\n`initialize` entry point means there is no window in which an\\nuninitialized contract can be claimed by whoever calls first.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "platform_fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "symbol",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "base_uri",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "unlock_authority",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Transfers the token with `token_id` from `from` to `to` by using\\n`spender`s approval.\\n\\nUnlike `transfer()`, which is used when the token owner initiates the\\ntransfer, `transfer_from()` allows an approved third party\\n(`spender`) to transfer the token on behalf of the owner. This\\nfunction verifies that `spender` has the necessary approval.\\n\\nWARNING: Confirmation that the recipient is capable of receiving the\\n`Non-Fungible` is the caller's responsibility; otherwise the NFT may be\\npermanently lost.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `spender` - The address authorizing the transfer.\\n* `from` - Account of the sender.\\n* `to` - Account of the recipient.\\n* `token_id` - Token ID as a number.\\n\\n# Errors\\n\\n* [`NonFungibleTokenError::IncorrectOwner`] - If the current owner\\n(before calling this function) is not `from`.\\n* [`NonFungibleTokenError::InsufficientApproval`] - If the spender does\\nnot have a valid approval.\\n* [`NonFungibleTokenError::NonExistentToken`] - If the token does not\\nexist.\\n\\n# Events",
+      "name": "transfer_from",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel_listing",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "seller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Resolves the caller's off-chain reference back to the registered\\nedition id. This is how the backend confirms an edition exists\\non-chain and learns its id after the first purchase.",
+      "name": "edition_by_ref",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "edition_ref",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "u32"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "edition_prices",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "edition_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "PriceEntry"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Read-only preview of `buy`'s payment split for one of the listing's\\ncurrencies, so the UI can show the buyer exactly where their money\\ngoes before they sign.",
+      "name": "sale_breakdown",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "payment_token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "SaleBreakdown"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Rewrites an already-registered edition's title/description/\\nthumbnail/supply/prices. `media_url`, `media_type`, `creator`, and\\n`royalty_bps` are deliberately **not parameters** \\xe2\\x80\\x94 they're read\\nfrom the existing `EditionMeta` and carried over untouched, so\\nthere's no path, accidental or otherwise, that can alter them.\\n`supply` can only move down to `meta.minted` and never above the\\nedition's current `supply` \\xe2\\x80\\x94 never diluting what existing holders\\nalready bought into, never letting already-minted copies exceed\\ntheir own edition's cap.",
+      "name": "update_edition",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "edition_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "title",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "description",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "thumbnail_url",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "supply",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "prices",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "PriceEntry"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Approve or remove `operator` as an operator for the owner.\\n\\nOperators can call `transfer_from()` for any token held by `owner`,\\nand call `approve()` on behalf of `owner`.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n* `owner` - The address holding the tokens.\\n* `operator` - Account to add to the set of authorized operators.\\n* `live_until_ledger` - The ledger number at which the allowance\\nexpires. If `live_until_ledger` is `0`, the approval is revoked.\\n\\n# Errors\\n\\n* [`NonFungibleTokenError::InvalidLiveUntilLedger`] - If the ledger\\nnumber is less than the current ledger number.\\n\\n# Events\\n\\n* topics - `[\"approve_for_all\", from: Address]`\\n* data - `[operator: Address, live_until_ledger: u32]`",
+      "name": "approve_for_all",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "price_authority",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Resolves what a specific purchase attempt actually minted \\xe2\\x80\\x94 see\\n[`Self::buy_edition`]'s doc comment for why this, and not the\\ntransaction's return value, is how a confirmation step learns the\\nassigned token range.",
+      "name": "purchase_by_ref",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "purchase_ref",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "PurchaseReceipt"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Called by the backend once it has independently verified (off-chain)\\nthat this specific token's specific locked-content item had its\\nunlock rule completed. Idempotent \\xe2\\x80\\x94 calling it again for an\\nalready-unlocked (token, item) pair is a no-op, not an error, so a\\nretried backend call after a dropped response is safe. Keyed by\\n`(token_id, media_index)` alone, not edition or owner: each item's\\nrule applies to one specific minted copy, decided once, regardless\\nof who holds it later.",
+      "name": "unlock_item_for",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "media_index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Accepts a pending ownership transfer.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n\\n# Errors\\n\\n* [`crate::role_transfer::RoleTransferError::NoPendingTransfer`] - If\\nthere is no pending transfer to accept.\\n\\n# Events\\n\\n* topics - `[\"ownership_transfer_completed\"]`\\n* data - `[new_owner: Address]`",
+      "name": "accept_ownership",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Public, permissionless read \\xe2\\x80\\x94 anyone (the buyer, a marketplace UI,\\nan auditor) can verify on-chain whether a given token's given\\nlocked-content item was unlocked, without trusting the backend's\\nword for it.",
+      "name": "is_item_unlocked",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "media_index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "platform_fee_bps",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "remaining_supply",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "edition_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_platform_fee",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Renounces ownership of the contract.\\n\\nPermanently removes the owner, disabling all functions gated by\\n`#[only_owner]`.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n\\n# Errors\\n\\n* [`OwnableError::TransferInProgress`] - If there is a pending ownership\\ntransfer.\\n* [`OwnableError::OwnerNotSet`] - If the owner is not set.\\n\\n# Notes\\n\\n* Authorization for the current owner is required.",
+      "name": "renounce_ownership",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initiates a 2-step ownership transfer to a new address.\\n\\nRequires authorization from the current owner. The new owner must later\\ncall `accept_ownership()` to complete the transfer.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `new_owner` - The proposed new owner.\\n* `live_until_ledger` - Ledger number until which the new owner can\\naccept. A value of `0` cancels any pending transfer.\\n\\n# Errors\\n\\n* [`OwnableError::OwnerNotSet`] - If the owner is not set.\\n* [`crate::role_transfer::RoleTransferError::NoPendingTransfer`] - If\\ntrying to cancel a transfer that doesn't exist.\\n* [`crate::role_transfer::RoleTransferError::InvalidLiveUntilLedger`] -\\nIf the specified ledger is in the past.\\n* [`crate::role_transfer::RoleTransferError::InvalidPendingAccount`] -\\nIf the specified pending account is not the same as the provided `new`\\naddress.\\n\\n# Notes\\n\\n* Authorization for the current owner is required.",
+      "name": "transfer_ownership",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns whether the `operator` is allowed to manage all the assets of\\n`owner`.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `owner` - Account of the token's owner.\\n* `operator` - Account to be checked.",
+      "name": "is_approved_for_all",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Rotates the price authority's hot key \\xe2\\x80\\x94 same rationale as\\n`set_unlock_authority`: this key gets called by the backend on\\nevery creator edit, so being able to swap it without touching the\\nowner's cold key matters.",
+      "name": "set_price_authority",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_authority",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Rotates the unlock authority's hot key without a full upgrade \\xe2\\x80\\x94 the\\nbackend process holding this key gets called automatically and\\noften, so being able to swap it (e.g. after a suspected leak)\\nwithout touching the owner's cold key matters more here than for\\nmost admin settings.",
+      "name": "set_unlock_authority",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_authority",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RoleTransferError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NoPendingTransfer",
+          "value": 2200
+        },
+        {
+          "doc": "",
+          "name": "InvalidLiveUntilLedger",
+          "value": 2201
+        },
+        {
+          "doc": "",
+          "name": "InvalidPendingAccount",
+          "value": 2202
+        },
+        {
+          "doc": "",
+          "name": "TransferExpired",
+          "value": 2203
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OwnableError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "OwnerNotSet",
+          "value": 2100
+        },
+        {
+          "doc": "",
+          "name": "TransferInProgress",
+          "value": 2101
+        },
+        {
+          "doc": "",
+          "name": "OwnerAlreadySet",
+          "value": 2102
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an ownership transfer is initiated.",
+      "lib": "",
+      "name": "OwnershipTransfer",
+      "prefix_topics": [
+        "ownership_transfer"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when ownership is renounced.",
+      "lib": "",
+      "name": "OwnershipRenounced",
+      "prefix_topics": [
+        "ownership_renounced"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an ownership transfer is completed.",
+      "lib": "",
+      "name": "OwnershipTransferCompleted",
+      "prefix_topics": [
+        "ownership_transfer_completed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the contract is paused.",
+      "lib": "",
+      "name": "Paused",
+      "prefix_topics": [
+        "paused"
+      ],
+      "params": [],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the contract is unpaused.",
+      "lib": "",
+      "name": "Unpaused",
+      "prefix_topics": [
+        "unpaused"
+      ],
+      "params": [],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PausableError",
+      "cases": [
+        {
+          "doc": "The operation failed because the contract is paused.",
+          "name": "EnforcedPause",
+          "value": 1000
+        },
+        {
+          "doc": "The operation failed because the contract is not paused.",
+          "name": "ExpectedPause",
+          "value": 1001
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an approval is granted.",
+      "lib": "",
+      "name": "Approve",
+      "prefix_topics": [
+        "approve"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "approver",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "approved",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a token is transferred.",
+      "lib": "",
+      "name": "Transfer",
+      "prefix_topics": [
+        "transfer"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when approval for all tokens is granted.",
+      "lib": "",
+      "name": "ApproveForAll",
+      "prefix_topics": [
+        "approve_for_all"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "NonFungibleTokenError",
+      "cases": [
+        {
+          "doc": "Indicates a non-existent `token_id`.",
+          "name": "NonExistentToken",
+          "value": 200
+        },
+        {
+          "doc": "Indicates an error related to the ownership over a particular token.\\nUsed in transfers.",
+          "name": "IncorrectOwner",
+          "value": 201
+        },
+        {
+          "doc": "Indicates a failure with the `operator`s approval. Used in transfers.",
+          "name": "InsufficientApproval",
+          "value": 202
+        },
+        {
+          "doc": "Indicates a failure with the `approver` of a token to be approved. Used\\nin approvals.",
+          "name": "InvalidApprover",
+          "value": 203
+        },
+        {
+          "doc": "Indicates an invalid value for `live_until_ledger` when setting\\napprovals.",
+          "name": "InvalidLiveUntilLedger",
+          "value": 204
+        },
+        {
+          "doc": "Indicates overflow when adding two values",
+          "name": "MathOverflow",
+          "value": 205
+        },
+        {
+          "doc": "Indicates all possible `token_id`s are already in use.",
+          "name": "TokenIDsAreDepleted",
+          "value": 206
+        },
+        {
+          "doc": "Indicates an invalid amount to batch mint in `consecutive` extension.",
+          "name": "InvalidAmount",
+          "value": 207
+        },
+        {
+          "doc": "Indicates the token does not exist in owner's list.",
+          "name": "TokenNotFoundInOwnerList",
+          "value": 208
+        },
+        {
+          "doc": "Indicates the token does not exist in global list.",
+          "name": "TokenNotFoundInGlobalList",
+          "value": 209
+        },
+        {
+          "doc": "Indicates access to unset metadata.",
+          "name": "UnsetMetadata",
+          "value": 210
+        },
+        {
+          "doc": "Indicates the length of the base URI exceeds the maximum allowed.",
+          "name": "BaseUriMaxLenExceeded",
+          "value": 211
+        },
+        {
+          "doc": "Indicates the royalty amount is higher than 10_000 (100%) basis points.",
+          "name": "InvalidRoyaltyAmount",
+          "value": 212
+        },
+        {
+          "doc": "Indicates the length of the name exceeds the maximum allowed.",
+          "name": "NameMaxLenExceeded",
+          "value": 213
+        },
+        {
+          "doc": "Indicates the length of the symbol exceeds the maximum allowed.",
+          "name": "SymbolMaxLenExceeded",
+          "value": 214
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when consecutive tokens are minted.",
+      "lib": "",
+      "name": "ConsecutiveMint",
+      "prefix_topics": [
+        "consecutive_mint"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "from_token_id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "to_token_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a token is burned.",
+      "lib": "",
+      "name": "Burn",
+      "prefix_topics": [
+        "burn"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "token_id",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  }
+]

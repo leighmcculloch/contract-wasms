@@ -1,0 +1,839 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "EscrowError",
+      "cases": [
+        {
+          "doc": "NotAuthorized",
+          "name": "NotAuthorized",
+          "value": 2
+        },
+        {
+          "doc": "NotFound",
+          "name": "NotFound",
+          "value": 3
+        },
+        {
+          "doc": "NotOpen",
+          "name": "NotOpen",
+          "value": 4
+        },
+        {
+          "doc": "Expired",
+          "name": "Expired",
+          "value": 5
+        },
+        {
+          "doc": "BadParams",
+          "name": "BadParams",
+          "value": 6
+        },
+        {
+          "doc": "Paused",
+          "name": "Paused",
+          "value": 7
+        },
+        {
+          "doc": "TooMuchEvidence",
+          "name": "TooMuchEvidence",
+          "value": 8
+        },
+        {
+          "doc": "NotYetExpired",
+          "name": "NotYetExpired",
+          "value": 9
+        },
+        {
+          "doc": "OwnerNotSet",
+          "name": "OwnerNotSet",
+          "value": 10
+        },
+        {
+          "doc": "InvalidConfigVersion",
+          "name": "InvalidConfigVersion",
+          "value": 12
+        },
+        {
+          "doc": "RefundNotAllowed",
+          "name": "RefundNotAllowed",
+          "value": 13
+        },
+        {
+          "doc": "TokenTransferFailed \\xe2\\x80\\x94 SAC transfer rejected (e.g. missing trustline, insufficient balance)",
+          "name": "TokenTransferFailed",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "PlatformConfigNotSet",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "EbioroConfigNotSet",
+          "value": 16
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Order",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "created_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "ebioro_fee_bps",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "meta_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payee",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "payer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "platform_fee",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "refund_address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "release_policy",
+          "type_": {
+            "udt": {
+              "name": "ReleasePolicy"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "OrderStatus"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Id"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Owner"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Version"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PlatformConfig"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "EbioroConfig"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Seq"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Order",
+            "type_": [
+              "u128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OrderStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Created"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Funded"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Released"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Refunded"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PartiallyRefunded"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cancelled"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Rescued"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "EbioroConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "config_version",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "fee_wallet",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ReleasePolicy",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PlatformOnly"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PayeeOnly"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "OperatorOrPayee"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PayerConfirmation"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "OperatorAfterTimeout"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PlatformConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "platform_fee_recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "release_policy",
+          "type_": {
+            "udt": {
+              "name": "ReleasePolicy"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CreateOrderParams",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "expires_at",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "meta_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payee",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "payer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "platform_fee",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "refund_address",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "UpdateEbioroConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "config_version",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fee_wallet",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Fund an order (transfer tokens to escrow)",
+      "name": "fund",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "payer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u128"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "u128",
+              {
+                "udt": {
+                  "name": "OrderStatus"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Release a funded order: validates policy, settles funds to payee with fee split",
+      "name": "release",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "actor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "version",
+          "type_": {
+            "option": {
+              "value_type": "u32"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get order by ID",
+      "name": "get_order",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u128"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Order"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_owner",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Cancel an unfunded (Created) order.\\nCan be called by the payer or the platform owner (platform_admin).\\nNote: cancel does not require the contract to be unpaused \\xe2\\x80\\x94\\nusers should always be able to cancel pending orders.",
+      "name": "cancel_order",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "actor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Create a new escrow order\\nReturns the order ID",
+      "name": "create_order",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "params",
+          "type_": {
+            "udt": {
+              "name": "CreateOrderParams"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "u128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "platform_owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "platform_config",
+          "type_": {
+            "udt": {
+              "name": "PlatformConfig"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "ebioro_config",
+          "type_": {
+            "udt": {
+              "name": "EbioroConfig"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Partial refund a funded order back to the refund address, bypassing release conditions.",
+      "name": "partial_refund",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "actor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Refund an expired funded order back to the refund address.\\nCan be called by the payer or the platform owner (platform_admin).",
+      "name": "refund_expired",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "actor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Create a new escrow order and fund it atomically in a single transaction.\\nEquivalent to calling create_order followed by fund, but requires only one signature.\\nReturns the order ID.",
+      "name": "create_and_fund",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "params",
+          "type_": {
+            "udt": {
+              "name": "CreateOrderParams"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "u128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Emergency rescue: owner-only last resort for funds stuck in a\\nfunded order that has been expired for at least 90 days.",
+      "name": "emergency_rescue",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_ebioro_config",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "EbioroConfig"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_platform_config",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "PlatformConfig"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Updates Ebioro configuration directly.\\nCalled by the registry when Ebioro pushes a new config to all platform escrows.",
+      "name": "update_ebioro_config",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_config",
+          "type_": {
+            "udt": {
+              "name": "UpdateEbioroConfig"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "update_platform_config",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "release_policy",
+          "type_": {
+            "option": {
+              "value_type": {
+                "udt": {
+                  "name": "ReleasePolicy"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "platform_fee_recipient",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  }
+]
