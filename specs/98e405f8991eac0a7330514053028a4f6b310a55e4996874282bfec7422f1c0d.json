@@ -1,0 +1,78 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "deploy() with an empty credential id.",
+          "name": "EmptyCredentialId",
+          "value": 1
+        },
+        {
+          "doc": "deploy() with a credential id longer than MAX_CREDENTIAL_ID_LEN.",
+          "name": "CredentialIdTooLong",
+          "value": 2
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deploy a new `webauthn-account` for `public_key` (65-byte SEC-1), salted\\ndeterministically by `sha256(credential_id \\xe2\\x80\\x96 public_key)`, emit\\n`(deployed, credential_id, public_key) -> address` for the indexer, and\\nreturn the new smart-account C-address.\\n\\nThe event carries `public_key` as a topic so a resolver can bind a\\n`(credential_id, public_key)` pair to its address. `deploy` is\\npermissionless (gasless/relayer deploys), and `credential_id` alone is not\\nexclusive: anyone may deploy a DIFFERENT account for the same credential id\\nwith their own key (it lands at a different salted address by the F1\\nbinding). A consumer resolving a credential to an account MUST therefore\\nverify the user's key is enrolled (via `is_signer`, or by re-deriving the\\naddress with `deriveAccountAddress(credential_id, public_key)`) and never\\nblindly trust the first `deployed` event for a credential id.",
+      "name": "deploy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "public_key",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "credential_id",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The account wasm hash this factory deploys (for verification / indexing).",
+      "name": "account_wasm",
+      "inputs": [],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Store the `webauthn-account` wasm hash this factory deploys instances of.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

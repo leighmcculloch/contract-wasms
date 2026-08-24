@@ -1,0 +1,272 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "Constructor never ran (no signers stored). Code kept from v0.1.",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "clientDataJSON.challenge != base64url(signature_payload). Kept from v0.1.",
+          "name": "ChallengeMismatch",
+          "value": 2
+        },
+        {
+          "doc": "signature.public_key is not an enrolled signer.",
+          "name": "UnknownSigner",
+          "value": 3
+        },
+        {
+          "doc": "add_signer with a key that is already enrolled.",
+          "name": "SignerAlreadyExists",
+          "value": 4
+        },
+        {
+          "doc": "remove_signer would leave the account with zero signers.",
+          "name": "LastSignerRemoval",
+          "value": 5
+        },
+        {
+          "doc": "add_signer beyond MAX_SIGNERS.",
+          "name": "SignerLimitReached",
+          "value": 6
+        },
+        {
+          "doc": "clientDataJSON exceeds CLIENT_DATA_MAX_LEN.",
+          "name": "ClientDataTooLong",
+          "value": 7
+        },
+        {
+          "doc": "clientDataJSON is not parseable JSON with challenge + type.",
+          "name": "ClientDataParseError",
+          "value": 8
+        },
+        {
+          "doc": "clientDataJSON.type is not \"webauthn.get\".",
+          "name": "WrongCeremonyType",
+          "value": 9
+        },
+        {
+          "doc": "authenticatorData shorter than AUTHENTICATOR_DATA_MIN_LEN.",
+          "name": "AuthDataTooShort",
+          "value": 10
+        },
+        {
+          "doc": "User-Present flag not set.",
+          "name": "UserPresentFlagMissing",
+          "value": 11
+        },
+        {
+          "doc": "User-Verified flag not set (biometric / PIN required).",
+          "name": "UserVerifiedFlagMissing",
+          "value": 12
+        },
+        {
+          "doc": "Backup State set without Backup Eligibility (invalid per WebAuthn).",
+          "name": "BackupStateInvalid",
+          "value": 13
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Number of enrolled signers.",
+            "name": "SignerCount"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Enrolled signer marker, keyed by the 65-byte SEC-1 public key.",
+            "name": "Signer",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 65
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "secp256r1 assertion + the WebAuthn metadata needed to rebuild the signed\\nmessage + the enrolled signer to verify against. Field order is\\nalphabetical so the ScMap keys are canonically sorted.",
+      "lib": "",
+      "name": "Secp256r1Signature",
+      "fields": [
+        {
+          "doc": "",
+          "name": "authenticator_data",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "client_data_json",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "public_key",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signature",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Whether `public_key` is an enrolled signer.",
+      "name": "is_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "public_key",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Enroll an additional passkey signer. Authorized by the account itself,\\nso an existing device's `__check_auth` gates the change (multi-device\\nrecovery: enroll the new device while one enrolled device still signs).",
+      "name": "add_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "public_key",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__check_auth",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signature_payload",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "signature",
+          "type_": {
+            "udt": {
+              "name": "Secp256r1Signature"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "auth_contexts",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Context"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Number of enrolled signers.",
+      "name": "signer_count",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Enroll the founding secp256r1 signer (SEC-1 uncompressed, 65 bytes).",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "public_key",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Remove an enrolled passkey signer. Authorized by the account itself.\\nThe last signer can never be removed (no lockout by misconfiguration).",
+      "name": "remove_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "public_key",
+          "type_": {
+            "bytes_n": {
+              "n": 65
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

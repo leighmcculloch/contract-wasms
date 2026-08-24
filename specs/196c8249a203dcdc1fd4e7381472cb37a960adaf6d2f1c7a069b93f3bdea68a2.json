@@ -1,0 +1,72 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "GuardFailed",
+          "value": 1
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Swap on `pool` only if the classic leg already delivered.\\n\\n* `user` \\xe2\\x80\\x94 the inventory account; must authorize (tx source).\\n* `expect_asset` \\xe2\\x80\\x94 SAC of the asset the classic leg should have delivered.\\n* `expect_min_balance` \\xe2\\x80\\x94 guard: balance(user, expect_asset) >= this.\\n* `pool` \\xe2\\x80\\x94 Aquarius pool.\\n* `token_in` \\xe2\\x80\\x94 asset the swap spends (the pool pulls it from `user`;\\nnot used in the call itself, kept in the ABI so the invocation args\\ncarry everything an offline auth builder needs).\\n* `in_idx`/`out_idx` \\xe2\\x80\\x94 token indices in the pool.\\n* `in_amount`/`out_min` \\xe2\\x80\\x94 swap amount / min out (the pool enforces out_min).\\n\\nReturns the pool swap's amount out.",
+      "name": "swap_if",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "expect_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "expect_min_balance",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "in_idx",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "out_idx",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "in_amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "out_min",
+          "type_": "u128"
+        }
+      ],
+      "outputs": [
+        "u128"
+      ]
+    }
+  }
+]
