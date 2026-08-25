@@ -1,0 +1,741 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FlashLoan",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "contract",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Request",
+      "fields": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "request_type",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Positions",
+      "fields": [
+        {
+          "doc": "",
+          "name": "collateral",
+          "type_": {
+            "map": {
+              "key_type": "u32",
+              "value_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "liabilities",
+          "type_": {
+            "map": {
+              "key_type": "u32",
+              "value_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "supply",
+          "type_": {
+            "map": {
+              "key_type": "u32",
+              "value_type": "i128"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidConfig",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "UnauthorizedOperator",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "WrongRole",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "WrongPhase",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "StateChanged",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "FlashAlreadyArmed",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "FlashNotArmed",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "CallbackMismatch",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "InsufficientCapital",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "SeedTooSmall",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "ProfitTooLow",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "ResidualTooHigh",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "Arithmetic",
+          "value": 15
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Phase",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Ready"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Armed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Desync"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Mint"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Finish"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Complete"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Aborted"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Market",
+      "fields": [
+        {
+          "doc": "",
+          "name": "blnd_cash",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "blnd_record",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "usdc_cash",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "usdc_record",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Plan",
+      "fields": [
+        {
+          "doc": "",
+          "name": "desync_batch",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "desync_cap",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "desync_swaps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "liquidations",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "loan_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_owned_capital",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_final_profit",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_seed_profit",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_working_usdc",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "mint_batch",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "mints",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Status",
+      "fields": [
+        {
+          "doc": "",
+          "name": "current_market",
+          "type_": {
+            "udt": {
+              "name": "Market"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "desync_remaining",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "expected_market",
+          "type_": {
+            "udt": {
+              "name": "Market"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "mint_remaining",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "owned_capital",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "phase",
+          "type_": {
+            "udt": {
+              "name": "Phase"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "receiver_blnd",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "receiver_shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "receiver_usdc",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Recovery",
+      "fields": [
+        {
+          "doc": "",
+          "name": "blnd_held",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "usdc_sent",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "LauncherTargets",
+      "fields": [
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ReceiverTargets",
+      "fields": [
+        {
+          "doc": "",
+          "name": "blnd",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "comet",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "launcher",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "operators",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "usdc",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize_launcher",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize_receiver",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "launcher",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "comet",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "blnd",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "operators",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "plan",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Plan"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "launcher_targets",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "LauncherTargets"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "receiver_targets",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "ReceiverTargets"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "status",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Status"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "flash_seed",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "arm",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "initiator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "loan_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "exec_op",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "initiator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "collect_seed",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "advance_desync",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "advance_mint",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "finish",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "abort",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "min_blnd",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_usdc",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Recovery"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "rescue_blnd",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "rescue_usdc",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  }
+]

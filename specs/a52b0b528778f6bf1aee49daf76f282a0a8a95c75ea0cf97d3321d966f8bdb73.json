@@ -1,0 +1,393 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ContractError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "InvalidConfig",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidProfit",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "InvalidFee",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidExpiry",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidRoute",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "PlanMissing",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "CallerMismatch",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "AssetMismatch",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "AmountMismatch",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "ArithmeticOverflow",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "LoanNotReceived",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "InsufficientProceeds",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "InvalidRepayment",
+          "value": 16
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SushiSwapResult",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount0",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "amount1",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "liquidity",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "sqrt_price_x96",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "tick",
+          "type_": "i32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SushiOracleHints",
+      "fields": [
+        {
+          "doc": "",
+          "name": "checkpoint",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "checkpoint_min",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "slot",
+          "type_": "u128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "exec_op",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "prepare",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "repay_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_profit",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "valid_until_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "route",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "tuple": {
+                  "value_types": [
+                    "u32",
+                    "address",
+                    {
+                      "vec": {
+                        "element_type": "address"
+                      }
+                    },
+                    {
+                      "bytes_n": {
+                        "n": 32
+                      }
+                    },
+                    "address"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Replace this contract's executable while preserving its address and\\ninstance storage. The new Wasm must already be uploaded to the ledger.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Prepare an owner-authorized flash loan from a selected Blend pool and\\nreserve. The callback authenticates this exact pool and asset.",
+      "name": "prepare_pool",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "blend_pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "repay_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_profit",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "valid_until_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "route",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "tuple": {
+                  "value_types": [
+                    "u32",
+                    "address",
+                    {
+                      "vec": {
+                        "element_type": "address"
+                      }
+                    },
+                    {
+                      "bytes_n": {
+                        "n": 32
+                      }
+                    },
+                    "address"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "blend_pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "router",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Execute an owner-funded arbitrage atomically. The owner's token balance\\nsupplies the principal, so this path avoids both Executor and Blend.",
+      "name": "execute_funded",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_profit",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "valid_until_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "route",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "tuple": {
+                  "value_types": [
+                    "u32",
+                    "address",
+                    {
+                      "vec": {
+                        "element_type": "address"
+                      }
+                    },
+                    {
+                      "bytes_n": {
+                        "n": 32
+                      }
+                    },
+                    "address"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  }
+]
