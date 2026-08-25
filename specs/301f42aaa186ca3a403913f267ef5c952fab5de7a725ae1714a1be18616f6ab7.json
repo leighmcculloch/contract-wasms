@@ -1,0 +1,335 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Ah",
+      "fields": [
+        {
+          "doc": "Fraction of the current balance to swap (7-dec; 0 = 100 %).",
+          "name": "f",
+          "type_": "u32"
+        },
+        {
+          "doc": "Token index of `t` in the pool.",
+          "name": "i",
+          "type_": "u32"
+        },
+        {
+          "doc": "Pool address.",
+          "name": "p",
+          "type_": "address"
+        },
+        {
+          "doc": "Token in.",
+          "name": "t",
+          "type_": "address"
+        },
+        {
+          "doc": "Token index of the output asset in the pool.",
+          "name": "x",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Op",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "Soroswap constant-product pair \\xe2\\x80\\x94 push model, zero auth.",
+            "name": "S",
+            "type_": [
+              {
+                "udt": {
+                  "name": "Sh"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Aquarius pool (XYK or concentrated-liquidity) \\xe2\\x80\\x94 pull model, u128 amounts.",
+            "name": "A",
+            "type_": [
+              {
+                "udt": {
+                  "name": "Ah"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Sh",
+      "fields": [
+        {
+          "doc": "Fraction of the current balance to swap (7-dec; 0 = 100 %).",
+          "name": "f",
+          "type_": "u32"
+        },
+        {
+          "doc": "Token out.",
+          "name": "o",
+          "type_": "address"
+        },
+        {
+          "doc": "Pair address.",
+          "name": "p",
+          "type_": "address"
+        },
+        {
+          "doc": "Token in.",
+          "name": "t",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Everything the fill needs, staged by [`InterestFlash::a`] and consumed by\\n[`InterestFlash::exec_op`] in the same transaction.\\n\\nThe loaned asset is **not** in here: `exec_op` receives it from Blend and\\nuses it as the join asset, the lot's principal asset and the repay asset, so\\nthere is no way for those three to disagree.",
+      "lib": "",
+      "name": "Plan",
+      "fields": [
+        {
+          "doc": "The Blend V2 backstop \\xe2\\x80\\x94 the auction's `user` key, and the address that\\npulls the bid inside `donate`.",
+          "name": "backstop",
+          "type_": "address"
+        },
+        {
+          "doc": "The Comet BLND:USDC pool. A Comet pool *is* its own LP token, so this\\naddress is both the join target and the bid asset.",
+          "name": "comet",
+          "type_": "address"
+        },
+        {
+          "doc": "The Blend pool the flash loan comes from. Declared so a same-pool plan\\nfails with a named error instead of the host's bare `InvalidAction`.",
+          "name": "loan_pool",
+          "type_": "address"
+        },
+        {
+          "doc": "Refuse if the runtime-scaled bid exceeds this many LP. A cap on how much\\nof the loan the join may consume, priced off-chain against the lot.",
+          "name": "max_bid_lp",
+          "type_": "i128"
+        },
+        {
+          "doc": "Hard ceiling on the loaned asset the join may spend. Passed to Comet as\\n`max_amount_in`, which is also the amount of the nested approve Comet\\ngrants itself \\xe2\\x80\\x94 so this value, and not a runtime one, is what the\\nauthorization has to name.",
+          "name": "max_usdc_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "Loaned-asset balance this contract must hold before handing back.\\n\\nSet it to **loan principal + 1 stroop at minimum**. Blend converts the\\nborrow to d-tokens with a ceiling and back to underlying with a ceiling,\\nso the amount `handle_transfer_with_allowance` pulls is normally one\\nstroop above the principal \\xe2\\x80\\x94 measured live on mainnet 2026-08-24, where\\na 250.0000000 USDC loan was repaid at 250.0000001. That double-ceiling\\n*is* the \"protocol fee is rounding dust\" figure, observed rather than\\ninferred. Below `min_repay` the transaction reverts here rather than at\\nBlend's repay `transfer_from`.",
+          "name": "min_repay",
+          "type_": "i128"
+        },
+        {
+          "doc": "The Blend pool the auction lives on. Must differ from `loan_pool`.",
+          "name": "pool",
+          "type_": "address"
+        },
+        {
+          "doc": "EURC \\xe2\\x86\\x92 loaned-asset conversion. Empty for a USDC-only lot.",
+          "name": "swaps",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Op"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "The plan borrows from the very pool whose auction it fills. The Soroban\\nhost would reject that re-entry anyway (`Context/InvalidAction`); this\\nturns it into something greppable.",
+          "name": "SamePoolReentrancy",
+          "value": 1
+        },
+        {
+          "doc": "A non-positive cap, or a fraction above 100 %.",
+          "name": "BadParams",
+          "value": 2
+        },
+        {
+          "doc": "The auction has no bid in the backstop token, or has not started\\n(`ledger < auction.block`).",
+          "name": "NoAuction",
+          "value": 3
+        },
+        {
+          "doc": "The scaled bid is above `max_bid_lp` \\xe2\\x80\\x94 the fill would cost more than it\\nwas priced at. Reverts fee-only.",
+          "name": "BidAboveCap",
+          "value": 4
+        },
+        {
+          "doc": "The join pulled more of the loaned asset than `max_usdc_in`.",
+          "name": "SpendCapExceeded",
+          "value": 5
+        },
+        {
+          "doc": "LP is still held after the fill. `dep_lp_tokn_amt_out_get_tokn_in` mints\\nexactly the bid and `donate` takes exactly the bid, so any residual\\nmeans one of those two contracts did not behave as read.",
+          "name": "LpResidual",
+          "value": 6
+        },
+        {
+          "doc": "The lot (plus whatever the swaps converted) does not cover `min_repay`.\\nEverything rolls back \\xe2\\x80\\x94 the loan, the join and the fill.",
+          "name": "InsufficientRepay",
+          "value": 7
+        },
+        {
+          "doc": "`exec_op` was driven by something other than the orchestrator this\\ncontract was constructed against. Only the pinned orchestrator may\\nreceive the swept balance \\xe2\\x80\\x94 see the `exec_op` note. This is the fix for\\nthe \"drainable by anyone\" defect.",
+          "name": "UnexpectedCaller",
+          "value": 8
+        },
+        {
+          "doc": "The join did not mint exactly the bid.\\n\\n`dep_lp_tokn_amt_out_get_tokn_in` is **exact-LP-out**: it is documented\\nto mint precisely `pool_amount_out` and its own `ErrLimitIn` bounds what\\nit charges. So the LP delta this contract measures on its own balance is\\nan *independent* expectation, and a disagreement means the Comet pool did\\nnot behave the way its source reads.\\n\\nThis matters because the backstop token is Comet BLND:USDC\\n`CAS3FL6T\\xe2\\x80\\xa6`, whose deployed wasm carries a live, unpatched\\nbalance-desync defect: `execute_swap_exact_amount_in` never checks\\n`token_in != token_out`, and a self-swap writes `in_record` then\\n`out_record` into the same map key, so the last write wins and the\\nrecorded reserve silently drifts below the tokens actually held (that\\npool was drained of 717,519 USDC on 2026-08-25 and the wasm is\\nunchanged). Every quote taken from it may therefore be computed off\\ncorrupted state.\\n\\nThe spend ceiling already bounds what a corrupted quote can cost us;\\nthis bounds what it can *deliver*, and it fires",
+          "name": "LpMintMismatch",
+          "value": 9
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Blend's `submit` request element.",
+      "lib": "",
+      "name": "Request",
+      "fields": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "request_type",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Blend's `AuctionData`, as returned by `pool.get_auction(auction_type, user)`\\n(`pool/src/auctions/auction.rs`). A `#[contracttype]` struct is encoded as a\\nsymbol-keyed map, so field order here is irrelevant to the wire format \\xe2\\x80\\x94\\nonly the names and types matter.",
+      "lib": "",
+      "name": "AuctionData",
+      "fields": [
+        {
+          "doc": "Assets spent by the filler. For an interest auction: exactly one entry,\\nkeyed by the backstop token (the Comet BLND:USDC LP).",
+          "name": "bid",
+          "type_": {
+            "map": {
+              "key_type": "address",
+              "value_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "The ledger the auction became fillable at.",
+          "name": "block",
+          "type_": "u32"
+        },
+        {
+          "doc": "Assets paid to the filler \\xe2\\x80\\x94 the pool's accrued interest, USDC and\\nsometimes EURC.",
+          "name": "lot",
+          "type_": {
+            "map": {
+              "key_type": "address",
+              "value_type": "i128"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Stage the plan in temporary storage.\\n\\nThe two-argument shape is the deployed orchestrator's ABI: it calls\\n`receiver.a(b, h)` with the two opaque `Val`s it was handed. `_h` is\\nParallax's sub-auth list, which this contract does not use \\xe2\\x80\\x94 its\\nauthorizations are derived on-chain, not supplied.\\n\\nPermissionless, like Parallax v5's `a`. Nothing here moves money, the\\nentry is temporary, and `exec_op` deletes it before doing anything \\xe2\\x80\\x94\\nand both calls live inside the orchestrator's single invocation, so no\\nother transaction can interleave with them.",
+      "name": "a",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "p",
+          "type_": {
+            "udt": {
+              "name": "Plan"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "h",
+          "type_": "val"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Blend flash-loan callback: buy the bid with the borrowed asset, win the\\nauction, convert the non-principal side of the lot, hand everything to\\n`caller`.\\n\\n* `caller` \\xe2\\x80\\x94 the `from` of `pool.flash_loan`, i.e. the orchestrator. It\\nowes the pool the repayment and holds the allowance to satisfy it, so\\nthis is where the proceeds must go. It is **verified** against the\\npinned orchestrator, not trusted: see the check at the top of the body.\\n* `token_addr` \\xe2\\x80\\x94 the loaned asset. Used as the join asset, the lot's\\nprincipal asset and the repay asset.\\n* `c` / `d` \\xe2\\x80\\x94 borrowed amount and fee. `c + d` is the real repayment\\nobligation Blend enforces a frame later; the hand-back must clear it\\n(and `Plan.min_repay`, the priced floor). The whole balance still goes\\nback \\xe2\\x80\\x94 Blend's fee is rounding dust and any surplus is profit \\xe2\\x80\\x94 but the\\nloan is no longer discarded: it is the structural lower bound.\\n\\nPanics \\xe2\\x80\\x94 reverting the loan with it \\xe2\\x80\\x94 on any bound violation, and\\npropagates Comet's and Blend's panics untouched. A lost ra",
+      "name": "exec_op",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_addr",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "c",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "d",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pin the orchestrator at deploy time. This is the only persistent state\\nthe contract ever holds and there is no setter, so the address is\\nimmutable for the life of the deployment \\xe2\\x80\\x94 the same discipline the\\norchestrator itself uses for its payout address.\\n\\n`exec_op` will hand the swept balance to exactly this address and refuse\\nto run for any other `caller`. In production it is the deployed\\norchestrator `CA4I5TPQ\\xe2\\x80\\xa6`.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "orchestrator",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]
