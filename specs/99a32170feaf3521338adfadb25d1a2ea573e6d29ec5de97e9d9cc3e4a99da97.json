@@ -1,0 +1,1329 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OperationMeta",
+      "fields": [
+        {
+          "doc": "",
+          "name": "executor",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "predecessor",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "operation_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "canceller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execute",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "predecessor",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "executor",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "val"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns `Some(index)` if the account has the specified role,\\nwhere `index` is the position of the account for that role,\\nand can be used to query [`AccessControl::get_role_member()`].\\nReturns `None` if the account does not have the specified role.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n* `account` - The account to check.\\n* `role` - The role to check for.",
+      "name": "has_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "u32"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "schedule",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "predecessor",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "delay",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "proposer",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the admin account.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Grants a role to an account.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n* `account` - The account to grant the role to.\\n* `role` - The role to grant.\\n* `caller` - The address of the caller, must be the admin or have the\\n`RoleAdmin` for the `role`.\\n\\n# Errors\\n\\n* [`AccessControlError::Unauthorized`] - If the caller does not have\\nenough privileges.\\n* [`AccessControlError::MaxRolesExceeded`] - If adding a new role would\\nexceed the maximum allowed number of roles.\\n\\n# Events\\n\\n* topics - `[\"role_granted\", role: Symbol, account: Address]`\\n* data - `[caller: Address]`",
+      "name": "grant_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TimelockControllerError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Mismatch",
+          "value": 0
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Revokes a role from an account.\\nTo revoke the caller's own role, use\\n[`AccessControl::renounce_role()`] instead.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n* `account` - The account to revoke the role from.\\n* `role` - The role to revoke.\\n* `caller` - The address of the caller, must be the admin or has the\\n`RoleAdmin` for the `role`.\\n\\n# Errors\\n\\n* [`AccessControlError::Unauthorized`] - If the `caller` does not have\\nenough privileges.\\n* [`AccessControlError::RoleNotHeld`] - If the `account` doesn't have\\nthe role.\\n* [`AccessControlError::RoleIsEmpty`] - If the role has no members.\\n\\n# Events\\n\\n* topics - `[\"role_revoked\", role: Symbol, account: Address]`\\n* data - `[caller: Address]`",
+      "name": "revoke_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Custom authorization check for self-administration operations.\\n\\nThis enables the timelock contract to execute operations on itself when\\nthe admin is set to the contract's own address. Unlike external\\noperations which use `execute_op`, self-administration operations are\\nexecuted by calling the admin function directly (e.g., `update_delay`,\\n`grant_role`).\\n\\nThe `__check_auth` implementation validates that:\\n- The operation targets the timelock contract itself\\n- The operation was properly scheduled and is ready for execution\\n- The predecessor and salt match the scheduled operation\\n- The executor (if any) has role and has authorized the invocation\\n\\nThe caller must construct an `OperationMeta` signature containing the\\n`predecessor` and `salt` values that were used when scheduling the\\noperation, allowing this function to validate and mark the operation as\\nexecuted.",
+      "name": "__check_auth",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signature_payload",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "context_meta",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "OperationMeta"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "auth_contexts",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Context"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "TimelockError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "update_delay",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_delay",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initializes the timelock controller.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n* `min_delay` - Initial minimum delay in ledgers for operations.\\n* `proposers` - Accounts to be granted proposer and canceller roles.\\n* `executors` - Accounts to be granted executor role.\\n* `admin` - Optional account to be granted admin role for initial setup.\\nIf provided, this admin can configure roles without delay but should\\nrenounce the role after setup to enforce timelock governance.\\n\\n# Notes\\n\\n- The contract itself is always granted the admin role for\\nself-administration.\\n- Proposers are automatically granted the canceller role.\\n- If an external admin is provided, they should renounce their admin\\nrole after initial configuration to ensure all admin actions go\\nthrough the timelock.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "min_delay",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "proposers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "executors",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the minimum delay in ledgers required for operations.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n\\n# Errors\\n\\n* [`TimelockError::MinDelayNotSet`] - If the minimum delay has not been\\ninitialized.",
+      "name": "get_min_delay",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Allows an account to renounce a role assigned to itself.\\nUsers can only renounce roles for their own account.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n* `role` - The role to renounce.\\n* `caller` - The address of the caller, must be the account that has the\\nrole.\\n\\n# Errors\\n\\n* [`AccessControlError::RoleNotHeld`] - If the `caller` doesn't have the\\nrole.\\n* [`AccessControlError::RoleIsEmpty`] - If the role has no members.\\n\\n# Events\\n\\n* topics - `[\"role_revoked\", role: Symbol, account: Address]`\\n* data - `[caller: Address]`",
+      "name": "renounce_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the admin role for a specific role.\\nIf no admin role is explicitly set, returns `None`.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n* `role` - The role to query the admin role for.",
+      "name": "get_role_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "symbol"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Computes the unique identifier for an operation from its parameters.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `target` - The target contract address.\\n* `function` - The function name to invoke.\\n* `args` - The arguments to pass to the function.\\n* `predecessor` - The predecessor operation ID.\\n* `salt` - The salt for uniqueness.",
+      "name": "hash_operation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "predecessor",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Allows the current admin to renounce their role, making the contract\\npermanently admin-less. This is useful for decentralization purposes\\nor when the admin role is no longer needed. Once the admin is\\nrenounced, it cannot be reinstated.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n\\n# Errors\\n\\n* [`AccessControlError::AdminNotSet`] - If no admin account is set.\\n\\n# Events\\n\\n* topics - `[\"admin_renounced\", admin: Address]`\\n* data - `[]`\\n\\n# Notes\\n\\n* Authorization for the current admin is required.",
+      "name": "renounce_admin",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sets `admin_role` as the admin role of `role`.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n* `role` - The role to set the admin for.\\n* `admin_role` - The new admin role.\\n\\n# Events\\n\\n* topics - `[\"role_admin_changed\", role: Symbol]`\\n* data - `[previous_admin_role: Symbol, new_admin_role: Symbol]`\\n\\n# Errors\\n\\n* [`AccessControlError::AdminNotSet`] - If admin account is not set.\\n\\n# Notes\\n\\n* Authorization for the current admin is required.",
+      "name": "set_role_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "admin_role",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the account at the specified index for a given role.\\n\\nA function to get all members of a role is not provided because that\\nwould be unbounded. To enumerate all members of a role, use\\n[`AccessControl::get_role_member_count()`] to get the total number of\\nmembers and then use [`AccessControl::get_role_member()`] to retrieve\\neach member one by one.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n* `role` - The role to query.\\n* `index` - The index of the account to retrieve.\\n\\n# Errors\\n\\n* [`AccessControlError::IndexOutOfBounds`] - If the index is out of\\nbounds for the role's member list.",
+      "name": "get_role_member",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns a vector containing all existing roles.\\nDefaults to empty vector if no roles exist.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n\\n# Notes\\n\\nThis function returns all roles that currently have at least one member.\\nThe maximum number of roles is limited by [`MAX_ROLES`].",
+      "name": "get_existing_roles",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "symbol"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the current state of an operation.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `operation_id` - The unique identifier of the operation.",
+      "name": "get_operation_state",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "operation_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "OperationState"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initiates the admin role transfer.\\nAdmin privileges for the current admin are not revoked until the\\nrecipient accepts the transfer.\\nOverrides the previous pending transfer if there is one.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n* `new_admin` - The account to transfer the admin privileges to.\\n* `live_until_ledger` - The ledger number at which the pending transfer\\nexpires. If `live_until_ledger` is `0`, the pending transfer is\\ncancelled. `live_until_ledger` argument is implicitly bounded by the\\nmaximum allowed TTL extension for a temporary storage entry and\\nspecifying a higher value will cause the code to panic.\\n\\n# Errors\\n\\n* [`crate::role_transfer::RoleTransferError::NoPendingTransfer`] - If\\ntrying to cancel a transfer that doesn't exist.\\n* [`crate::role_transfer::RoleTransferError::InvalidLiveUntilLedger`] -\\nIf the specified ledger is in the past.\\n* [`crate::role_transfer::RoleTransferError::InvalidPendingAccount`] -\\nIf the specified pending account is not the same as the provided `new`\\naddress.\\n",
+      "name": "transfer_admin_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the ledger sequence number at which an operation becomes ready.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `operation_id` - The unique identifier of the operation.",
+      "name": "get_operation_ledger",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "operation_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Completes the 2-step admin transfer.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n\\n# Events\\n\\n* topics - `[\"admin_transfer_completed\", new_admin: Address]`\\n* data - `[previous_admin: Address]`\\n\\n# Errors\\n\\n* [`crate::role_transfer::RoleTransferError::NoPendingTransfer`] - If\\nthere is no pending transfer to accept.\\n* [`AccessControlError::AdminNotSet`] - If admin account is not set.",
+      "name": "accept_admin_transfer",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the total number of accounts that have the specified role.\\nIf the role does not exist, returns 0.\\n\\n# Arguments\\n\\n* `e` - Access to Soroban environment.\\n* `role` - The role to get the count for.",
+      "name": "get_role_member_count",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Context of a single authorized call performed by an address.\\n\\nCustom account contracts that implement `__check_auth` special function\\nreceive a list of `Context` values corresponding to all the calls that\\nneed to be authorized.",
+      "lib": "",
+      "name": "Context",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "Contract invocation.",
+            "name": "Contract",
+            "type_": [
+              {
+                "udt": {
+                  "name": "ContractContext"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Contract that has a constructor with no arguments is created.",
+            "name": "CreateContractHostFn",
+            "type_": [
+              {
+                "udt": {
+                  "name": "CreateContractHostFnContext"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Contract that has a constructor with 1 or more arguments is created.",
+            "name": "CreateContractWithCtorHostFn",
+            "type_": [
+              {
+                "udt": {
+                  "name": "CreateContractWithConstructorHostFnContext"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Authorization context of a single contract call.\\n\\nThis struct corresponds to a `require_auth_for_args` call for an address\\nfrom `contract` function with `fn_name` name and `args` arguments.",
+      "lib": "",
+      "name": "ContractContext",
+      "fields": [
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fn_name",
+          "type_": "symbol"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Contract executable used for creating a new contract and used in\\n`CreateContractHostFnContext`.",
+      "lib": "",
+      "name": "ContractExecutable",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Wasm",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Authorization context for `create_contract` host function that creates a\\nnew contract on behalf of authorizer address.",
+      "lib": "",
+      "name": "CreateContractHostFnContext",
+      "fields": [
+        {
+          "doc": "",
+          "name": "executable",
+          "type_": {
+            "udt": {
+              "name": "ContractExecutable"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Authorization context for `create_contract` host function that creates a\\nnew contract on behalf of authorizer address.\\nThis is the same as `CreateContractHostFnContext`, but also has\\ncontract constructor arguments.",
+      "lib": "",
+      "name": "CreateContractWithConstructorHostFnContext",
+      "fields": [
+        {
+          "doc": "",
+          "name": "constructor_args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "executable",
+          "type_": {
+            "udt": {
+              "name": "ContractExecutable"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RoleTransferError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NoPendingTransfer",
+          "value": 2200
+        },
+        {
+          "doc": "",
+          "name": "InvalidLiveUntilLedger",
+          "value": 2201
+        },
+        {
+          "doc": "",
+          "name": "InvalidPendingAccount",
+          "value": 2202
+        },
+        {
+          "doc": "",
+          "name": "TransferExpired",
+          "value": 2203
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a role is granted.",
+      "lib": "",
+      "name": "RoleGranted",
+      "prefix_topics": [
+        "role_granted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a role is revoked.",
+      "lib": "",
+      "name": "RoleRevoked",
+      "prefix_topics": [
+        "role_revoked"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the admin role is renounced.",
+      "lib": "",
+      "name": "AdminRenounced",
+      "prefix_topics": [
+        "admin_renounced"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a role admin is changed.",
+      "lib": "",
+      "name": "RoleAdminChanged",
+      "prefix_topics": [
+        "role_admin_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "previous_admin_role",
+          "type_": "symbol",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_admin_role",
+          "type_": "symbol",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccessControlError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 2000
+        },
+        {
+          "doc": "",
+          "name": "AdminNotSet",
+          "value": 2001
+        },
+        {
+          "doc": "",
+          "name": "IndexOutOfBounds",
+          "value": 2002
+        },
+        {
+          "doc": "",
+          "name": "AdminRoleNotFound",
+          "value": 2003
+        },
+        {
+          "doc": "",
+          "name": "RoleCountIsNotZero",
+          "value": 2004
+        },
+        {
+          "doc": "",
+          "name": "RoleNotFound",
+          "value": 2005
+        },
+        {
+          "doc": "",
+          "name": "AdminAlreadySet",
+          "value": 2006
+        },
+        {
+          "doc": "",
+          "name": "RoleNotHeld",
+          "value": 2007
+        },
+        {
+          "doc": "",
+          "name": "RoleIsEmpty",
+          "value": 2008
+        },
+        {
+          "doc": "",
+          "name": "TransferInProgress",
+          "value": 2009
+        },
+        {
+          "doc": "",
+          "name": "MaxRolesExceeded",
+          "value": 2010
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an admin transfer is completed.",
+      "lib": "",
+      "name": "AdminTransferCompleted",
+      "prefix_topics": [
+        "admin_transfer_completed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "previous_admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an admin transfer is initiated.",
+      "lib": "",
+      "name": "AdminTransferInitiated",
+      "prefix_topics": [
+        "admin_transfer_initiated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "current_admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Errors that can occur in timelock operations.",
+      "lib": "",
+      "name": "TimelockError",
+      "cases": [
+        {
+          "doc": "The operation is already scheduled",
+          "name": "OperationAlreadyScheduled",
+          "value": 4000
+        },
+        {
+          "doc": "The delay is less than the minimum required delay",
+          "name": "InsufficientDelay",
+          "value": 4001
+        },
+        {
+          "doc": "The operation is not in the expected state",
+          "name": "InvalidOperationState",
+          "value": 4002
+        },
+        {
+          "doc": "A predecessor operation has not been executed yet",
+          "name": "UnexecutedPredecessor",
+          "value": 4003
+        },
+        {
+          "doc": "The caller is not authorized to perform this action",
+          "name": "Unauthorized",
+          "value": 4004
+        },
+        {
+          "doc": "The minimum delay has not been set",
+          "name": "MinDelayNotSet",
+          "value": 4005
+        },
+        {
+          "doc": "The operation has not been scheduled",
+          "name": "OperationNotScheduled",
+          "value": 4006
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the minimum delay is changed.",
+      "lib": "",
+      "name": "MinDelayChanged",
+      "prefix_topics": [
+        "min_delay_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_delay",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_delay",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an operation is executed.",
+      "lib": "",
+      "name": "OperationExecuted",
+      "prefix_topics": [
+        "operation_executed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "predecessor",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an operation is cancelled.",
+      "lib": "",
+      "name": "OperationCancelled",
+      "prefix_topics": [
+        "operation_cancelled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an operation is scheduled.",
+      "lib": "",
+      "name": "OperationScheduled",
+      "prefix_topics": [
+        "operation_scheduled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "predecessor",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "delay",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "The state of an operation in the timelock system.",
+      "lib": "",
+      "name": "OperationState",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Operation has not been scheduled",
+            "name": "Unset"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Operation is scheduled but the delay period has not passed",
+            "name": "Waiting"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Operation is ready to be executed (delay has passed)",
+            "name": "Ready"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Operation has been executed",
+            "name": "Done"
+          }
+        }
+      ]
+    }
+  }
+]
