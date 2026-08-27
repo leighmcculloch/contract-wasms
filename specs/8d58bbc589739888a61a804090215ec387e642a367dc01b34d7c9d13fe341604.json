@@ -1,0 +1,878 @@
+[
+  {
+    "function_v0": {
+      "doc": "Returns the current Ownable owner; panics with `Error::NotAdmin` if unset.\\n\\nA convenience wrapper over [`Ownable::get_owner`] for callers that want a hard failure\\nrather than an `Option`; both read the same Ownable slot.",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Upgrade contract WASM. Owner only.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the referral config for `id`, or `None` if it does not exist.",
+      "name": "referral",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "ReferralConfig"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the current owner, or `None` if ownership has been renounced or was never set.",
+      "name": "get_owner",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Create a referral; returns the new id. Owner only.",
+      "name": "add_referral",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set `admin` as Ownable owner.\\n\\nThe static fee and referral counter are deliberately left unwritten:\\n`storage::static_fee_bps` and `storage::referral_counter` both default to\\nzero on a missing key, so writing zeros here only bought two instance\\nentries' worth of rent.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Recover non-fee token balances to `recipient`. Leaves fee buckets intact. Owner only.",
+      "name": "sweep_balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tokens",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns whether `token` is on the fee whitelist.",
+      "name": "is_whitelisted",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set the protocol static fee in bps (`<= FEE_CAP`). Owner only.",
+      "name": "set_static_fee",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the protocol static fee in basis points.",
+      "name": "static_fee_bps",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Completes a pending ownership transfer. Requires authorization from the\\npending owner.",
+      "name": "accept_ownership",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Mark `token` as fee-whitelisted (affects input-side fee selection). Owner only.",
+      "name": "add_to_whitelist",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pay out accrued admin fee balances for `tokens`. Owner only.",
+      "name": "claim_admin_fees",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tokens",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Decode `swap_xdr` as `StrategyPayload` and execute it.\\n\\nPulls `total_in` from `sender`, runs optional LP burn/paths/mint, applies\\nfees, enforces `total_min_out`, and returns delivered output.",
+      "name": "execute_strategy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "swap_xdr",
+          "type_": "bytes"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the highest referral id issued so far.",
+      "name": "referral_counter",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Update a referral's fee bps. Owner only.",
+      "name": "set_referral_fee",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the accrued admin fee balance for `token`.",
+      "name": "admin_fee_balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Clears the current owner. Requires current-owner authorization and panics\\nif a transfer is pending.",
+      "name": "renounce_ownership",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Transfer claim rights for a referral. Owner only.",
+      "name": "set_referral_owner",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Starts a two-step ownership transfer to `new_owner`, acceptable until ledger\\n`live_until_ledger`. Requires current-owner authorization; overrides any\\npending transfer.",
+      "name": "transfer_ownership",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the full fee-whitelist token list.",
+      "name": "whitelisted_tokens",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pay out accrued fees for referral `id` to its configured owner.",
+      "name": "claim_referral_fees",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "tokens",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Activate or deactivate a referral. Owner only.",
+      "name": "set_referral_active",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "active",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the accrued referral fee balance for `(id, token)`.",
+      "name": "referral_fee_balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Remove `token` from the fee whitelist. Owner only.",
+      "name": "remove_from_whitelist",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "Instruction count is zero or above the program cap, or the split-weight\\ncount is above its cap.",
+          "name": "EmptyBatch",
+          "value": 1
+        },
+        {
+          "doc": "Non-positive amount, overdraft, or spend mismatch.",
+          "name": "InvalidAmount",
+          "value": 3
+        },
+        {
+          "doc": "`Prev` has no predecessor output, or it names a different token.",
+          "name": "BrokenTokenChain",
+          "value": 4
+        },
+        {
+          "doc": "Declared minimum output is not positive, or the delivered output is\\nbelow it.",
+          "name": "SlippageExceeded",
+          "value": 5
+        },
+        {
+          "doc": "Venue returned zero usable output.",
+          "name": "ZeroOutput",
+          "value": 7
+        },
+        {
+          "doc": "Checked arithmetic overflow.",
+          "name": "IntegerOverflow",
+          "value": 9
+        },
+        {
+          "doc": "A split weight is zero.",
+          "name": "ZeroSplitPpm",
+          "value": 11
+        },
+        {
+          "doc": "A split weight exceeds 1e6.",
+          "name": "SplitPpmMismatch",
+          "value": 12
+        },
+        {
+          "doc": "Strategy XDR or packed program failed to decode or validate.",
+          "name": "InvalidRouteXdr",
+          "value": 13
+        },
+        {
+          "doc": "Ownable owner missing when required.",
+          "name": "NotAdmin",
+          "value": 20
+        },
+        {
+          "doc": "Fee bps above [`crate::constants::FEE_CAP`].",
+          "name": "FeeTooHigh",
+          "value": 21
+        },
+        {
+          "doc": "Referral id not in storage.",
+          "name": "ReferralNotFound",
+          "value": 22
+        },
+        {
+          "doc": "Input and output token are identical.",
+          "name": "SameToken",
+          "value": 25
+        },
+        {
+          "doc": "Declared LP token is not the pool share token.",
+          "name": "LpTokenMismatch",
+          "value": 26
+        },
+        {
+          "doc": "Mint delivered fewer shares than `mint_min_shares`.",
+          "name": "MinSharesNotMet",
+          "value": 27
+        },
+        {
+          "doc": "Burn constituent below its min amount.",
+          "name": "MinAmountsNotMet",
+          "value": 28
+        },
+        {
+          "doc": "Leftover vault balance exceeds residual allowance.",
+          "name": "ExcessiveResidual",
+          "value": 29
+        },
+        {
+          "doc": "A contract-internal invariant no longer holds; the call fails closed\\nrather than acting on state it can no longer trust. Not reachable\\nthrough any documented sequence of calls on a fresh deployment \\xe2\\x80\\x94 if\\nyou see it, report it. (Instances must always be deployed fresh from\\nthis build; upgrading a pre-`ReservedTotal` build in place is\\nunsupported and would surface this code on fee claims.)",
+          "name": "InternalInvariant",
+          "value": 30
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Error codes for general contract, registry, account, timelock, and\\nrole-management failures not covered by a more specific error enum below.",
+      "lib": "",
+      "name": "GenericError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AssetNotSupported",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AssetAlreadySupported",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidTicker",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "PoolAlreadyDeployed",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidAsset",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "AssetsAreTheSame",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "WrongToken",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "InvalidWasmHash",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "InvalidExchangeSrc",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "PairNotActive",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "AccountNotInMarket",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "AmountMustBePositive",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "InvalidPayments",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "NotSmartContract",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "AccountNotFound",
+          "value": 24
+        },
+        {
+          "doc": "",
+          "name": "AccountModeMismatch",
+          "value": 25
+        },
+        {
+          "doc": "",
+          "name": "AggregatorNotSet",
+          "value": 27
+        },
+        {
+          "doc": "",
+          "name": "PositionLimitsNotSet",
+          "value": 29
+        },
+        {
+          "doc": "",
+          "name": "PoolNotInitialized",
+          "value": 30
+        },
+        {
+          "doc": "",
+          "name": "OwnerNotSet",
+          "value": 32
+        },
+        {
+          "doc": "",
+          "name": "MathOverflow",
+          "value": 33
+        },
+        {
+          "doc": "",
+          "name": "InternalError",
+          "value": 34
+        },
+        {
+          "doc": "",
+          "name": "InvalidPositionLimits",
+          "value": 36
+        },
+        {
+          "doc": "",
+          "name": "SpotOnlyNotProductionSafe",
+          "value": 38
+        },
+        {
+          "doc": "",
+          "name": "InvalidTimelockDelay",
+          "value": 39
+        },
+        {
+          "doc": "",
+          "name": "TimelockOperationExpired",
+          "value": 40
+        },
+        {
+          "doc": "",
+          "name": "InvalidRole",
+          "value": 41
+        },
+        {
+          "doc": "",
+          "name": "BlendPoolNotApproved",
+          "value": 42
+        },
+        {
+          "doc": "",
+          "name": "HubNotActive",
+          "value": 43
+        },
+        {
+          "doc": "",
+          "name": "NotAuthorized",
+          "value": 44
+        },
+        {
+          "doc": "",
+          "name": "RegistryCapReached",
+          "value": 45
+        },
+        {
+          "doc": "",
+          "name": "OperationNotCancellable",
+          "value": 46
+        },
+        {
+          "doc": "",
+          "name": "BorrowRoundsToZeroShares",
+          "value": 47
+        },
+        {
+          "doc": "",
+          "name": "CannotRemoveLastProposer",
+          "value": 48
+        },
+        {
+          "doc": "",
+          "name": "WithdrawRoundsToZeroShares",
+          "value": 49
+        },
+        {
+          "doc": "",
+          "name": "NetSettleRoundsToZeroShares",
+          "value": 50
+        },
+        {
+          "doc": "",
+          "name": "SupplyRoundsToZeroShares",
+          "value": 51
+        },
+        {
+          "doc": "",
+          "name": "RepayRoundsToZeroShares",
+          "value": 52
+        },
+        {
+          "doc": "",
+          "name": "PositionNftNotSet",
+          "value": 53
+        },
+        {
+          "doc": "",
+          "name": "PositionNftAlreadyDeployed",
+          "value": 54
+        },
+        {
+          "doc": "",
+          "name": "DivisionByZero",
+          "value": 55
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RoleTransferError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NoPendingTransfer",
+          "value": 2200
+        },
+        {
+          "doc": "",
+          "name": "InvalidLiveUntilLedger",
+          "value": 2201
+        },
+        {
+          "doc": "",
+          "name": "InvalidPendingAccount",
+          "value": 2202
+        },
+        {
+          "doc": "",
+          "name": "TransferExpired",
+          "value": 2203
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OwnableError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "OwnerNotSet",
+          "value": 2100
+        },
+        {
+          "doc": "",
+          "name": "TransferInProgress",
+          "value": 2101
+        },
+        {
+          "doc": "",
+          "name": "OwnerAlreadySet",
+          "value": 2102
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an ownership transfer is initiated.",
+      "lib": "",
+      "name": "OwnershipTransfer",
+      "prefix_topics": [
+        "ownership_transfer"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when ownership is renounced.",
+      "lib": "",
+      "name": "OwnershipRenounced",
+      "prefix_topics": [
+        "ownership_renounced"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an ownership transfer is completed.",
+      "lib": "",
+      "name": "OwnershipTransferCompleted",
+      "prefix_topics": [
+        "ownership_transfer_completed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Stored referral account.\\n\\nDefined here rather than in the contract so that the trait below can name it\\nwithout callers depending on the router crate.",
+      "lib": "",
+      "name": "ReferralConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "active",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,1249 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "Error conditions returned by the oracle's contract calls.",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotAuthorizedSigner",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "InvalidPrice",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidThreshold",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "SignerAlreadyRegistered",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "SignerNotRegistered",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "CannotRemoveBelowThreshold",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "NoDataForFeed",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "StaleData",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "PriceOutOfRange",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "LengthMismatch",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "FutureTimestamp",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "FeedAlreadyMapped",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "FeedNotMapped",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "FeedNotKnown",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "InvalidSubmissionAge",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "StaleSubmission",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "FeedAlreadyRegistered",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "InvalidRelativeSkew",
+          "value": 18
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Renews the contract's instance storage TTL and upgrades the contract\\nto the WASM code at `new_wasm_hash`.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the current contract owner, if set.",
+      "name": "get_owner",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initializes the contract: sets `admin` as owner and stores the\\ninitial signer set, submission threshold, price resolution, and\\ndefault staleness, submission-age, and skew bounds. Fails with\\n`InvalidThreshold` if `threshold` is zero, exceeds the number of\\nsigners, or `signers` contains a duplicate address.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "signers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "resolution",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Accepts a pending ownership transfer, making the caller the new owner.",
+      "name": "accept_ownership",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Renounces ownership, leaving the contract without an owner.",
+      "name": "renounce_ownership",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Starts an ownership transfer to `new_owner`, valid for acceptance\\nuntil `live_until_ledger`.",
+      "name": "transfer_ownership",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Maps `asset` to `feed_id` in both directions, registers `feed_id` as\\nknown, and adds `asset` to the asset registry. Fails with\\n`FeedAlreadyMapped` if `asset` already has a feed mapping or\\n`feed_id` already has an owning asset.",
+      "name": "add_feed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "feed_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": {
+            "udt": {
+              "name": "ReflectorAsset"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Adds `signer` to the set of addresses authorized to submit prices.\\nFails with `SignerAlreadyRegistered` if the address is already present.",
+      "name": "add_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Removes `feed_id` and all its stored state, including its asset\\nmapping and asset-registry entry if one exists. Fails with\\n`FeedNotKnown` if the feed is not registered.",
+      "name": "purge_feed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "feed_id",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Removes the feed mapping owned by `asset`, removes `asset` from the\\nasset registry, and clears all stored state for the underlying feed\\n(aggregate, history, per-signer submissions, and feed index entry).\\nFails with `FeedNotMapped` if `asset` has no feed mapping.",
+      "name": "remove_feed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": {
+            "udt": {
+              "name": "ReflectorAsset"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Registers `feed_id` as a known feed without mapping it to a\\n`ReflectorAsset`. Fails with `FeedAlreadyRegistered` if the feed is\\nalready known.",
+      "name": "register_feed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "feed_id",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Removes `signer` from the signer set. Fails with `SignerNotRegistered`\\nif the address is not currently a signer, and with\\n`CannotRemoveBelowThreshold` if removal would drop the signer count\\nbelow the configured threshold. Deletes the signer's latest submission\\nfor every feed it had submitted to, recomputes the aggregate for each\\nof those feeds, and clears the signer's feed list.",
+      "name": "remove_signer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sets the minimum number of signer submissions required to accept a\\nprice for a feed. Fails with `InvalidThreshold` if `threshold` is zero\\nor exceeds the current signer count. Does not re-derive existing\\naggregates: call `recompute_feeds` afterwards to apply the new\\nthreshold to feeds that already hold one.",
+      "name": "set_threshold",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sets the price resolution, in seconds, used to decide whether a new\\naggregate replaces or appends to the last history entry.",
+      "name": "set_resolution",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "resolution",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Re-derives the stored aggregate for each feed in `feed_ids` under the\\ncurrent threshold, submission-age, and skew configuration.\\n\\nThe configuration setters deliberately do not sweep every registered\\nfeed. That cost grows with the feed count and eventually crosses the\\ntransaction footprint limit, which would leave those settings\\npermanently unchangeable -- exactly when a signer outage requires\\nlowering the threshold. Call this after a configuration change, in\\nbatches small enough to stay inside the limit: each feed costs about\\none ledger entry per signer plus three. Use `feeds()` to enumerate the\\nregistered ids.\\n\\nFails with `FeedNotKnown` if any id is not registered, in which case\\nno aggregate is recomputed.",
+      "name": "recompute_feeds",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "feed_ids",
+          "type_": {
+            "vec": {
+              "element_type": "string"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sets the maximum age, in seconds, a stored aggregate can reach before\\nreads treat it as stale. Fails with `InvalidSubmissionAge` if `seconds`\\nis smaller than the configured maximum submission age.",
+      "name": "set_max_stale_seconds",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "seconds",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sets the maximum allowed timestamp skew, in seconds, between clustered\\nsigner submissions for the same aggregate. Fails with\\n`InvalidRelativeSkew` if `seconds` exceeds the configured maximum\\nsubmission age or is not greater than `MAX_FUTURE_SKEW_SECONDS`.\\nDoes not re-derive existing aggregates: call `recompute_feeds`\\nafterwards to apply the new bound to feeds that already hold one.",
+      "name": "set_max_relative_skew_seconds",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "seconds",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sets the maximum age, in seconds, a signer's submission timestamp can\\nhave relative to ledger time to be accepted. Fails with\\n`InvalidSubmissionAge` if `seconds` is below `MIN_SUBMISSION_AGE_SECONDS`\\nor above the configured maximum stale age. Does not re-derive\\nexisting aggregates: call `recompute_feeds` afterwards to apply the\\nnew bound to feeds that already hold one.",
+      "name": "set_max_submission_age_seconds",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "seconds",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the quote asset for all prices reported by this contract:\\n`ReflectorAsset::Other(\"USD\")`.",
+      "name": "base",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "ReflectorAsset"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns every registered feed id, including feeds with no asset\\nmapping. Use this to enumerate the ids to pass to `recompute_feeds`\\nafter a configuration change.",
+      "name": "feeds",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "string"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the history entry for `asset` with the newest package\\ntimestamp at or before `timestamp`, converted to `ReflectorPriceData`.\\nReturns `None` if `asset` has no feed mapping, the feed has no current\\naggregate or that aggregate is stale, the feed's history is\\nunavailable, or no entry satisfies the timestamp bound.",
+      "name": "price",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": {
+            "udt": {
+              "name": "ReflectorAsset"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "ReflectorPriceData"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns every `ReflectorAsset` currently mapped to a feed.",
+      "name": "assets",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "ReflectorAsset"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns up to `records` history entries for `asset`, newest first,\\nconverted to `ReflectorPriceData`. Returns `None` if `asset` has no\\nfeed mapping, the feed has no current aggregate or that aggregate is\\nstale, or its history is empty or unavailable.",
+      "name": "prices",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": {
+            "udt": {
+              "name": "ReflectorAsset"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "records",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "vec": {
+                "element_type": {
+                  "udt": {
+                    "name": "ReflectorPriceData"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the number of decimals used for reported prices.",
+      "name": "decimals",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the latest price for `asset`, converted to `ReflectorPriceData`.\\nReturns `None` if `asset` has no feed mapping or the feed's aggregate\\nis unavailable or stale.",
+      "name": "lastprice",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": {
+            "udt": {
+              "name": "ReflectorAsset"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "ReflectorPriceData"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the configured price resolution, in seconds.",
+      "name": "resolution",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the current aggregate price for each feed in `feed_ids`, in\\nthe same order. Fails on the first feed that returns an error from\\n`read_price_data_for_feed`.",
+      "name": "read_price_data",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "feed_ids",
+          "type_": {
+            "vec": {
+              "element_type": "string"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "vec": {
+                "element_type": {
+                  "udt": {
+                    "name": "RedStonePriceData"
+                  }
+                }
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the configured maximum staleness, in seconds, for aggregate\\nreads.",
+      "name": "max_stale_seconds",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns up to `limit` history entries for `feed_id`, newest first.\\nFails with `NoDataForFeed` if the feed has no current aggregate or an\\nempty history, and with `StaleData` if the current aggregate is stale.",
+      "name": "read_price_history",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "feed_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "limit",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "vec": {
+                "element_type": {
+                  "udt": {
+                    "name": "RedStonePriceData"
+                  }
+                }
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the current aggregate for `feed_id`. Fails with `NoDataForFeed`\\nif none is stored, or `StaleData` if `now - write_timestamp` (seconds;\\ntimestamps stored in ms) exceeds `max_stale_seconds`. Package timestamp\\nis not used for this check.",
+      "name": "read_price_data_for_feed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "feed_id",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "RedStonePriceData"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the configured maximum relative timestamp skew, in seconds,\\nbetween clustered submissions.",
+      "name": "max_relative_skew_seconds",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns the configured maximum submission age, in seconds.",
+      "name": "max_submission_age_seconds",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Submits `price` for `feed_id` on behalf of `signer`, requiring\\n`signer`'s authorization. Validates that `signer` is registered,\\n`feed_id` is known, the price is within bounds, and\\n`package_timestamp` (milliseconds) is not in the future, not stale\\n(age vs max submission age in seconds), and not older than the\\nsigner's previous submission for the feed. Stores the submission and\\nrecomputes the feed's aggregate.",
+      "name": "submit_price",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "feed_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "package_timestamp",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Submits `prices` for `feed_ids` on behalf of `signer`, requiring\\n`signer`'s authorization and using the same `package_timestamp`\\n(milliseconds) for every entry; fails with `LengthMismatch` if the two\\nlists differ in length. Validates that `signer` is registered, the\\ntimestamp is not in the future or stale (age vs max submission age in\\nseconds), and each feed is known, monotonic for `signer`, and its\\nprice within bounds, before storing any submission. Stores each\\nsubmission and recomputes each feed's aggregate.\\n\\nFaults are reported in that chain's order \\xe2\\x80\\x94 unregistered signer,\\nlength mismatch, future timestamp, stale timestamp, then the per-feed\\npass (unknown feed / non-monotonic timestamp), then price \\xe2\\x80\\x94 so a batch\\ncarrying two different faults reports whichever comes first in that\\nlist, not the one in the earliest entry. The unknown-feed and\\nnon-monotonic checks are the exception: they run interleaved per\\nentry, so between those two the earlier entry decides. Example:\\n`[known-but-non-monotonic, unknown]` r",
+      "name": "submit_prices",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "signer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "feed_ids",
+          "type_": {
+            "vec": {
+              "element_type": "string"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "prices",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "package_timestamp",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Error codes for general contract, registry, account, timelock, and\\nrole-management failures not covered by a more specific error enum below.",
+      "lib": "",
+      "name": "GenericError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AssetNotSupported",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AssetAlreadySupported",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidTicker",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "PoolAlreadyDeployed",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "InvalidAsset",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "AssetsAreTheSame",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "WrongToken",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "InvalidWasmHash",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "InvalidExchangeSrc",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "PairNotActive",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "AccountNotInMarket",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "AmountMustBePositive",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "InvalidPayments",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "NotSmartContract",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "AccountNotFound",
+          "value": 24
+        },
+        {
+          "doc": "",
+          "name": "AccountModeMismatch",
+          "value": 25
+        },
+        {
+          "doc": "",
+          "name": "AggregatorNotSet",
+          "value": 27
+        },
+        {
+          "doc": "",
+          "name": "PositionLimitsNotSet",
+          "value": 29
+        },
+        {
+          "doc": "",
+          "name": "PoolNotInitialized",
+          "value": 30
+        },
+        {
+          "doc": "",
+          "name": "OwnerNotSet",
+          "value": 32
+        },
+        {
+          "doc": "",
+          "name": "MathOverflow",
+          "value": 33
+        },
+        {
+          "doc": "",
+          "name": "InternalError",
+          "value": 34
+        },
+        {
+          "doc": "",
+          "name": "InvalidPositionLimits",
+          "value": 36
+        },
+        {
+          "doc": "",
+          "name": "SpotOnlyNotProductionSafe",
+          "value": 38
+        },
+        {
+          "doc": "",
+          "name": "InvalidTimelockDelay",
+          "value": 39
+        },
+        {
+          "doc": "",
+          "name": "TimelockOperationExpired",
+          "value": 40
+        },
+        {
+          "doc": "",
+          "name": "InvalidRole",
+          "value": 41
+        },
+        {
+          "doc": "",
+          "name": "BlendPoolNotApproved",
+          "value": 42
+        },
+        {
+          "doc": "",
+          "name": "HubNotActive",
+          "value": 43
+        },
+        {
+          "doc": "",
+          "name": "NotAuthorized",
+          "value": 44
+        },
+        {
+          "doc": "",
+          "name": "RegistryCapReached",
+          "value": 45
+        },
+        {
+          "doc": "",
+          "name": "OperationNotCancellable",
+          "value": 46
+        },
+        {
+          "doc": "",
+          "name": "BorrowRoundsToZeroShares",
+          "value": 47
+        },
+        {
+          "doc": "",
+          "name": "CannotRemoveLastProposer",
+          "value": 48
+        },
+        {
+          "doc": "",
+          "name": "WithdrawRoundsToZeroShares",
+          "value": 49
+        },
+        {
+          "doc": "",
+          "name": "NetSettleRoundsToZeroShares",
+          "value": 50
+        },
+        {
+          "doc": "",
+          "name": "SupplyRoundsToZeroShares",
+          "value": 51
+        },
+        {
+          "doc": "",
+          "name": "RepayRoundsToZeroShares",
+          "value": 52
+        },
+        {
+          "doc": "",
+          "name": "PositionNftNotSet",
+          "value": 53
+        },
+        {
+          "doc": "",
+          "name": "PositionNftAlreadyDeployed",
+          "value": 54
+        },
+        {
+          "doc": "",
+          "name": "DivisionByZero",
+          "value": 55
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A single RedStone price observation, as returned by a RedStone price feed\\ncontract: the price value together with the package and write timestamps\\nattached to it.",
+      "lib": "",
+      "name": "RedStonePriceData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "package_timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "write_timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Identifies a priced asset as understood by a Reflector oracle: either a\\nStellar contract address or a symbol identifying a non-Stellar asset.",
+      "lib": "",
+      "name": "ReflectorAsset",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Stellar",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Other",
+            "type_": [
+              "symbol"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A single price observation from a Reflector oracle: the price value\\ntogether with its observation timestamp.",
+      "lib": "",
+      "name": "ReflectorPriceData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RoleTransferError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NoPendingTransfer",
+          "value": 2200
+        },
+        {
+          "doc": "",
+          "name": "InvalidLiveUntilLedger",
+          "value": 2201
+        },
+        {
+          "doc": "",
+          "name": "InvalidPendingAccount",
+          "value": 2202
+        },
+        {
+          "doc": "",
+          "name": "TransferExpired",
+          "value": 2203
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OwnableError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "OwnerNotSet",
+          "value": 2100
+        },
+        {
+          "doc": "",
+          "name": "TransferInProgress",
+          "value": 2101
+        },
+        {
+          "doc": "",
+          "name": "OwnerAlreadySet",
+          "value": 2102
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an ownership transfer is initiated.",
+      "lib": "",
+      "name": "OwnershipTransfer",
+      "prefix_topics": [
+        "ownership_transfer"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when ownership is renounced.",
+      "lib": "",
+      "name": "OwnershipRenounced",
+      "prefix_topics": [
+        "ownership_renounced"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an ownership transfer is completed.",
+      "lib": "",
+      "name": "OwnershipTransferCompleted",
+      "prefix_topics": [
+        "ownership_transfer_completed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  }
+]
