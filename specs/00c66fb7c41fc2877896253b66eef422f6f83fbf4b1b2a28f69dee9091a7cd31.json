@@ -1,0 +1,652 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "One primed leveraged-open callback, staged by the Blend borrow venue immediately before\\n`account.flash_open` and consumed (take-and-clear) by the pool's `exec_op` callback.",
+      "lib": "",
+      "name": "PendingOp",
+      "fields": [
+        {
+          "doc": "The borrow account whose flash loan this is (`exec_op`'s expected `caller`).",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "The swap aggregator to sell the stake through.",
+          "name": "aggregator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "collateral_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "debt_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "Debt amount kept back and forwarded to `margin_to` as total IRS margin.",
+          "name": "irs_margin_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "The exact flash-loan amount expected (`exec_op`'s expected `amount`).",
+          "name": "loan_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "The broker (lock-borrow) \\xe2\\x80\\x94 receives `irs_margin_amount`.",
+          "name": "margin_to",
+          "type_": "address"
+        },
+        {
+          "doc": "Slippage floor: the swap must deliver at least this much collateral.",
+          "name": "min_collateral_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "Debt amount to convert into collateral (loan + any debt-side deposit \\xe2\\x88\\x92 IRS margin).",
+          "name": "stake",
+          "type_": "i128"
+        },
+        {
+          "doc": "The aggregator route, as `StrategyPayload` XDR. Built off-chain, where the quote comes\\nfrom; `min_collateral_out` below is what makes accepting it safe.",
+          "name": "swap_xdr",
+          "type_": "bytes"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "`prime` while another op is already pending.",
+          "name": "OpAlreadyPending",
+          "value": 1
+        },
+        {
+          "doc": "`exec_op` with no primed op, or with a caller/token/amount not matching it.",
+          "name": "FlashCallbackUnauthorized",
+          "value": 2
+        },
+        {
+          "doc": "The swap delivered less than `min_collateral_out`.",
+          "name": "SwapSlippage",
+          "value": 3
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "owner",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "prime",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "op",
+          "type_": {
+            "udt": {
+              "name": "PendingOp"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The pool's flash callback: take-and-clear the primed op, verify the callback is the\\none primed (the `pendingFlashLoan` guard), convert the staked debt into collateral\\nfor the account, and forward the held-back IRS margin to the broker.",
+      "name": "exec_op",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Replace the contract's wasm. The owner is the Blend borrow venue, whose admin reaches this\\nentrypoint through `upgrade_flash_receiver`; the receiver address and storage are kept.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "has_pending",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A single pool operation submitted via `BlendPool::submit`.",
+      "lib": "",
+      "name": "Request",
+      "fields": [
+        {
+          "doc": "The reserve's underlying asset address (for Supply/Withdraw/Borrow/Repay).",
+          "name": "address",
+          "type_": "address"
+        },
+        {
+          "doc": "Token amount (in the underlying's native units).",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "Discriminant \\xe2\\x80\\x94 use the `REQUEST_*` constants below.",
+          "name": "request_type",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A fully-decoded reserve (config + live data), returned by `get_reserve`.",
+      "lib": "",
+      "name": "Reserve",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "config",
+          "type_": {
+            "udt": {
+              "name": "ReserveConfig"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "data",
+          "type_": {
+            "udt": {
+              "name": "ReserveData"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "scalar",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Arguments for `BlendPool::flash_loan`: the loan is minted as dTokens on `from`, `amount`\\nof `asset` is transferred to `contract`, and `contract.exec_op(from, asset, amount, 0)`\\nruns before the declared requests are pulled back from `from` via allowance.",
+      "lib": "",
+      "name": "FlashLoan",
+      "fields": [
+        {
+          "doc": "Loan amount (in the underlying's native units).",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "The reserve underlying being flash-borrowed.",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "The moderc3156 receiver invoked as `exec_op(caller, token, amount, fee)`.",
+          "name": "contract",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A user's open positions in the pool, indexed by reserve index (`config.index`).\\nA non-collateral supply credits bTokens in the `supply` map.",
+      "lib": "",
+      "name": "Positions",
+      "fields": [
+        {
+          "doc": "Reserve index \\xe2\\x86\\x92 bToken balance (collateral supply shares).",
+          "name": "collateral",
+          "type_": {
+            "map": {
+              "key_type": "u32",
+              "value_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "Reserve index \\xe2\\x86\\x92 dToken balance (borrowed shares).",
+          "name": "liabilities",
+          "type_": {
+            "map": {
+              "key_type": "u32",
+              "value_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "Reserve index \\xe2\\x86\\x92 bToken balance (non-collateral supply shares).",
+          "name": "supply",
+          "type_": {
+            "map": {
+              "key_type": "u32",
+              "value_type": "i128"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Pool-level configuration, returned by `get_config`. Consumed for `oracle` (the SEP-40\\nprice source health-factor math reads) and `status`.",
+      "lib": "",
+      "name": "PoolConfig",
+      "fields": [
+        {
+          "doc": "Backstop take rate on accrued debt interest, 7 decimals.",
+          "name": "bstop_rate",
+          "type_": "u32"
+        },
+        {
+          "doc": "Max effective positions a single user can hold.",
+          "name": "max_positions",
+          "type_": "u32"
+        },
+        {
+          "doc": "Minimum collateral (in oracle base units) required to open a liability position.",
+          "name": "min_collateral",
+          "type_": "i128"
+        },
+        {
+          "doc": "The pool's price oracle contract.",
+          "name": "oracle",
+          "type_": "address"
+        },
+        {
+          "doc": "Pool status (0/1 active, odd values are backstop-triggered; see Blend docs).",
+          "name": "status",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Per-reserve runtime data \\xe2\\x80\\x94 updated on every interest accrual.",
+      "lib": "",
+      "name": "ReserveData",
+      "fields": [
+        {
+          "doc": "bToken (supply share) exchange-rate index, **12 decimals** (`SCALAR_12`).\\n`underlying = b_tokens * b_rate / SCALAR_12`.",
+          "name": "b_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "Total outstanding bToken supply.",
+          "name": "b_supply",
+          "type_": "i128"
+        },
+        {
+          "doc": "Underlying owed to the backstop (accumulated interest).",
+          "name": "backstop_credit",
+          "type_": "i128"
+        },
+        {
+          "doc": "dToken (borrow share) exchange-rate index, 12 decimals.",
+          "name": "d_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "Total outstanding dToken supply.",
+          "name": "d_supply",
+          "type_": "i128"
+        },
+        {
+          "doc": "Interest-rate modifier (7 decimals).",
+          "name": "ir_mod",
+          "type_": "i128"
+        },
+        {
+          "doc": "Last ledger timestamp at which interest was accrued.",
+          "name": "last_time",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Per-reserve configuration \\xe2\\x80\\x94 immutable after initialization.",
+      "lib": "",
+      "name": "ReserveConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "c_factor",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "decimals",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "enabled",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "l_factor",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_util",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "r_base",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "r_one",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "r_three",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "r_two",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "reactivity",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "supply_cap",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "util",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "SEP-40 asset key: a Stellar token, or a ticker symbol.",
+      "lib": "",
+      "name": "Asset",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Stellar",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Other",
+            "type_": [
+              "symbol"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "SEP-40 price record: `price` in the oracle's `decimals`, quoted in its base asset.",
+      "lib": "",
+      "name": "PriceData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "One swap hop through a specific pool.\\n\\n`amount_out` is ignored by the aggregator \\xe2\\x80\\x94 it derives the honorable output from live reserves \\xe2\\x80\\x94\\nso a payload built on-chain can leave it at `0`.",
+      "lib": "",
+      "name": "SwapHop",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "venue",
+          "type_": {
+            "udt": {
+              "name": "SwapVenue"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "One sub-route: a sequence of hops taking `split_ppm` (parts-per-million) of the total input.",
+      "lib": "",
+      "name": "SwapPath",
+      "fields": [
+        {
+          "doc": "",
+          "name": "hops",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "SwapHop"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "split_ppm",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "A DEX the aggregator can route a hop through. Mirrors the Router's own `SwapVenue`.",
+      "lib": "",
+      "name": "SwapVenue",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Soroswap"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Aquarius"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Phoenix"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Sushi"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "CometDex"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "The full route. `total_min_out` is the only slippage bound the aggregator itself enforces.\\n\\nField names and types mirror the Router's ABI **exactly** \\xe2\\x80\\x94 the payload crosses the boundary as\\nXDR ([`soroban_sdk::xdr::ToXdr`]), so a renamed or reordered field does not fail to compile, it\\nfails to decode on the other side.",
+      "lib": "",
+      "name": "StrategyPayload",
+      "fields": [
+        {
+          "doc": "",
+          "name": "paths",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "SwapPath"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "referral_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_min_out",
+          "type_": "i128"
+        }
+      ]
+    }
+  }
+]

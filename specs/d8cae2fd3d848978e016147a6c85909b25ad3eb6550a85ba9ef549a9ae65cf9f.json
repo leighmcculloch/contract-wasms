@@ -1,0 +1,499 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "Where a pool's rate comes from. Single-variant for now; new source kinds\\n(e.g. a contract quoting an APR directly, like Solidity's `ExternalRay`)\\nextend this enum without a storage migration.",
+      "lib": "",
+      "name": "Source",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "The rate is pulled as the ln-slope of a cumulative growth index exposed\\nby this contract (any fixed scale \\xe2\\x80\\x94 only ratios are used).",
+            "name": "GrowthIndex",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Version"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "State",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "A pinned `I(t)` (RAY), keyed `(asset, t)` \\xe2\\x80\\x94 a durable memo of the index at `t` so it\\nsurvives buffer eviction. Written by [`AprOracle::pin_index`], read by `index_at`.",
+            "name": "IndexSnapshot",
+            "type_": [
+              "address",
+              "u64"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Cumulative compound index since inception (RAY). 1.0 == RAY == no growth.",
+      "name": "index",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AprState",
+      "fields": [
+        {
+          "doc": "Cumulative compound index since inception, RAY. 1.0 == RAY == no growth.",
+          "name": "index_ray",
+          "type_": "i128"
+        },
+        {
+          "doc": "Last `Source::GrowthIndex` snapshot. Always positive: `configure` seeds it from the source\\nand every later write comes from the same asserted read.",
+          "name": "last_source_index",
+          "type_": "i128"
+        },
+        {
+          "doc": "Observation ring buffer (see [`buffer`]).",
+          "name": "obs",
+          "type_": {
+            "udt": {
+              "name": "RingBuffer"
+            }
+          }
+        },
+        {
+          "doc": "Where this pool's rate comes from.",
+          "name": "source",
+          "type_": {
+            "udt": {
+              "name": "Source"
+            }
+          }
+        },
+        {
+          "doc": "Last update timestamp (unix seconds); set to the registration time by `configure`.",
+          "name": "updated_at",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Replace the contract's wasm (admin-gated). Address and storage are kept.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Index value (RAY) at an arbitrary past timestamp `t`.\\n\\nA **pinned** `t` (see [`AprOracle::pin_index`]) is returned directly and stays available\\nforever; otherwise it is reconstructed from the observation buffer:\\n* `t` newer than the latest observation -> the latest index (flat:\\nthe index only moves on updates, so this is the stale-read value);\\n* `t` exactly on an observation -> that observation's index;\\n* `t` between two observations -> geometric interpolation\\n(constant-rate assumption between the surrounding snapshots);\\n* `t` in the future, or older than the oldest retained observation and not pinned,\\nor pool never updated -> panic.",
+      "name": "index_at",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "t",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Register a **new** pool/asset and start its index at 1.0 (RAY) \"from inception\", seeding\\nthe source baseline in the same call.\\n\\n`obs_capacity` sizes the per-pool observation ring buffer (must be >= 1).\\n\\nCreation-only: an asset that already has state is rejected. Re-`configure` would reset the\\nindex to 1.0 and wipe the accrued history, so a fast-path (the governance deployer) may\\nregister a new pool's asset without a timelock but can never disturb a live one.\\n\\nSeeding here rather than leaving it to the first `update_state` closes the window between\\nthe two: until a baseline exists the index cannot advance, so every bit of yield the source\\nearned in that gap was dropped, and a term starting inside it would settle short. It also\\nmeans the source is read under the admin's own call \\xe2\\x80\\x94 a misconfigured or dead source fails\\nat registration instead of surfacing as a pool that quietly never accrues.",
+      "name": "configure",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "obs_capacity",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "source",
+          "type_": {
+            "udt": {
+              "name": "Source"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Full state for a pool (debugging / off-chain reads).",
+      "name": "get_state",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "AprState"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Durably memoize `I(asset, t)` so it survives eviction from the observation buffer \\xe2\\x80\\x94 a\\npure memoization of the oracle's own index series (nothing pool-specific). Permissionless\\nand idempotent (first write wins); a no-op for a future `t` or one already pinned. The\\ncaller decides which timestamps to pin (e.g. a pool's term boundaries) and when.\\n\\nSelf-refreshing: if `t` is newer than the newest observation we would be *extrapolating*,\\nand `buffer_index_at` would take its flat branch and freeze the last known index \\xe2\\x80\\x94\\nsilently dropping everything that accrued between it and `t`, for the life of the pin. We\\nare the only component that can tell, so we pull the source first and let `t` land between\\ntwo real observations. That costs one refresh, once, and only when the pin would otherwise\\nbe wrong: an already-pinned `t` returns above, and a `t` already bracketed needs nothing (a\\nnewer observation cannot change the pair surrounding it).\\n\\nA `t` older than the oldest retained observation **traps**. Its history is gone",
+      "name": "pin_index",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "t",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Transfer the admin role to `new_admin` (current admin only). The deploy hands the oracle to\\nthe governance timelock this way once its owner-driven pool configuration is done \\xe2\\x80\\x94 the same\\nhandover the engine/vamm/lock-yield use.",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Accrued rate since pool inception as a RAY fraction (`current_index - 1`).\\ne.g. `0.05 * RAY` means 5% has accrued since the pool started.",
+      "name": "accrued_ray",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Storage/schema version, bumped by a post-`upgrade` migration when the layout changes.",
+      "name": "get_version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Advance a `Source::GrowthIndex` pool by pulling its source index and\\nderiving the rate from the index growth since the previous snapshot.\\n\\nDeliberately **permissionless** (mirrors the public `updateState` in the\\nSolidity implementation): the caller only chooses the moment of the update,\\nthe data comes from the configured source and cannot be forged.",
+      "name": "update_state",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Accrued rate over `[from, to]` as a RAY fraction:\\n`index(to) / index(from) - 1`.",
+      "name": "accrued_between",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Read one observation slot (debugging / off-chain reads).",
+      "name": "get_observation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "slot",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Observation"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Index growth `I(to) / I(from) - 1` as a [`Wad`] (1e18): pool-agnostic, it only knows\\ntwo timestamps. Returns `(growth, valid)` and never traps \\xe2\\x80\\x94 `valid == false` when\\neither endpoint is unavailable (unconfigured, future, or evicted-and-never-pinned), so\\nthe caller surfaces a clean error rather than every future read for the pool tripping\\nonce the buffer evicts the requested `from`. A pinned endpoint stays available\\nindefinitely (see [`AprOracle::pin_index`]); the caller pins the timestamps it needs to\\noutlive the buffer.",
+      "name": "get_rate_from_to",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              {
+                "udt": {
+                  "name": "Wad"
+                }
+              },
+              "bool"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Supply `I(asset, t)` by hand for a `t` the observation buffer no longer covers \\xe2\\x80\\x94 the\\nrecovery path for a [`AprOracle::pin_index`] that traps, and the only way an index value\\never enters this contract from outside its source.\\n\\nDeliberately narrow, because it is the one place a human number can reach settlement:\\n\\n* **only an evicted `t`** \\xe2\\x80\\x94 while `t` is still in the buffer, `pin_index` derives the real\\nvalue and no judgement is needed, so the admin has no business there;\\n* **only once** \\xe2\\x80\\x94 an already-pinned `t` is rejected, so this can never rewrite a pin the\\npermissionless path produced honestly, and first-write-wins still holds;\\n* **only within `[RAY, I(oldest)]`** \\xe2\\x80\\x94 the index starts at `RAY` and never decreases, so a\\n`t` before the oldest retained observation had an index between inception and that\\nobservation's. Anything outside that range is provably wrong, whoever signed it.\\n\\nThose bounds leave real discretion inside the interval, which is why this is admin-gated\\n(the governance timelock) rather th",
+      "name": "set_pinned_index",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "t",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "index_ray",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Ring bookkeeping; the slots live in storage under `(owner, slot)` keys.",
+      "lib": "",
+      "name": "RingBuffer",
+      "fields": [
+        {
+          "doc": "Ring size; bounds how far back history reaches.",
+          "name": "capacity",
+          "type_": "u32"
+        },
+        {
+          "doc": "Number of slots written so far (grows to `capacity`, then stays there).",
+          "name": "count",
+          "type_": "u32"
+        },
+        {
+          "doc": "Slot of the newest observation.",
+          "name": "head",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A snapshot of some value at a point in time (one slot of the ring).",
+      "lib": "",
+      "name": "Observation",
+      "fields": [
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "value",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "An unsigned WAD (`1e18`) fixed-point quantity: a rate, fee, or duration in seconds.",
+      "lib": "",
+      "name": "Wad",
+      "fields": [
+        {
+          "doc": "",
+          "name": "0",
+          "type_": "u128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A `Q64.96` sqrt price (`sqrt(token1/token0) * 2^96`). The pool-constrained range\\n(`tick_math::{MIN,MAX}_SQRT_PRICE`) fits in `u128`; wide intermediates widen via\\n[`to_u256`](Self::to_u256).",
+      "lib": "",
+      "name": "SqrtPriceX96",
+      "fields": [
+        {
+          "doc": "",
+          "name": "0",
+          "type_": "u128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A Unix timestamp in WAD-scaled seconds (`seconds * 1e18`), the EVM\\n`Time.blockTimestampScaled` convention. Distinct from [`Wad`] so a point in time is\\nnever mistaken for a duration: timestamps only compare and subtract (yielding a\\n[`Wad`] duration).",
+      "lib": "",
+      "name": "TimestampWad",
+      "fields": [
+        {
+          "doc": "",
+          "name": "0",
+          "type_": "u128"
+        }
+      ]
+    }
+  }
+]

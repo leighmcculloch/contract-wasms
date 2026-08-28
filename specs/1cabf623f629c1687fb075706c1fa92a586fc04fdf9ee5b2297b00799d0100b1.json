@@ -1,0 +1,814 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "debt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "position",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The address holding the venue's admin role.",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "owner",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "repay",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "position",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "refund_to",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The bound configuration.",
+      "name": "config",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Config"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "health",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "position",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Wad"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "snapshot",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "position",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "VenueSnapshot"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Transfer the admin role to `new_admin` (current admin only). Deployment hands the role to\\nthe governance timelock once the venue is wired, which is what puts `set_aggregator`,\\n`set_flash_receiver`, `set_account_wasm` and both `upgrade`s behind the Sensitive delay \\xe2\\x80\\x94\\ngovernance classifies any unlisted method as Sensitive, so no per-setter code is needed\\nhere. Without this the venue would be stuck on its deployer key for good: no handover, and\\nno rotation if it leaks.",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The configured swap aggregator, if any.",
+      "name": "aggregator",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "collateral",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "position",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Bind this venue to one Blend `pool`. `owner` is the broker (lock-borrow); every mutating\\nentrypoint requires its auth. `admin` (deployer / gov) binds the swap aggregator and\\nwires the flash receiver. `account_wasm` is the installed `blend-borrow-account` code new\\npositions are deployed from.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "account_wasm",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "open_position",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "collateral_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "debt_asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The `blend-borrow-account` a handle maps to (also its collateral custodian).",
+      "name": "subaccount_of",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "position",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The wired flash receiver, if any.",
+      "name": "flash_receiver",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Leveraged open through Blend's flash: flash-borrow `borrow_amount`, have the receiver sell\\nthe stake for collateral through the swap aggregator along `swap_xdr` and forward the\\nborrowed IRS margin to `margin_to`, then supply \\xe2\\x80\\x94 the flash is left standing as the debt.\\n\\nThe whole flash dance lives here rather than in the broker: the venue owns its receiver and\\nits aggregator, so the broker stays venue-agnostic and only carries the route through.",
+      "name": "open_leveraged",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "position",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "borrow_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "irs_margin_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "margin_to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "equity_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "equity_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_collateral_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "swap_xdr",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "min_health",
+          "type_": {
+            "udt": {
+              "name": "Wad"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "VenueSnapshot"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set the swap aggregator a leveraged open sells borrowed debt through (admin-gated).\\n\\nOne address for the whole venue, not one per asset pair: routing is the aggregator's job,\\nand it takes the route with the call. What stays admin-gated is *which contract* is trusted\\nto receive the stake \\xe2\\x80\\x94 the route only chooses a path through it.",
+      "name": "set_aggregator",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "aggregator",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set the `blend-borrow-account` wasm hash future positions deploy from (**admin**-gated, like\\nthe other config setters). Existing subaccounts are upgraded separately via\\n[`Self::upgrade_subaccount`].",
+      "name": "set_account_wasm",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account_wasm",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade_position",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "position",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "supply_and_borrow",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "position",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "collateral_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "borrow_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "min_health",
+          "type_": {
+            "udt": {
+              "name": "Wad"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "VenueSnapshot"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Blend has a flash loan, which is what leverage here is built on \\xe2\\x80\\x94 so, yes.",
+      "name": "supports_leverage",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "position_custodian",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "position",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Wire the `blend-flash-receiver` this venue primes for leveraged opens (admin-gated). Set after\\nconstruction because the receiver is deployed *owned by this venue*, so its address cannot be\\na constructor argument without a deployment cycle.",
+      "name": "set_flash_receiver",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "withdraw_collateral",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "position",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Upgrade the venue-owned flash receiver through its only reachable authorization path.\\n\\nThe receiver requires this venue's contract address to authorize `upgrade`, while this\\nrelay is gated by the venue's admin (governance in production). Existing receivers need no\\nmigration because their stored owner is already this venue.",
+      "name": "upgrade_flash_receiver",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "A negative amount was passed to a leveraged open.",
+          "name": "NegativeAmount",
+          "value": 1
+        },
+        {
+          "doc": "`irs_margin_amount` exceeds `borrow_amount` on a leveraged open.",
+          "name": "MarginExceedsBorrow",
+          "value": 2
+        },
+        {
+          "doc": "A leveraged open before the admin wired this venue's swap aggregator.",
+          "name": "AggregatorNotSet",
+          "value": 3
+        },
+        {
+          "doc": "The pool did not drive the flash callback \\xe2\\x80\\x94 the primed op is still unconsumed.",
+          "name": "FlashCallbackUnauthorized",
+          "value": 4
+        },
+        {
+          "doc": "A leveraged open before the admin wired this venue's `blend-flash-receiver`.",
+          "name": "FlashReceiverNotSet",
+          "value": 5
+        },
+        {
+          "doc": "The `equity_asset` on a leveraged open is neither the position's collateral nor debt asset.",
+          "name": "InvalidEquityAsset",
+          "value": 6
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Immutable venue binding, set at construction.",
+      "lib": "",
+      "name": "Config",
+      "fields": [
+        {
+          "doc": "Installed `blend-borrow-account` wasm hash new positions deploy from.",
+          "name": "account_wasm",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "Config admin (deployer / governance): sets the leverage converters \\xe2\\x80\\x94 separate from `owner`,\\nso swap routing stays admin config rather than a caller argument.",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "The broker (lock-borrow); every mutating entrypoint requires its auth.",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "The Blend pool every position here borrows from.",
+          "name": "pool",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Config"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Version"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "NextPosition"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Position",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "The swap aggregator a leveraged open sells the borrowed debt through. One address for the\\nvenue rather than a table per asset pair: the aggregator routes every pair itself, and the\\nroute arrives with the call.",
+            "name": "Aggregator"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "The `blend-flash-receiver` this venue primes for leveraged opens. Set after construction\\n(admin), because the receiver is deployed *owned by this venue* \\xe2\\x80\\x94 so its address can't be a\\nconstructor argument without a deployment cycle.",
+            "name": "FlashReceiver"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "One position: its deployed subaccount plus the pair it is bound to (the leveraged open needs the\\nassets to size the stake and pick the converter).",
+      "lib": "",
+      "name": "PositionInfo",
+      "fields": [
+        {
+          "doc": "",
+          "name": "collateral_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "debt_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "subaccount",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "One primed leveraged-open callback, staged by the Blend borrow venue immediately before\\n`account.flash_open` and consumed (take-and-clear) by the pool's `exec_op` callback.",
+      "lib": "",
+      "name": "PendingOp",
+      "fields": [
+        {
+          "doc": "The borrow account whose flash loan this is (`exec_op`'s expected `caller`).",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "The swap aggregator to sell the stake through.",
+          "name": "aggregator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "collateral_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "debt_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "Debt amount kept back and forwarded to `margin_to` as total IRS margin.",
+          "name": "irs_margin_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "The exact flash-loan amount expected (`exec_op`'s expected `amount`).",
+          "name": "loan_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "The broker (lock-borrow) \\xe2\\x80\\x94 receives `irs_margin_amount`.",
+          "name": "margin_to",
+          "type_": "address"
+        },
+        {
+          "doc": "Slippage floor: the swap must deliver at least this much collateral.",
+          "name": "min_collateral_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "Debt amount to convert into collateral (loan + any debt-side deposit \\xe2\\x88\\x92 IRS margin).",
+          "name": "stake",
+          "type_": "i128"
+        },
+        {
+          "doc": "The aggregator route, as `StrategyPayload` XDR. Built off-chain, where the quote comes\\nfrom; `min_collateral_out` below is what makes accepting it safe.",
+          "name": "swap_xdr",
+          "type_": "bytes"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Venue-side position snapshot. Every field is a by-product of the single valuation pass\\na health read already performs, so a snapshot costs no cross-contract calls beyond that\\nread; a venue that cannot produce a field in the same frame leaves it zero. Base values\\nare in the venue oracle's base units (the scale cancels out of `health`, so it is\\nvenue-defined and only ratios of base values are portable); factors are the venue's\\nnative risk weights in the venue's native scale (Blend: 7-decimal `c_factor`/`l_factor`;\\nAlula: bps `close_ltv`/`liability_factor`; XOXNO: not exposed, `0`).",
+      "lib": "",
+      "name": "VenueSnapshot",
+      "fields": [
+        {
+          "doc": "Supplied collateral in the collateral asset's units, rounded down (venue-accrued).",
+          "name": "collateral",
+          "type_": "i128"
+        },
+        {
+          "doc": "Collateral-factor-discounted collateral value in oracle base units \\xe2\\x80\\x94 the health\\nnumerator (the EVM `totalCollateralBase` analogue, already LTV-weighted).",
+          "name": "collateral_base",
+          "type_": "u128"
+        },
+        {
+          "doc": "The collateral reserve's risk weight, venue-native scale \\xe2\\x80\\x94 the venue's LTV parameter.",
+          "name": "collateral_factor",
+          "type_": "u32"
+        },
+        {
+          "doc": "Outstanding debt in the debt asset's units, rounded up (venue-accrued).",
+          "name": "debt",
+          "type_": "i128"
+        },
+        {
+          "doc": "Health factor as a WAD ratio; `Wad::from_raw(u128::MAX)` when no debt.",
+          "name": "health",
+          "type_": {
+            "udt": {
+              "name": "Wad"
+            }
+          }
+        },
+        {
+          "doc": "Liability-factor-weighted debt value in oracle base units \\xe2\\x80\\x94 the health denominator.",
+          "name": "liability_base",
+          "type_": "u128"
+        },
+        {
+          "doc": "The debt reserve's risk weight, venue-native scale \\xe2\\x80\\x94 the venue's\\nliquidation-threshold parameter.",
+          "name": "liability_factor",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "An unsigned WAD (`1e18`) fixed-point quantity: a rate, fee, or duration in seconds.",
+      "lib": "",
+      "name": "Wad",
+      "fields": [
+        {
+          "doc": "",
+          "name": "0",
+          "type_": "u128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A `Q64.96` sqrt price (`sqrt(token1/token0) * 2^96`). The pool-constrained range\\n(`tick_math::{MIN,MAX}_SQRT_PRICE`) fits in `u128`; wide intermediates widen via\\n[`to_u256`](Self::to_u256).",
+      "lib": "",
+      "name": "SqrtPriceX96",
+      "fields": [
+        {
+          "doc": "",
+          "name": "0",
+          "type_": "u128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A Unix timestamp in WAD-scaled seconds (`seconds * 1e18`), the EVM\\n`Time.blockTimestampScaled` convention. Distinct from [`Wad`] so a point in time is\\nnever mistaken for a duration: timestamps only compare and subtract (yielding a\\n[`Wad`] duration).",
+      "lib": "",
+      "name": "TimestampWad",
+      "fields": [
+        {
+          "doc": "",
+          "name": "0",
+          "type_": "u128"
+        }
+      ]
+    }
+  }
+]

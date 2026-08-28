@@ -1,0 +1,303 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "Immutable binding set at construction.",
+      "lib": "",
+      "name": "Config",
+      "fields": [
+        {
+          "doc": "The reserve's underlying asset, keying `get_reserve`.",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "The Blend pool contract.",
+          "name": "pool",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Config"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Version"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The reserve's current bToken supply index (`b_rate`, `SCALAR_12` scale),\\nread live from Blend via `get_reserve`.\\n\\nThis is a live read, not a settled one: `get_reserve` runs `Reserve::load`,\\nwhich accrues from `data.last_time` to the current ledger timestamp before\\nreturning (early-returning only when the reserve was already accrued this\\nledger). So the index advances continuously on a quiet reserve, and a\\n`pin_index` at a term boundary captures that boundary's true index \\xe2\\x80\\x94\\nno interaction has to land nearby. The Alula adapter reaches the same\\nproperty by projecting forward itself, because its source settles on read;\\nhere the pool already does it.\\n\\n`b_rate` does legitimately hold flat while `utilization == 0` \\xe2\\x80\\x94 nothing is\\nborrowed, so suppliers earn nothing. That is a real zero rate, not staleness.",
+      "name": "index",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The bound configuration (pool / asset).",
+      "name": "config",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Config"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Replace the contract's wasm (admin-gated). Address and storage are kept.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Hand the admin role to `new_admin` (current admin only).\\n\\n`upgrade` is admin-gated and this contract has no other way to move that role, so without\\nthis the deploying key kept un-timelocked code-replacement authority over it forever \\xe2\\x80\\x94 the\\ngovernance handover could rotate the engine, vAMM and broker but not this.",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Storage/schema version, bumped by a post-`upgrade` migration when the layout changes.",
+      "name": "get_version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Bind this adapter to one reserve (`asset`) of one Blend `pool`, admin-gated for upgrades.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Reserve",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "config",
+          "type_": {
+            "udt": {
+              "name": "ReserveConfig"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "data",
+          "type_": {
+            "udt": {
+              "name": "ReserveData"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "scalar",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ReserveData",
+      "fields": [
+        {
+          "doc": "bToken (supply) index \\xe2\\x80\\x94 what the adapter reads.",
+          "name": "b_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "b_supply",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "backstop_credit",
+          "type_": "i128"
+        },
+        {
+          "doc": "dToken (borrow) index.",
+          "name": "d_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "d_supply",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "ir_mod",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "last_time",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ReserveConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "c_factor",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "decimals",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "enabled",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "l_factor",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_util",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "r_base",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "r_one",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "r_three",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "r_two",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "reactivity",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "supply_cap",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "util",
+          "type_": "u32"
+        }
+      ]
+    }
+  }
+]

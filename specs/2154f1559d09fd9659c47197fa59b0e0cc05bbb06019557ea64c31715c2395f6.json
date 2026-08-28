@@ -1,0 +1,928 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "SEP-40 asset key: a Stellar token, or a ticker symbol.",
+      "lib": "",
+      "name": "Asset",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Stellar",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Other",
+            "type_": [
+              "symbol"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "SEP-40 price record: `price` in the oracle's `decimals`, quoted in its `base`.",
+      "lib": "",
+      "name": "PriceData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Config",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Config"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Version"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Source",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Assets"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Temporary-storage cache of a fully resolved price read, keyed by our-asset\\nAddress \\xe2\\x86\\x92 [`PriceCache`]. Valid only within the ledger it was written in.",
+            "name": "PriceCache",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A cached resolved price: the asset's WAD USD price, its source timestamp in seconds,\\nthe freshness verdict, and the ledger the cache was written in. Any repeat read of the\\nsame asset within a tx (an account with several positions in one pool prices the same\\nunderlying over and over; the margin gate touches both a share and its underlying)\\nskips the source's cross-contract call \\xe2\\x80\\x94 a fresh ~1MB VM instantiation charged against\\nthe tx memory cap. Caching the whole resolved triple (not a raw feed value) covers\\nevery source uniformly \\xe2\\x80\\x94 Sep40, RedStone, and the derived YieldShare, whose base and\\nwrapper-rate calls are both skipped on a hit. `fresh` is safe to cache: within one\\nledger `now` is constant, so the verdict cannot flip. Same-ledger validity bounds the\\nstaleness this can mask to one ledger (~5s), far inside any registered `max_age`.",
+      "lib": "",
+      "name": "PriceCache",
+      "fields": [
+        {
+          "doc": "",
+          "name": "fresh",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "How an asset's USD price is sourced.",
+      "lib": "",
+      "name": "PriceSource",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Sep40",
+            "type_": [
+              {
+                "udt": {
+                  "name": "Sep40Source"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "RedStone",
+            "type_": [
+              {
+                "udt": {
+                  "name": "RedStoneSource"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Xoxno",
+            "type_": [
+              {
+                "udt": {
+                  "name": "XoxnoSource"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Derived: the base asset's price scaled by the wrapper's share\\xe2\\x86\\x92underlying rate.",
+            "name": "YieldShare",
+            "type_": [
+              {
+                "udt": {
+                  "name": "YieldShareSource"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A SEP-40 source: which oracle + asset key, the oracle's decimals, freshness bound.",
+      "lib": "",
+      "name": "Sep40Source",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": {
+            "udt": {
+              "name": "Asset"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "decimals",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_age",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "oracle",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A XOXNO price-aggregator source: the aggregator contract, the key this asset is quoted under\\nthere, and the freshness bound.\\n\\nNo `decimals`: the aggregator already answers in WAD. Its own `asset_decimals` describes the\\nasset, not the price.\\n\\nThe aggregator resolves each key from one or more underlying feeds and applies its own\\nstaleness and dual-source-deviation checks; the hub reads the *soft* side of that\\n(`quote`) and decides for itself what counts as usable, so an asset XOXNO considers\\nquestionable degrades to \"no price\" instead of reverting every valuation that touches it.",
+      "lib": "",
+      "name": "XoxnoSource",
+      "fields": [
+        {
+          "doc": "",
+          "name": "aggregator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "key",
+          "type_": {
+            "udt": {
+              "name": "PriceKey"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "max_age",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A RedStone Adapter source: the network's shared adapter contract, the feed id it\\nkeys this asset's price under (\"USDC\", \"XLM\", \\xe2\\x80\\xa6), the deployment's price decimals\\n(8 on RedStone's Stellar deployments \\xe2\\x80\\x94 the adapter doesn't expose it on-chain, so\\nit's recorded at registration), and the freshness bound. Adapter timestamps are\\nalways milliseconds; the hub normalizes on read.",
+      "lib": "",
+      "name": "RedStoneSource",
+      "fields": [
+        {
+          "doc": "",
+          "name": "adapter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "decimals",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "feed_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "max_age",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A yield-share source: a share token whose price is *derived* rather than quoted. `base_asset`\\nis the underlying (registered in the hub under its own source), `wrapper` the yield wrapper\\nexposing `assets_per_share_wad()` \\xe2\\x80\\x94 how much underlying one whole share is currently worth.\\n\\nExists because a yield-bearing share is not worth its underlying 1:1: the rate grows as\\ninterest accrues, so quoting the share at the underlying's price understates it by exactly the\\naccrued yield. There is no external oracle for such a share \\xe2\\x80\\x94 the rate is on-chain \\xe2\\x80\\x94 hence a\\nderived source rather than another feed.",
+      "lib": "",
+      "name": "YieldShareSource",
+      "fields": [
+        {
+          "doc": "",
+          "name": "base_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "wrapper",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Every registered asset, in registration order (lets consumers enumerate the hub).",
+      "name": "assets",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Replace the contract's wasm (admin-gated). Address and storage are kept.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Transfer the admin role to `new_admin` (current admin only). Hands the hub over to the\\ngovernance timelock; the price-source routing (`set_sep40_source` /\\n`set_redstone_feed_source`) moves with the role.",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Storage/schema version, bumped by a post-`upgrade` migration when the layout changes.",
+      "name": "get_version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OracleHubError",
+      "cases": [
+        {
+          "doc": "The base price multiplied by the live share rate does not fit the hub's price type.",
+          "name": "YieldSharePriceOverflow",
+          "value": 3
+        },
+        {
+          "doc": "A RedStone `U256` price does not fit the hub's signed `i128` price representation.",
+          "name": "RedStonePriceOutOfRange",
+          "value": 4
+        },
+        {
+          "doc": "Normalizing a quoted price to WAD does not fit `i128`.",
+          "name": "PriceScaleOverflow",
+          "value": 5
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Unregister `asset`'s price source (admin only): it prices as `(0, 0, false)` again,\\nexactly like an asset that was never routed. The escape hatch for a wedged feed \\xe2\\x80\\x94 a\\nyield wrapper whose upstream broke, a decommissioned oracle \\xe2\\x80\\x94 so it can be neutralised\\nwithout inventing a fake quoted price. Re-registering via `set_*_source` restores it.",
+      "name": "remove_source",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_price_source",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "PriceSource"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Route `asset` to a SEP-40 oracle (Reflector / RedStone SEP-40), keyed by\\n`sep40_asset` (admin only). Caches the oracle's `decimals()`.",
+      "name": "set_sep40_source",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "oracle",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sep40_asset",
+          "type_": {
+            "udt": {
+              "name": "Asset"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "max_age",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Route `asset` to XOXNO's price aggregator under `key` (admin only).\\n\\nProbes with the fail-closed `price` rather than the soft `quote` the hub reads at runtime:\\nregistration is the one moment we *want* a hard failure. A key the aggregator cannot\\nresolve would otherwise register cleanly and price the asset `(0, 0, false)` forever, which\\ndownstream reads as \"stale oracle\" and traps every valuation touching it \\xe2\\x80\\x94 far from the\\ncall that actually got it wrong.",
+      "name": "set_xoxno_source",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "aggregator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "key",
+          "type_": {
+            "udt": {
+              "name": "PriceKey"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "max_age",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "USD price of `asset` in WAD (1e18), the source timestamp, and a freshness flag.\\nReturns `(0, 0, false)` when no source is registered, a quoted source has no price,\\nor a source read fails. Every arm degrades rather than trapping: this hub sits inside\\nevery margin, liquidation and settlement flow, and consumers cannot guard a panic in a\\ndependency \\xe2\\x80\\x94 one wedged source would freeze all of them for every account holding the\\nasset (S2-M-04). \"No price\" is the one verdict consumers already handle safely.",
+      "name": "get_price_usd_wad",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "u64",
+              "bool"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Route `asset` to a feed on the RedStone Adapter (admin only). `feed_id` is the\\nadapter's key for the asset (\"USDC\", \"XLM\", \"BENJI\", \\xe2\\x80\\xa6); `decimals` is the\\ndeployment's price scale \\xe2\\x80\\x94 8 on RedStone's Stellar deployments (the adapter\\ndoesn't expose it on-chain). Probes the adapter once so a wrong adapter address\\nor feed id fails here instead of silently pricing as `(0, 0, false)`.",
+      "name": "set_redstone_source",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "adapter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "feed_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "decimals",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_age",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Route a yield-wrapper `share` to its underlying's price scaled by the wrapper's live\\nshare\\xe2\\x86\\x92underlying rate (admin only). `base_asset` must already have a quoted source; a\\nderived base is rejected so sources cannot nest.\\n\\nThe three arguments must describe **one** wrapper: `share` and `base_asset` are checked\\nagainst the wrapper's own `share_token()` and `underlying()`, so the triple cannot be\\nassembled from parts of two.\\n\\nProbing the rate is not enough on its own \\xe2\\x80\\x94 it passes for any contract exposing\\n`assets_per_share_wad() > 0`, which is every other wrapper in the deployment. Registration\\nhappens in a loop over reserves and tenors, so a transposed pair is a live risk, and it\\nproduces a *well-formed* price: the share ends up quoted at some other asset's price times\\nthis wrapper's rate. Nothing downstream can tell \\xe2\\x80\\x94 the error is a constant factor, so it\\nreads as a plausible number and mis-values margin by the ratio of the two assets until an\\noff-chain reconciliation catches it.\\n\\nAlso probes the base price",
+      "name": "set_yield_share_source",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "share",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "base_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "wrapper",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Adapter price record. `price` is in the deployment's fixed decimals (8 on\\nRedStone's Stellar deployments). Both timestamps are **milliseconds**:\\n`package_timestamp` is when the oracle nodes signed the data (the price's true\\nage), `write_timestamp` when an updater pushed it on-chain.",
+      "lib": "",
+      "name": "RedStonePriceData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "package_timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "u256"
+        },
+        {
+          "doc": "",
+          "name": "write_timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "One swap hop through a specific pool.\\n\\n`amount_out` is ignored by the aggregator \\xe2\\x80\\x94 it derives the honorable output from live reserves \\xe2\\x80\\x94\\nso a payload built on-chain can leave it at `0`.",
+      "lib": "",
+      "name": "SwapHop",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "venue",
+          "type_": {
+            "udt": {
+              "name": "SwapVenue"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "One sub-route: a sequence of hops taking `split_ppm` (parts-per-million) of the total input.",
+      "lib": "",
+      "name": "SwapPath",
+      "fields": [
+        {
+          "doc": "",
+          "name": "hops",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "SwapHop"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "split_ppm",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "A DEX the aggregator can route a hop through. Mirrors the Router's own `SwapVenue`.",
+      "lib": "",
+      "name": "SwapVenue",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Soroswap"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Aquarius"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Phoenix"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Sushi"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "CometDex"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "The full route. `total_min_out` is the only slippage bound the aggregator itself enforces.\\n\\nField names and types mirror the Router's ABI **exactly** \\xe2\\x80\\x94 the payload crosses the boundary as\\nXDR ([`soroban_sdk::xdr::ToXdr`]), so a renamed or reordered field does not fail to compile, it\\nfails to decode on the other side.",
+      "lib": "",
+      "name": "StrategyPayload",
+      "fields": [
+        {
+          "doc": "",
+          "name": "paths",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "SwapPath"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "referral_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_min_out",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "What a price is keyed by in XOXNO's aggregator: a token address, or a symbolic reference for a\\nquote that has no token of its own (an index, a synthetic pair).\\n\\nMirrors `common::types::composable_oracle::PriceKey`.",
+      "lib": "",
+      "name": "PriceKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Token",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Ref",
+            "type_": [
+              "symbol"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A XOXNO market coordinate: the same underlying can be listed as several isolated markets\\n(separate indexes, cash, bad debt), so a market is `(hub_id, asset)`, not just `asset`.\\nField names/types mirror XOXNO's `common::types::HubAssetKey` exactly (a two-field struct\\nXOXNO encodes as an XDR map keyed by field name), so it decodes on both the argument and the\\nmap-key side.",
+      "lib": "",
+      "name": "HubAssetKey",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "hub_id",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "The aggregator's soft read: a resolved price plus why it might not be usable. Mirrors\\n`common::types::oracle::PriceStatus`.\\n\\n`final_wad` is already WAD-scaled USD, so nothing needs re-scaling on our side \\xe2\\x80\\x94\\n`asset_decimals` on the fail-closed `PriceFeedRaw` describes the *asset*, not the price.\\n\\nThe three flags are the reason this, and not `price`, is what the hub calls:\\n\\n* `valid` \\xe2\\x80\\x94 the aggregator could resolve anything at all. `false` means no usable price.\\n* `stale` \\xe2\\x80\\x94 the newest observation is older than the asset's configured bound.\\n* `deviation` \\xe2\\x80\\x94 two independent sources disagree beyond the configured tolerance. Not an\\nerror on XOXNO's side, but for a margin engine it is exactly the case where a price should\\nnot be trusted.",
+      "lib": "",
+      "name": "PriceStatus",
+      "fields": [
+        {
+          "doc": "",
+          "name": "deviation",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "final_wad",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "price_timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "primary_wad",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "secondary_wad",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "stale",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "valid",
+          "type_": "bool"
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "Leverage/position mode for `multiply`. A `u32`-discriminant enum mirroring XOXNO's\\n`common::types::PositionMode` exactly (values must match, or the call decodes to the wrong mode).\\n`Multiply` allows the same asset across different hubs (passthrough, no swap); `Long`/`Short`\\nrequire distinct assets and a real swap route.",
+      "lib": "",
+      "name": "PositionMode",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Normal",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Multiply",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Long",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Short",
+          "value": 3
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "The aggregator's fail-closed read: it reverts rather than hand back a price it considers\\nstale, deviating or unresolvable. Mirrors `common::types::oracle::PriceFeedRaw`.\\n\\n`price_wad` is USD in WAD; `asset_decimals` describes the *asset*, not the price, so nothing\\nhere needs re-scaling.",
+      "lib": "",
+      "name": "PriceFeedRaw",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset_decimals",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "price_wad",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A market's supply and borrow indexes, RAY-scaled (1e27). Mirrors XOXNO's\\n`common::types::MarketIndexRaw`.",
+      "lib": "",
+      "name": "MarketIndexRaw",
+      "fields": [
+        {
+          "doc": "",
+          "name": "borrow_index",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "supply_index",
+          "type_": "i128"
+        }
+      ]
+    }
+  }
+]

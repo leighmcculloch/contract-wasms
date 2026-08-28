@@ -1,0 +1,2264 @@
+[
+  {
+    "function_v0": {
+      "doc": "Remove liquidity. Returns `positionMarginRequirement`.\\n`caller` must be the account owner or the collateral engine (liquidation).\\nLiquidations skip the margin check (returns 0).",
+      "name": "burn",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": {
+            "udt": {
+              "name": "PoolId"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": {
+            "udt": {
+              "name": "Account"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "tick_lower",
+          "type_": "i32"
+        },
+        {
+          "doc": "",
+          "name": "tick_upper",
+          "type_": "i32"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Add liquidity. Returns `(positionMarginRequirement, feeIncurred)`.\\n`caller` must be the account owner.\\n\\n`initial_price` sets the pool's price when it was created without one (see\\n[`create_pool`](Self::create_pool)): the first mint must pass `Some(price)`, which\\ninitializes the pool and emits `PoolInitialized`. Once the price is set, mints must\\npass `None` \\xe2\\x80\\x94 supplying a price to an already-priced pool errors with `PriceAlreadySet`.",
+      "name": "mint",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": {
+            "udt": {
+              "name": "PoolId"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": {
+            "udt": {
+              "name": "Account"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "tick_lower",
+          "type_": "i32"
+        },
+        {
+          "doc": "",
+          "name": "tick_upper",
+          "type_": "i32"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "initial_price",
+          "type_": {
+            "option": {
+              "value_type": {
+                "udt": {
+                  "name": "SqrtPriceX96"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": [
+                  "u128",
+                  "i128"
+                ]
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Execute a swap. `amount_specified > 0` = fixed taker, `< 0` = variable taker.\\n`caller` must be the account owner or the collateral engine (liquidation).\\nLiquidations skip the margin check (returns 0).",
+      "name": "swap",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": {
+            "udt": {
+              "name": "PoolId"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "params",
+          "type_": {
+            "udt": {
+              "name": "SwapParams"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "SwapResult"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The current admin.",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Derive a pool's id from its key (`PoolKey.toId`).",
+      "name": "pool_id",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key",
+          "type_": {
+            "udt": {
+              "name": "PoolKey"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "PoolId"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Replace the contract's wasm (admin-gated). Address and storage are kept.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Transfer the admin role to `new_admin` (current admin only). The deploy hands the VAMM over\\nto the governance timelock this way once its owner-driven setup has run; afterwards every\\nadmin change (including `create_pool`) goes through governance.",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Every pool id ever created, in creation order. The on-chain directory: lets a\\nclient enumerate pools and then drive `mint`/`burn`/`swap` by id alone.\\n\\nReads the whole registry in one call, so it is eventually bounded by the transaction read\\nbudget. Clients that must not inherit that bound should page through\\n[`list_pools_page`](Self::list_pools_page) using [`pool_count`](Self::pool_count).",
+      "name": "list_pools",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "PoolId"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "How many pools have ever been created \\xe2\\x80\\x94 the length of the directory.",
+      "name": "pool_count",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Create and initialize a new pool (admin only). Returns `(tick, poolId)`.\\n`key` fully identifies the pool.\\n\\n`sqrt_price` may be `None` to defer the initial price: the pool is created without a\\nprice (and without a meaningful tick), and the first [`mint`](Self::mint) must supply\\none. When deferred, the returned tick is `None` and the `PoolInitialized` event fires\\nfrom that first mint instead of here.",
+      "name": "create_pool",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key",
+          "type_": {
+            "udt": {
+              "name": "PoolKey"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "sqrt_price",
+          "type_": {
+            "option": {
+              "value_type": {
+                "udt": {
+                  "name": "SqrtPriceX96"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": [
+                  {
+                    "option": {
+                      "value_type": "i32"
+                    }
+                  },
+                  {
+                    "udt": {
+                      "name": "PoolId"
+                    }
+                  }
+                ]
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Storage/schema version, bumped by a post-`upgrade` migration when the layout changes.",
+      "name": "get_version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Whether a pool with this key exists.",
+      "name": "pool_exists",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key",
+          "type_": {
+            "udt": {
+              "name": "PoolKey"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Reconstruct a pool's `PoolKey` from its stored state \\xe2\\x80\\x94 the inverse of\\n[`pool_id`](Self::pool_id). Useful to label/identify a pool given only its id.",
+      "name": "get_pool_key",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": {
+            "udt": {
+              "name": "PoolId"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "PoolKey"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set global config: the admin (pool creator) and the shared CollateralEngine.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "engine",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "`(tick, sqrtPrice, compoundToken)` for the pool.",
+      "name": "get_vamm_state",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": {
+            "udt": {
+              "name": "PoolId"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": [
+                  "i32",
+                  {
+                    "udt": {
+                      "name": "SqrtPriceX96"
+                    }
+                  },
+                  "address"
+                ]
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "One page of the directory, in creation order: ids `page * 256 .. (page + 1) * 256`. Empty\\npast the end. Pair with [`pool_count`](Self::pool_count) to walk the registry at a fixed\\ncost per call, however many pools exist.",
+      "name": "list_pools_page",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "page",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "PoolId"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The `amount_specified` that retires exactly `variable_tokens` of a position's variable leg,\\nsigned the same way \\xe2\\x80\\x94 pass a position's `variable_token_balance` to get the notional that\\ncloses it out to zero.\\n\\nA swap is quoted in notional and books `ceil(notional / (1 + accrued))` of the pool's\\nterm-start-anchored tokens, so the two units are not interchangeable once the term is under\\nway, and a caller cannot compute the inverse off-chain: `accrued` advances with the ledger,\\nso any notional derived before the transaction lands is stale on arrival and leaves a\\nresidue. Worse, retrying against the residue leaves `1 / (1 + accrued)` of it each time \\xe2\\x80\\x94\\ngeometric, never reaching the zero that gates a full close.\\n\\nThe floor here is what makes the round trip exact rather than approximate:\\n`ceil(floor(B * (1 + accrued)) / (1 + accrued)) == B` for every `B`, because flooring loses\\nstrictly less than one unit and the swap's ceiling puts it back. Rounding the other way would\\novershoot and flip the leg past zero.\\n\\nRefresh",
+      "name": "notional_to_close",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": {
+            "udt": {
+              "name": "PoolId"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "variable_tokens",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The APR oracle this pool reads its variable factor from and pins `term_start` on \\xe2\\x80\\x94 the\\nengine's own, resolved at [`create_pool`](Self::create_pool). Exposed so a deployment can be\\nchecked against the engine's config without a trade having to fail first.",
+      "name": "get_pool_apr_oracle",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": {
+            "udt": {
+              "name": "PoolId"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Remove liquidity as a liquidation step, driven by the collateral engine. Same pool\\nmutation as [`burn`](Self::burn), but returns the resulting `UpdatePositionParams`\\ninstead of calling back into the engine: the engine \\xe2\\x80\\x94 already on the call stack inside\\nits own `liquidate_position` \\xe2\\x80\\x94 applies the update to itself in-process\\n(`update_position_post_vamm_action`). This is what keeps the engine from re-entering\\nitself through the VAMM (engine -> vamm -> engine), which the two-hop `burn` callback\\nwould otherwise require during liquidation. `caller` must be the configured engine; the\\nmargin check `burn` runs is meaningless here (liquidations are forced closes), so it is\\nskipped. The engine is the only intended caller \\xe2\\x80\\x94 see `CollateralEngine::liquidate_position`.",
+      "name": "burn_for_liquidation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": {
+            "udt": {
+              "name": "PoolId"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": {
+            "udt": {
+              "name": "Account"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "tick_lower",
+          "type_": "i32"
+        },
+        {
+          "doc": "",
+          "name": "tick_upper",
+          "type_": "i32"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "UpdatePositionParams"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Execute a swap as a liquidation step, driven by the collateral engine. Same pool math as\\n[`swap`](Self::swap), but returns the resulting `UpdatePositionParams` instead of calling\\nback into the engine \\xe2\\x80\\x94 see\\n[`burn_for_liquidation`](Self::burn_for_liquidation) for why. `caller` must be the\\nconfigured engine.",
+      "name": "swap_for_liquidation",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": {
+            "udt": {
+              "name": "PoolId"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "params",
+          "type_": {
+            "udt": {
+              "name": "SwapParams"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "UpdatePositionParams"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Fixed/variable token growth accumulated inside `[tick_lower, tick_upper)` (X128).",
+      "name": "compute_growth_inside",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": {
+            "udt": {
+              "name": "PoolId"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "tick_lower",
+          "type_": "i32"
+        },
+        {
+          "doc": "",
+          "name": "tick_upper",
+          "type_": "i32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": [
+                  "i256",
+                  "i256"
+                ]
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "PoolExpired",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "PoolNotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "PoolAlreadyExists",
+          "value": 3
+        },
+        {
+          "doc": "Caller is neither the account owner nor the collateral engine.",
+          "name": "Unauthorized",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "IsolatedMarginViolation",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "ZeroAmount",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "TickSpacingOutOfBounds",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "SqrtPriceOutOfBounds",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "ZeroPrice",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "FeeRangeInvalid",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "InvalidTerm",
+          "value": 11
+        },
+        {
+          "doc": "`tickLower < tickUpper && in [MIN_TICK, MAX_TICK]` violated, or growth-inside check.",
+          "name": "TickRange",
+          "value": 12
+        },
+        {
+          "doc": "Notional / amountSpecified must be non-zero.",
+          "name": "ZeroNotional",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "InvalidPriceLimit",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "InvalidAprRate",
+          "value": 15
+        },
+        {
+          "doc": "Acting on a pool whose deferred initial price has not been set yet.",
+          "name": "PriceNotSet",
+          "value": 16
+        },
+        {
+          "doc": "Supplying an initial price to a pool that already has one.",
+          "name": "PriceAlreadySet",
+          "value": 17
+        },
+        {
+          "doc": "A user swap filled nothing on one of its legs (traded for zero) \\xe2\\x80\\x94 the notional was\\ndust against the pool's liquidity or the price limit blocked any progress.",
+          "name": "ZeroSwapOutput",
+          "value": 18
+        },
+        {
+          "doc": "A user swap filled only part of `amount_specified`: the swap loop dropped a dust\\nremainder that could not move the price against deep liquidity. Fill-or-revert \\xe2\\x80\\x94\\nstopping at the price limit is still a legitimate partial fill and is not this\\nerror. Liquidation swaps are exempt (a forced close keeps whatever it filled).",
+          "name": "PartialSwapFill",
+          "value": 19
+        },
+        {
+          "doc": "",
+          "name": "MathOverflow",
+          "value": 20
+        },
+        {
+          "doc": "",
+          "name": "MathDivByZero",
+          "value": 21
+        },
+        {
+          "doc": "",
+          "name": "MathOutOfRange",
+          "value": 22
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Burn",
+      "prefix_topics": [
+        "burn"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": {
+            "udt": {
+              "name": "PoolId"
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "isolated_margin_token",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "tick_lower",
+          "type_": "i32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "tick_upper",
+          "type_": "i32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "fee_incurred",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Mint",
+      "prefix_topics": [
+        "mint"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": {
+            "udt": {
+              "name": "PoolId"
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "isolated_margin_token",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "tick_lower",
+          "type_": "i32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "tick_upper",
+          "type_": "i32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "fee_incurred",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Swap",
+      "prefix_topics": [
+        "swap"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": {
+            "udt": {
+              "name": "PoolId"
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "isolated_margin_token",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "tick_lower",
+          "type_": "i32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "tick_upper",
+          "type_": "i32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "fixed_token_delta",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "variable_token_delta",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "fee_incurred",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "tick_after",
+          "type_": "i32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "price_after",
+          "type_": {
+            "udt": {
+              "name": "SqrtPriceX96"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PoolInitialized",
+      "prefix_topics": [
+        "pool_initialized"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": {
+            "udt": {
+              "name": "PoolId"
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "underlying",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "compound",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "The rate source the pool pins `term_start` on, taken from the engine's config. Emitted so a\\ndeployment's two oracle bindings can be reconciled off-chain instead of only by the first\\naction that traps once the observation ring rolls past `term_start`.",
+          "name": "apr_oracle",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "tick",
+          "type_": "i32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "sqrt_price",
+          "type_": {
+            "udt": {
+              "name": "SqrtPriceX96"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Engine"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Version"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Total pools ever created \\xe2\\x80\\x94 the length behind [`DataKey::PoolPage`].",
+            "name": "PoolCount"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "One page of the pool registry, 256 ids each. Paged rather than flat: see\\n[`POOLS_PER_PAGE`].",
+            "name": "PoolPage",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Pool",
+            "type_": [
+              {
+                "udt": {
+                  "name": "PoolId"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Tick",
+            "type_": [
+              {
+                "udt": {
+                  "name": "PoolId"
+                }
+              },
+              "i32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Bitmap",
+            "type_": [
+              {
+                "udt": {
+                  "name": "PoolId"
+                }
+              },
+              "i32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Per-pool scalar state. Growth globals are host `I256` (X128 fixed point).",
+      "lib": "",
+      "name": "PoolState",
+      "fields": [
+        {
+          "doc": "",
+          "name": "apr_oracle",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "compound_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee",
+          "type_": {
+            "udt": {
+              "name": "Wad"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fixed_token_growth_global",
+          "type_": "i256"
+        },
+        {
+          "doc": "",
+          "name": "liquidity",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "max_liquidity_per_tick",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "sqrt_price",
+          "type_": {
+            "udt": {
+              "name": "SqrtPriceX96"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "term_end_timestamp",
+          "type_": {
+            "udt": {
+              "name": "TimestampWad"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "term_start_timestamp",
+          "type_": {
+            "udt": {
+              "name": "TimestampWad"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "tick",
+          "type_": "i32"
+        },
+        {
+          "doc": "",
+          "name": "tick_spacing",
+          "type_": "i32"
+        },
+        {
+          "doc": "",
+          "name": "underlying_asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "variable_token_growth_global",
+          "type_": "i256"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Stored tick (host `I256` growth); the in-memory [`TickInfo`] uses pure `math::I256`.",
+      "lib": "",
+      "name": "StoredTick",
+      "fields": [
+        {
+          "doc": "",
+          "name": "fixed_growth_outside_x128",
+          "type_": "i256"
+        },
+        {
+          "doc": "",
+          "name": "initialized",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "liquidity_gross",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "liquidity_net",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "variable_growth_outside_x128",
+          "type_": "i256"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "The engine has not been wired to a VAMM yet (see `set_vamm`).",
+          "name": "VammNotSet",
+          "value": 1
+        },
+        {
+          "doc": "Token is not configured as margin-eligible (see `set_margin_asset_config`).",
+          "name": "AssetNotConfigured",
+          "value": 2
+        },
+        {
+          "doc": "Withdrawal exceeds the account's balance for that token.",
+          "name": "InsufficientBalance",
+          "value": 3
+        },
+        {
+          "doc": "`settle_position` was called before the pool reached `term_end`.",
+          "name": "PoolNotMatured",
+          "value": 4
+        },
+        {
+          "doc": "The APR oracle returned an invalid variable factor for the position's term.",
+          "name": "InvalidAprRate",
+          "value": 5
+        },
+        {
+          "doc": "A pool with an open position has no worst-case variable factor configured.",
+          "name": "WorstCaseNotSet",
+          "value": 6
+        },
+        {
+          "doc": "A collateral/underlying price needed for valuation was missing or stale.",
+          "name": "StalePrice",
+          "value": 7
+        },
+        {
+          "doc": "Post-action LTV-discounted collateral does not cover the worst-case obligation.",
+          "name": "InsufficientMargin",
+          "value": 8
+        },
+        {
+          "doc": "`settle_position` was called for a position the account does not hold.",
+          "name": "PositionNotFound",
+          "value": 9
+        },
+        {
+          "doc": "Liquidation attempted on an account that is not below its liquidation threshold.",
+          "name": "CannotLiquidate",
+          "value": 10
+        },
+        {
+          "doc": "Liquidation target position has no fixed-token debt to cover (`fixedBalance >= 0`).",
+          "name": "PositionNotInDebt",
+          "value": 11
+        },
+        {
+          "doc": "A partial liquidation or settlement round would strand dust (sub-threshold) residue \\xe2\\x80\\x94 a\\ndust-sized debt left while collateral is still available to cover it.",
+          "name": "DustResidue",
+          "value": 12
+        },
+        {
+          "doc": "The unwind swap did not fully close the position's variable leg.",
+          "name": "VariableTokensNotFullyLiquidated",
+          "value": 13
+        },
+        {
+          "doc": "A worst-case variable factor envelope the engine will not hold: a zero or inverted\\n`[positive_wad, negative_wad]`, or a `max_rate_wad` at or below `negative_wad`. The LP\\nsweep is cut at the ticks these rates imply, so an inconsistent triple would put the\\n`max_rate` cut *inside* the envelope and mis-zone every segment past it.",
+          "name": "InvalidWorstCase",
+          "value": 14
+        },
+        {
+          "doc": "A fee-pool deposit amount was non-positive.",
+          "name": "InvalidFeeAmount",
+          "value": 15
+        },
+        {
+          "doc": "A fee claim was attempted before any Merkle root was published.",
+          "name": "FeeRootNotSet",
+          "value": 16
+        },
+        {
+          "doc": "A fee claim's Merkle proof did not reproduce the published root.",
+          "name": "InvalidFeeProof",
+          "value": 17
+        },
+        {
+          "doc": "A fee claim's cumulative amount does not exceed what was already claimed.",
+          "name": "NothingToClaim",
+          "value": 18
+        },
+        {
+          "doc": "A fee claim would draw more than the token's fee pool (isolation: collateral is untouched).",
+          "name": "FeePoolExhausted",
+          "value": 19
+        },
+        {
+          "doc": "The account lacks the underlying-token margin to pay the trade fee on a position update.",
+          "name": "NotEnoughFundsForFee",
+          "value": 20
+        },
+        {
+          "doc": "`execute_early_settlement` before an ESM has been wired (see `set_esm`).",
+          "name": "EsmNotSet",
+          "value": 21
+        },
+        {
+          "doc": "`execute_early_settlement` on a pool that has already reached `term_end`.",
+          "name": "PoolExpired",
+          "value": 22
+        },
+        {
+          "doc": "The ESM's global fixed-token balance cannot cover the fixed leg being handed to it.",
+          "name": "InsufficientEsmBalance",
+          "value": 23
+        },
+        {
+          "doc": "A fixed-point computation overflowed (e.g. the early-settlement collateral delta).",
+          "name": "MathOverflow",
+          "value": 24
+        },
+        {
+          "doc": "`execute_early_settlement` for a `pool_id` the engine has no registered `PoolKey` for\\n(port of the EVM `PoolNotInitialized`).",
+          "name": "PoolNotInitialized",
+          "value": 25
+        },
+        {
+          "doc": "A liquidation round asked the VAMM to unwind part of the variable leg and the swap filled\\nnothing (an exhausted pool, or a price already at the limit). The position is unchanged, so\\nthe round must revert rather than charge an unwind fee for notional that never traded.",
+          "name": "UnwindMadeNoProgress",
+          "value": 26
+        },
+        {
+          "doc": "The engine has no cached VAMM price for a pool holding an LP position, so its current\\nbalances and worst-case sweep cannot be reconstructed on the hook-safe path.",
+          "name": "VammTickUnavailable",
+          "value": 27
+        },
+        {
+          "doc": "A protocol fee rate above `MAX_PROTOCOL_FEE_RATE`. The cut is a fraction of the trade fee,\\nand leaving LPs less than half of it is not a rate the engine will hold.",
+          "name": "InvalidProtocolFeeRate",
+          "value": 28
+        },
+        {
+          "doc": "A protocol-fee withdrawal exceeds what the token's protocol pool has accrued (isolation: it\\nmay never reach the LP fee pool or the collateral ledger).",
+          "name": "InsufficientProtocolFees",
+          "value": 29
+        },
+        {
+          "doc": "`eliminate_bad_debt` / `eliminate_adl_deficit` for a non-positive amount, or for more than\\nthe ledger it targets currently records.",
+          "name": "InvalidDeficitAmount",
+          "value": 30
+        },
+        {
+          "doc": "An amount that must be strictly positive (deposit/withdraw) was `<= 0`.",
+          "name": "InvalidAmount",
+          "value": 31
+        },
+        {
+          "doc": "`apply_adl` was called for a token with no recorded deficit.",
+          "name": "NoDeficit",
+          "value": 32
+        },
+        {
+          "doc": "`apply_adl` selected a candidate whose position is not a positive claim after unwind.",
+          "name": "AdlCandidateNotEligible",
+          "value": 33
+        },
+        {
+          "doc": "A margin deposit would push the asset's total held margin past its configured `deposit_max`.",
+          "name": "DepositMaxReached",
+          "value": 34
+        },
+        {
+          "doc": "A user-facing entrypoint was called while the engine is paused (guardian emergency brake).",
+          "name": "Paused",
+          "value": 35
+        },
+        {
+          "doc": "An open would leave the position below the pool's minimum notional \\xe2\\x80\\x94 a dust position too small\\nto be worth liquidating/settling (anti-spam floor).",
+          "name": "PositionBelowMin",
+          "value": 36
+        },
+        {
+          "doc": "A deposit or withdrawal would leave a non-zero collateral balance below the asset's\\n`deposit_min` \\xe2\\x80\\x94 dust collateral that would inflate margin against value no one will seize.",
+          "name": "CollateralBelowMin",
+          "value": 37
+        },
+        {
+          "doc": "`initialize_pool` on a pool that is already configured. Creation is a distinct, one-shot\\noperation from the per-pool `set_*` setters that retune a live pool, so a compromised\\nfast-path (deployer) can never reach a live pool's risk params through it.",
+          "name": "PoolAlreadyInitialized",
+          "value": 38
+        },
+        {
+          "doc": "Liquidation/settlement collateral cannot be the pool's own underlying debt token.",
+          "name": "InvalidCollateral",
+          "value": 39
+        },
+        {
+          "doc": "A margin asset's risk config is inconsistent: liquidation threshold below LTV, or\\n`liquidation_threshold + auto_exchange_bonus` above 1.0 (in either the default or isolated path).",
+          "name": "InvalidRiskConfig",
+          "value": 40
+        },
+        {
+          "doc": "An asset's isolated config is cleared (`ltv == 0`) but its liquidation threshold or bonus is\\nnonzero \\xe2\\x80\\x94 an isolated config is all-or-nothing (port of `IsolatedConfigMustBeZeroWhenCleared`).",
+          "name": "IsolatedConfigNotCleared",
+          "value": 41
+        },
+        {
+          "doc": "A margin deposit of a *restricted* collateral (one with [`AssetConfig::restricted_depositor`]\\nset) came from an account whose owner is not that depositor. Restricted collateral \\xe2\\x80\\x94 a\\nLockYield wrapper share, with a zero auto-exchange bonus so it self-settles at par and cannot\\nbe liquidated for a discount \\xe2\\x80\\x94 must never back an arbitrary cross-margin account, where a\\nzero bonus would leave it un-seizable and its position un-liquidatable.",
+          "name": "DepositRestricted",
+          "value": 42
+        },
+        {
+          "doc": "An [`AssetConfig`] naming a `restricted_depositor` whose auto-exchange bonus is nonzero (in\\neither the default or isolated path). Restricting a collateral to self-settlement is only\\nsound when it carries no bonus \\xe2\\x80\\x94 otherwise a settler/liquidator could still skim it.",
+          "name": "RestrictedBonusNonZero",
+          "value": 43
+        },
+        {
+          "doc": "An open would push the pool's open interest on that side past its configured `notional_max`.\\nThe cap bounds what an index-manipulation attack can pay out (see [`OpenInterest`]); closes,\\nreduces and liquidations are exempt, so a pool at the cap can always wind down.",
+          "name": "NotionalMaxReached",
+          "value": 44
+        },
+        {
+          "doc": "A normal VAMM action reached the engine before the pool's configured `term_start`.",
+          "name": "PoolNotStarted",
+          "value": 45
+        },
+        {
+          "doc": "Governance permanently disabled this pool before its configured `term_start`.",
+          "name": "PoolBlacklisted",
+          "value": 46
+        },
+        {
+          "doc": "`blacklist_pool` was called at or after the pool's configured `term_start`.",
+          "name": "PoolAlreadyStarted",
+          "value": 47
+        },
+        {
+          "doc": "An account with an `isolated_margin_token` took a position in a pool whose underlying is a\\n*different* asset. The isolated risk tier is the more generous one precisely because the\\nmargin and the debt are the same asset and so carry no cross-asset price risk; letting the\\ntwo diverge would hand out that tier on collateral it was never sized for. Mirrors the\\nVAMM's own `IsolatedMarginViolation` on mint/burn/swap.",
+          "name": "IsolatedMarginViolation",
+          "value": 48
+        },
+        {
+          "doc": "Opening a position would push the account past the protocol-wide per-account open-position\\nceiling. Entry values positions from cheap stored snapshots while liquidation and settlement\\nwalk them live, so without this ceiling an account can be grown past what its own exit paths\\nfit in one transaction and become un-liquidatable, un-settleable bad debt (see\\n[`crate::caps`]). Liquidations and the ESM's own book are exempt.",
+          "name": "PositionMaxReached",
+          "value": 49
+        },
+        {
+          "doc": "The caller is not the account owner (port of the EVM `_requireAuthorized` revert).",
+          "name": "Unauthorized",
+          "value": 50
+        },
+        {
+          "doc": "A trade reached a pool inside its `closing_window` \\xe2\\x80\\x94 the stretch before `term_end` where\\nrequired margin has shrunk with the term left to run. Liquidation, settlement, early\\nsettlement and `apply_adl` are unaffected.",
+          "name": "PoolClosing",
+          "value": 51
+        },
+        {
+          "doc": "`execute_early_settlement` was asked to open exposure rather than retire it \\xe2\\x80\\x94 a delta that\\ngrows the standing fixed leg, or one that overshoots it and flips the leg through zero onto\\nthe other side. The ESM is an exit venue, the counterparty of last resort for the fixed tail\\nan unwind leaves behind, so it may only walk a pre-existing leg toward zero. A zero balance\\nadmits no delta at all, which is what stops a position being created from nothing against\\nthe ESM's inventory.",
+          "name": "EsmOpensExposure",
+          "value": 52
+        },
+        {
+          "doc": "The account selected for ADL is already below its liquidation threshold and must go through\\nthe ordinary liquidation path instead.",
+          "name": "AdlCandidateLiquidatable",
+          "value": 53
+        },
+        {
+          "doc": "The candidate's actual post-unwind claim cannot cover the caller's minimum requested amount.",
+          "name": "AdlCoverBelowMinimum",
+          "value": 54
+        },
+        {
+          "doc": "A fee root publication did not advance the globally monotonic sequence.",
+          "name": "StaleFeeRoot",
+          "value": 55
+        },
+        {
+          "doc": "A user tried to sell a positive fixed claim to the ESM while this pool still has an\\noutstanding ADL deficit. The claim remains available to cover that deficit; buying fixed\\nto retire a negative leg is still allowed.",
+          "name": "EarlySettlementBlockedByAdl",
+          "value": 56
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Global wiring, set at construction (`vamm` set afterwards via `set_vamm`).",
+      "lib": "",
+      "name": "Config",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "APR oracle \\xe2\\x80\\x94 variable factor / settlement (Milestone B).",
+          "name": "apr_oracle",
+          "type_": "address"
+        },
+        {
+          "doc": "The Early Settlement Manager, queried for the discounted price in\\n`execute_early_settlement` (set afterwards via `set_esm`).",
+          "name": "esm",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "Reflector price oracle \\xe2\\x80\\x94 collateral valuation (Milestone B).",
+          "name": "price_oracle",
+          "type_": "address"
+        },
+        {
+          "doc": "The VAMM allowed to call `update_position_post_vamm_action`.",
+          "name": "vamm",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Why a fee was accrued. The backend uses this to distinguish a prepaid taker fee from an\\nimmediately distributable liquidation-unwind fee without inferring intent from neighbouring\\nevents.",
+      "lib": "",
+      "name": "FeeKind",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Trade"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LiquidationUnwind"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "The globally published fee-distribution root and its monotonic publication sequence.",
+      "lib": "",
+      "name": "FeeRoot",
+      "fields": [
+        {
+          "doc": "",
+          "name": "root",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "root_seq",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "One LP/taker position's accounting (a trimmed `Position.Info`: most liquidation fields\\nomitted). `*_growth_inside_last` snapshot the per-unit-liquidity X128 accumulators; an LP\\nposition's accrued balances are reconstructed from them in [`crate::growth`].\\n\\nTwo ledgers travel alongside the balances, both in the pool's term-start-anchored tokens \\xe2\\x80\\x94 the\\nsame unit as `variable_token_balance`, and **not** notionals despite what the per-pool caps are\\nconfigured in; those multiply by `1 + accrued` at the comparison ([`crate::caps`]).\\n\\n`traded_tokens` is the position's **counted exposure**: its contribution to the pool's\\n[`OpenInterest`]. Every explicit trade moves it at full size, including one a range makes against\\nits own leg \\xe2\\x80\\x94 that is not a netting, its counterparty is whoever holds liquidity at the current\\ntick. A range's *fills* are deliberately not counted; they arrive through growth-inside, and the\\npool's variable legs sum to zero, so bounding the traded sides bounds the ranges implicitly. When\\na range is b",
+      "lib": "",
+      "name": "Position",
+      "fields": [
+        {
+          "doc": "",
+          "name": "billed_tokens",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fixed_growth_inside_last",
+          "type_": "i256"
+        },
+        {
+          "doc": "",
+          "name": "fixed_token_balance",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "liquidity",
+          "type_": "u128"
+        },
+        {
+          "doc": "VAMM price matching the stored balances and growth baselines. The hook-safe valuation\\nsweeps from this price, keeping the realized and hypothetical parts at one point in time.",
+          "name": "sqrt_price_at_last_sync",
+          "type_": {
+            "udt": {
+              "name": "SqrtPriceX96"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "traded_tokens",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "variable_growth_inside_last",
+          "type_": "i256"
+        },
+        {
+          "doc": "",
+          "name": "variable_token_balance",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Aave-style per-asset collateral config.",
+      "lib": "",
+      "name": "AssetConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "default",
+          "type_": {
+            "udt": {
+              "name": "AssetRiskConfig"
+            }
+          }
+        },
+        {
+          "doc": "Max total margin (base units) the engine will hold of this asset across all accounts; `0`\\ndisables it. Tracked as the sum of every account's balance \\xe2\\x80\\x94 maintained inside\\n[`crate::account::apply_delta`], so a seizure or settlement auto-exchange gives its headroom\\nback the way a withdrawal does. Enforced entry-time on deposit only: lowering it blocks new\\ndeposits but never forces a withdrawal, and internal credits (settlement, fees) move the\\ngauge but are never gated by it.",
+          "name": "deposit_max",
+          "type_": "i128"
+        },
+        {
+          "doc": "Minimum collateral balance (base units) a user may hold of this asset; `0` disables it. After a\\nuser deposit or withdrawal the balance must be `0` or `>= deposit_min` \\xe2\\x80\\x94 dust collateral is\\nun-liquidatable one asset at a time, so holding it (and letting it back margin) is barred.",
+          "name": "deposit_min",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "isolated",
+          "type_": {
+            "udt": {
+              "name": "AssetRiskConfig"
+            }
+          }
+        },
+        {
+          "doc": "The only account owner allowed to post this asset as margin; `None` leaves it open to anyone.\\n\\nSet it to the LockYield broker to make the asset a **self-settling wrapper share**: it must\\nthen carry a zero `auto_exchange_bonus` (enforced together with this field, so the pair can\\nnever drift apart), which is exactly what lets matured settlement redeem it at par instead of\\nselling it to a settler at a discount ([`crate::settlement`]). That zero bonus is also why it\\nmust be confined here \\xe2\\x80\\x94 anywhere else it would be un-seizable collateral backing an\\nun-liquidatable position. Presence of this field is what arms the self-redeem.",
+          "name": "restricted_depositor",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "An element of an account's position list: the pool (by `pool_id`) and tick range.",
+      "lib": "",
+      "name": "PositionKey",
+      "fields": [
+        {
+          "doc": "",
+          "name": "pool_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "tick_lower",
+          "type_": "i32"
+        },
+        {
+          "doc": "",
+          "name": "tick_upper",
+          "type_": "i32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A pool's **open interest** in variable-token base units: the two one-sided sums of every\\nposition's `traded_tokens` (`variable_receiving` = the positive side, `variable_paying` = the\\nmagnitude of the negative side).\\n\\nStored in tokens, compared in underlying: `notional_max` is configured in the underlying, so each\\nside is multiplied by `1 + accrued` at the check rather than at the booking \\xe2\\x80\\x94 see\\n[`crate::caps`] for why only the token count is time-invariant. The two units coincide at\\n`term_start` and diverge from there.\\n\\nThree properties make this the right quantity to cap, rather than the pool's net position or the\\ngross flow through it:\\n\\n* **Per-position netting.** Each position contributes its *current* signed `traded_tokens`, so\\na round trip (open then close, in one account) leaves no residue. Summing trade magnitudes\\ninstead would let free wash trades ratchet the pool into its own cap.\\n* **Both sides, not the net.** An index-manipulation profit scales with the attacker's *own*\\nvariable-receiving notional",
+      "lib": "",
+      "name": "OpenInterest",
+      "fields": [
+        {
+          "doc": "",
+          "name": "variable_paying",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "variable_receiving",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A pool's [`WorstCaseVariableFactor`] together with the thresholds it implies \\xe2\\x80\\x94 the points an\\nLP's worst-case sweep is cut at ([`crate::lp_margin`]).",
+      "lib": "",
+      "name": "PoolWorstCase",
+      "fields": [
+        {
+          "doc": "",
+          "name": "cut_max_rate",
+          "type_": {
+            "udt": {
+              "name": "SqrtPriceX96"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "cut_negative",
+          "type_": {
+            "udt": {
+              "name": "SqrtPriceX96"
+            }
+          }
+        },
+        {
+          "doc": "`factor`'s three rates as cut points, derived once when the envelope is written.",
+          "name": "cut_positive",
+          "type_": {
+            "udt": {
+              "name": "SqrtPriceX96"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "factor",
+          "type_": {
+            "udt": {
+              "name": "WorstCaseVariableFactor"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "The full per-pool risk configuration written once, atomically, by `initialize_pool` \\xe2\\x80\\x94 the\\nruntime \"constructor\" for a pool on the shared engine. The engine and VAMM are singletons that\\nhost every pool, so a pool's params cannot live in a contract constructor; they are set when the\\npool is added. The individual `set_*` setters mutate these afterwards (each a timelocked\\ngovernance op); `initialize_pool` writes them all on a not-yet-configured pool and rejects an\\nalready-configured one. `notional_min`/`notional_max`/`protocol_fee_rate` of `0` disable those.",
+      "lib": "",
+      "name": "PoolRiskConfig",
+      "fields": [
+        {
+          "doc": "Seconds before `term_end` in which the pool stops accepting **trades**; `0` disables it.\\n\\nLiquidation, settlement, early settlement and `apply_adl` keep working. Two reasons:\\n\\n* The margin a position requires is proportional to the term it still has to run, so as\\n`term_end` approaches the notional a given deposit supports grows without bound. Such a\\nposition is worth about nothing, but its *balances* are not, and they land in open\\ninterest, ADL candidate selection and the deficit ledger all the same.\\n* ADL has only until `term_end` \\xe2\\x80\\x94 the VAMM refuses its liquidation entrypoints once the term\\nis over \\xe2\\x80\\x94 so a still book keeps the candidate its backend picked valid long enough to act\\non.\\n\\nPer-pool rather than global because it is a fraction of the tenor: an hour is nothing to a\\none-year pool and 4% of a one-day one.",
+          "name": "closing_window",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "notional_max",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "notional_min",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "protocol_fee_rate",
+          "type_": {
+            "udt": {
+              "name": "Wad"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "worst_case",
+          "type_": {
+            "udt": {
+              "name": "WorstCaseVariableFactor"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Per-asset risk parameters (WAD). An asset carries two: a `default` (cross-margin) path\\nand an `isolated` path used when it is the account's `isolated_margin_token`.",
+      "lib": "",
+      "name": "AssetRiskConfig",
+      "fields": [
+        {
+          "doc": "Auto-exchange / liquidation bonus (WAD): the discount a liquidator (seizure) or settler\\n(settlement ADL exchange) receives on this collateral.",
+          "name": "auto_exchange_bonus",
+          "type_": {
+            "udt": {
+              "name": "Wad"
+            }
+          }
+        },
+        {
+          "doc": "Liquidation threshold (WAD), `\\xe2\\x89\\xa5 ltv`.",
+          "name": "liquidation_threshold",
+          "type_": {
+            "udt": {
+              "name": "Wad"
+            }
+          }
+        },
+        {
+          "doc": "LTV (WAD). Margin gate: `\\xce\\xa3 amount\\xc2\\xb7price\\xc2\\xb7ltv \\xe2\\x89\\xa5 obligation`.",
+          "name": "ltv",
+          "type_": {
+            "udt": {
+              "name": "Wad"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Per-pool worst-case variable factor envelope (WAD annual rates) \\xe2\\x80\\x94 bounds the unknown variable\\nleg when valuing a position.\\n\\n`[positive_wad, negative_wad]` is the range the variable rate is expected to realize in:\\n`positive_wad` is the worst case for a position *receiving* variable (the rate collapses),\\n`negative_wad` the worst case for one *paying* it (the rate spikes).\\n\\n`max_rate_wad` is the hard ceiling \\xe2\\x80\\x94 the underlying venue's borrow APR at 100% utilization.\\nIt is what the envelope widens to once a price path falsifies the envelope on that side: an\\nLP whose liquidity only gets consumed at fixed rates above `negative_wad` is, in the scenario\\nwhere that happens, holding a position the envelope never described, so its variable leg is\\nbounded by the ceiling instead. The mirror case \\xe2\\x80\\x94 a path below `positive_wad` \\xe2\\x80\\x94 widens the\\nreceiving side down to zero. Only the side the path actually breached is widened.",
+      "lib": "",
+      "name": "WorstCaseVariableFactor",
+      "fields": [
+        {
+          "doc": "",
+          "name": "max_rate_wad",
+          "type_": {
+            "udt": {
+              "name": "Wad"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "negative_wad",
+          "type_": {
+            "udt": {
+              "name": "Wad"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "positive_wad",
+          "type_": {
+            "udt": {
+              "name": "Wad"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Pool identifier: `keccak256(xdr(PoolKey))`, the Soroban analogue of `PoolKey.toId`.\\n\\nA compact 32-byte handle for a pool: pass it to `mint`/`burn`/`swap` (and the read\\nhelpers) instead of re-supplying the full `PoolKey` on every call. Only `create_pool`,\\n`pool_id`, and `pool_exists` still take the full key.\\n\\nA `#[contracttype]` newtype, NOT a bare `type` alias: an alias makes the spec macros emit\\nan undefined UDT named \"PoolId\" (the CLI then fails \"Missing Entry PoolId\" on\\ndeploy/invoke), whereas the newtype registers a real spec entry. Being a 1-tuple, its wire\\nform wraps the inner bytes \\xe2\\x80\\x94 the CLI renders a `PoolId` as `[\"<hex>\"]` (like `Wad`), not a\\nbare `\"<hex>\"`. Reach the inner `BytesN<32>` via `.0`.",
+      "lib": "",
+      "name": "PoolId",
+      "fields": [
+        {
+          "doc": "",
+          "name": "0",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Trader / LP account. `isolated_margin_token = None` is unrestricted (cross) margin;\\n`Some(token)` selects isolated-margin mode against that asset.",
+      "lib": "",
+      "name": "Account",
+      "fields": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "isolated_margin_token",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Pool identity passed to the CollateralEngine.",
+      "lib": "",
+      "name": "PoolKey",
+      "fields": [
+        {
+          "doc": "",
+          "name": "compound_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee",
+          "type_": {
+            "udt": {
+              "name": "Wad"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "term_end_timestamp",
+          "type_": {
+            "udt": {
+              "name": "TimestampWad"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "term_start_timestamp",
+          "type_": {
+            "udt": {
+              "name": "TimestampWad"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "tick_spacing",
+          "type_": "i32"
+        },
+        {
+          "doc": "",
+          "name": "underlying_asset",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Swap inputs. `amount_specified > 0` is a fixed taker (exact input), `< 0` a variable\\ntaker (exact output). `tick_lower`/`tick_upper` identify the position for the engine.",
+      "lib": "",
+      "name": "SwapParams",
+      "fields": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": {
+            "udt": {
+              "name": "Account"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amount_specified",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "sqrt_price_limit",
+          "type_": {
+            "udt": {
+              "name": "SqrtPriceX96"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "tick_lower",
+          "type_": "i32"
+        },
+        {
+          "doc": "",
+          "name": "tick_upper",
+          "type_": "i32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Swap outputs.",
+      "lib": "",
+      "name": "SwapResult",
+      "fields": [
+        {
+          "doc": "",
+          "name": "fee_incurred",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fixed_token_delta",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fixed_token_delta_unbalanced",
+          "type_": "i128"
+        },
+        {
+          "doc": "How much of `amount_specified` the swap consumed, in the units it was given in. Equals it on\\na full fill; short when the price limit stopped the loop or the pool ran out of liquidity.",
+          "name": "notional_filled",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "position_margin_requirement",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "price_after",
+          "type_": {
+            "udt": {
+              "name": "SqrtPriceX96"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "tick_after",
+          "type_": "i32"
+        },
+        {
+          "doc": "The position's variable balance change, in the pool's term-start-anchored tokens. Below\\n`notional_filled` by the accrued factor whenever the trade lands mid-term, which is why a\\ncaller checking \"did I get the notional I asked for\" must read `notional_filled` instead.",
+          "name": "variable_token_delta",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Arguments for `CollateralEngine.update_position_post_vamm_action`.\\n\\nMixed-width by design: the token deltas are SEP-41 `i128` amounts, while the\\ngrowth-inside fields are X128 per-unit-liquidity accumulators carried as host `I256`.",
+      "lib": "",
+      "name": "UpdatePositionParams",
+      "fields": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": {
+            "udt": {
+              "name": "Account"
+            }
+          }
+        },
+        {
+          "doc": "The VAMM's current sqrt price at the time of this action, passed so the engine can run the\\nLP worst-case sweep without calling back into the VAMM (which is on the call stack).\\n\\nThe price rather than the tick: an LP's balance is a function of where the price actually\\nrests, and the realized side the engine pairs this with already reflects that, so starting\\nthe hypothetical sweep from a floored tick would leave the two describing different points.",
+          "name": "current_sqrt_price",
+          "type_": {
+            "udt": {
+              "name": "SqrtPriceX96"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fixed_growth_inside_x128",
+          "type_": "i256"
+        },
+        {
+          "doc": "",
+          "name": "fixed_token_delta",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "liquidity_delta",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "pool_key",
+          "type_": {
+            "udt": {
+              "name": "PoolKey"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "tick_lower",
+          "type_": "i32"
+        },
+        {
+          "doc": "",
+          "name": "tick_upper",
+          "type_": "i32"
+        },
+        {
+          "doc": "",
+          "name": "variable_growth_inside_x128",
+          "type_": "i256"
+        },
+        {
+          "doc": "",
+          "name": "variable_token_delta",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "An unsigned WAD (`1e18`) fixed-point quantity: a rate, fee, or duration in seconds.",
+      "lib": "",
+      "name": "Wad",
+      "fields": [
+        {
+          "doc": "",
+          "name": "0",
+          "type_": "u128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A `Q64.96` sqrt price (`sqrt(token1/token0) * 2^96`). The pool-constrained range\\n(`tick_math::{MIN,MAX}_SQRT_PRICE`) fits in `u128`; wide intermediates widen via\\n[`to_u256`](Self::to_u256).",
+      "lib": "",
+      "name": "SqrtPriceX96",
+      "fields": [
+        {
+          "doc": "",
+          "name": "0",
+          "type_": "u128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A Unix timestamp in WAD-scaled seconds (`seconds * 1e18`), the EVM\\n`Time.blockTimestampScaled` convention. Distinct from [`Wad`] so a point in time is\\nnever mistaken for a duration: timestamps only compare and subtract (yielding a\\n[`Wad`] duration).",
+      "lib": "",
+      "name": "TimestampWad",
+      "fields": [
+        {
+          "doc": "",
+          "name": "0",
+          "type_": "u128"
+        }
+      ]
+    }
+  }
+]

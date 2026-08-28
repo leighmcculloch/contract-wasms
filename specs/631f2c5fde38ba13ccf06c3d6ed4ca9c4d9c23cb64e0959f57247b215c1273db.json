@@ -1,0 +1,903 @@
+[
+  {
+    "function_v0": {
+      "doc": "Disabled. A share is a claim on bTokens sitting in this contract's Blend position, and the\\ntwo only stay in lockstep because every burn goes through [`Self::redeem`], which withdraws\\nthe backing in the same call. A raw burn destroys the claim and leaves the bTokens in the\\nposition with nobody able to reach them \\xe2\\x80\\x94 no recovery path, since the shares that addressed\\nthem no longer exist. SEP-41 wants the entrypoint to exist, so it exists and refuses.",
+      "name": "burn",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "name",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The Blend pool this wrapper supplies into (also exposed as the oracle/compound key).",
+      "name": "pool",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The address holding the admin role (`upgrade`, `set_metadata`, `set_admin`). Readable so a\\ngovernance handover can be verified rather than assumed.",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The reserve's underlying asset (same as `underlying()`; exposed for frontend routing).",
+      "name": "asset",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "redeem",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "symbol",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "approve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expiration_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Replace the contract's wasm (admin-gated). Address and storage are kept.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "decimals",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "muxed_address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "allowance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Disabled for the same reason as [`Self::burn`].",
+      "name": "burn_from",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Hand the admin role to `new_admin` (current admin only).\\n\\n`upgrade` is admin-gated and this contract has no other way to move that role, so without\\nthis the deploying key kept un-timelocked code-replacement authority over it forever \\xe2\\x80\\x94 the\\ngovernance handover could rotate the engine, vAMM and broker but not this.",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "underlying",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Storage/schema version, bumped by a post-`upgrade` migration when the layout changes.",
+      "name": "get_version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The share token is this contract itself (SEP-41 implemented below).",
+      "name": "share_token",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Update the share token's SEP-41 `name`/`symbol` metadata (admin-gated). Every other\\nconfig field is left untouched.",
+      "name": "set_metadata",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "symbol",
+          "type_": "string"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Configure the wrapper for one Blend reserve: `admin` may upgrade the wasm, `pool` is\\nthe Blend V2 pool contract, `asset` is the reserve's underlying SEP-41 token.\\n`decimals`/`name`/`symbol` are the share token's SEP-41 metadata.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "decimals",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "symbol",
+          "type_": "string"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "transfer_from",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "`b_rate` is exactly this rate, quoted at Blend's 12 decimals: `underlying = b_tokens *\\nb_rate / SCALAR_12`. Shares are bTokens one-for-one, and bTokens carry the underlying's\\nscale, so the whole-per-whole ratio is just `b_rate` restated in WAD.",
+      "name": "assets_per_share_wad",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "A token amount was negative.",
+          "name": "NegativeAmount",
+          "value": 1
+        },
+        {
+          "doc": "Transfer/burn exceeds the holder's balance.",
+          "name": "InsufficientBalance",
+          "value": 2
+        },
+        {
+          "doc": "`transfer_from`/`burn_from` exceeds the allowance.",
+          "name": "InsufficientAllowance",
+          "value": 3
+        },
+        {
+          "doc": "`approve` expiration ledger is in the past for a non-zero amount.",
+          "name": "BadExpiration",
+          "value": 4
+        },
+        {
+          "doc": "A deposit minted no shares, or a redeem resolved to a zero amount.",
+          "name": "ZeroShares",
+          "value": 5
+        },
+        {
+          "doc": "The pool has no bTokens yet, so no exchange rate exists.",
+          "name": "RateUnavailable",
+          "value": 6
+        },
+        {
+          "doc": "Fixed-point conversion overflow.",
+          "name": "MathOverflow",
+          "value": 7
+        },
+        {
+          "doc": "SEP-41 `burn` / `burn_from` on the share token. Shares are a claim on bTokens held in this\\ncontract's Blend position, so destroying them outside [`redeem`] would leave that backing\\nwith no owner and no way to reach it \\xe2\\x80\\x94 permanently. Exiting is `redeem`, which burns and\\nwithdraws together.",
+          "name": "BurnDisabled",
+          "value": 8
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Immutable wrapper configuration.",
+      "lib": "",
+      "name": "Config",
+      "fields": [
+        {
+          "doc": "Admin allowed to upgrade the contract's wasm.",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "The reserve's underlying asset (SEP-41 token) \\xe2\\x80\\x94 also the wrapper's `underlying()`.",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "Share-token decimals (mirrors the underlying asset).",
+          "name": "decimals",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        },
+        {
+          "doc": "Blend V2 pool contract (the `submit`/`get_positions`/`get_reserve` counterparty).",
+          "name": "pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "symbol",
+          "type_": "string"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Config"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Version"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalSupply"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Balance",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Allowance",
+            "type_": [
+              {
+                "udt": {
+                  "name": "AllowanceDataKey"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AllowanceValue",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expiration_ledger",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AllowanceDataKey",
+      "fields": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A single pool operation submitted via `BlendPool::submit`.",
+      "lib": "",
+      "name": "Request",
+      "fields": [
+        {
+          "doc": "The reserve's underlying asset address (for Supply/Withdraw/Borrow/Repay).",
+          "name": "address",
+          "type_": "address"
+        },
+        {
+          "doc": "Token amount (in the underlying's native units).",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "Discriminant \\xe2\\x80\\x94 use the `REQUEST_*` constants below.",
+          "name": "request_type",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A fully-decoded reserve (config + live data), returned by `get_reserve`.",
+      "lib": "",
+      "name": "Reserve",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "config",
+          "type_": {
+            "udt": {
+              "name": "ReserveConfig"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "data",
+          "type_": {
+            "udt": {
+              "name": "ReserveData"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "scalar",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Arguments for `BlendPool::flash_loan`: the loan is minted as dTokens on `from`, `amount`\\nof `asset` is transferred to `contract`, and `contract.exec_op(from, asset, amount, 0)`\\nruns before the declared requests are pulled back from `from` via allowance.",
+      "lib": "",
+      "name": "FlashLoan",
+      "fields": [
+        {
+          "doc": "Loan amount (in the underlying's native units).",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "The reserve underlying being flash-borrowed.",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "The moderc3156 receiver invoked as `exec_op(caller, token, amount, fee)`.",
+          "name": "contract",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A user's open positions in the pool, indexed by reserve index (`config.index`).\\nA non-collateral supply credits bTokens in the `supply` map.",
+      "lib": "",
+      "name": "Positions",
+      "fields": [
+        {
+          "doc": "Reserve index \\xe2\\x86\\x92 bToken balance (collateral supply shares).",
+          "name": "collateral",
+          "type_": {
+            "map": {
+              "key_type": "u32",
+              "value_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "Reserve index \\xe2\\x86\\x92 dToken balance (borrowed shares).",
+          "name": "liabilities",
+          "type_": {
+            "map": {
+              "key_type": "u32",
+              "value_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "Reserve index \\xe2\\x86\\x92 bToken balance (non-collateral supply shares).",
+          "name": "supply",
+          "type_": {
+            "map": {
+              "key_type": "u32",
+              "value_type": "i128"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Pool-level configuration, returned by `get_config`. Consumed for `oracle` (the SEP-40\\nprice source health-factor math reads) and `status`.",
+      "lib": "",
+      "name": "PoolConfig",
+      "fields": [
+        {
+          "doc": "Backstop take rate on accrued debt interest, 7 decimals.",
+          "name": "bstop_rate",
+          "type_": "u32"
+        },
+        {
+          "doc": "Max effective positions a single user can hold.",
+          "name": "max_positions",
+          "type_": "u32"
+        },
+        {
+          "doc": "Minimum collateral (in oracle base units) required to open a liability position.",
+          "name": "min_collateral",
+          "type_": "i128"
+        },
+        {
+          "doc": "The pool's price oracle contract.",
+          "name": "oracle",
+          "type_": "address"
+        },
+        {
+          "doc": "Pool status (0/1 active, odd values are backstop-triggered; see Blend docs).",
+          "name": "status",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Per-reserve runtime data \\xe2\\x80\\x94 updated on every interest accrual.",
+      "lib": "",
+      "name": "ReserveData",
+      "fields": [
+        {
+          "doc": "bToken (supply share) exchange-rate index, **12 decimals** (`SCALAR_12`).\\n`underlying = b_tokens * b_rate / SCALAR_12`.",
+          "name": "b_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "Total outstanding bToken supply.",
+          "name": "b_supply",
+          "type_": "i128"
+        },
+        {
+          "doc": "Underlying owed to the backstop (accumulated interest).",
+          "name": "backstop_credit",
+          "type_": "i128"
+        },
+        {
+          "doc": "dToken (borrow share) exchange-rate index, 12 decimals.",
+          "name": "d_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "Total outstanding dToken supply.",
+          "name": "d_supply",
+          "type_": "i128"
+        },
+        {
+          "doc": "Interest-rate modifier (7 decimals).",
+          "name": "ir_mod",
+          "type_": "i128"
+        },
+        {
+          "doc": "Last ledger timestamp at which interest was accrued.",
+          "name": "last_time",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Per-reserve configuration \\xe2\\x80\\x94 immutable after initialization.",
+      "lib": "",
+      "name": "ReserveConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "c_factor",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "decimals",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "enabled",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "l_factor",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_util",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "r_base",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "r_one",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "r_three",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "r_two",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "reactivity",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "supply_cap",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "util",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "SEP-40 asset key: a Stellar token, or a ticker symbol.",
+      "lib": "",
+      "name": "Asset",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Stellar",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Other",
+            "type_": [
+              "symbol"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "SEP-40 price record: `price` in the oracle's `decimals`, quoted in its base asset.",
+      "lib": "",
+      "name": "PriceData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  }
+]

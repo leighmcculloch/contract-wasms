@@ -1,0 +1,1000 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "The timelock tier an admin call schedules at, derived from *which* method it targets (not from\\ncaller choice). See [`classify`].",
+      "lib": "",
+      "name": "Tier",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Creation-only, additive calls (register a new pool/asset). Driven immediately by a\\n`DEPLOYER` via [`Governance::deployer_call`], which bypasses the timelock entirely; also\\nschedulable, at this tier's own delay.",
+            "name": "Deployer"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Routine protocol-wide operational params. Scheduled at the Standard delay.",
+            "name": "Standard"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Bad-debt auto-deleveraging (`apply_adl`). Executed through [`Governance::execute_adl`] by\\nthe `ADL` role when its configurable delay is `0`; schedulable normally when it is non-zero.",
+            "name": "Adl"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Off-chain fee-tree publication (`set_fee_merkle_root`). Schedulable by the\\n`FEE_DISTRIBUTOR` role at its own configurable delay, defaulting to a one-day review window.",
+            "name": "FeeDistribution"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Contract-level or irreversible changes, and every live-pool risk retune. Scheduled at the\\nelevated Sensitive floor. The **fail-safe default** for any unclassified method.",
+            "name": "Sensitive"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "A delay above [`MAX_DELAY_LEDGERS`] \\xe2\\x80\\x94 at construction, or on any `set_*_delay` retune.",
+          "name": "InvalidDelay",
+          "value": 1
+        },
+        {
+          "doc": "A Ready operation executed past its [`OPERATION_GRACE_LEDGERS`] window.",
+          "name": "OperationExpired",
+          "value": 2
+        },
+        {
+          "doc": "`deployer_call` for a method that is not [`Tier::Deployer`] \\xe2\\x80\\x94 the immediate fast path is\\ncreation-only; everything else must go through `schedule` + the timelock.",
+          "name": "NotADeployerOperation",
+          "value": 3
+        },
+        {
+          "doc": "`guardian_pause` called with `paused == false`. The guardian brake is one-directional:\\nstopping the protocol is urgent and instant, restarting it is a decision, and decisions go\\nthrough the timelock where they are visible and cancellable.",
+          "name": "GuardianCanOnlyPause",
+          "value": 4
+        },
+        {
+          "doc": "`execute_self` supports only governance's own `upgrade`, `grant_role`, and `revoke_role`.",
+          "name": "InvalidSelfOperation",
+          "value": 5
+        },
+        {
+          "doc": "A supported self-operation was supplied with the wrong number or type of arguments.",
+          "name": "InvalidSelfArguments",
+          "value": 6
+        },
+        {
+          "doc": "`schedule` was handed the salt reserved for the owner's role-change path. Reserving it is\\nwhat lets `cancel` trust the marker: an operation carrying this salt can only have been\\nscheduled by the owner.",
+          "name": "ReservedSalt",
+          "value": 7
+        },
+        {
+          "doc": "`cancel` for an operation the owner scheduled through\\n[`Governance::owner_schedule_role_change`]. That path exists precisely so a role holder\\ncannot veto its own removal, so it is the one thing a canceller may not touch.",
+          "name": "OwnerOperationNotCancellable",
+          "value": 8
+        },
+        {
+          "doc": "The immediate ADL gateway was requested while the ADL tier has a non-zero delay. Delayed\\noperations must remain separately scheduled, visible and cancellable.",
+          "name": "OperationDelayNotZero",
+          "value": 9
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Cancel a pending operation. `canceller` must hold `CANCELLER` or `GUARDIAN`.\\n\\nTakes the operation itself rather than its id, as [`Self::execute`] does, and rebuilds the\\nid from it. The id is a hash, so a canceller holding only that cannot be told apart from one\\ncancelling the owner's recovery path \\xe2\\x80\\x94 and the alternative, a stored per-id marker, buys\\nthat distinction with persistent state, a TTL to size, and a cleanup path to get right.\\nRebuilding is free and makes the caller name what it is killing.",
+      "name": "cancel",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "canceller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Execute a Ready operation, invoking `target.function(args)` authorized as this contract.\\n`executor` must authorize the call and hold the `EXECUTOR` role \\xe2\\x80\\x94 the role is enforced on\\nevery execution, there is no anonymous path. A deployment that wants permissionless\\nexecution grants `EXECUTOR` to a designated relayer address explicitly. Returns the\\ntarget's result.",
+      "name": "execute",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "executor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "val"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Execute a Ready `upgrade(new_wasm_hash)` self-operation scheduled under `salt`. Address and\\nstorage are preserved. `executor` must hold `EXECUTOR`.\\n\\nThe salt matters here too: rolling back to a wasm hash this contract has run before is a\\nnormal recovery step, and a fixed salt made it permanently unschedulable.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "executor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Whether `account` holds `role`.",
+      "name": "has_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Schedule an admin `(target, function, args)` call on the timelock; returns its operation id.\\nThe delay is derived from the method's [`Tier`] via [`classify`] \\xe2\\x80\\x94 the caller does not choose\\nit, so a Sensitive change (upgrade, admin/ownership, live-pool risk) always carries the\\nelevated floor.\\n\\n`proposer` must hold the role that owns the derived tier: `ADL` for `apply_adl`,\\n`FEE_DISTRIBUTOR` for `set_fee_merkle_root`, and `PROPOSER` for the governance tiers (see\\n[`ensure_can_schedule`]). The scoped keys reach their own tier and nothing else.",
+      "name": "schedule",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proposer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The ADL-tier delay in ledgers. Zero selects [`Self::execute_adl`]; a non-zero value selects\\nthe ordinary schedule/execute/cancel lifecycle.",
+      "name": "adl_delay",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Execute a Ready `grant_role(account, role)` self-operation scheduled under `salt`.\\n`executor` must hold `EXECUTOR`, exactly as on [`Self::execute_self`].\\n\\nThe salt is a parameter rather than a fixed zero because an executed id is `Done` forever \\xe2\\x80\\x94\\nthe timelock never returns one to `Unset`, and `cancel` refuses a `Done` entry \\xe2\\x80\\x94 so a\\nhardcoded salt made this entry point single-use per `(function, account, role)`. Granting a\\nrole, revoking it, and later restoring it is ordinary operations work, and the third step\\nreverted permanently with an error that read as a timelock bug.",
+      "name": "grant_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "executor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Immediately execute `target.apply_adl(args)` through governance.\\n\\nADL names a live candidate and defaults to a zero-ledger delay. A zero-delay operational\\naction is not a timelocked governance proposal, so this path deliberately creates no\\n[`Operation`], salt or pending state: the scoped backend is authorized here and the target\\ncall either succeeds in this invocation or rolls back with it.\\n\\n`operator` must hold the dedicated `ADL` role. The function is hard-coded rather than\\nsupplied by the caller, so this capability reaches only `apply_adl`. A non-zero ADL delay\\ndisables this gateway; delayed ADL operations use the ordinary schedule/execute/cancel\\nlifecycle.",
+      "name": "execute_adl",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "operator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "val"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Execute a Ready `revoke_role(account, role)` self-operation scheduled under `salt`.\\n`executor` must hold `EXECUTOR`. See [`Self::grant_role`] for why the salt is a parameter.",
+      "name": "revoke_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "executor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Execute a Ready Sensitive operation whose target is this governance contract. Self-calls\\ncannot use [`Self::execute`] because Soroban rejects governance -> governance re-entry, so\\nthis path consumes the operation with OZ's `set_execute_operation` and dispatches the\\nallowlisted action internally: `upgrade`, `grant_role`, `revoke_role`, or one of the five\\nper-tier `set_*_delay` retunes. Each retune takes one `u32` of ledgers, bounded by\\n[`MAX_DELAY_LEDGERS`] as at construction, and is the only way to move that delay after\\ndeploy \\xe2\\x80\\x94 the values live in storage, so a later `upgrade` alone cannot reach them.\\n\\nLike [`Self::execute`], `executor` must authorize the call and hold the `EXECUTOR` role:\\nscheduling and the Sensitive delay decide *what* can run and *when*, the executor decides\\nthe moment it lands, and a guardian can cancel while it is pending.",
+      "name": "execute_self",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "executor",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initialize governance: `admin` becomes owner + access-control admin and holds all seven\\noperational roles. One delay per [`Tier`], all in ledgers, each independent of the others and\\neach retunable afterwards by its own self-operation. `DEFAULT_SENSITIVE_DELAY_LEDGERS`,\\n[`DEFAULT_ADL_DELAY_LEDGERS`] and [`DEFAULT_FEE_DISTRIBUTION_DELAY_LEDGERS`] are the\\nrecommended mainnet values; a dev/testnet deploy passes `0` for all five, which is the only\\nway to turn the timelock off \\xe2\\x80\\x94 no tier's value silently zeroes another.\\n\\nHanding `ADL` / `FEE_DISTRIBUTOR` to the off-chain services is a `grant_role`\\nself-operation, after which the admin should drop its own copies.\\n\\nOZ's own `min_delay` is pinned to `0` and left there. It exists to stop a caller passing\\n`schedule_operation` a delay under the configured floor, and here no caller ever passes one:\\n[`Self::schedule`] is the only path in and derives the delay from the method's tier. Leaving\\nthe library floor armed would only mean it silently overrode four of our five tier",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "deployer_delay",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "standard_delay",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "sensitive_delay",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "adl_delay",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "fee_distribution_delay",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Immediately invoke a **creation-only** admin call \\xe2\\x80\\x94 `create_pool`, `initialize_pool`,\\n`approve_pool`, `configure` \\xe2\\x80\\x94 authorized as this contract, bypassing the timelock. `deployer`\\nmust hold `DEPLOYER`, and the method must classify as [`Tier::Deployer`] (else\\n`NotADeployerOperation`). These methods reject an already-configured target; LockYield also\\ntombstones every `revoke_pool`, so `approve_pool` cannot resurrect it. Restoring that pool\\nrequires the separate, Sensitive `reapprove_pool` operation. Thus this fast path can bring\\nup a new pool but can never retune or restore a live one \\xe2\\x80\\x94 that (and registering a margin\\nasset) stays on the Sensitive setters, reachable only through `schedule` + the delay.\\nReturns the target's result.",
+      "name": "deployer_call",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "deployer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "val"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The Deployer tier's delay, in ledgers \\xe2\\x80\\x94 for a creation-only op that is *scheduled* rather\\nthan driven through the immediate [`Self::deployer_call`].",
+      "name": "deployer_delay",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Emergency brake: immediately (bypassing the timelock) pause `target` by invoking\\n`target.set_paused(true)` authorized as this contract. `guardian` must hold `GUARDIAN`. The\\ntarget must be a contract whose admin is this governance and that exposes `set_paused(bool)`.\\n\\n**Pause only.** `paused == false` is rejected (`GuardianCanOnlyPause`); unpausing is a\\n`Tier::Standard` `set_paused(false)` through `schedule`. The brake is deliberately\\none-directional: halting during an incident cannot wait for a delay, but restarting is a\\njudgement call that should be visible as a pending operation and cancellable by anyone\\nholding `CANCELLER` or `GUARDIAN`. Forwarding the flag let a single compromised guardian key\\nclear a pause the instant it was set \\xe2\\x80\\x94 reopening the exploit window with nothing scheduled\\nto cancel, while honest governance had to wait out the full delay to re-pause.\\n\\nThe `paused` argument survives the restriction rather than being dropped so the call shape\\n(and every runbook and script built on it) stays put,",
+      "name": "guardian_pause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "guardian",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The [`Tier`] a method schedules at \\xe2\\x80\\x94 lets ops tell ahead of time whether a call is an instant\\n`deployer_call`, a min-delay `schedule`, or a Sensitive-floor `schedule`.",
+      "name": "operation_tier",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Tier"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The Standard tier's delay, in ledgers.",
+      "name": "standard_delay",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The elevated delay a Sensitive-tier op schedules at (ledgers), set at construction.",
+      "name": "sensitive_delay",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The delay a fee-distribution-tier op (`set_fee_merkle_root`) schedules at (ledgers).",
+      "name": "fee_distribution_delay",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Schedule a grant or revoke of `role` on `account` that no canceller or guardian can veto.\\nOwner-gated; returns the operation id. Execute it with `execute_self` once the Sensitive\\ndelay has run, passing the same arguments and this path's reserved salt (readable from the\\nemitted operation, or rebuilt as 32 `0xFF` bytes).\\n\\nThe recovery lever, and the only one: role administration is otherwise a Sensitive\\nself-operation, and `cancel` accepts any pending operation from any canceller or guardian \\xe2\\x80\\x94\\nso a compromised holder vetoes its own removal indefinitely, and a compromised guardian\\nkeeps the engine paused on top of that. Forbidding cancellation of *every* `revoke_role`\\nwould swap that deadlock for a worse one: a compromised proposer could then strip every\\nother holder unopposed, and since granting a role is itself a proposer-scheduled operation,\\nnothing could put them back.\\n\\nTimelocked like any other Sensitive change \\xe2\\x80\\x94 the owner gets notice, not immediacy \\xe2\\x80\\x94 and\\nscoped to role changes alone.\\n\\n`salt` is the o",
+      "name": "owner_schedule_role_change",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "grant",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a role is granted.",
+      "lib": "",
+      "name": "RoleGranted",
+      "prefix_topics": [
+        "role_granted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a role is revoked.",
+      "lib": "",
+      "name": "RoleRevoked",
+      "prefix_topics": [
+        "role_revoked"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccessControlError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 2000
+        },
+        {
+          "doc": "",
+          "name": "AdminNotSet",
+          "value": 2001
+        },
+        {
+          "doc": "",
+          "name": "IndexOutOfBounds",
+          "value": 2002
+        },
+        {
+          "doc": "",
+          "name": "AdminRoleNotFound",
+          "value": 2003
+        },
+        {
+          "doc": "",
+          "name": "RoleCountIsNotZero",
+          "value": 2004
+        },
+        {
+          "doc": "",
+          "name": "RoleNotFound",
+          "value": 2005
+        },
+        {
+          "doc": "",
+          "name": "AdminAlreadySet",
+          "value": 2006
+        },
+        {
+          "doc": "",
+          "name": "RoleNotHeld",
+          "value": 2007
+        },
+        {
+          "doc": "",
+          "name": "RoleIsEmpty",
+          "value": 2008
+        },
+        {
+          "doc": "",
+          "name": "TransferInProgress",
+          "value": 2009
+        },
+        {
+          "doc": "",
+          "name": "MaxRolesExceeded",
+          "value": 2010
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OwnableError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "OwnerNotSet",
+          "value": 2100
+        },
+        {
+          "doc": "",
+          "name": "TransferInProgress",
+          "value": 2101
+        },
+        {
+          "doc": "",
+          "name": "OwnerAlreadySet",
+          "value": 2102
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Errors that can occur in timelock operations.",
+      "lib": "",
+      "name": "TimelockError",
+      "cases": [
+        {
+          "doc": "The operation is already scheduled",
+          "name": "OperationAlreadyScheduled",
+          "value": 4000
+        },
+        {
+          "doc": "The delay is less than the minimum required delay",
+          "name": "InsufficientDelay",
+          "value": 4001
+        },
+        {
+          "doc": "The operation is not in the expected state",
+          "name": "InvalidOperationState",
+          "value": 4002
+        },
+        {
+          "doc": "A predecessor operation has not been executed yet",
+          "name": "UnexecutedPredecessor",
+          "value": 4003
+        },
+        {
+          "doc": "The caller is not authorized to perform this action",
+          "name": "Unauthorized",
+          "value": 4004
+        },
+        {
+          "doc": "The minimum delay has not been set",
+          "name": "MinDelayNotSet",
+          "value": 4005
+        },
+        {
+          "doc": "The operation has not been scheduled",
+          "name": "OperationNotScheduled",
+          "value": 4006
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the minimum delay is changed.",
+      "lib": "",
+      "name": "MinDelayChanged",
+      "prefix_topics": [
+        "min_delay_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_delay",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_delay",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an operation is executed.",
+      "lib": "",
+      "name": "OperationExecuted",
+      "prefix_topics": [
+        "operation_executed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "predecessor",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an operation is cancelled.",
+      "lib": "",
+      "name": "OperationCancelled",
+      "prefix_topics": [
+        "operation_cancelled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an operation is scheduled.",
+      "lib": "",
+      "name": "OperationScheduled",
+      "prefix_topics": [
+        "operation_scheduled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "predecessor",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "delay",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  }
+]
