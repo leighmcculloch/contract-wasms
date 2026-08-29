@@ -1,0 +1,326 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Token"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Factory"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Treasury"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Market",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "UserBal",
+            "type_": [
+              "address",
+              "u64",
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "UserLP",
+            "type_": [
+              "address",
+              "u64"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MarketState",
+      "fields": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "oracle",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "r_no",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "r_yes",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "res_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "winner",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "buy_shares",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "payment",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "factory",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "sell_shares",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "add_liquidity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_market",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "creator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "res_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "oracle",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "claim_winnings",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "resolve_market",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "outcome",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "remove_liquidity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "market_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  }
+]
