@@ -1,0 +1,858 @@
+[
+  {
+    "function_v0": {
+      "doc": "Emergency stop for the sole money-moving path.",
+      "name": "pause",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Restore the money-moving path after an emergency stop.",
+      "name": "unpause",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Replace this contract's WASM at the same address. Upgrades require the\\nadministrator's authorization and an already-paused money path.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Current operational administrator.",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Read the emergency-stop state without authorization.",
+      "name": "is_paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Non-value-moving accessor for inspection and off-chain preflight. A\\nsuccessful read may refresh the mandate's persistence horizon.",
+      "name": "get_mandate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "mandate_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Mandate"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Accept a pending handoff. Authorized by the proposed administrator.",
+      "name": "accept_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Atomically establishes the initial administrator during deployment.\\nConstructors run only once; WASM upgrades do not rerun them.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "initial_asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Propose a recoverable authority handoff. The current administrator keeps\\ncontrol until the candidate proves control by calling `accept_admin`.",
+      "name": "propose_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "User withdrawal of consent. Authorized by the bound user.",
+      "name": "revoke_mandate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "mandate_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "The only money path. State consumption and transfer are atomic; a token\\nfailure reverts the stored `spent`, `seq`, and status changes.",
+      "name": "execute_payment",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "mandate_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expected_seq",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Whether an asset is currently admitted for validation and settlement.",
+      "name": "is_asset_allowed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Store a user-authorized mandate. Mutable fields are initialized by the\\ncontract so the caller cannot seed a spent balance, sequence, or status.",
+      "name": "register_mandate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "merchant",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "max_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "vc_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "bytes_n": {
+                "n": 32
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Non-value-moving preview. It may refresh TTLs; the authoritative checks\\nare repeated by `execute_payment` against current stored state.",
+      "name": "validate_mandate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "mandate_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expected_seq",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "merchant",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deterministically derive the domain-separated identifier returned by\\n`register_mandate` without depending on any x402 wire representation.",
+      "name": "derive_mandate_id",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "agent",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "merchant",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "max_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "vc_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Candidate administrator waiting to accept a proposed handoff.",
+      "name": "get_pending_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Change the reviewed-token admission policy. Policy changes are allowed\\nonly while the money path is paused; removal also blocks existing\\nmandates from executing against that asset.",
+      "name": "set_asset_allowed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "allowed",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Current durable storage schema. Money-path methods reject a missing or\\nunexpected version so an incompatible upgrade cannot fail open.",
+      "name": "get_schema_version",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u32",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyExists",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotFound",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "MandateExpired",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "MandateRevoked",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "BudgetExceeded",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "MerchantOutOfScope",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "BadSequence",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "UpgradeRequiresPause",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "AssetNotAllowed",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "MandateTooLong",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "SequenceExhausted",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "AssetPolicyRequiresPause",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "InvalidState",
+          "value": 19
+        },
+        {
+          "doc": "",
+          "name": "NoPendingAdmin",
+          "value": 20
+        },
+        {
+          "doc": "",
+          "name": "AssetOutOfScope",
+          "value": 21
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Status",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Active"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Revoked"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Exhausted"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Mandate",
+      "fields": [
+        {
+          "doc": "The only principal permitted to call `execute_payment`.",
+          "name": "agent",
+          "type_": "address"
+        },
+        {
+          "doc": "SEP-41 token contract used for settlement.",
+          "name": "asset",
+          "type_": "address"
+        },
+        {
+          "doc": "Ledger-close timestamp after which the mandate is invalid.",
+          "name": "expiry",
+          "type_": "u64"
+        },
+        {
+          "doc": "Total amount authorized by the mandate.",
+          "name": "max_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "The only allowed payment recipient.",
+          "name": "merchant",
+          "type_": "address"
+        },
+        {
+          "doc": "Monotonic replay guard for successful payments.",
+          "name": "seq",
+          "type_": "u32"
+        },
+        {
+          "doc": "Amount consumed so far; always between zero and `max_amount`.",
+          "name": "spent",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "Status"
+            }
+          }
+        },
+        {
+          "doc": "Principal authorizing the mandate and token allowance.",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "Credential commitment and caller-supplied uniqueness source. The\\non-chain mandate identifier is a domain-separated hash over this value\\nand every immutable mandate term.",
+          "name": "vc_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Paused",
+      "prefix_topics": [
+        "paused"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "data",
+          "type_": "void",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AdminSet",
+      "prefix_topics": [
+        "admin"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Unpaused",
+      "prefix_topics": [
+        "unpaused"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "data",
+          "type_": "void",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Upgraded",
+      "prefix_topics": [
+        "upgrade"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MandateRevoked",
+      "prefix_topics": [
+        "revoke"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "mandate_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PaymentExecuted",
+      "prefix_topics": [
+        "payment"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "merchant",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "mandate_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "sequence",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "vec"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MandateRegistered",
+      "prefix_topics": [
+        "register"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "mandate_id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AssetPolicyChanged",
+      "prefix_topics": [
+        "asset_policy"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "allowed",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AdminTransferProposed",
+      "prefix_topics": [
+        "admin_pending"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "pending_admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "single_value"
+    }
+  }
+]
