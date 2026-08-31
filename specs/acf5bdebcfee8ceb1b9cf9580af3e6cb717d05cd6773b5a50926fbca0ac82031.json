@@ -1,0 +1,429 @@
+[
+  {
+    "function_v0": {
+      "doc": "Vote on a proposal by escrowing sXLM for the length of the vote.\\n\\nWeight is the amount escrowed, so the same shares cannot vote twice or\\nbe sold in the same ledger they voted in. Returned by `unlock_vote` once\\nvoting closes.",
+      "name": "vote",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "voter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "support",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Upgrade the contract WASM. Only callable by admin.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Read the last approved value for a parameter.\\n\\nThis is a record, not the source of truth \\xe2\\x80\\x94 execution applies the value\\nto the target contract, and that contract is what to read for the live\\nsetting.",
+      "name": "get_param",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key",
+          "type_": "symbol"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SxlmToken"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "VotingPeriodLedgers"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "QuorumBps"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Initialized"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ProposalCount"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Proposal",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Vote",
+            "type_": [
+              "u64",
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "sXLM escrowed by a voter for a proposal, returned after voting closes.",
+            "name": "VoteWeight",
+            "type_": [
+              "u64",
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Param",
+            "type_": [
+              "symbol"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Ledgers that must pass between voting closing and execution.",
+            "name": "ExecutionDelayLedgers"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initialize the governance contract.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sxlm_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "voting_period_ledgers",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "quorum_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "execution_delay_ledgers",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Proposal",
+      "fields": [
+        {
+          "doc": "",
+          "name": "end_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "Earliest ledger at which this proposal may execute. Voting closing and\\nexecution are deliberately separated so a passing proposal can be seen\\nand reacted to before it takes effect.",
+          "name": "eta",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "executed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "new_value",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "param_key",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "proposer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "start_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "Share supply at creation. Quorum is measured against this rather than a\\nfigure an admin can set, and freezing it stops a proposal's own\\nmint/burn activity from moving the bar it has to clear.",
+          "name": "supply_snapshot",
+          "type_": "i128"
+        },
+        {
+          "doc": "Contract the approved change is applied to.",
+          "name": "target",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "votes_against",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "votes_for",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Reclaim escrowed sXLM once voting on a proposal has closed.",
+      "name": "unlock_vote",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "voter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_proposal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Proposal"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Earliest ledger at which a proposal may execute.",
+      "name": "proposal_eta",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Bump instance TTL \\xe2\\x80\\x94 can be called by anyone to keep contract alive.",
+      "name": "bump_instance",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_vote_count",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "i128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "proposal_count",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Create a new governance proposal. Proposer must hold minimum sXLM balance.",
+      "name": "create_proposal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proposer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "target",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "param_key",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "new_value",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Ledgers between voting closing and execution becoming possible.",
+      "name": "execution_delay",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "sXLM a voter has escrowed on a proposal.",
+      "name": "get_vote_weight",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "voter",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Execute a proposal if quorum met and passed.\\nStores the new parameter value on-chain for the admin/backend to read and propagate.",
+      "name": "execute_proposal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "proposal_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

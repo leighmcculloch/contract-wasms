@@ -1,0 +1,615 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deposit XLM and receive sXLM tokens.",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "xlm_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unpause",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Upgrade the contract WASM. Only callable by admin.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Apply a governance-approved parameter change.\\n\\nOnly the configured governance contract may call this, and only these\\nkeys exist \\xe2\\x80\\x94 an approved proposal naming anything else does nothing\\nrather than silently succeeding.",
+      "name": "set_param",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "value",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SxlmToken"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "NativeToken"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "XLM handed out to strategies. Always 0 until the Phase 2 registry lands,\\nbut the term exists now so `total_assets()` never has to be redefined.",
+            "name": "DeployedToStrategies"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "XLM owed to withdrawals whose shares are already burned but whose payout\\nhas not happened yet. Subtracted from assets so the exchange rate does\\nnot rise for remaining holders during the cooldown window.",
+            "name": "PendingWithdrawals"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "CooldownPeriod"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "WithdrawalQueue"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "WithdrawalCounter"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Initialized"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Treasury"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TreasuryBalance"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "One-shot marker for the v2 storage migration.",
+            "name": "MigratedV2"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Governance contract, the only caller allowed to change parameters.",
+            "name": "Governance"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Protocol fee, storage-backed so governance can move it.",
+            "name": "ProtocolFeeBps"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Fee charged on withdrawal, kept by the vault rather than paid out.",
+            "name": "WithdrawalFeeBps"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Fee charged on a flash loan, in basis points.",
+            "name": "FlashFeeBps"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Set while a flash loan is outstanding, to block reentry.",
+            "name": "FlashLoanActive"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Lend idle XLM for the length of one transaction.\\n\\nThe receiver is called once and must return the amount plus the fee\\nbefore this function returns. There is no credit risk: if the balance is\\nnot restored the assertion fails and the whole transaction reverts, loan\\nincluded. The fee stays in the vault, so it raises the exchange rate.\\n\\nDeposits, withdrawals and claims are blocked for the duration. Without\\nthat, a borrower could satisfy the balance check by depositing the\\nborrowed XLM and mint themselves shares out of the loan.",
+      "name": "flash_loan",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "governance",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initialize the staking contract.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sxlm_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "native_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "cooldown_period",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "One-shot storage migration for a contract deployed before derived\\naccounting.\\n\\nReconstructs `PendingWithdrawals` by summing unclaimed queue entries.\\nRequired once on any contract upgraded from a build that did not record\\nthe liability, or `total_assets()` counts XLM already owed to the queue.\\n\\nLegacy `TotalXlmStaked`, `TotalSxlmSupply` and `LiquidityBuffer` entries\\nare left orphaned; nothing reads them.",
+      "name": "migrate_v2",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Contribute realised yield to the vault.\\n\\nThe XLM is transferred in. There is no counter to increment: the deposit\\nraises the contract balance, `total_assets()` reads that balance, and the\\nexchange rate follows. The protocol fee is booked as a liability so it is\\nexcluded from the assets backing shares until it is withdrawn.",
+      "name": "add_rewards",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Raw XLM held by the contract, including encumbered amounts.",
+      "name": "idle_balance",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_treasury",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "XLM backing sXLM shares.",
+      "name": "total_assets",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Donate XLM to the vault with no shares minted in return.\\n\\nNo separate buffer counter: the donated XLM is part of the balance, so it\\nbacks shares like any other asset.",
+      "name": "add_liquidity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Bump instance TTL \\xe2\\x80\\x94 can be called by anyone to keep the contract alive.",
+      "name": "bump_instance",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "flash_fee_bps",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Withdraw protocol fees to the admin address.\\nIf amount > 0, withdraw that specific amount; if 0, withdraw all.",
+      "name": "withdraw_fees",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_withdrawal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "withdrawal_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "WithdrawalRequest"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Hand parameter control to the governance contract, once.\\n\\nThis is the step that makes a passed proposal actually do something. It\\nis deliberately separate from deploying the code: handing over control\\nof a live contract is a decision, not a side effect of an upgrade.",
+      "name": "set_governance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "governance",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Claim a delayed withdrawal after cooldown has expired.",
+      "name": "claim_withdrawal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "withdrawal_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "XLM free to pay out right now.",
+      "name": "liquidity_buffer",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "protocol_fee_bps",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Retained for client compatibility; identical to `total_assets`.",
+      "name": "total_xlm_staked",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "treasury_balance",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_exchange_rate",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_sxlm_supply",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Request withdrawal: burns sXLM and returns XLM.",
+      "name": "request_withdrawal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sxlm_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "withdrawal_fee_bps",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_cooldown_period",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "XLM owed to withdrawals whose shares are already burned.",
+      "name": "pending_withdrawals",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_cooldown_period",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_cooldown",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WithdrawalRequest",
+      "fields": [
+        {
+          "doc": "",
+          "name": "claimed",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "unlock_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "xlm_amount",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "deployed_to_strategies",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  }
+]

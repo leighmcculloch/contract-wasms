@@ -1,0 +1,379 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "vault",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Upgrade the contract WASM. Only callable by admin.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns price of sXLM in XLM (scaled by 1e7).",
+      "name": "get_price",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Point the pool at the vault, once. Only needed to migrate a pool\\ndeployed before the seed-ratio check existed.",
+      "name": "set_vault",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vault",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SxlmToken"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "NativeToken"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "FeeBps"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Initialized"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ReserveXlm"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ReserveSxlm"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalLpSupply"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "LpBalance",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ProtocolFeeBps"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AccruedProtocolFees"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Vault address. Used to check the seed ratio, and as the destination for\\nthe vault's share of protocol fees.",
+            "name": "Vault"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Share of protocol fees passed to the vault, in basis points.",
+            "name": "VaultShareBps"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initialize the LP pool.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sxlm_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "native_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "vault",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns (reserve_xlm, reserve_sxlm).",
+      "name": "get_reserves",
+      "inputs": [],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "i128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Add liquidity to the pool. Returns LP tokens minted.\\nOnly transfers the proportional amounts needed; excess stays with the user.",
+      "name": "add_liquidity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "xlm_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "sxlm_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Bump instance TTL \\xe2\\x80\\x94 can be called by anyone to keep contract alive.",
+      "name": "bump_instance",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_lp_balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_lp_supply",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns protocol fee in basis points.",
+      "name": "protocol_fee_bps",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Remove liquidity from the pool. Returns (xlm_out, sxlm_out).",
+      "name": "remove_liquidity",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "lp_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "i128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Swap sXLM for XLM. Returns XLM received. min_out provides slippage protection.",
+      "name": "swap_sxlm_to_xlm",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sxlm_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Swap XLM for sXLM. Returns sXLM received. min_out provides slippage protection.",
+      "name": "swap_xlm_to_sxlm",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "xlm_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set protocol fee in basis points (portion of LP fee taken for protocol).",
+      "name": "set_protocol_fee_bps",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns accrued protocol fees in XLM stroops.",
+      "name": "accrued_protocol_fees",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Collect accrued protocol fees. Admin-only. Transfers XLM to admin and resets counter.\\nSweep accrued protocol fees.\\n\\nThe vault's share is transferred to it directly \\xe2\\x80\\x94 the vault derives its\\nassets from its own balance, so XLM arriving raises the exchange rate for\\nevery sXLM holder without a call. The remainder goes to the admin as\\nprotocol revenue.\\n\\nCallable by anyone: it only moves fees to their two fixed destinations.",
+      "name": "collect_protocol_fees",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  }
+]

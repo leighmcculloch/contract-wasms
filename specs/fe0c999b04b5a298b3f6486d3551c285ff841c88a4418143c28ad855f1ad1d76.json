@@ -1,0 +1,604 @@
+[
+  {
+    "function_v0": {
+      "doc": "Repay borrowed XLM.",
+      "name": "repay",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "xlm_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "vault",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Borrow XLM against deposited sXLM collateral.",
+      "name": "borrow",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "xlm_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Upgrade the contract WASM. Only callable by admin.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Liquidate an unhealthy position. Liquidator repays debt and receives collateral + bonus.",
+      "name": "liquidate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "liquidator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "borrower",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Apply a governance-approved parameter change.",
+      "name": "set_param",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "key",
+          "type_": "symbol"
+        },
+        {
+          "doc": "",
+          "name": "value",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Point this contract at the vault, once.\\n\\nNeeded only to migrate a contract deployed before the rate was read\\ncross-contract. It can be set exactly once: naming the source is a\\ndifferent power from setting the price, and freezing it after the first\\nwrite keeps an admin from later swapping in a vault that lies.",
+      "name": "set_vault",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vault",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SxlmToken"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "NativeToken"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "CollateralFactorBps"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LiquidationThresholdBps"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "BorrowRateBps"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LiquidationBonusBps"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Ceiling on total borrowing as a share of total collateral value.",
+            "name": "MaxUtilizationBps"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Governance contract, the only caller allowed to change parameters.",
+            "name": "Governance"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Cumulative borrow index, scaled by RATE_PRECISION. Starts at 1.0 and\\nonly ever rises, so a debt recorded against it grows with time.",
+            "name": "BorrowIndex"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Ledger at which the index was last advanced.",
+            "name": "LastAccrualLedger"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Interest charged to borrowers and not yet passed to the vault.",
+            "name": "InterestAccrued"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Vault share of interest, in basis points. The remainder is protocol fee.",
+            "name": "VaultShareBps"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Surcharge paid by a liquidator, passed to the vault.",
+            "name": "LiquidationFeeBps"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Address of the vault contract. The sXLM price is read from it rather\\nthan stored here, so no admin can set the number this contract values\\ncollateral at.",
+            "name": "Vault"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Initialized"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalCollateral"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalBorrowed"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Collateral",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Borrowed",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "governance",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initialize the lending contract.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sxlm_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "native_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "collateral_factor_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "liquidation_threshold_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "borrow_rate_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "vault",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns (collateral, borrowed) for a user.",
+      "name": "get_position",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "i128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Bump instance TTL \\xe2\\x80\\x94 can be called by anyone to keep contract alive.",
+      "name": "bump_instance",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns health factor scaled by RATE_PRECISION (1e7 = 1.0).\\nUses liquidation threshold (not collateral factor) to match what liquidate() checks.",
+      "name": "health_factor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Hand parameter control to the governance contract, once.",
+      "name": "set_governance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "governance",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_borrowed",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_borrow_rate",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pass accrued interest to the vault, raising the sXLM exchange rate.\\n\\nCallable by anyone \\xe2\\x80\\x94 it moves money in one direction only, from this\\ncontract to holders, so there is nothing to gain by calling it and\\nnothing to lose by letting anyone.\\n\\nThe vault takes its own protocol fee out of what arrives, so this split\\nis on top of that one: `VaultShareBps` reaches holders and the remainder\\nstays here as protocol revenue.",
+      "name": "settle_interest",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_borrow_index",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_pool_balance",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_collateral",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_exchange_rate",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deposit sXLM as collateral.",
+      "name": "deposit_collateral",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sxlm_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Update the borrow rate. Only callable by admin.",
+      "name": "update_borrow_rate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_rate_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_max_utilization",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_vault_share_bps",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Withdraw sXLM collateral if health factor stays above 1.0.",
+      "name": "withdraw_collateral",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sxlm_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_collateral_factor",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_liquidation_bonus",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Interest charged to borrowers and not yet passed to the vault.",
+      "name": "total_accrued_interest",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Update the recursion cap. Only callable by admin.",
+      "name": "update_max_utilization",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_liquidation_fee_bps",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Update the collateral factor. Only callable by admin.",
+      "name": "update_collateral_factor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_cf_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_liquidation_threshold",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Update the liquidation threshold. Only callable by admin.",
+      "name": "update_liquidation_threshold",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_lt_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]
