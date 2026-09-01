@@ -1,0 +1,1727 @@
+[
+  {
+    "function_v0": {
+      "doc": "Add PT coupon capacity: pull `amount` USDC, wrap to SR, strip into PT+YT held by the vault.\\nPure capacity \\xe2\\x80\\x94 it creates **no liability**.\\n\\n**Admin-gated.** v1's `seed` was permissionless, which is what turned a capacity limit into\\n`tofix.md` #18's denial-of-service: anyone could prepend dust positions until the redeem\\nwalk exceeded the transaction budget and every receipt became unpayable. There is no walk\\nhere, but an open `seed` still lets a stranger write vault state for the price of a\\ntransaction, and nothing needs it to be open.",
+      "name": "seed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "What `amount` USDC would earn: `(payout, coupon, rate_bps)`. Read-only.",
+      "name": "quote",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "i128",
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "stats",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "SrVaultStats"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Recover surplus inventory \\xe2\\x80\\x94 seed capital and unneeded capacity \\xe2\\x80\\x94 to `to`.\\n\\n**Liability-gated**, which is `tofix.md` #22: v1 had no path at all, so seed capital and any\\nover-provisioned inventory were one-way. This releases only PT face **above** every open\\npayout, so it can never touch a receipt's backing. Admin only.",
+      "name": "sweep",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pt_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Redeem a matured receipt for its full promised payout.\\n\\n**O(1) \\xe2\\x80\\x94 and that is the headline difference from v1.** v1 walked a list of wrapper\\npositions, redeeming each until the payout was met, at ~7 MB per position; five positions\\nexhausted the mainnet transaction budget and a stranger could inflate the list at will\\n(`tofix.md` #18). Here PT is fungible bearer, so the vault burns `payout` PT face in one\\n`redeem_py` call. Cost does not depend on history, on how the inventory was assembled, or\\non anything an attacker controls.",
+      "name": "redeem",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "receipt_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Lock a fixed rate. Pulls `amount` USDC, mints matching PT+YT into inventory, and issues a\\nreceipt promising `principal + coupon` at maturity.\\n\\nThe coupon is backed out of **existing** capacity: the deposit itself only creates PT equal\\nto the principal, so the coupon must come from spare inventory. That is why the capacity\\ncheck is the load-bearing line \\xe2\\x80\\x94 it is what makes the promise solvent rather than hopeful.",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Claim the vault's YT yield and reinvest it as fresh PT capacity.\\n\\n**No maturity gate and no pruning**, which is `tofix.md` #21. v1's `harvest` refused to run\\nafter maturity and pruned positions that still held live YT, so yield accrued before\\nmaturity became permanently unclaimable. Here the engine keeps pre-expiry yield claimable\\nforever, and this simply collects it whenever it is called.\\n\\nReturns `(sr_claimed, py_minted)`. Reinvestment is skipped past expiry (the engine refuses\\n`mint_py` then, correctly) \\xe2\\x80\\x94 the claimed SR stays as vault inventory instead of reverting\\nand throwing the claim away with it.",
+      "name": "harvest",
+      "inputs": [],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "i128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "What [`Self::sweep_surplus`] would release right now, without moving anything.",
+      "name": "surplus",
+      "inputs": [],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "i128",
+              "i128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unpause",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "version",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "maturity",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pt_token",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "rate_bps",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_rate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "rate_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "sr_token",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "timelock",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "code_hash",
+      "inputs": [],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "One-shot, admin-gated init.\\n\\nTakes **only** the engine address. sr, pt, underlying and maturity are read back from it, so\\nthe `tofix.md` #24 class of mismatch \\xe2\\x80\\x94 a vault wired to an asset its PT does not redeem into\\n\\xe2\\x80\\x94 cannot be constructed here.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "yield_contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "rate_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_rate_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "underlying",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Read-only snapshot for the dashboard.",
+      "lib": "",
+      "name": "SrVaultStats",
+      "fields": [
+        {
+          "doc": "Spare PT available to back new coupons: inventory, less every unpaid balance, less the\\nper-receipt redemption reserve. This is exactly what `deposit` and `sweep` will allow.",
+          "name": "coupon_capacity",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "maturity",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "open_receipts",
+          "type_": "u64"
+        },
+        {
+          "doc": "PT face the vault holds \\xe2\\x80\\x94 its bond inventory. Each unit redeems for one asset at expiry.",
+          "name": "pt_inventory",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "rate_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "USDC banked against partially-redeemed receipts. Reserved: it backs those payouts in place\\nof the PT that was burned to obtain it, and no sweep may touch it.",
+          "name": "total_collected",
+          "type_": "i128"
+        },
+        {
+          "doc": "Sum of `payout` across open receipts.",
+          "name": "total_liability",
+          "type_": "i128"
+        },
+        {
+          "doc": "Flooring loss already realized by partial redemptions, across open receipts. Expected, tiny,\\nand excluded from the solvency check rather than absorbed silently (`anyfix.md` F2).",
+          "name": "total_residue",
+          "type_": "i128"
+        },
+        {
+          "doc": "YT the vault holds; its yield funds future coupons.",
+          "name": "yt_inventory",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_receipt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "receipt_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Receipt"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accept_admin",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Permissionless TTL keep-alive so a long-dated receipt cannot archive before it matures.",
+      "name": "bump_receipt",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "receipt_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "max_rate_bps",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_timelock",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "secs",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "apply_upgrade",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pending_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "propose_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Recover surplus **SR, YT and USDC** to `to`, at or after expiry (`tofix.md` #22).\\n\\n`sweep` handles the PT leg. This handles everything else the vault ends up holding, which\\nthe PT-only sweep left permanently stranded \\xe2\\x80\\x94 measured at **248.53 SR** on a 20,000 USDC\\nseed, about 1.2% of it, plus the USDC flooring remainder.\\n\\n## Why this is gated at expiry and `sweep` is not\\n\\nPT face is directly comparable to a payout, so surplus PT can be identified \\xe2\\x80\\x94 and released \\xe2\\x80\\x94\\nat any time. The other three legs cannot:\\n\\n* **YT** is what *earns* the yield that funds future coupons. Before expiry it has real\\nforward value that `assert_solvent` cannot see, because that invariant compares PT face\\nagainst liability and says nothing about future capacity. A pre-expiry YT sweep would\\nquietly degrade the vault's ability to meet later payouts while every check still passed.\\n* **SR** resting in the vault before expiry is transient \\xe2\\x80\\x94 `harvest` reinvests it in the\\nsame call. It only accumulates *after* expiry, when `mint_py` refus",
+      "name": "sweep_surplus",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "i128",
+              "i128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Flooring loss realized by partial redemptions across open receipts (`anyfix.md` F2).",
+      "name": "total_residue",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel_upgrade",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "yield_contract",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pending_upgrade",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "PendingUpgrade"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "total_liability",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "How much more USDC a receipt still needs before it can be paid. `0` = ready (or closed).",
+      "name": "redeem_remaining",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "receipt_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "schedule_upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel_admin_transfer",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Swept",
+      "prefix_topics": [
+        "swept"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "pt_amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Seeded",
+      "prefix_topics": [
+        "seeded"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "usdc_in",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "py_minted",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RateSet",
+      "prefix_topics": [
+        "rate_set"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "rate_bps",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Redeemed",
+      "prefix_topics": [
+        "redeemed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "receipt_id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "paid",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Deposited",
+      "prefix_topics": [
+        "deposited"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "receipt_id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "principal",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "payout",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "rate_bps",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Harvested",
+      "prefix_topics": [
+        "harvested"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "sr_claimed",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "py_minted",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Initialized",
+      "prefix_topics": [
+        "initialized"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "yield_contract",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "pt",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "sr",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "maturity",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "rate_bps",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Surplus SR / YT / USDC returned to the admin at or after expiry (`tofix.md` #22).",
+      "lib": "",
+      "name": "SurplusSwept",
+      "prefix_topics": [
+        "surplus_swept"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "sr_amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "yt_amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "usdc_amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "A redeem that could only collect part of its payout (`tofix.md` #20). The receipt stays open;\\n`still_owed` is what a later call must still gather before the holder is paid.",
+      "lib": "",
+      "name": "RedeemedPartial",
+      "prefix_topics": [
+        "redeemed_partial"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "receipt_id",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "collected",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "still_owed",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Initialized"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "The PT/YT engine this vault sits on.",
+            "name": "YieldContract"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Sr"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Pt"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Underlying"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Maturity"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "RateBps"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "MaxRateBps"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Sum of `payout` across open receipts \\xe2\\x80\\x94 the vault's total obligation.",
+            "name": "TotalLiability"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Sum of `collected` across open receipts \\xe2\\x80\\x94 obligation already backed by USDC rather than PT.",
+            "name": "TotalCollected"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Sum of `Receipt::residue` across open receipts \\xe2\\x80\\x94 flooring loss already realized by partial\\nredemptions, which `assert_solvent` must not mistake for a deficit (`anyfix.md` F2).",
+            "name": "TotalResidue"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "NextReceiptId"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Count of open receipts, for the dashboard.",
+            "name": "OpenReceipts"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Receipt",
+            "type_": [
+              "u64"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A single fixed-rate deposit. The user is promised exactly `payout` at maturity, backed by PT the\\nvault actually holds \\xe2\\x80\\x94 so the rate is solvent by construction, not by forecast.",
+      "lib": "",
+      "name": "Receipt",
+      "fields": [
+        {
+          "doc": "USDC already collected toward `payout` by earlier partial redemptions (`tofix.md` #20).\\n\\nA redeem sizes its PT burn to what the venue can actually pay, banks the proceeds here, and\\npays the holder only once `collected >= payout`. Until then this USDC sits in the vault\\n**reserved for this receipt** \\xe2\\x80\\x94 it is counted by `assert_solvent` in place of the PT that was\\nburned to obtain it, and excluded from every sweep.",
+          "name": "collected",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "maturity",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "open",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "USDC guaranteed at maturity = principal + fixed coupon. Backed 1:1 by PT face.",
+          "name": "payout",
+          "type_": "i128"
+        },
+        {
+          "doc": "USDC the user deposited.",
+          "name": "principal",
+          "type_": "i128"
+        },
+        {
+          "doc": "The APR quoted, in bps. Display only \\xe2\\x80\\x94 `payout` is the binding number.",
+          "name": "rate_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "PT face burned by this receipt's partial redemptions that did **not** turn into banked USDC\\n(`anyfix.md` F2).\\n\\nEach partial leg burns `take` PT and banks `got <= take` USDC, because both conversions on\\nthe way out (`PT -> SR -> USDC`) floor. The gap is a genuine loss of vault inventory, about\\na stroop a leg. Recording it is what lets [`SrVault::assert_solvent`] tell expected rounding\\nresidue apart from a real deficit \\xe2\\x80\\x94 before this, the third partial leg on any receipt\\ntripped the invariant and the receipt could not be redeemed at all until the venue could pay\\nthe whole remainder in one call.\\n\\nReleased from the running total when the receipt closes, so the slack never outlives the\\nreceipt that earned it.",
+          "name": "residue",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "A scheduled upgrade was applied \\xe2\\x80\\x94 the contract now runs `wasm_hash`.",
+      "lib": "",
+      "name": "Upgraded",
+      "prefix_topics": [
+        "upgraded"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "A proposed admin accepted the role (two-step rotation, step 2). `new_admin` is now in control.",
+      "lib": "",
+      "name": "AdminChanged",
+      "prefix_topics": [
+        "admin_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "A new admin was proposed (two-step rotation, step 1).",
+      "lib": "",
+      "name": "AdminProposed",
+      "prefix_topics": [
+        "admin_proposed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "current_admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "proposed_admin",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A pending, scheduled upgrade.",
+      "lib": "",
+      "name": "PendingUpgrade",
+      "fields": [
+        {
+          "doc": "Earliest unix-second timestamp at which `apply_upgrade` may run (`scheduled_at + timelock`).",
+          "name": "eta",
+          "type_": "u64"
+        },
+        {
+          "doc": "The WASM hash the contract will be upgraded to.",
+          "name": "wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "The upgrade timelock delay was changed.",
+      "lib": "",
+      "name": "TimelockChanged",
+      "prefix_topics": [
+        "timelock_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "secs",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "A scheduled upgrade was cancelled before it was applied.",
+      "lib": "",
+      "name": "UpgradeCancelled",
+      "prefix_topics": [
+        "upgrade_cancelled"
+      ],
+      "params": [],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "An upgrade was scheduled; it may be applied at/after `eta`.",
+      "lib": "",
+      "name": "UpgradeScheduled",
+      "prefix_topics": [
+        "upgrade_scheduled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "eta",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "A pending admin proposal was cancelled by the current admin.",
+      "lib": "",
+      "name": "AdminTransferCancelled",
+      "prefix_topics": [
+        "admin_transfer_cancelled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "current_admin",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TokenKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Balance",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Allowance",
+            "type_": [
+              {
+                "udt": {
+                  "name": "AllowanceKey"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TotalSupply"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Allowances are short-lived by design; balances live as long as the series. Both are persistent\\nentries bumped on write.",
+      "lib": "",
+      "name": "AllowanceKey",
+      "fields": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "spender",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AllowanceValue",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expiration_ledger",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A single deposit's accounting record \\xe2\\x80\\x94 the unit that makes Spield's yield math correct.\\n\\n**Per-position, never overwritten** (fixes SCF #4): every `mint` creates a *new* `Position`\\nwith its own `entry_rate`, so topping up never clobbers an earlier tranche's entry point.\\n\\n**`settled_rate` travels with the YT** (fixes SCF #5/#6): yield is always measured from\\n`settled_rate`, which starts at `entry_rate` and is bumped to the current rate on every\\n`claim_yield` *without burning YT*. A position transferred to a new owner carries its\\n`settled_rate`, so the buyer can only ever claim yield accrued *after* they held it.",
+      "lib": "",
+      "name": "Position",
+      "fields": [
+        {
+          "doc": "Blend `b_rate` (SCALAR_12) at the moment this position was minted. Immutable.",
+          "name": "entry_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "False once the position is fully redeemed/closed (all PT + YT gone).",
+          "name": "open",
+          "type_": "bool"
+        },
+        {
+          "doc": "Current owner of this position (and of the PT + YT it represents).",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "Underlying principal deposited for this position, in the underlying's decimals (USDC).\\nEqual to the PT amount still outstanding and the YT amount still outstanding (1:1:1 at\\nmint; PT and YT are only reduced by `redeem_pt` / `combine_and_redeem`).",
+          "name": "principal",
+          "type_": "i128"
+        },
+        {
+          "doc": "PT still held in this position. Burned on `redeem_pt` (after maturity) and on `combine`.",
+          "name": "pt_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "Blend `b_rate` (SCALAR_12) up to which yield has already been settled/paid. Starts equal\\nto `entry_rate`; advanced to `current_rate` on each claim. Yield owed is measured from\\nhere, so the same YT can be claimed across many epochs.",
+          "name": "settled_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "Blend bToken shares this position is backed by (its slice of the wrapper's total Blend\\nposition). `principal = shares * entry_rate / SCALAR_12` at mint.",
+          "name": "shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "YT still held in this position. **Never burned by `claim_yield`** \\xe2\\x80\\x94 only by `combine`.",
+          "name": "yt_amount",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Defence-in-depth bound on `b_rate` reads, stored in the strategy adapter's config.\\n\\nThe bound is **time-aware**: `b_rate` may rise by at most `max_apr_bps` per year, pro-rated by\\nthe seconds elapsed since `last_ts`. This makes the check independent of how often the strategy\\nis read (a long-untouched position no longer false-trips), so only `max_apr_bps` \\xe2\\x80\\x94 calibrated\\nagainst Blend's real max borrow APR \\xe2\\x80\\x94 needs tuning. See [`crate::math::check_rate_bound_timed`].",
+      "lib": "",
+      "name": "RateBound",
+      "fields": [
+        {
+          "doc": "Last `b_rate` the strategy observed (SCALAR_12). Used to enforce monotonicity + the ceiling.",
+          "name": "last_rate",
+          "type_": "i128"
+        },
+        {
+          "doc": "Unix-second timestamp at which `last_rate` was observed. The elapsed time since this is what\\nthe allowed increase is pro-rated by. `0` = no observation yet (first read bypasses the cap).",
+          "name": "last_ts",
+          "type_": "u64"
+        },
+        {
+          "doc": "Max allowed **annual** `b_rate` growth, in basis points (e.g. `30_000` = 300% APR). Set\\ngenerously above Blend's real max borrow APR so honest reads always pass.",
+          "name": "max_apr_bps",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Read-only snapshot of the Fixed-Rate Vault's health, for the frontend / solvency dashboard.\\nThe vault is solvent iff `pt_inventory >= total_liability` (it holds enough PT to honor every\\noutstanding receipt at par).",
+      "lib": "",
+      "name": "VaultStats",
+      "fields": [
+        {
+          "doc": "`pt_inventory - total_liability`: spare PT available to back new coupons (the headroom\\nthat lets the vault quote a fixed rate). Negative would mean insolvency (never allowed).",
+          "name": "coupon_capacity",
+          "type_": "i128"
+        },
+        {
+          "doc": "The vault's maturity (unix seconds).",
+          "name": "maturity",
+          "type_": "u64"
+        },
+        {
+          "doc": "PT the vault currently holds (its bond inventory). Each unit redeems 1:1 at maturity.",
+          "name": "pt_inventory",
+          "type_": "i128"
+        },
+        {
+          "doc": "The current fixed APR the vault quotes, in basis points.",
+          "name": "rate_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "Sum of `payout` across all open receipts \\xe2\\x80\\x94 the vault's total obligation at maturity.",
+          "name": "total_liability",
+          "type_": "i128"
+        },
+        {
+          "doc": "YT the vault currently holds (the variable leg whose yield funds future coupons).",
+          "name": "yt_inventory",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A single Fixed-Rate Vault deposit (plan \\xc2\\xa711.2 / \\xc2\\xa77.5 \\xe2\\x80\\x94 the flagship \"lock X% fixed\" product).\\n\\nPT-passthrough model: the user deposits `principal` USDC and is promised exactly `payout`\\nUSDC at maturity (`payout = principal + coupon`, the coupon being the fixed return). The\\nvault backs every receipt with **PT it actually holds** (each PT redeems 1:1 at maturity),\\nso the fixed rate is solvent by construction \\xe2\\x80\\x94 the same rigor as the wrapper's invariant.\\nThere is no per-user yield accounting here: the user's outcome is fixed and known at deposit.",
+      "lib": "",
+      "name": "FixedReceipt",
+      "fields": [
+        {
+          "doc": "Unix seconds at which `payout` becomes redeemable (the vault's maturity).",
+          "name": "maturity",
+          "type_": "u64"
+        },
+        {
+          "doc": "False once redeemed.",
+          "name": "open",
+          "type_": "bool"
+        },
+        {
+          "doc": "Owner of this receipt (the only account that may redeem it).",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "USDC the user is guaranteed at maturity = principal + fixed coupon. Backed by PT the\\nvault holds 1:1, so it is always redeemable.",
+          "name": "payout",
+          "type_": "i128"
+        },
+        {
+          "doc": "USDC principal the user deposited.",
+          "name": "principal",
+          "type_": "i128"
+        },
+        {
+          "doc": "The fixed APR quoted for this receipt, in basis points (for display / events only \\xe2\\x80\\x94 the\\neconomically binding figure is `payout`).",
+          "name": "rate_bps",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A read-only snapshot returned to the frontend / solvency dashboard: the live, Blend-backed\\nvalue of a position, split into its principal and currently-claimable yield.",
+      "lib": "",
+      "name": "PositionValue",
+      "fields": [
+        {
+          "doc": "Yield claimable right now: `yt_amount * (current_rate - settled_rate) / SCALAR_12`.",
+          "name": "claimable_yield",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "open",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "position_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "principal",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "pt_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "yt_amount",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Spield error codes, shared across contracts. Numbering leaves gaps so each contract's\\ndomain stays grouped: 1\\xe2\\x80\\x9319 generic/lifecycle, 20\\xe2\\x80\\x9339 wrapper accounting, 40\\xe2\\x80\\x9359 strategy.",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "`initialize` called a second time (SCF #7: one-shot init guard).",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "A function needing prior `initialize` was called first.",
+          "name": "NotInitialized",
+          "value": 2
+        },
+        {
+          "doc": "Caller is not the configured admin.",
+          "name": "NotAuthorized",
+          "value": 3
+        },
+        {
+          "doc": "Contract is paused by the circuit breaker; mutating calls are halted.",
+          "name": "Paused",
+          "value": 4
+        },
+        {
+          "doc": "A supplied amount was zero or negative where a positive value is required.",
+          "name": "InvalidAmount",
+          "value": 5
+        },
+        {
+          "doc": "Arithmetic overflowed (should be unreachable with i128 + overflow-checks, but asserted).",
+          "name": "MathOverflow",
+          "value": 6
+        },
+        {
+          "doc": "`accept_admin` / `cancel_admin_transfer` called with no admin proposal pending.",
+          "name": "NoPendingAdmin",
+          "value": 7
+        },
+        {
+          "doc": "`apply_upgrade` / `cancel_upgrade` called with no upgrade scheduled.",
+          "name": "NoPendingUpgrade",
+          "value": 8
+        },
+        {
+          "doc": "`apply_upgrade` called before the scheduled upgrade's timelock `eta`.",
+          "name": "TimelockNotElapsed",
+          "value": 9
+        },
+        {
+          "doc": "`set_timelock` value outside the allowed `[MIN_TIMELOCK_SECS, MAX_TIMELOCK_SECS]` range.",
+          "name": "TimelockOutOfBounds",
+          "value": 10
+        },
+        {
+          "doc": "The underlying token's `decimals()` is not the value the fixed-point math is calibrated for\\n(7 on Stellar USDC). Asserted at init rather than assumed.",
+          "name": "UnexpectedDecimals",
+          "value": 11
+        },
+        {
+          "doc": "The referenced position id does not exist.",
+          "name": "PositionNotFound",
+          "value": 20
+        },
+        {
+          "doc": "Caller does not own the referenced position.",
+          "name": "NotPositionOwner",
+          "value": 21
+        },
+        {
+          "doc": "A post-maturity-only operation was called while the term is still running: `redeem_pt`\\n(PT redeems 1:1 only at/after maturity) or `stamp_maturity_rate` (there is no maturity rate\\nto pin yet).",
+          "name": "NotMatured",
+          "value": 22
+        },
+        {
+          "doc": "Tried to redeem/split more PT or YT than the position holds.",
+          "name": "InsufficientBalance",
+          "value": 23
+        },
+        {
+          "doc": "The solvency invariant would be violated by this operation \\xe2\\x80\\x94 refuse it.\\n(SCF #3: the vault can never promise value Blend hasn't actually accrued.)",
+          "name": "SolvencyViolation",
+          "value": 24
+        },
+        {
+          "doc": "The position has already been fully redeemed/closed.",
+          "name": "PositionClosed",
+          "value": 25
+        },
+        {
+          "doc": "`mint` called at/after the market's maturity. The bond term is over: the vault\\n(`ensure_before_maturity`) and the market (`ensure_tradeable`) already refuse post-maturity\\ninflows, and the wrapper now matches them. Exits (`redeem_pt`, `combine_and_redeem`,\\n`claim_yield`) are unaffected.",
+          "name": "MarketMatured",
+          "value": 26
+        },
+        {
+          "doc": "`split_position` was asked for a slice so small that one side would floor to **zero Blend\\nshares** \\xe2\\x80\\x94 a position holding principal with nothing backing it (or, in reverse, gutting the\\noriginal). Split a larger amount. Distinct from `InvalidAmount` so the dApp can tell \"this\\nnumber is nonsense\" (\\xe2\\x89\\xa4 0, or \\xe2\\x89\\xa5 the whole position) from \"this number is legal but too\\nsmall at the current `b_rate`\".",
+          "name": "SplitTooSmall",
+          "value": 27
+        },
+        {
+          "doc": "Blend returned a `bRate` outside the configured sanity bound (defence-in-depth).",
+          "name": "RateOutOfBounds",
+          "value": 40
+        },
+        {
+          "doc": "Blend reported no supplied position for the asset we expected to hold.",
+          "name": "NoStrategyPosition",
+          "value": 41
+        },
+        {
+          "doc": "Withdrawal from Blend returned less underlying than required (liquidity edge case).",
+          "name": "WithdrawShortfall",
+          "value": 42
+        },
+        {
+          "doc": "The referenced fixed-rate receipt id does not exist.",
+          "name": "ReceiptNotFound",
+          "value": 60
+        },
+        {
+          "doc": "Caller does not own the referenced receipt.",
+          "name": "NotReceiptOwner",
+          "value": 61
+        },
+        {
+          "doc": "`redeem` called before the vault's maturity.",
+          "name": "VaultNotMatured",
+          "value": 62
+        },
+        {
+          "doc": "The receipt has already been redeemed.",
+          "name": "ReceiptClosed",
+          "value": 63
+        },
+        {
+          "doc": "The vault lacks enough spare PT (coupon capacity) to back the coupon for this deposit.\\nRefusing keeps the vault solvent by construction (the SCF #3 bar): a fixed coupon is only\\never promised when the vault already holds the PT to honor it.",
+          "name": "InsufficientCapacity",
+          "value": 64
+        },
+        {
+          "doc": "The quoted fixed rate is out of the allowed range (e.g. above the admin-set ceiling).",
+          "name": "RateNotAllowed",
+          "value": 65
+        },
+        {
+          "doc": "Deposit rejected because the market has already matured (no time left to earn the coupon,\\nand PT can no longer be accumulated). Vault maturity is inherited from the wrapper.",
+          "name": "VaultExpired",
+          "value": 66
+        },
+        {
+          "doc": "A swap/liquidity op would empty a pool reserve (proportion must stay strictly in (0,1)).",
+          "name": "InsufficientLiquidity",
+          "value": 80
+        },
+        {
+          "doc": "The realized output was below the caller's `min_out` slippage guard \\xe2\\x80\\x94 reverted.",
+          "name": "SlippageExceeded",
+          "value": 81
+        },
+        {
+          "doc": "Trading attempted at/after the market's maturity (after maturity PT just redeems 1:1).",
+          "name": "MarketExpired",
+          "value": 82
+        },
+        {
+          "doc": "`remove_liquidity` for more LP shares than the caller holds (or than exist).",
+          "name": "InsufficientShares",
+          "value": 83
+        },
+        {
+          "doc": "`add_liquidity` deposit ratio doesn't match the pool's current reserves (would mis-price\\nexisting LPs). The caller must supply PT and USDC in the pool's current proportion.",
+          "name": "ImbalancedLiquidity",
+          "value": 84
+        },
+        {
+          "doc": "The swap fee (bps) exceeds the on-chain ceiling set at init (a guardrail).",
+          "name": "FeeNotAllowed",
+          "value": 85
+        },
+        {
+          "doc": "`market::initialize` was given a `maturity` that differs from the wrapper whose PT it\\ntrades. A mismatch in either direction is a live failure \\xe2\\x80\\x94 late-dated leaves the curve\\nquoting PT below par after it already redeems at par (a risk-free draw on the LPs);\\nearly-dated strands PT holders with no venue and no redemption between the two dates.",
+          "name": "MaturityMismatch",
+          "value": 86
+        },
+        {
+          "doc": "`market::initialize` was given a `pt` SAC that is not the one the wrapper mints.",
+          "name": "PtTokenMismatch",
+          "value": 87
+        },
+        {
+          "doc": "A market/vault was wired to a settlement asset that is not the one PT redeems into\\n(`tofix.md` #19). Distinct from the two above so the operator is told *which* argument\\nis wrong.",
+          "name": "UnderlyingMismatch",
+          "value": 88
+        },
+        {
+          "doc": "SEP-41: the spender's allowance over `from` is smaller than the amount being moved.",
+          "name": "InsufficientAllowance",
+          "value": 100
+        },
+        {
+          "doc": "The operation is only valid BEFORE the series expiry (e.g. `mint_py`, any swap).",
+          "name": "SeriesExpired",
+          "value": 101
+        },
+        {
+          "doc": "The operation is only valid AT/AFTER the series expiry (e.g. post-expiry index stamping).",
+          "name": "SeriesNotExpired",
+          "value": 102
+        },
+        {
+          "doc": "The caller is not the one contract permitted to drive this entrypoint (e.g. only the\\nregistered market may fund a split; only the yield contract may mint PT).",
+          "name": "NotRegistered",
+          "value": 103
+        },
+        {
+          "doc": "A protocol fee share was set above its on-chain ceiling.",
+          "name": "FeeShareTooHigh",
+          "value": 104
+        },
+        {
+          "doc": "SR `deposit`/`redeem` produced fewer shares/underlying than the caller's floor.",
+          "name": "MinOutNotMet",
+          "value": 105
+        },
+        {
+          "doc": "An SR/PY amount rounded to zero \\xe2\\x80\\x94 refuse rather than mint or burn nothing for something.",
+          "name": "DustAmount",
+          "value": 106
+        },
+        {
+          "doc": "A deposit would push deployed assets past the configured launch TVL cap (`tofix.md` #3).",
+          "name": "DepositCapExceeded",
+          "value": 107
+        }
+      ]
+    }
+  }
+]
