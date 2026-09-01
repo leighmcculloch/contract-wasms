@@ -1,0 +1,317 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AdminNotSet",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "OfferNotFound",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "OfferIsInactive",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidTtlParams",
+          "value": 10
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Offer",
+      "fields": [
+        {
+          "doc": "",
+          "name": "active",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "amount_a",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "price_b_per_a",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "seller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_a",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_b",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_offer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "offer_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "Offer"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accept_offer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "buyer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "offer_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "tx_fee_receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tx_fee_a",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel_offer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "seller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "offer_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "tx_fee_receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tx_fee_a",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_offer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "seller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_a",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_b",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount_a",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "price_b_per_a",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "tx_fee_receiver",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tx_fee_a",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "extend_paged_ttl",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "threshold",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "extend_to",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "offer_ids",
+          "type_": {
+            "vec": {
+              "element_type": "u64"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  }
+]
