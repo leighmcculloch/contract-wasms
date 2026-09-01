@@ -1,0 +1,2391 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ViaMessage",
+      "fields": [
+        {
+          "doc": "",
+          "name": "destination_chain_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "off_chain_data",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "on_chain_data",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sender",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "source_chain_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "tx_id",
+          "type_": "u128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "send",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "request",
+          "type_": {
+            "udt": {
+              "name": "SendRequest"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "u128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "process",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "request",
+          "type_": {
+            "udt": {
+              "name": "ProcessRequest"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "recover",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns `Some(Address)` if ownership is set, or `None` if ownership has\\nbeen renounced.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.",
+      "name": "get_owner",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_relayers",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "relayers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "required",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "chain_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "message_prefix",
+          "type_": "u128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_next_tx_id",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u128",
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_fee_handler",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_gas_handler",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_fee_handler",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "fee_handler",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_gas_handler",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "gas_handler",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_pos_handler",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "pos_handler",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_via_signers",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "via_signers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "required",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Accepts a pending ownership transfer.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n\\n# Errors\\n\\n* [`crate::role_transfer::RoleTransferError::NoPendingTransfer`] - If\\nthere is no pending transfer to accept.\\n\\n# Events\\n\\n* topics - `[\"ownership_transfer_completed\"]`\\n* data - `[new_owner: Address]`",
+      "name": "accept_ownership",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_all_relayers",
+      "inputs": [],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              {
+                "vec": {
+                  "element_type": "address"
+                }
+              },
+              "bool"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_chain_details",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "ChainDetails"
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_system_enabled",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_chain_signers",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "chain_signers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "required",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Renounces ownership of the contract.\\n\\nPermanently removes the owner, disabling all functions gated by\\n`#[only_owner]`.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n\\n# Errors\\n\\n* [`OwnableError::TransferInProgress`] - If there is a pending ownership\\ntransfer.\\n* [`OwnableError::OwnerNotSet`] - If the owner is not set.\\n\\n# Notes\\n\\n* Authorization for the current owner is required.",
+      "name": "renounce_ownership",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_system_enabled",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "system_enabled",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initiates a 2-step ownership transfer to a new address.\\n\\nRequires authorization from the current owner. The new owner must later\\ncall `accept_ownership()` to complete the transfer.\\n\\n# Arguments\\n\\n* `e` - Access to the Soroban environment.\\n* `new_owner` - The proposed new owner.\\n* `live_until_ledger` - Ledger number until which the new owner can\\naccept. A value of `0` cancels any pending transfer.\\n\\n# Errors\\n\\n* [`OwnableError::OwnerNotSet`] - If the owner is not set.\\n* [`crate::role_transfer::RoleTransferError::NoPendingTransfer`] - If\\ntrying to cancel a transfer that doesn't exist.\\n* [`crate::role_transfer::RoleTransferError::InvalidLiveUntilLedger`] -\\nIf the specified ledger is in the past.\\n* [`crate::role_transfer::RoleTransferError::InvalidPendingAccount`] -\\nIf the specified pending account is not the same as the provided `new`\\naddress.\\n\\n# Notes\\n\\n* Authorization for the current owner is required.",
+      "name": "transfer_ownership",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_all_via_signers",
+      "inputs": [],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              {
+                "vec": {
+                  "element_type": "address"
+                }
+              },
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_project_signers",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "signers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "required",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accept_admin_transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "client_contract",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_all_chain_signers",
+      "inputs": [],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              {
+                "vec": {
+                  "element_type": "address"
+                }
+              },
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Returns true if the relayer is authorized to deliver a message to `recipient`.\\n\\nAuthorization rules:\\n- If relayers are not required, any relayer is accepted.\\n- If contract-specific relayers are enabled for `recipient`, only those are accepted.\\n- Otherwise, the relayer must be in the global relayer set.",
+      "name": "is_relayer_authorized",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "relayer",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_contract_relayers",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "contract_relayers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_all_project_signers",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "project_contract",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              {
+                "vec": {
+                  "element_type": "address"
+                }
+              },
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_all_contract_relayers",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "contract",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              {
+                "vec": {
+                  "element_type": "address"
+                }
+              },
+              "bool"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_required_signer_counts",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "u32",
+              "u32",
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize_universal_settings",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "request",
+          "type_": {
+            "udt": {
+              "name": "InitializeUniversalSettingsRequest"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": []
+              }
+            },
+            "error_type": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "Invalid number of signatures provided",
+          "name": "InvalidSignatureCount",
+          "value": 1
+        },
+        {
+          "doc": "The system is not enabled",
+          "name": "SystemNotEnabled",
+          "value": 2
+        },
+        {
+          "doc": "Recipient address is zero",
+          "name": "RecipientZeroAddress",
+          "value": 3
+        },
+        {
+          "doc": "Fee was not paid",
+          "name": "FeeNotPaid",
+          "value": 4
+        },
+        {
+          "doc": "Transaction has already been processed",
+          "name": "TransactionAlreadyProcessed",
+          "value": 5
+        },
+        {
+          "doc": "Relayer is not authorized",
+          "name": "RelayerNotAuthorized",
+          "value": 6
+        },
+        {
+          "doc": "Gas refund failed",
+          "name": "GasRefundFailed",
+          "value": 7
+        },
+        {
+          "doc": "Invalid key provided",
+          "name": "InvalidKey",
+          "value": 8
+        },
+        {
+          "doc": "Duplicate signer detected",
+          "name": "DuplicateSignerDetected",
+          "value": 9
+        },
+        {
+          "doc": "Insufficient project signatures",
+          "name": "InsufficientProjectSignatures",
+          "value": 10
+        },
+        {
+          "doc": "Insufficient chain signatures",
+          "name": "InsufficientChainSignatures",
+          "value": 11
+        },
+        {
+          "doc": "Insufficient VIA signatures",
+          "name": "InsufficientVIASignatures",
+          "value": 12
+        },
+        {
+          "doc": "POS (Proof of Stake) validation failed",
+          "name": "POSValidationFailed",
+          "value": 13
+        },
+        {
+          "doc": "Chains and endpoints arrays have mismatched lengths",
+          "name": "ChainsEndpointsMislength",
+          "value": 14
+        },
+        {
+          "doc": "Message gateway is not set",
+          "name": "MissingMessageGateway",
+          "value": 15
+        },
+        {
+          "doc": "Chain endpoint is not configured",
+          "name": "MissingChainEndpoint",
+          "value": 16
+        },
+        {
+          "doc": "Gas amount exceeds maximum allowed",
+          "name": "GasAmountExceedsMaxGasAmount",
+          "value": 17
+        },
+        {
+          "doc": "Gas amount is not authorized",
+          "name": "GasAmountNotAuthorized",
+          "value": 18
+        },
+        {
+          "doc": "Insufficient balance",
+          "name": "InsufficientBalance",
+          "value": 19
+        },
+        {
+          "doc": "Gas token contract is not set",
+          "name": "GasTokenContractNotSet",
+          "value": 20
+        },
+        {
+          "doc": "Maximum fee exceeds maximum fee amount",
+          "name": "MaxFeeExceededMaxFeeAmount",
+          "value": 21
+        },
+        {
+          "doc": "Fee token contract is not set",
+          "name": "FeeTokenContractNotSet",
+          "value": 22
+        },
+        {
+          "doc": "Fee amount is not authorized",
+          "name": "FeeAmountNotAuthorized",
+          "value": 23
+        },
+        {
+          "doc": "Invalid chain sender",
+          "name": "InvalidChainSender",
+          "value": 24
+        },
+        {
+          "doc": "Address XDR representation is too short",
+          "name": "AddressXDRRepresentationTooShort",
+          "value": 25
+        },
+        {
+          "doc": "Owner is not set",
+          "name": "OwnerNotSet",
+          "value": 26
+        },
+        {
+          "doc": "Chain details not found",
+          "name": "ChainDetailsNotFound",
+          "value": 27
+        },
+        {
+          "doc": "Owner has already been set",
+          "name": "OwnerAlreadySet",
+          "value": 28
+        },
+        {
+          "doc": "Fee processing failed",
+          "name": "FeeProcessingFailed",
+          "value": 29
+        },
+        {
+          "doc": "Signer list is not sorted in strict ascending order",
+          "name": "SignersNotSorted",
+          "value": 30
+        },
+        {
+          "doc": "Signer must be an account address, not a contract address",
+          "name": "SignerMustBeAccountAddress",
+          "value": 31
+        },
+        {
+          "doc": "Message destination chain does not match this gateway's chain ID",
+          "name": "DestinationChainMismatch",
+          "value": 32
+        },
+        {
+          "doc": "Sender must be a contract address, not a direct account",
+          "name": "SenderMustBeContractAddress",
+          "value": 33
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Recover",
+      "prefix_topics": [
+        "recover"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetOwner",
+      "prefix_topics": [
+        "set_owner"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetRelayers",
+      "prefix_topics": [
+        "set_relayers"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "relayers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "required",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SendProcessed",
+      "prefix_topics": [
+        "send_processed"
+      ],
+      "params": [],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SendRequested",
+      "prefix_topics": [
+        "send_requested"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "tx_id",
+          "type_": "u128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "bytes",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "destination_chain",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "chain_data",
+          "type_": "bytes",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "confirmations",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetFeeHandler",
+      "prefix_topics": [
+        "set_fee_handler"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "fee_handler",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetGasHandler",
+      "prefix_topics": [
+        "set_gas_handler"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "gas_handler",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetPosHandler",
+      "prefix_topics": [
+        "set_pos_handler"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "pos_handler",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetViaSigners",
+      "prefix_topics": [
+        "set_via_signers"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "via_signers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "required",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetFeesOffline",
+      "prefix_topics": [
+        "set_fees_offline"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "status",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetChainSigners",
+      "prefix_topics": [
+        "set_chain_signers"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "chain_signers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "required",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetMaxFeeAmount",
+      "prefix_topics": [
+        "set_max_fee_amount"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "client_contract",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetMaxGasAmount",
+      "prefix_topics": [
+        "set_max_gas_amount"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "max_gas_amount",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "client_contract",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetSystemEnabled",
+      "prefix_topics": [
+        "set_system_enabled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "system_enabled",
+          "type_": "bool",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetTokenContract",
+      "prefix_topics": [
+        "set_token_contract"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "client_contract",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "token_contract",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetProjectSigners",
+      "prefix_topics": [
+        "set_project_signers"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "contract",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "signers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "required",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetCustomSourceFee",
+      "prefix_topics": [
+        "set_custom_source_fee"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "client_contract",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetContractRelayers",
+      "prefix_topics": [
+        "set_contract_relayers"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "contract",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "relayers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetFeeTokenContract",
+      "prefix_topics": [
+        "set_fee_token_contract"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "client_contract",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "contract",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Storage key for chain details (chain ID and next transaction ID)",
+            "name": "ChainDetails"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Storage key for the list of chain signers",
+            "name": "ChainSigners"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Storage key for mapping chain signer addresses to their status",
+            "name": "ChainSignersMap",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Storage key for the required number of chain signatures",
+            "name": "ChainSignersRequired"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Storage key for the list of VIA signers",
+            "name": "ViaSigners"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Storage key for mapping VIA signer addresses to their status",
+            "name": "ViaSignersMap",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Storage key for the required number of VIA signatures",
+            "name": "ViaSignersRequired"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Storage key for project signers list for a specific contract",
+            "name": "ProjectSigners",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Storage key for mapping project signer addresses to their status for a specific contract",
+            "name": "ProjectSignersMap",
+            "type_": [
+              "address",
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Storage key for the required number of project signatures for a specific contract",
+            "name": "ProjectSignersRequired",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Storage key for the list of relayers",
+            "name": "Relayers"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Storage key for mapping relayer addresses to their status",
+            "name": "RelayersMap",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Storage key indicating whether relayers are required",
+            "name": "RelayersRequired"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Storage key for contract-specific relayers list",
+            "name": "ContractRelayers",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Storage key for mapping contract-specific relayer addresses to their status",
+            "name": "ContractRelayersMap",
+            "type_": [
+              "address",
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Storage key indicating whether relayers are enabled for a specific contract",
+            "name": "ContractRelayersEnabled",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Storage key for tracking processed transfers by transaction ID",
+            "name": "ProcessedTransfers",
+            "type_": [
+              "u128"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Storage key for the gas handler contract address",
+            "name": "GasHandler"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Storage key for the fee handler contract address",
+            "name": "FeeHandler"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Storage key for the POS (Proof of Stake) handler contract address",
+            "name": "PosHandler"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ChainDetails",
+      "fields": [
+        {
+          "doc": "Chain ID of the current chain",
+          "name": "chain_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "Next transaction ID to be used for cross-chain messages",
+          "name": "next_tx_id",
+          "type_": "u128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Signature structure for message validation\\n\\nContains the signature and public key used to verify message authenticity.",
+      "lib": "",
+      "name": "Signature",
+      "fields": [
+        {
+          "doc": "The public key bytes (32 bytes)",
+          "name": "public_key",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "The signature bytes (64 bytes)",
+          "name": "signature",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Request structure for sending messages\\n\\nContains all the information needed to send a cross-chain message.",
+      "lib": "",
+      "name": "SendRequest",
+      "fields": [
+        {
+          "doc": "Data to send to the destination chain",
+          "name": "chain_data",
+          "type_": "bytes"
+        },
+        {
+          "doc": "Number of confirmations required",
+          "name": "confirmations",
+          "type_": "u32"
+        },
+        {
+          "doc": "Chain ID of the destination chain",
+          "name": "destination_chain",
+          "type_": "u64"
+        },
+        {
+          "doc": "Recipient address on the destination chain (in bytes format)",
+          "name": "recipient",
+          "type_": "bytes"
+        },
+        {
+          "doc": "Sender address (client contract) that is sending the message",
+          "name": "sender",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Request structure for processing messages\\n\\nContains all the information needed to process a cross-chain message, including\\ntransaction details, sender/recipient information, message data, and signatures.",
+      "lib": "",
+      "name": "ProcessRequest",
+      "fields": [
+        {
+          "doc": "Chain ID of the destination chain",
+          "name": "destination_chain_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "Gas amount for the transaction",
+          "name": "gas",
+          "type_": "u64"
+        },
+        {
+          "doc": "Optional off-chain data",
+          "name": "off_chain_data",
+          "type_": "bytes"
+        },
+        {
+          "doc": "ABI-encoded data for processing on-chain",
+          "name": "on_chain_data",
+          "type_": "bytes"
+        },
+        {
+          "doc": "Recipient address on this chain",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "Relayer address that submitted the message",
+          "name": "relayer",
+          "type_": "address"
+        },
+        {
+          "doc": "Sender address in bytes format",
+          "name": "sender",
+          "type_": "bytes"
+        },
+        {
+          "doc": "Signatures for message validation",
+          "name": "signatures",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Signature"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "Chain ID where the message originated",
+          "name": "source_chain_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "Transaction ID for tracking",
+          "name": "tx_id",
+          "type_": "u128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Request structure for initializing universal gateway settings\\n\\nContains all the configuration needed to initialize the gateway with universal settings\\nin a single transaction.",
+      "lib": "",
+      "name": "InitializeUniversalSettingsRequest",
+      "fields": [
+        {
+          "doc": "List of chain signer addresses",
+          "name": "chain_signers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "Number of chain signatures required",
+          "name": "chain_signers_required",
+          "type_": "u32"
+        },
+        {
+          "doc": "Address of the fee handler contract",
+          "name": "fee_handler",
+          "type_": "address"
+        },
+        {
+          "doc": "Address of the gas handler contract",
+          "name": "gas_handler",
+          "type_": "address"
+        },
+        {
+          "doc": "Address of the POS handler contract",
+          "name": "pos_handler",
+          "type_": "address"
+        },
+        {
+          "doc": "List of relayer addresses",
+          "name": "relayers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "Whether relayers are required",
+          "name": "relayers_required",
+          "type_": "bool"
+        },
+        {
+          "doc": "Whether the system is enabled",
+          "name": "system_enabled",
+          "type_": "bool"
+        },
+        {
+          "doc": "List of VIA signer addresses",
+          "name": "via_signers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "Number of VIA signatures required",
+          "name": "via_signers_required",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "Error types for message client operations",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "Chains and endpoints arrays have mismatched lengths",
+          "name": "ChainsEndpointsMislength",
+          "value": 1
+        },
+        {
+          "doc": "Message gateway is not set",
+          "name": "MissingMessageGateway",
+          "value": 2
+        },
+        {
+          "doc": "Chain endpoint is not configured",
+          "name": "MissingChainEndpoint",
+          "value": 3
+        },
+        {
+          "doc": "Invalid recipient address",
+          "name": "InvalidRecipient",
+          "value": 4
+        },
+        {
+          "doc": "Invalid amount (e.g., zero or negative)",
+          "name": "InvalidAmount",
+          "value": 5
+        },
+        {
+          "doc": "Sender length doesn't match expected length",
+          "name": "SenderLengthMismatch",
+          "value": 6
+        },
+        {
+          "doc": "Invalid chain sender",
+          "name": "InvalidChainSender",
+          "value": 7
+        },
+        {
+          "doc": "No pending admin to transfer role",
+          "name": "NoPendingAdmin",
+          "value": 8
+        },
+        {
+          "doc": "No pending admin to transfer role",
+          "name": "NoAdminSet",
+          "value": 9
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys for contract data",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "Storage key for chain endpoint address for a specific chain ID",
+            "name": "ChainsEndpoints",
+            "type_": [
+              "u64"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Request structure for sending messages",
+      "lib": "",
+      "name": "SendRequest",
+      "fields": [
+        {
+          "doc": "Data to send to the destination chain",
+          "name": "chain_data",
+          "type_": "bytes"
+        },
+        {
+          "doc": "Number of confirmations required",
+          "name": "confirmations",
+          "type_": "u32"
+        },
+        {
+          "doc": "Chain ID of the destination chain",
+          "name": "destination_chain",
+          "type_": "u64"
+        },
+        {
+          "doc": "Recipient address on the destination chain (in bytes format)",
+          "name": "recipient",
+          "type_": "bytes"
+        },
+        {
+          "doc": "Sender address (client contract) that is sending the message",
+          "name": "sender",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Request structure for processing messages from the gateway",
+      "lib": "",
+      "name": "ProcessFromGatewayRequest",
+      "fields": [
+        {
+          "doc": "Gas fee for the transaction",
+          "name": "gas_fee",
+          "type_": "u64"
+        },
+        {
+          "doc": "Optional off-chain data",
+          "name": "off_chain_data",
+          "type_": "bytes"
+        },
+        {
+          "doc": "ABI-encoded data for processing on-chain",
+          "name": "on_chain_data",
+          "type_": "bytes"
+        },
+        {
+          "doc": "Recipient address on this chain (Stellar address)",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "Sender address in bytes format (from the source chain)",
+          "name": "sender",
+          "type_": "bytes"
+        },
+        {
+          "doc": "Chain ID where the message originated",
+          "name": "source_chain_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "Transaction ID for tracking this cross-chain message",
+          "name": "tx_id",
+          "type_": "u128"
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RoleTransferError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NoPendingTransfer",
+          "value": 2200
+        },
+        {
+          "doc": "",
+          "name": "InvalidLiveUntilLedger",
+          "value": 2201
+        },
+        {
+          "doc": "",
+          "name": "InvalidPendingAccount",
+          "value": 2202
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a role is granted.",
+      "lib": "",
+      "name": "RoleGranted",
+      "prefix_topics": [
+        "role_granted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a role is revoked.",
+      "lib": "",
+      "name": "RoleRevoked",
+      "prefix_topics": [
+        "role_revoked"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when the admin role is renounced.",
+      "lib": "",
+      "name": "AdminRenounced",
+      "prefix_topics": [
+        "admin_renounced"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a role admin is changed.",
+      "lib": "",
+      "name": "RoleAdminChanged",
+      "prefix_topics": [
+        "role_admin_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "previous_admin_role",
+          "type_": "symbol",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_admin_role",
+          "type_": "symbol",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccessControlError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 2000
+        },
+        {
+          "doc": "",
+          "name": "AdminNotSet",
+          "value": 2001
+        },
+        {
+          "doc": "",
+          "name": "IndexOutOfBounds",
+          "value": 2002
+        },
+        {
+          "doc": "",
+          "name": "AdminRoleNotFound",
+          "value": 2003
+        },
+        {
+          "doc": "",
+          "name": "RoleCountIsNotZero",
+          "value": 2004
+        },
+        {
+          "doc": "",
+          "name": "RoleNotFound",
+          "value": 2005
+        },
+        {
+          "doc": "",
+          "name": "AdminAlreadySet",
+          "value": 2006
+        },
+        {
+          "doc": "",
+          "name": "RoleNotHeld",
+          "value": 2007
+        },
+        {
+          "doc": "",
+          "name": "RoleIsEmpty",
+          "value": 2008
+        },
+        {
+          "doc": "",
+          "name": "TransferInProgress",
+          "value": 2009
+        },
+        {
+          "doc": "",
+          "name": "MaxRolesExceeded",
+          "value": 2010
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an admin transfer is completed.",
+      "lib": "",
+      "name": "AdminTransferCompleted",
+      "prefix_topics": [
+        "admin_transfer_completed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "previous_admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an admin transfer is initiated.",
+      "lib": "",
+      "name": "AdminTransferInitiated",
+      "prefix_topics": [
+        "admin_transfer_initiated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "current_admin",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Storage key for enumeration of accounts per role.",
+      "lib": "",
+      "name": "RoleAccountKey",
+      "fields": [
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys for the data associated with the access control",
+      "lib": "",
+      "name": "AccessControlStorageKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ExistingRoles"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "RoleAccounts",
+            "type_": [
+              {
+                "udt": {
+                  "name": "RoleAccountKey"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "HasRole",
+            "type_": [
+              "address",
+              "symbol"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "RoleAccountsCount",
+            "type_": [
+              "symbol"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "RoleAdmin",
+            "type_": [
+              "symbol"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PendingAdmin"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OwnableError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "OwnerNotSet",
+          "value": 2100
+        },
+        {
+          "doc": "",
+          "name": "TransferInProgress",
+          "value": 2101
+        },
+        {
+          "doc": "",
+          "name": "OwnerAlreadySet",
+          "value": 2102
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an ownership transfer is initiated.",
+      "lib": "",
+      "name": "OwnershipTransfer",
+      "prefix_topics": [
+        "ownership_transfer"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "live_until_ledger",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when ownership is renounced.",
+      "lib": "",
+      "name": "OwnershipRenounced",
+      "prefix_topics": [
+        "ownership_renounced"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "old_owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when an ownership transfer is completed.",
+      "lib": "",
+      "name": "OwnershipTransferCompleted",
+      "prefix_topics": [
+        "ownership_transfer_completed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Storage keys for `Ownable` utility.",
+      "lib": "",
+      "name": "OwnableStorageKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Owner"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PendingOwner"
+          }
+        }
+      ]
+    }
+  }
+]
