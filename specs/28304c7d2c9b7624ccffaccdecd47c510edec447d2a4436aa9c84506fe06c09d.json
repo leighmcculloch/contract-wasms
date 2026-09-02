@@ -1,0 +1,845 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StorageDataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ToteContractHash"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AdminAddress"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TokenAddress"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ListKey"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "FinishedMap"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "RefundFee"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Commissions"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "KnownTotes"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ToteIndex"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "list",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "StellarToteData"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "start",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "tote",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "author",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "resolvers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "question",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "answers",
+          "type_": {
+            "vec": {
+              "element_type": "string"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "end_bet_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "resolve_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "round_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "min_bet",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_tote",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "tote",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "version",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_tote_at",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tote_contract_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_tote_data",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "tote",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "udt": {
+            "name": "StellarToteData"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "mark_finished",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tote",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_refund_fee",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_tote_count",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_refund_fee",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "percent100",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_commissions",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "ToteCommissions"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_commissions",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "admin_percent100",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "author_percent100",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "resolver_percent100",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_finished_locally",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "tote",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_tote_contract_hash",
+      "inputs": [],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_tote_contract_hash",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Bet",
+      "prefix_topics": [
+        "bet"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "bettor",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "variant_index",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Refund",
+      "prefix_topics": [
+        "refund"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "bettor",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BetInfo",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "variant_index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "winnings",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "withdrawn",
+          "type_": "bool"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Resolve",
+      "prefix_topics": [
+        "resolve"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "winner_index",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Withdraw",
+      "prefix_topics": [
+        "withdraw"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "bettor",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Cancelled",
+      "prefix_topics": [
+        "cancelled"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "round",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AnswerStat",
+      "fields": [
+        {
+          "doc": "",
+          "name": "bettors",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "total_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "variant_index",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RoundStart",
+      "prefix_topics": [
+        "round_start"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "round",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ToteStarted",
+      "prefix_topics": [
+        "tote_started"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "tote",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "author",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StellarToteData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "admin_commission_percent100",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "answers",
+          "type_": {
+            "vec": {
+              "element_type": "string"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "author",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "author_commission_percent100",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "deploy_salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "end_bet_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "manager_address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "min_bet",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "question",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "refund_fee_percent100",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "resolve_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "resolver_commission_percent100",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "resolvers",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "round_time",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "token_address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "toto_contract_address",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ToteCommissions",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin_percent100",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "author_percent100",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "resolver_percent100",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ResolverWithdraw",
+      "prefix_topics": [
+        "resolver_withdraw"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "resolver",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "BettorUnauthorizedCall",
+      "prefix_topics": [
+        "bettor_unauthorized_call"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "fn_name",
+          "type_": "symbol",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ManagerUnauthorizedCall",
+      "prefix_topics": [
+        "manager_unauthorized_call"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "fn_name",
+          "type_": "symbol",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  }
+]
