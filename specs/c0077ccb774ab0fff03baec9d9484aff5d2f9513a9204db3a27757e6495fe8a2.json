@@ -1,0 +1,223 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ReviewStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Pending"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Approved"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Rejected"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PostModeratedEvent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "moderator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "post_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "review_contract",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "ReviewStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "submitter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "reject",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "status",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "ReviewStatus"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "approve",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "treasury",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "moderator",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "post_hash",
+      "inputs": [],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "submitter",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "submitter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "moderator",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "treasury",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "escrow_amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "post_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "escrow_amount",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "token_address",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  }
+]

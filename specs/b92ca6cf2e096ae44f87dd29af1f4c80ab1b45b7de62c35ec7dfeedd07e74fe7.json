@@ -1,0 +1,397 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OnboardEvent",
+      "fields": [
+        {
+          "doc": "",
+          "name": "lockb0x_addr",
+          "type_": "address"
+        },
+        {
+          "doc": "32-byte ZK commitment; zero-filled when PoH skipped.",
+          "name": "poh_anchor",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Groth16VerifyingKey",
+      "fields": [
+        {
+          "doc": "",
+          "name": "alpha_g1",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "beta_g2",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "delta_g2",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "gamma_g2",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "ic0_g1",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "ic1_g1",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Called after the user's XLM/USDC payment is confirmed.\\n\\nDeploys a new lockb0x Soroban contract for `user`, invokes its\\n`initialize` function via cross-contract call, and emits an event.",
+      "name": "on_board",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "poh_anchor",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Initialise the contract.  Must be called once by the deployer.",
+      "name": "initialise",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "lockb0x_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Update the lockb0x WASM hash for new deployments.",
+      "name": "set_lockb0x_wasm",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Register/update Groth16 verifying key material referenced by `vk_id`.",
+      "name": "set_verifying_key",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vk_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "alpha_g1",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "beta_g2",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "gamma_g2",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "delta_g2",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "ic0_g1",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "ic1_g1",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Redeem a fiat access code using a ZK proof of issuer-commitment knowledge.\\n\\nThe issuer commitment is stored as a persistent key so it cannot be re-used.",
+      "name": "redeem_access_code",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "zk_proof_a",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "zk_proof_b",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "zk_proof_c",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "nullifier_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vk_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "poh_anchor",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Register a 32-byte access-code commitment hash. Admin-only.",
+      "name": "register_commitment",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "commitment",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Called by orchestrators that bind onboarding to an off-chain payment key.\\n\\nReplay-safe behavior:\\n- If the same payment key was already onboarded, return the same lockb0x.\\n- Otherwise execute standard onboarding and persist the payment->lockb0x mapping.",
+      "name": "on_board_for_payment",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "poh_anchor",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payment_key",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Redeem a fiat access code and bind onboarding idempotency to `payment_key`.",
+      "name": "redeem_access_code_for_payment",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "zk_proof_a",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "zk_proof_b",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "zk_proof_c",
+          "type_": "bytes"
+        },
+        {
+          "doc": "",
+          "name": "nullifier_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "vk_id",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "poh_anchor",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payment_key",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  }
+]
