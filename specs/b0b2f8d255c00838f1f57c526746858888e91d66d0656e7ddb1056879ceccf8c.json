@@ -1,0 +1,1367 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Order",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "amount_in_remaining",
+          "type_": "i128"
+        },
+        {
+          "doc": "Ledger sequence after which the router may claim this order and\\nexecute it through DEX liquidity. 0 = no auto-route (sit forever).",
+          "name": "auto_route_after",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "created_at",
+          "type_": "u32"
+        },
+        {
+          "doc": "Addresses that may NOT fill this order (\\xe2\\x89\\xa4 MAX_EXCLUDED). Lets a\\nliquidity provider running several wallets guarantee on-chain that\\nthey never cross themselves. Empty = anyone may fill.",
+          "name": "excluded",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "maker",
+          "type_": "address"
+        },
+        {
+          "doc": "(Oracle mode only) maximum slippage tolerance in basis points",
+          "name": "max_slippage_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "For Fixed mode: the explicit minimum output.\\nFor Oracle mode: ignored at fill time (oracle price + slippage used instead).",
+          "name": "min_amount_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "Pricing strategy for this order",
+          "name": "price_mode",
+          "type_": {
+            "udt": {
+              "name": "PriceMode"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "OrderStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "FeeVault"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "NextOrderId"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Order",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Index of open order IDs for a token pair (token_in, token_out)",
+            "name": "PairIndex",
+            "type_": [
+              "address",
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Authorized router address (can claim timer-expired orders).\\nThis MUST be the Router *contract* so claims stay atomic on-chain.",
+            "name": "Router"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Oracle price for a directed pair, stored as (price_num, price_den)",
+            "name": "OraclePrice",
+            "type_": [
+              "address",
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Authorized oracle updater address",
+            "name": "OracleAdmin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Protocol fee numerator per FEE_DENOMINATOR (settable \\xe2\\x89\\xa4 cap)",
+            "name": "FeePer100k"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Max acceptable age (seconds) of a SEP-40 price",
+            "name": "Sep40MaxAge"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "SEP-40 feed for a token \\xe2\\x80\\x94 carries ITS OWN oracle contract, so\\ndifferent tokens can price off different oracles (e.g. Reflector's\\nexternal-markets oracle for XLM/USDC/EURC, their Stellar-DEX\\noracle for the Etherfuse stablebonds).",
+            "name": "Sep40Feed",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Two-step admin rotation: the proposed new admin, pending acceptance.",
+            "name": "PendingAdmin"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Minimum order size (base units) for orders escrowing this token.",
+            "name": "MinOrder",
+            "type_": [
+              "address"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "One fill inside a `match_and_place` plan: take `fill_amount_in` of the\\nreverse-side order's escrow, paying `amount_out` of its token_out.",
+      "lib": "",
+      "name": "FillSpec",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fill_amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "How the order's minimum output price is determined.",
+      "lib": "",
+      "name": "PriceMode",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "Classic fixed-price order: maker sets an explicit min_amount_out.",
+            "name": "Fixed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Oracle-pegged order: at fill time the contract reads a stored oracle\\nprice and enforces that the taker's payment is within\\n`max_slippage_bps` of fair value.",
+            "name": "Oracle"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Current protocol fee as (numerator, denominator).",
+      "name": "get_fee",
+      "inputs": [],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "i128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set the protocol fee (per 100,000 of the taker's payment). Admin\\nonly, hard-capped at MAX_FEE_PER_100K (0.5 bps) \\xe2\\x80\\x94 the ceiling is\\ncompile-time; 0 is valid (fee holiday).",
+      "name": "set_fee",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "fee_per_100k",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SwapBookError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "A token's oracle feed: which SEP-40 contract to ask, how the asset is\\nkeyed there, and that oracle's price decimals (captured at\\nregistration so cross-oracle pairs normalize correctly).",
+      "lib": "",
+      "name": "FeedConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": {
+            "udt": {
+              "name": "OracleAsset"
+            }
+          }
+        },
+        {
+          "doc": "Max acceptable price age (seconds) for THIS feed; 0 = use the\\nglobal Sep40MaxAge. Providers push on very different cadences\\n(Reflector ~5 min, RedStone 12-24h heartbeat) \\xe2\\x80\\x94 a single global\\nage either rejects healthy RedStone feeds or waves through a\\nhalf-day-stale Reflector one.",
+          "name": "max_age_secs",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "oracle",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "oracle_decimals",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Mirror of the SEP-40 `Asset` enum \\xe2\\x80\\x94 variant names must match the\\noracle contract's exactly (XDR encodes the variant symbol).",
+      "lib": "",
+      "name": "OracleAsset",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Stellar",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Other",
+            "type_": [
+              "symbol"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OrderStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Open"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PartialFill"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Filled"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cancelled"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Expired"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Timer expired \\xe2\\x80\\x94 claimed by router for DEX execution",
+            "name": "Routed"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get a specific order by ID.",
+      "name": "get_order",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Order"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "SwapBookError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Returned by `claim_expired_timer` so the Router contract can enforce the\\nmaker's price on the DEX proceeds within the same invocation.",
+      "lib": "",
+      "name": "ClaimedOrder",
+      "fields": [
+        {
+          "doc": "Escrowed amount transferred to the router",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "maker",
+          "type_": "address"
+        },
+        {
+          "doc": "Minimum token_out the maker must receive (net) for this claim,\\nderived from the order's fixed price or the current oracle price.",
+          "name": "min_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Fill an order completely. The taker provides `amount_out` of token_out,\\nand receives the maker's escrowed token_in.",
+      "name": "fill_order",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "taker",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "amount_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SwapBookError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get all open order IDs for a token pair.",
+      "name": "get_orders",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "u64"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Quote a fill from the TAKER's perspective.\\n\\nThe taker wants to acquire `token_buy` and pay with `token_pay`.\\nScans orders where makers sell `token_buy` for `token_pay`\\n(i.e. PairIndex(token_buy, token_pay)) and greedily computes how much\\n`token_buy` the taker receives for spending up to `amount_pay`\\n(before protocol fee).\\n\\nReturns (amount_bought, amount_paid).",
+      "name": "quote_fill",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_buy",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_pay",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount_pay",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "i128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set the authorized router address (admin only).\\nThe router MUST be the Router contract, which claims timer-expired\\norders and settles the maker atomically.",
+      "name": "set_router",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "router",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SwapBookError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SwapBookError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "OrderNotFound",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "OrderNotOpen",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "OrderExpired",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InsufficientOutput",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "FillExceedsRemaining",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "SameToken",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "OraclePriceNotSet",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "OracleSlippageExceeded",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "TimerNotExpired",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "RouterNotSet",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "OraclePriceStale",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "Overflow",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "InvalidPrice",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "SlippageTooHigh",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "BookFull",
+          "value": 19
+        },
+        {
+          "doc": "",
+          "name": "OrderNotExpired",
+          "value": 20
+        },
+        {
+          "doc": "",
+          "name": "OracleJumpTooLarge",
+          "value": 21
+        },
+        {
+          "doc": "",
+          "name": "ExcludedCounterparty",
+          "value": 22
+        },
+        {
+          "doc": "",
+          "name": "TooManyExclusions",
+          "value": 23
+        },
+        {
+          "doc": "",
+          "name": "FeeAboveCap",
+          "value": 24
+        },
+        {
+          "doc": "",
+          "name": "MatchWrongPair",
+          "value": 25
+        },
+        {
+          "doc": "",
+          "name": "MatchExceedsBudget",
+          "value": 26
+        },
+        {
+          "doc": "",
+          "name": "BelowMinimumOrder",
+          "value": 27
+        },
+        {
+          "doc": "",
+          "name": "ExpiryTooFar",
+          "value": 28
+        },
+        {
+          "doc": "",
+          "name": "NoPendingAdmin",
+          "value": 29
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Place a new swap order.\\n\\n`price_mode`: 0 = Fixed (uses min_amount_out), 1 = Oracle (uses live price)\\n`max_slippage_bps`: Oracle mode only \\xe2\\x80\\x94 must be 1..=MAX_SLIPPAGE_BPS\\n`auto_route_after`: ledger sequence after which router can claim for DEX.\\n0 = no auto-route (sit on book until expiry).\\n`excluded`: addresses that may not fill this order (\\xe2\\x89\\xa4 MAX_EXCLUDED);\\npass an empty Vec for none.",
+      "name": "place_order",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "maker",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_amount_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "price_mode",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_slippage_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "auto_route_after",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "excluded",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": {
+              "udt": {
+                "name": "SwapBookError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Mirror of the SEP-40 `PriceData` struct (field names must match).",
+      "lib": "",
+      "name": "Sep40PriceData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Complete an admin rotation \\xe2\\x80\\x94 callable only by the proposed admin,\\nproving the new key is live before it holds power.",
+      "name": "accept_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SwapBookError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Cancel an open order. Only the maker can cancel.\\nReturns escrowed tokens to the maker.",
+      "name": "cancel_order",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SwapBookError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Permissionless cleanup: refund and close an order whose expiry has\\npassed. Anyone may call (keeper-friendly); funds always go to the maker.",
+      "name": "expire_order",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SwapBookError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Partially fill an order.\\n\\n`fill_amount_in` is the portion of the maker's token_in the taker wants.\\n`amount_out` is what the taker pays in token_out.",
+      "name": "partial_fill",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "taker",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "fill_amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "amount_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SwapBookError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Oracle price stored as a rational number (numerator / denominator).",
+      "lib": "",
+      "name": "OraclePriceData",
+      "fields": [
+        {
+          "doc": "price denominator",
+          "name": "den",
+          "type_": "i128"
+        },
+        {
+          "doc": "price numerator (amount of token_out per unit of token_in)",
+          "name": "num",
+          "type_": "i128"
+        },
+        {
+          "doc": "ledger sequence when this price was last updated",
+          "name": "updated_at",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deploy-time constructor \\xe2\\x80\\x94 atomic with deployment, cannot be front-run.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_vault",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set the minimum order size (base units) for orders escrowing\\n`token` \\xe2\\x80\\x94 the dust floor that keeps 1-stroop orders from squatting\\nthe bounded pair index. Admin only; 0 clears the floor.",
+      "name": "set_min_order",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "min_amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SwapBookError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Register a token's SEP-40 feed \\xe2\\x80\\x94 the oracle contract to ask AND\\nhow the asset is keyed there. Admin only. The oracle's price\\ndecimals are read on-chain here and stored with the feed, so pairs\\nwhose tokens use DIFFERENT oracles still cross-rate correctly.\\nPairs where BOTH tokens have feeds price exclusively off SEP-40\\n(fail closed); others keep the pushed price.\\n`max_age_secs`: per-feed freshness bound; 0 = use the global\\nSep40MaxAge (set it per the provider's push cadence \\xe2\\x80\\x94 e.g. ~600 for\\nReflector's 5-min updates, 86400+ for RedStone's 12-24h heartbeat).",
+      "name": "set_sep40_feed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "oracle",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": {
+            "udt": {
+              "name": "OracleAsset"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "max_age_secs",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SwapBookError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Propose a new admin (two-step rotation). Admin only. The proposed\\naddress must call `accept_admin` to take over, so a mistyped\\ntransfer is recoverable until accepted.",
+      "name": "transfer_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SwapBookError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Atomically fill reverse-side orders and escrow the remainder as a\\nnew sitting order \\xe2\\x80\\x94 the whole plan lands in ONE invocation, so the\\nbook cannot move between the fills and the placement.\\n\\nEach `FillSpec` targets an order selling `token_out` for `token_in`\\n(the reverse side of the new order). The maker acts as taker on\\nthose fills, paying `amount_out` of their token_in per fill. The\\npayments plus the escrowed remainder must not exceed `amount_in`.\\n\\nReturns the new order's id, or 0 if the fills consumed the full\\namount and nothing was placed. Placement params mirror place_order.",
+      "name": "match_and_place",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "maker",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_amount_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "expiry",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "price_mode",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_slippage_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "auto_route_after",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "excluded",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "fills",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "FillSpec"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": {
+              "udt": {
+                "name": "SwapBookError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Read the current oracle price for a pair.",
+      "name": "get_oracle_price",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "tuple": {
+                "value_types": [
+                  "i128",
+                  "i128",
+                  "u32"
+                ]
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "SwapBookError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set the authorized oracle admin (contract admin only).",
+      "name": "set_oracle_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "oracle_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SwapBookError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Remove a token's SEP-40 feed (pairs including it fall back to the\\npushed price). Admin only.",
+      "name": "remove_sep40_feed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SwapBookError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set the max acceptable SEP-40 price age in seconds. Admin only.",
+      "name": "set_sep40_max_age",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "max_age_secs",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SwapBookError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Claim a timer-expired order. Only the authorized Router CONTRACT can\\ncall this (invoker auth). The escrowed tokens transfer to the router,\\nwhich must \\xe2\\x80\\x94 within the same invocation \\xe2\\x80\\x94 execute the DEX route and\\npay the maker at least `min_out` of token_out.\\n\\n`min_out` is derived on-chain from the order's own price terms:\\nFixed  \\xe2\\x86\\x92 pro-rata min_amount_out over the remaining amount\\nOracle \\xe2\\x86\\x92 current fresh oracle fair value minus max_slippage_bps",
+      "name": "claim_expired_timer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "ClaimedOrder"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "SwapBookError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Update an oracle price for a token pair. Only the oracle admin can call.\\n\\nHardening:\\n- num and den must be strictly positive\\n- consecutive updates may not deviate more than MAX_ORACLE_JUMP_BPS\\nfrom the stored price (bounds damage from a compromised key)",
+      "name": "update_oracle_price",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "price_num",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "price_den",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SwapBookError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Get all orders whose auto_route_after timer has expired.",
+      "name": "get_expired_timer_orders",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "u64"
+          }
+        }
+      ]
+    }
+  }
+]

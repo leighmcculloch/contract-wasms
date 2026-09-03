@@ -1,0 +1,386 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SushiRouter"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SushiQuoter"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "Registered (fee tier, pool address) for a directed pair",
+            "name": "Pair",
+            "type_": [
+              "address",
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Sushi factory \\xe2\\x80\\x94 enables permissionless pair resolution: pairs the\\nadmin never registered fall back to factory.get_pool lookups.",
+            "name": "SushiFactory"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Two-step admin rotation: proposed new admin, pending acceptance.",
+            "name": "PendingAdmin"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PairInfo",
+      "fields": [
+        {
+          "doc": "",
+          "name": "fee",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Mirror of the pool's OracleHints \\xe2\\x80\\x94 field names must match exactly\\n(contracttype structs encode as maps keyed by field name).",
+      "lib": "",
+      "name": "OracleHints",
+      "fields": [
+        {
+          "doc": "",
+          "name": "checkpoint",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "checkpoint_min",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "slot",
+          "type_": "u128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Execute a swap through SushiSwap V3.\\n\\nExpects `amount_in` of token_in pushed to this contract beforehand.",
+      "name": "swap",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_amount_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "SushiAdapterError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Quote via the Sushi quoter/lens contract.",
+      "name": "quote",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "SushiAdapterError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SushiAdapterError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "SwapFailed",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "PairNotSet",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "NoPendingAdmin",
+          "value": 7
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Register the pool (fee tier + pool contract) for a pair, both\\ndirections. Admin only. Pool address is needed to pre-authorize the\\nvenue's nested fund pull wherever it lands (router or pool).",
+      "name": "set_pair",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token_a",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_b",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SushiAdapterError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Update the factory address. Admin only.",
+      "name": "set_factory",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sushi_factory",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SushiAdapterError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Complete an admin rotation \\xe2\\x80\\x94 callable only by the proposed admin,\\nproving the new key is live before it holds power.",
+      "name": "accept_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SushiAdapterError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deploy-time constructor.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sushi_router",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sushi_quoter",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sushi_factory",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Update venue contract addresses. Admin only.",
+      "name": "set_contracts",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "sushi_router",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sushi_quoter",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SushiAdapterError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Propose a new admin (two-step rotation). Admin only. The proposed\\naddress must call `accept_admin` to take over, so a mistyped\\ntransfer is recoverable until accepted.",
+      "name": "transfer_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "SushiAdapterError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

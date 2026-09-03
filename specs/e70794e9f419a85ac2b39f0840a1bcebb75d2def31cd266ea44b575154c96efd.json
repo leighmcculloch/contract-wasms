@@ -1,0 +1,746 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "FeeVault"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "SwapBook contract \\xe2\\x80\\x94 source of oracle prices for market-bound orders",
+            "name": "SwapBook"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "NextOrderId"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Order",
+            "type_": [
+              "u64"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Index of Active order ids (bounded by MAX_ACTIVE_ORDERS)",
+            "name": "ActiveIndex"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "venue_id -> adapter contract address (same registry shape as Router)",
+            "name": "Venue",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Protocol fee numerator per FEE_DENOMINATOR (100,000)",
+            "name": "FeePer100k"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "Two-step admin rotation: proposed new admin, pending acceptance.",
+            "name": "PendingAdmin"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TwapError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "OrderNotFound",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "OrderNotActive",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "InvalidAmount",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "SameToken",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InvalidSchedule",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidPricing",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "InvalidParams",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "BookFull",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "VenueNotFound",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "InvalidRoute",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "RouteMismatch",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "SliceTooEarly",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "AheadOfSchedule",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "SliceExceedsCap",
+          "value": 16
+        },
+        {
+          "doc": "",
+          "name": "InsufficientOutput",
+          "value": 17
+        },
+        {
+          "doc": "",
+          "name": "OraclePriceStale",
+          "value": 18
+        },
+        {
+          "doc": "",
+          "name": "OrderExpired",
+          "value": 19
+        },
+        {
+          "doc": "",
+          "name": "OrderNotExpired",
+          "value": 20
+        },
+        {
+          "doc": "",
+          "name": "Overflow",
+          "value": 21
+        },
+        {
+          "doc": "",
+          "name": "NoPendingAdmin",
+          "value": 22
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TwapOrder",
+      "fields": [
+        {
+          "doc": "",
+          "name": "end_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "Cumulative token_in executed so far",
+          "name": "filled_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "last_slice_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "limit_den",
+          "type_": "i128"
+        },
+        {
+          "doc": "Fixed limit price: minimum token_out per token_in as num/den.\\nBoth zero = no fixed limit \\xe2\\x80\\x94 the SwapBook oracle bounds each slice.",
+          "name": "limit_num",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "maker",
+          "type_": "address"
+        },
+        {
+          "doc": "Hard cap per slice, in token_in units",
+          "name": "max_slice_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "(oracle mode only) max slippage vs oracle fair value, in bps",
+          "name": "max_slippage_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "Minimum ledgers between slices",
+          "name": "min_slice_gap",
+          "type_": "u32"
+        },
+        {
+          "doc": "Catch-up headroom: cumulative fill may exceed pro-rata schedule by\\ntotal_in * pace_tolerance_bps / 10000",
+          "name": "pace_tolerance_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "Cumulative token_out streamed to the maker (net of fees)",
+          "name": "received_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "start_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "TwapStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        },
+        {
+          "doc": "Total escrowed amount to execute over the schedule",
+          "name": "total_in",
+          "type_": "i128"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Current protocol fee as (numerator, denominator) \\xe2\\x80\\x94 e.g. (100, 100000)\\n= 10 bps. Denominator is always FEE_DENOMINATOR.",
+      "name": "get_fee",
+      "inputs": [],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "i128"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Set the protocol fee (per 100,000 of slice output). Admin only,\\nhard-capped at MAX_FEE_PER_100K \\xe2\\x80\\x94 the ceiling is compile-time and\\ncannot be raised without a new contract makers would have to opt\\ninto. 0 is valid (fee holiday).",
+      "name": "set_fee",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "fee_per_100k",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "TwapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TwapStatus",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Active"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Completed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Cancelled"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Expired"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_order",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "TwapOrder"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "TwapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_venue",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "venue_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": {
+              "udt": {
+                "name": "TwapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RouteSegment",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_amount_out",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "venue_id",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Place a TWAP order. Escrows `total_in` of token_in.\\n\\nPricing: pass limit_num/limit_den > 0 for a fixed floor (min token_out\\nper token_in). Pass 0/0 to bound each slice by the SwapBook oracle\\ninstead \\xe2\\x80\\x94 requires max_slippage_bps in 1..=1000 and a FRESH oracle\\nprice for the pair at placement time.",
+      "name": "place_twap",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "maker",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_in",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_out",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "total_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "end_ledger",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "limit_num",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "limit_den",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_slippage_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_slice_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_slice_gap",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "pace_tolerance_bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": {
+              "udt": {
+                "name": "TwapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Cancel an active TWAP order \\xe2\\x80\\x94 maker only. Refunds the unfilled\\nremainder immediately; proceeds already streamed stay with the maker.",
+      "name": "cancel_twap",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "TwapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Permissionless cleanup after end_ledger: refund the unfilled\\nremainder to the maker and close the order.",
+      "name": "expire_twap",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "TwapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Complete an admin rotation \\xe2\\x80\\x94 callable only by the proposed admin,\\nproving the new key is live before it holds power.",
+      "name": "accept_admin",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "TwapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Remove a venue. Admin only.",
+      "name": "remove_venue",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "venue_id",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "TwapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deploy-time constructor \\xe2\\x80\\x94 atomic with deployment, cannot be front-run.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "fee_vault",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "swap_book",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Execute one slice of a TWAP order. PERMISSIONLESS \\xe2\\x80\\x94 the contract\\nenforces pace, price, and cadence; the caller only chooses timing,\\nsize (within caps), and the route.",
+      "name": "execute_slice",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "order_id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "amount_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "segments",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "RouteSegment"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "i128",
+            "error_type": {
+              "udt": {
+                "name": "TwapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Register a venue adapter (same push-funds interface as the Router's).\\nAdmin only.",
+      "name": "register_venue",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "venue_id",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "contract_address",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "TwapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Propose a new admin (two-step rotation). Admin only. The proposed\\naddress must call `accept_admin` to take over, so a mistyped\\ntransfer is recoverable until accepted.",
+      "name": "transfer_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "TwapError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_active_orders",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "u64"
+          }
+        }
+      ]
+    }
+  }
+]

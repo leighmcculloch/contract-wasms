@@ -1,0 +1,222 @@
+[
+  {
+    "udt_union_v0": {
+      "doc": "8 bps of a micro-tx, in stroops (1 XLM = 10_000_000 stroops) is computed off-chain then accrue'd.",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Root"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Crumb",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Head"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Fees"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "head",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "bytes_n": {
+                "n": 32
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "init",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "root",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "root",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "forge",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "envelope_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "prev",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "index",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "bytes_n": {
+            "n": 32
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "fulfill",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "envelope_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_crumb",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "bytes_n": {
+                "n": 32
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accrue_fee",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "stroops",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "fee_balance",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Cycle fees back into the loop (accounting). Token move is a later SAC wire.",
+      "name": "recycle_fees",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  }
+]
