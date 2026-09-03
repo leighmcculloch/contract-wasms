@@ -1,0 +1,1724 @@
+[
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Deposited",
+      "prefix_topics": [
+        "deposited"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "underlying_in",
+          "type_": "u128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "liquidity_minted",
+          "type_": "u128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "shares_minted",
+          "type_": "u128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Harvested",
+      "prefix_topics": [
+        "harvested"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "reward_token",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "reward_amount",
+          "type_": "u128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "underlying_out",
+          "type_": "u128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PausedSet",
+      "prefix_topics": [
+        "paused_set"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Withdrawn",
+      "prefix_topics": [
+        "withdrawn"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "shares_burned",
+          "type_": "u128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "liquidity_burned",
+          "type_": "u128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "underlying_out",
+          "type_": "u128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ConfigChanged",
+      "prefix_topics": [
+        "config_changed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "what",
+          "type_": "symbol",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "old_value",
+          "type_": "u128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_value",
+          "type_": "u128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Emitted when a harvest leg is skipped rather than reverting the whole call.\\nA single unsellable reward token must not block the rest of the harvest.",
+      "lib": "",
+      "name": "HarvestSkipped",
+      "prefix_topics": [
+        "harvest_skipped"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "reward_token",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "reward_amount",
+          "type_": "u128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "reason",
+          "type_": "symbol",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RangePolicySet",
+      "prefix_topics": [
+        "range_policy_set"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "enabled",
+          "type_": "bool",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "half_width_ticks",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "rebalance_margin_ticks",
+          "type_": "u32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "rebalance_cooldown",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "max_rebalance_divergence_bps",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AdminTransferred",
+      "prefix_topics": [
+        "admin_transferred"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "previous_admin",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Raised when liquidity was burned but no underlying came back. Emitting\\ninstead of panicking keeps withdrawals from being DoS'd by a misbehaving\\npool, matching `receipt-vault`'s `BoostedRedeemZeroReturn` handling.",
+      "lib": "",
+      "name": "RedeemZeroReturn",
+      "prefix_topics": [
+        "redeem_zero_return"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "liquidity_burned",
+          "type_": "u128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VaultInitialized",
+      "prefix_topics": [
+        "vault_initialized"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "underlying",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "tick_lower",
+          "type_": "i32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "tick_upper",
+          "type_": "i32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ReceiptVaultBound",
+      "prefix_topics": [
+        "receipt_vault_bound"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "receipt_vault",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ExternalCallFailed",
+      "prefix_topics": [
+        "external_call_failed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "contract",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "function",
+          "type_": "symbol",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "recoverable",
+          "type_": "bool",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "failure_kind",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PositionRebalanced",
+      "prefix_topics": [
+        "position_rebalanced"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "old_tick_lower",
+          "type_": "i32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "old_tick_upper",
+          "type_": "i32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_tick_lower",
+          "type_": "i32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_tick_upper",
+          "type_": "i32",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "liquidity_burned",
+          "type_": "u128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "liquidity_minted",
+          "type_": "u128",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AdminTransferProposed",
+      "prefix_topics": [
+        "admin_transfer_proposed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "current_admin",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "pending_admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "PrimaryRewardTokenSet",
+      "prefix_topics": [
+        "primary_reward_token_set"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "reward_token",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Pool wiring and the currently active position range.\\n\\nEverything here lives in a single **instance** storage entry. That is not a\\nstyle preference: the market-deposit path spans ReceiptVault -> this vault\\n-> the Aquarius pool -> three token contracts, and Soroban caps a\\ntransaction at 100 footprint ledger entries. One entry per config field put\\nthe end-to-end deposit at 113 and made it unexecutable on-chain.",
+      "lib": "",
+      "name": "Config",
+      "fields": [
+        {
+          "doc": "",
+          "name": "dec0",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "dec1",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "oracle",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "tick_lower",
+          "type_": "i32"
+        },
+        {
+          "doc": "",
+          "name": "tick_upper",
+          "type_": "i32"
+        },
+        {
+          "doc": "",
+          "name": "token0",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token1",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "underlying_index",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Admin-tunable risk parameters. Also a single instance entry.",
+      "lib": "",
+      "name": "Params",
+      "fields": [
+        {
+          "doc": "",
+          "name": "harvest_cooldown",
+          "type_": "u64"
+        },
+        {
+          "doc": "Cap on underlying deployed into the pool; 0 disables it.",
+          "name": "max_deploy",
+          "type_": "u128"
+        },
+        {
+          "doc": "Maximum tolerated gap between the pool's own swap quote and the\\noracle-implied fair rate, in basis points. `0` disables the check.\\n\\nThe per-swap slippage floor is derived from `estimate_swap`, so it only\\nguards against movement between quote and execution \\xe2\\x80\\x94 it cannot tell\\nthat the pool itself is mispriced. Entering or exiting through a\\ndislocated pool can realize that gap immediately: on testnet a ~7%\\npool/oracle divergence cost 4.65% of a deposit. This guards both\\nposition entry and the paired-token leg of position exit.",
+          "name": "max_pool_divergence_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "How long a cached NAV root stays usable without re-reading the oracle.\\n\\nThis is a footprint budget decision as much as a freshness one: the\\nReceiptVault withdraw path already spans six contracts, and pulling two\\nReflector prices inside it pushed the transaction over Soroban's\\n100-entry cap. The ratio being cached is between two pegged assets, so\\nit moves slowly; `refresh_nav_root()` forces an update out of band.",
+          "name": "nav_root_max_age",
+          "type_": "u64"
+        },
+        {
+          "doc": "Hard ceiling on how old the cached NAV root may be when the oracle is\\nunreachable. Past this the vault refuses to price rather than serving an\\narbitrarily obsolete ratio. `0` disables the bound.",
+          "name": "nav_root_max_stale",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "oracle_max_age_mult",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "slippage_bps",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Keeper-managed range policy. Stored outside `Config` so an upgrade can\\ndecode the exact Config value already present on Mainnet.",
+      "lib": "",
+      "name": "RangeParams",
+      "fields": [
+        {
+          "doc": "",
+          "name": "enabled",
+          "type_": "bool"
+        },
+        {
+          "doc": "Requested distance from the center to either edge, in raw ticks.\\nBounds are rounded outward to the pool's tick spacing.",
+          "name": "half_width_ticks",
+          "type_": "u32"
+        },
+        {
+          "doc": "Independent, tighter pool/oracle guard used only for recentering.",
+          "name": "max_rebalance_divergence_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "rebalance_cooldown",
+          "type_": "u64"
+        },
+        {
+          "doc": "Recenter when spot enters this many ticks of either edge.",
+          "name": "rebalance_margin_ticks",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Last observed token amounts backing the active concentrated position.\\n\\nUnlike a full-range position, concentrated-liquidity NAV cannot be derived\\nfrom liquidity alone: its token mix changes as pool price moves through the\\nconfigured range. The keeper refreshes this snapshot from Aquarius and all\\nposition mutations update it from actual token balance deltas.",
+      "lib": "",
+      "name": "PositionAmounts",
+      "fields": [
+        {
+          "doc": "",
+          "name": "amount0",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "amount1",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "liquidity",
+          "type_": "u128"
+        },
+        {
+          "doc": "",
+          "name": "updated_at",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "name",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deploys any idle underlying. Permissionless \\xe2\\x80\\x94 it only ever moves the\\nvault's own cash into the position it is configured for.",
+      "name": "deploy",
+      "inputs": [],
+      "outputs": [
+        "u128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Redeem shares for underlying. Thin wrapper so users are not forced to\\nconstruct the DeFindex-shaped vectors.",
+      "name": "redeem",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_underlying_out",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "symbol",
+      "inputs": [],
+      "outputs": [
+        "string"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Share balance. Read by `receipt-vault` through a SEP-41 `TokenClient`.\\n\\nRenews the holder's TTL on the way past. `Shares(owner)` is persistent\\nstate that is otherwise only bumped on write, so a market that holds a\\nposition without depositing or withdrawing for the entry lifetime would\\nsee its balance archived to zero while `total_shares` still counted it \\xe2\\x80\\x94\\nand could then never redeem. `receipt-vault` reads this on every\\nboosted-value refresh, so renewing here keeps live claims alive.",
+      "name": "balance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Accepts underlying and mints shares.\\n\\nDeliberately does **not** call `from.require_auth()`: `receipt-vault`\\npre-authorizes only the inner token transfer (contract.rs:311-327), and\\nthat transfer's own auth requirement is what makes this safe \\xe2\\x80\\x94 a caller\\ncannot pull funds from an address that has not signed.",
+      "name": "deposit",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "amounts_desired",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "amounts_min",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "invest",
+          "type_": "bool"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Permissionless: claim the configured primary reward, third-party gauge\\nincentives and accrued swap fees, convert everything to underlying,\\nand redeploy.\\n\\nRate-limited because each call moves the share price; without a cooldown\\nit could be used to grind rounding in the depositor's favour.",
+      "name": "harvest",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "decimals",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_idle",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_pool",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Strategy shares are deliberately non-transferable. Users hold the\\nbound ReceiptVault's pTokens instead; keeping this selector as a\\nfail-closed stub preserves ABI compatibility without allowing dust\\nholders to create unbounded persistent share entries.",
+      "name": "transfer",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Burns shares and returns underlying.\\n\\nUnlike `deposit`, this *does* require auth from `from`, because\\n`receipt-vault` authorizes this exact invocation before calling it\\n(contract.rs:420-437). Requiring it closes the forced-redemption\\ngriefing vector that the bare DeFindex shape leaves open.",
+      "name": "withdraw",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "withdraw_shares",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_amounts_out",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "i128"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_admin",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_ticks",
+      "inputs": [],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i32",
+              "i32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Permissionlessly recenters the vault's one active position.\\n\\nThe old position is withdrawn in full. A single guarded swap converts\\nonly the excess side into the approximately equal-value pair required\\nby a centered range, avoiding a wasteful sell-and-buy round trip. The\\ncall reverts atomically unless a new position is minted and at least\\n95% of the pre-deposit pair value is put back to work.",
+      "name": "rebalance",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin_addr",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_config",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Config"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_params",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Params"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_tokens",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Wires the vault to a concentrated Aquarius pool.\\n\\nPool metadata (tokens, decimals, tick spacing) is read from the pool\\nitself rather than passed in, so a typo cannot silently point the vault\\nat the wrong asset.",
+      "name": "initialize",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "underlying_index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "oracle",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_oracle",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin_addr",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "oracle",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Pauses new deposits. Withdrawals are deliberately never pausable: the\\nmarket above must always be able to pull its cash back.",
+      "name": "set_paused",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin_addr",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "paused",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "accept_admin",
+      "inputs": [],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sells any configured reward held by the vault. Kept separate from\\n`harvest` so a route can be exercised even when claiming is paused.",
+      "name": "sweep_reward",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "reward_token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Total share supply.",
+      "name": "total_supply",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "upgrade_wasm",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin_addr",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_max_deploy",
+      "inputs": [],
+      "outputs": [
+        "u128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_underlying",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Caps how much underlying may sit in the pool.\\n\\nThe realised APR of an LP position is the headline rate scaled by\\n`pool_tvl / (pool_tvl + deployed)`. On a thin pool an uncapped vault\\ndilutes itself to near-zero yield, so this is a yield control, not just\\na risk control. `0` disables the cap.",
+      "name": "set_max_deploy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin_addr",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "max_deploy",
+          "type_": "u128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Reconciles locally tracked liquidity against the pool's own view.\\n\\nPermissionless: it can only ever replace the local number with the\\npool's authoritative one, so there is nothing to gain from calling it.",
+      "name": "sync_liquidity",
+      "inputs": [],
+      "outputs": [
+        "u128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Permissionless TTL renewal for a share holder, for keepers that do not\\nwant to pay for a full `balance` read path.",
+      "name": "bump_shares_ttl",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Cheap simulation/read used by keepers to avoid submitting no-op\\nrebalance transactions every polling cycle.",
+      "name": "needs_rebalance",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_last_harvest",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_range_policy",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "RangeParams"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_reward_route",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "reward_token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_slippage_bps",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Forces a fresh oracle read of the NAV price ratio.\\n\\nPermissionless, and the mirror of `receipt-vault`'s\\n`refresh_boosted_underlying`: keepers call it so user transactions get a\\ncurrent value without paying the oracle's footprint cost themselves.",
+      "name": "refresh_nav_root",
+      "inputs": [],
+      "outputs": [
+        "u128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Installs the actively managed concentrated-range policy.\\n\\nChanging policy does not move funds. The permissionless keeper path\\nperforms the migration only after its independent price guard passes.\\nThis separation keeps governance changes reviewable and lets existing\\nMainnet full-range deployments fail closed immediately after upgrade.",
+      "name": "set_range_policy",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin_addr",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "half_width_ticks",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "rebalance_margin_ticks",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "rebalance_cooldown",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "max_rebalance_divergence_bps",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "enabled",
+          "type_": "bool"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Registers the Aquarius pool used to sell a reward token for underlying.",
+      "name": "set_reward_route",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin_addr",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "reward_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "route",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_slippage_bps",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin_addr",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_receipt_vault",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Overrides the Reflector asset encoding for a token, for feeds published\\nunder a symbol rather than a contract address.",
+      "name": "set_oracle_symbol",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin_addr",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "symbol",
+          "type_": {
+            "option": {
+              "value_type": "symbol"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Permanently binds the sole ReceiptVault allowed to deposit.\\n\\nThe candidate must already point back at this Aquarius vault and must\\nsettle in the same underlying token. This closes both the supply-cap\\nbypass and an admin typo that would otherwise strand the deployment.",
+      "name": "set_receipt_vault",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin_addr",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "receipt_vault",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Single-sided deposit wrapper for the bound ReceiptVault. The vault\\nhandles the split; direct user calls are rejected by `deposit`.",
+      "name": "deposit_underlying",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_shares",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_reward_min_rate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "reward_token",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "u128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Sets the minimum raw underlying returned per raw reward unit, scaled by\\n`REWARD_RATE_SCALE` (1e7). A zero value removes the guard and therefore\\ndisables selling that reward until governance installs a new floor.\\n\\nThe guard is intentionally independent of the route: changing a pool\\nmust not silently weaken the fair-value floor. Keepers should alert and\\nleave rewards idle when a legitimate market move crosses the floor;\\ngovernance can then review and update it.",
+      "name": "set_reward_min_rate",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin_addr",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "reward_token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "min_rate_scaled",
+          "type_": "u128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Timestamp of the last successful oracle read. `0` means the cache has\\nbeen invalidated and the next valuation must re-read the feed.",
+      "name": "get_last_nav_root_at",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Idle paired-token balance, valued in the underlying at the oracle rate.",
+      "name": "get_other_idle_value",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_position_amounts",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "PositionAmounts"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_total_underlying",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "propose_upgrade_wasm",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin_addr",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_harvest_cooldown",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin_addr",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "seconds",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_nav_root_max_age",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin_addr",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "seconds",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_last_rebalance_at",
+      "inputs": [],
+      "outputs": [
+        "u64"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_position_liquidity",
+      "inputs": [],
+      "outputs": [
+        "u128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_nav_root_max_stale",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin_addr",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "seconds",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Permissionless TTL renewal for the configured mappings.\\n\\nBoth are persistent keys that user traffic may not touch often enough to\\nkeep alive on its own, and an archived symbol override stops the vault\\npricing at all \\xe2\\x80\\x94 which blocks supplier exits, not just deposits.",
+      "name": "bump_config_mapping_ttl",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_oracle_max_age_mult",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin_addr",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "k",
+          "type_": "u64"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_primary_reward_token",
+      "inputs": [],
+      "outputs": [
+        {
+          "option": {
+            "value_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Permissionless position-composition refresh for keepers and recovery.\\nReturns false without replacing the last good snapshot if Aquarius is\\ntemporarily unavailable or returns a malformed amount vector.",
+      "name": "refresh_position_amounts",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Changes the token transferred by Aquarius' primary `claim()` path.\\nReward conversion routes remain independently configurable per token.",
+      "name": "set_primary_reward_token",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin_addr",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "reward_token",
+          "type_": {
+            "option": {
+              "value_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "set_max_pool_divergence_bps",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin_addr",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "bps",
+          "type_": "u32"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Underlying redeemable for `vault_shares`, as a single-element vector.\\n\\n`receipt-vault` reads index 0 as *the* underlying amount and sizes its\\n`min_amounts_out` vector by this vector's length, so the single-asset\\nshape here is load-bearing.",
+      "name": "get_asset_amounts_per_shares",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "vault_shares",
+          "type_": "i128"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "i128"
+          }
+        }
+      ]
+    }
+  }
+]
