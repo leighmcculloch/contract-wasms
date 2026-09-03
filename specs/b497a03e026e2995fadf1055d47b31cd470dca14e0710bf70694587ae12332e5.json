@@ -1,0 +1,199 @@
+[
+  {
+    "function_v0": {
+      "doc": "`refresh(asset)` on `oracle` for each asset, in order. A trap in any\\nrefresh reverts the whole batch; status-level failures are returned.",
+      "name": "refresh_many",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "oracle",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "assets",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Asset"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "RefreshStatus"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Renew `oracle`'s instance and code, then `extend_ttl(asset)` on it for\\neach asset; `false` marks an asset the runtime rejected (unregistered).",
+      "name": "extend_ttl_many",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "oracle",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "assets",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Asset"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "bool"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Renew each contract's instance and code, then call its argument-less\\n`extend_ttl()` for its persistent entries; `false` marks a failed call.",
+      "name": "extend_ttl_contracts",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "contracts",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "bool"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Asset",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Stellar",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Other",
+            "type_": [
+              "symbol"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Decimals-free price representation used internally and across the\\nproxy-oracle \\xe2\\x86\\x94 SEP-40 adapter boundary. Adapters convert this to\\nSEP-40 `PriceData` using their own configured decimals.",
+      "lib": "",
+      "name": "NormalizedPrice",
+      "fields": [
+        {
+          "doc": "",
+          "name": "expo",
+          "type_": "i32"
+        },
+        {
+          "doc": "",
+          "name": "mantissa",
+          "type_": "i64"
+        },
+        {
+          "doc": "",
+          "name": "timestamp",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "Outcome of one runtime `refresh(asset)` call.",
+      "lib": "",
+      "name": "RefreshStatus",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Accepted",
+            "type_": [
+              {
+                "udt": {
+                  "name": "NormalizedPrice"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Blocked",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "ResolveFailed",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "UnknownAsset"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SourceUnavailable"
+          }
+        }
+      ]
+    }
+  }
+]

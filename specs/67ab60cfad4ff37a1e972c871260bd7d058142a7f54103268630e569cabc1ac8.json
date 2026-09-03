@@ -1,0 +1,1292 @@
+[
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProposalSubmitted",
+      "prefix_topics": [
+        "proposal_submitted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "valid_after_ns",
+          "type_": "u64",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "action_code",
+          "type_": "u32",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProposalAccepted",
+      "prefix_topics": [
+        "proposal_accepted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProposalRevoked",
+      "prefix_topics": [
+        "proposal_revoked"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OwnershipTransferSubmitted",
+      "prefix_topics": [
+        "ownership_transfer_submitted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "new_owner",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ActionTtlSet",
+      "prefix_topics": [
+        "action_ttl_set"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "kind",
+          "type_": {
+            "udt": {
+              "name": "OperationKind"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "new_ttl_ns",
+          "type_": "u64",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "TtlExtended",
+      "prefix_topics": [
+        "ttl_extended"
+      ],
+      "params": [],
+      "data_format": "map"
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "proxy_oracle",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "initial_uniform_ttl_ns",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "GovernanceError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "next_proposal_id",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": {
+              "udt": {
+                "name": "GovernanceError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_proposal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "option": {
+            "value_type": {
+              "udt": {
+                "name": "Proposal"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_effective_proposal_ttl",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "operation",
+          "type_": {
+            "udt": {
+              "name": "GovernanceAction"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "requested_ttl",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": {
+              "udt": {
+                "name": "GovernanceError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_operation_ttl",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "kind",
+          "type_": {
+            "udt": {
+              "name": "OperationKind"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "u64",
+            "error_type": {
+              "udt": {
+                "name": "GovernanceError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "create_proposal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "operation",
+          "type_": {
+            "udt": {
+              "name": "GovernanceAction"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "requested_ttl",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": {
+              "udt": {
+                "name": "Proposal"
+              }
+            },
+            "error_type": {
+              "udt": {
+                "name": "GovernanceError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "cancel_proposal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "GovernanceError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "execute_proposal",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "id",
+          "type_": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "GovernanceError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "has_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": {
+            "udt": {
+              "name": "Role"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "list_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": {
+            "udt": {
+              "name": "Role"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_roles",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": {
+              "udt": {
+                "name": "Role"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "active_ids",
+      "inputs": [],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "u64"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "proxy_oracle",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "address",
+            "error_type": {
+              "udt": {
+                "name": "GovernanceError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "extend_ttl",
+      "inputs": [],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "GovernanceError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a role is granted.",
+      "lib": "",
+      "name": "RoleGranted",
+      "prefix_topics": [
+        "role_granted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "Event emitted when a role is revoked.",
+      "lib": "",
+      "name": "RoleRevoked",
+      "prefix_topics": [
+        "role_revoked"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": "symbol",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "account",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Asset",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Stellar",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Other",
+            "type_": [
+              "symbol"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SourceConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": {
+            "udt": {
+              "name": "Asset"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "oracle",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ProxyConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "max_age_secs",
+          "type_": {
+            "option": {
+              "value_type": "u64"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "max_clock_drift_secs",
+          "type_": {
+            "option": {
+              "value_type": "u64"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "min_sources",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "sources",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "SourceConfig"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Soroban wire format for a 512-bit `Decimal`. Wrapping `BytesN<64>` (the\\n8 \\xc3\\x97 `u64` words of `Decimal::as_repr` laid out little-endian) gives a\\ncompile-time length guarantee at the contract boundary \\xe2\\x80\\x94 unlike a raw\\n`Vec<u64>` field, which could arrive empty, short, or oversized and\\nwould have to be re-validated by every consumer.",
+      "lib": "",
+      "name": "SorobanDecimal",
+      "fields": [
+        {
+          "doc": "",
+          "name": "0",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "StepwiseChangeConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "max_relative_change",
+          "type_": {
+            "udt": {
+              "name": "SorobanDecimal"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "MonotonicRunConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "max_streak",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "min_relative_step_change",
+          "type_": {
+            "udt": {
+              "name": "SorobanDecimal"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WindowedChangeDeltaConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "lookback_windows",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "max_relative_mean_change",
+          "type_": {
+            "udt": {
+              "name": "SorobanDecimal"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "window_len",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CumulativeChangeConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "max_relative_change",
+          "type_": {
+            "udt": {
+              "name": "SorobanDecimal"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "CircuitBreakerConfig",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "StepwiseChange",
+            "type_": [
+              {
+                "udt": {
+                  "name": "StepwiseChangeConfig"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "MonotonicRun",
+            "type_": [
+              {
+                "udt": {
+                  "name": "MonotonicRunConfig"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "WindowedChangeDelta",
+            "type_": [
+              {
+                "udt": {
+                  "name": "WindowedChangeDeltaConfig"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "CumulativeChange",
+            "type_": [
+              {
+                "udt": {
+                  "name": "CumulativeChangeConfig"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SetEnforcedConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "is_enforced",
+          "type_": "bool"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RearmConfig",
+      "fields": [
+        {
+          "doc": "",
+          "name": "arming_delay_secs",
+          "type_": "u64"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Role",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ManualTripper"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "CircuitBreakerOperator"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ProxyConfigurationManager"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "GovernanceError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInitialized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "MissingConfig",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "ProposalNotFound",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "ProposalNotMature",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "ArithmeticOverflow",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "RuntimeFailed",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "ProposalOutOfOrder",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "InvalidInput",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "TtlExceedsMaximum",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "LastAdmin",
+          "value": 11
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "OperationKind",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SetProxy"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "RemoveProxy"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ConfigureBreakers"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AddBreaker"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "RemoveBreaker"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Rearm"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SetEnforced"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SetManualTrip"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "TransferOwnership"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AcceptOwnership"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "RenounceOwnership"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SetActionTtl"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "SetRole"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Upgrade"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "GovernanceAction",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "SetProxy",
+            "type_": [
+              {
+                "udt": {
+                  "name": "Asset"
+                }
+              },
+              {
+                "udt": {
+                  "name": "ProxyConfig"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "RemoveProxy",
+            "type_": [
+              {
+                "udt": {
+                  "name": "Asset"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "ConfigureBreakers",
+            "type_": [
+              {
+                "udt": {
+                  "name": "Asset"
+                }
+              },
+              "u64",
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "AddBreaker",
+            "type_": [
+              {
+                "udt": {
+                  "name": "Asset"
+                }
+              },
+              {
+                "udt": {
+                  "name": "CircuitBreakerConfig"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "RemoveBreaker",
+            "type_": [
+              {
+                "udt": {
+                  "name": "Asset"
+                }
+              },
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Rearm",
+            "type_": [
+              {
+                "udt": {
+                  "name": "Asset"
+                }
+              },
+              "u32",
+              {
+                "udt": {
+                  "name": "RearmConfig"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "SetEnforced",
+            "type_": [
+              {
+                "udt": {
+                  "name": "Asset"
+                }
+              },
+              "u32",
+              {
+                "udt": {
+                  "name": "SetEnforcedConfig"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "SetManualTrip",
+            "type_": [
+              {
+                "udt": {
+                  "name": "Asset"
+                }
+              },
+              "bool",
+              {
+                "option": {
+                  "value_type": "bytes"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "TransferOwnership",
+            "type_": [
+              "address"
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "AcceptOwnership"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "RenounceOwnership"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "SetActionTtl",
+            "type_": [
+              {
+                "udt": {
+                  "name": "OperationKind"
+                }
+              },
+              "u64"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "SetRole",
+            "type_": [
+              "address",
+              {
+                "udt": {
+                  "name": "Role"
+                }
+              },
+              "bool"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Upgrade",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Proposal",
+      "fields": [
+        {
+          "doc": "",
+          "name": "created_at_ns",
+          "type_": "u64"
+        },
+        {
+          "doc": "",
+          "name": "created_by",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "operation",
+          "type_": {
+            "udt": {
+              "name": "GovernanceAction"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "ttl_ns",
+          "type_": "u64"
+        }
+      ]
+    }
+  }
+]
