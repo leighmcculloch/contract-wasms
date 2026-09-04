@@ -1,0 +1,911 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "fees",
+      "inputs": [],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "init",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "collateral",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "reserve_col",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "reserve_yes",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "reserve_no",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "ping",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "reseed",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "reserve_col",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "reserve_yes",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "reserve_no",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "`payloads` carries exactly one encrypted note payload, for the single\\ncommitment this call inserts.",
+      "name": "shield",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "udt": {
+              "name": "VProof"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "public_inputs",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "screening_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payloads",
+          "type_": {
+            "vec": {
+              "element_type": "bytes"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "resolve",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "final_price",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "add_deny",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "screening_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Withdraw (unshield) collateral to `recipient` by spending two input notes.\\n\\n# Recipient binding (Plan 3 item \\xe2\\x80\\x94 closed)\\nThe circuit binds a `recipient` field element; this transfers to the `recipient`\\nAddress arg only after cryptographically enforcing that it equals\\n`encode_recipient(&env, &recipient)` from the proof's `recipient_field` (checked\\nabove, before `verify_proof`). Without this a malicious relayer \\xe2\\x80\\x94 which is\\nmandatory on this path \\xe2\\x80\\x94 could redirect withdrawals to an address of its choosing.\\nSee `circuits/CARRY_FORWARD.md` (Plan 3, item 3) for the original gap writeup.\\n`payloads` carries exactly one encrypted note payload, for the change\\ncommitment. The withdrawn value leaves the pool transparently and has no\\nnote to recover.",
+      "name": "unshield",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "relayer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "udt": {
+              "name": "VProof"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "public_inputs",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "recipient",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "screening_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payloads",
+          "type_": {
+            "vec": {
+              "element_type": "bytes"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Private BUY: spend COL notes \\xe2\\x86\\x92 mint a 1:1 complete set \\xe2\\x86\\x92 swap the minted\\nopposite side on the YES\\xe2\\x86\\x94NO AMM \\xe2\\x86\\x92 receive (mintAmount + swapOut) of the\\ntarget outcome. The 1:1 mint avoids the pure-swap \"dust\" of a thin pool.\\nProof verified against CID_MINT_SWAP (mint_swap.circom).\\n\\n`payloads` carries two encrypted note payloads \\xe2\\x80\\x94 `[0]` for the output\\nnote, `[1]` for the COL change \\xe2\\x80\\x94 in the same order the commitments are\\ninserted into the tree.",
+      "name": "mint_swap",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "relayer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "udt": {
+              "name": "VProof"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "public_inputs",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payloads",
+          "type_": {
+            "vec": {
+              "element_type": "bytes"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "get_config",
+      "inputs": [],
+      "outputs": [
+        {
+          "udt": {
+            "name": "Config"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "reserve_of",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "asset",
+          "type_": "u32"
+        }
+      ],
+      "outputs": [
+        "i128"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Private SELL: swap part of the position to the other side, merge the\\nmatched pair 1:1 \\xe2\\x86\\x92 COL (minus fee). Proof verified against CID_SWAP_MERGE\\n(swap_merge.circom).\\n\\n`payloads` carries two encrypted note payloads \\xe2\\x80\\x94 `[0]` for the COL output\\nnote, `[1]` for the leftover outcome change \\xe2\\x80\\x94 in insertion order.",
+      "name": "swap_merge",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "relayer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "udt": {
+              "name": "VProof"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "public_inputs",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "payloads",
+          "type_": {
+            "vec": {
+              "element_type": "bytes"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "remove_deny",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "screening_ref",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Settle a batch of trades as ONE aggregate reserve delta, so per-trade size\\nand direction are not derivable from chain data.\\n\\nv2 (2026-08-30) closes the last per-trade channel: the v1 circuits\\npublished `inputTotal`/`fee` per intent and `outAsset` per leg, and those\\npublics ride in THIS call's argument vectors \\xe2\\x80\\x94 so every leg's size and\\ndirection sat in the transaction envelope even though the event and the\\nreserves hid them. The v2 vectors carry commitments, nullifiers, the root\\nand the price alone; the fee arrives once as the aggregate's proven\\n`batchFee` ([10]).\\n\\nTHREE PROOFS PER BATCH-PLUS-TWO-PER-LEG, and each is load-bearing:\\n\\nintent (per leg) \\xe2\\x80\\x94 the notes exist, are unspent, and are bound to a\\nhidden trade. Intents never reach the chain, so without this the\\ncontract would be trusting the batcher that the inputs are real.\\nleg (per leg) \\xe2\\x80\\x94 the output note matches the batch's clearing price.\\naggregate (once) \\xe2\\x80\\x94 the published net flow really is the sum of the\\ncommitted amounts. The contract CANNOT deriv",
+      "name": "batch_settle",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "relayer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "legs",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "BatchLegInput"
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "agg_proof",
+          "type_": {
+            "udt": {
+              "name": "VProof"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "agg_inputs",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "clearing_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "payloads",
+          "type_": {
+            "vec": {
+              "element_type": "bytes"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "private_swap",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "relayer",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "proof",
+          "type_": {
+            "udt": {
+              "name": "VProof"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "public_inputs",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "is_known_root",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "root",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "withdraw_fees",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Config",
+      "fields": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "collateral",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "final_price",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "resolved",
+          "type_": "bool"
+        },
+        {
+          "doc": "",
+          "name": "verifier",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Config"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Merkle"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "RootHistory"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Reserve",
+            "type_": [
+              "u32"
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Nullifier",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Deny",
+            "type_": [
+              {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Fees"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "Serializable mirror of `merkle::MerkleState` (U256 <-> BytesN<32>).",
+      "lib": "",
+      "name": "MerkleStore",
+      "fields": [
+        {
+          "doc": "",
+          "name": "filled",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "next_index",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "root",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "One leg of a batch: BOTH proofs, bound by the two commitments they share.\\n\\nTwo proofs and not one. Intents never reach the chain \\xe2\\x80\\x94 the user sends the\\nphase-1 proof privately to the batcher \\xe2\\x80\\x94 so verifying only the leg would mean\\ntrusting the batcher that this leg's input notes exist and are unspent, which\\nis the ability to mint value.",
+      "lib": "",
+      "name": "BatchLegInput",
+      "fields": [
+        {
+          "doc": "[0] merkleRoot [1] nf0 [2] nf1 [3] tradeCommitment [4] ownerCommitment\\n\\nv2: `inputTotal` and `fee` are gone from the publics. These vectors ride\\nin the transaction envelope, so a per-leg total there named the trade\\nsize to anyone decoding the tx even though the event hid it. The fee the\\ncontract accrues now arrives once, proven, as the aggregate's batchFee.",
+          "name": "intent_inputs",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "intent_proof",
+          "type_": {
+            "udt": {
+              "name": "VProof"
+            }
+          }
+        },
+        {
+          "doc": "[0] tradeCommitment [1] ownerCommitment [2] clearingPrice\\n[3] outCommitment [4] changeCommitment\\n\\nv2: `outAsset` is gone \\xe2\\x80\\x94 public, it was the leg's direction in the tx\\nenvelope, linkable to its intent through the shared trade commitment.",
+          "name": "leg_inputs",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 32
+                }
+              }
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "leg_proof",
+          "type_": {
+            "udt": {
+              "name": "VProof"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "AlreadyInit",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "NotInit",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "ProofInvalid",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "NullifierUsed",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "StaleReserves",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "Resolved",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "EqualNullifiers",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "Denylisted",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "UnknownRoot",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "BadAsset",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "RecipientMismatch",
+          "value": 11
+        },
+        {
+          "doc": "",
+          "name": "BatchEmpty",
+          "value": 12
+        },
+        {
+          "doc": "",
+          "name": "BatchTooLarge",
+          "value": 13
+        },
+        {
+          "doc": "",
+          "name": "BatchMismatch",
+          "value": 14
+        },
+        {
+          "doc": "",
+          "name": "BatchDeltaWrong",
+          "value": 15
+        },
+        {
+          "doc": "",
+          "name": "BatchInsolvent",
+          "value": 16
+        },
+        {
+          "doc": "A note payload exceeded MAX_PAYLOAD_LEN. Bounds event size and the\\ninstruction cost of building the event, both of which a caller would\\notherwise control.",
+          "name": "PayloadTooLarge",
+          "value": 17
+        },
+        {
+          "doc": "The number of payloads did not match the number of commitments this call\\ninserts. Without this a caller could shrink the event to save gas and\\nproduce leaves that exist on chain with their recovery data nowhere \\xe2\\x80\\x94\\nthe failure that retired pool CAJDREQS\\xe2\\x80\\xa6 within hours of deployment.",
+          "name": "PayloadCountWrong",
+          "value": 18
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Proof",
+      "fields": [
+        {
+          "doc": "",
+          "name": "a",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "b",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "c",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Vk",
+            "type_": [
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "VerificationKey",
+      "fields": [
+        {
+          "doc": "",
+          "name": "alpha",
+          "type_": {
+            "bytes_n": {
+              "n": 64
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "beta",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "delta",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "gamma",
+          "type_": {
+            "bytes_n": {
+              "n": 128
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "ic",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "bytes_n": {
+                  "n": 64
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]
