@@ -1,0 +1,335 @@
+[
+  {
+    "function_v0": {
+      "doc": "Upgrade contract code (only Contract Registry owner is authorized)",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ContractRegistry"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "contract_registry",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "deploy_and_link_account",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "deploy_args",
+          "type_": {
+            "udt": {
+              "name": "ContractDeploymentArgs"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "wirex_parent_entity",
+          "type_": "string"
+        },
+        {
+          "doc": "",
+          "name": "user",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ContractDeploymentArgs",
+      "fields": [
+        {
+          "doc": "",
+          "name": "constructor_args",
+          "type_": {
+            "vec": {
+              "element_type": "val"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "salt",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "InvalidParentEntity",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "AccountAlreadyExists",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "AccountDoesNotExist",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "WalletNotLinked",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "WalletAlreadyLinked",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "ContractRegistryNotSet",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "BadHex",
+          "value": 8
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Wallet",
+      "fields": [
+        {
+          "doc": "",
+          "name": "confirmation_status",
+          "type_": {
+            "udt": {
+              "name": "WalletConfirmationStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Account",
+      "fields": [
+        {
+          "doc": "",
+          "name": "status",
+          "type_": {
+            "udt": {
+              "name": "AccountStatus"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "verification_status",
+          "type_": {
+            "udt": {
+              "name": "AccountVerificationStatus"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccountStatus",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Unknown",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Pending",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Active",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Blocked",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "Deleted",
+          "value": 4
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "WalletConfirmationStatus",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Unknown",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Confirmed",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Rejected",
+          "value": 2
+        }
+      ]
+    }
+  },
+  {
+    "udt_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccountVerificationStatus",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Unknown",
+          "value": 0
+        },
+        {
+          "doc": "",
+          "name": "Applied",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "InReview",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "Approved",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "Cancelled",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "Rejected",
+          "value": 5
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ContractData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "name",
+          "type_": "string"
+        }
+      ]
+    }
+  }
+]
