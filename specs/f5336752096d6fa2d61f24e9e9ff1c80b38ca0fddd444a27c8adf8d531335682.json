@@ -1,0 +1,940 @@
+[
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ContractError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "Unauthorized",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "Paused",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "LastAdmin",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "EmptyReason",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "ReasonTooLong",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "ZeroAddress",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "RoleNotFound",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "InvalidWasmHash",
+          "value": 8
+        }
+      ]
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Paused",
+      "prefix_topics": [
+        "paused"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Unpaused",
+      "prefix_topics": [
+        "unpaused"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "topic_list"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RoleGranted",
+      "prefix_topics": [
+        "role_granted"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": {
+            "udt": {
+              "name": "Role"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "who",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "RoleRevoked",
+      "prefix_topics": [
+        "role_revoked"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": {
+            "udt": {
+              "name": "Role"
+            }
+          },
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "who",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccountFrozen",
+      "prefix_topics": [
+        "account_frozen"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "counterparty",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "reason",
+          "type_": "string",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "KybAuthorized",
+      "prefix_topics": [
+        "kyb_authorized"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "counterparty",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AccountUnfrozen",
+      "prefix_topics": [
+        "account_unfrozen"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "counterparty",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "reason",
+          "type_": "string",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "KybDeauthorized",
+      "prefix_topics": [
+        "kyb_deauthorized"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "counterparty",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ClawbackExecuted",
+      "prefix_topics": [
+        "clawback_executed"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128",
+          "location": "data"
+        },
+        {
+          "doc": "",
+          "name": "reason",
+          "type_": "string",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ContractUpgraded",
+      "prefix_topics": [
+        "contract_upgraded"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          },
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "SacAdminTransferred",
+      "prefix_topics": [
+        "sac_admin_transferred"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "new_sac_admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "event_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "ContractAdminRotated",
+      "prefix_topics": [
+        "contract_admin_rotated"
+      ],
+      "params": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address",
+          "location": "topic_list"
+        },
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address",
+          "location": "data"
+        }
+      ],
+      "data_format": "map"
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "V1 storage layout \\xe2\\x80\\x94 compatibility contract for future upgrades.\\n\\nAny future v2 that uses `update_current_contract_wasm` MUST read/write\\nthe exact same `DataKey` and `Role` enums, or it will corrupt state.\\nStorage type: all keys use **instance** storage (small, contract-lifetime,\\ncheaper per-access). If a future version needs per-user keys, those should\\ngo into persistent storage under new `DataKey` variants.",
+      "lib": "",
+      "name": "Role",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Admin"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "KybAuthorizer"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "ClawbackOfficer"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Pauser"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Upgrader"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Roles",
+            "type_": [
+              {
+                "udt": {
+                  "name": "Role"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Paused"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Sac"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "pause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "freeze",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "counterparty",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "reason",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Address of the BRLP SAC this contract administers.",
+      "name": "get_sac",
+      "inputs": [],
+      "outputs": [
+        "address"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "`unpause` is never blocked by `paused`.",
+      "name": "unpause",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Native Soroban in-place upgrade. Same contract ID, same storage,\\nnew bytecode.\\n\\n**Future work**: This function is a candidate for a timelock\\n(propose + delay + execute). Until then, the `Upgrader` role should\\nbe a multisig account on mainnet.",
+      "name": "upgrade",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_wasm_hash",
+          "type_": {
+            "bytes_n": {
+              "n": 32
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "clawback",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "from",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "reason",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Whether `who` currently holds `role`.",
+      "name": "has_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": {
+            "udt": {
+              "name": "Role"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "who",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "unfreeze",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "counterparty",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "reason",
+          "type_": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Current value of the `Paused` flag.",
+      "name": "is_paused",
+      "inputs": [],
+      "outputs": [
+        "bool"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Idempotent: granting a role the holder already has is a no-op.",
+      "name": "grant_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": {
+            "udt": {
+              "name": "Role"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "who",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "revoke_role",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "role",
+          "type_": {
+            "udt": {
+              "name": "Role"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "who",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Deploy-time constructor. Sets `admin` as the sole `Role::Admin` holder,\\nstores the SAC address, and starts unpaused. All other roles start empty.",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "admin",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "sac",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Holders of `role`, empty if the role was never granted.",
+      "name": "get_role_members",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "role",
+          "type_": {
+            "udt": {
+              "name": "Role"
+            }
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "vec": {
+            "element_type": "address"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Re-point the SAC's admin to `new_sac_admin`.\\n\\n**DANGER**: This is the single most dangerous function in the contract.\\nOnce called, this contract loses SAC admin rights. The new admin has\\nfull control of the BRLP asset (authorize, clawback, mint, set_admin).\\n\\n**Future work**: This function is the primary candidate for a timelock\\nand/or requiring the `Admin` role holder to be a multisig account.\\nUntil then, operational discipline MUST ensure the `Admin` holder is a\\nclassic multisig with an appropriate threshold.",
+      "name": "transfer_sac_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_sac_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "authorize_trustline",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "counterparty",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "deauthorize_trustline",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "counterparty",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Add `new_admin` to `Role::Admin` inside this contract.\\nDoes NOT touch the SAC.",
+      "name": "rotate_contract_admin",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "new_admin",
+          "type_": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "result": {
+            "ok_type": "void",
+            "error_type": {
+              "udt": {
+                "name": "ContractError"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]
