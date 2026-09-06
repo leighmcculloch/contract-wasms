@@ -1,0 +1,288 @@
+[
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "mode",
+      "inputs": [],
+      "outputs": [
+        "u32"
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Owner: move any token held by this contract.",
+      "name": "sweep",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "tkn",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "to",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "DataKey",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Owner"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PoolFixed"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "PoolFlash"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Comet"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Backstop"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Usdc"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Blnd"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Lot"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Mode"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Plan"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LastBid"
+          }
+        },
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "LastBlock"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "FixError",
+      "cases": [
+        {
+          "doc": "",
+          "name": "NotOwner",
+          "value": 100
+        },
+        {
+          "doc": "",
+          "name": "BadMode",
+          "value": 101
+        },
+        {
+          "doc": "",
+          "name": "BadCaller",
+          "value": 102
+        },
+        {
+          "doc": "",
+          "name": "TooManyIters",
+          "value": 103
+        },
+        {
+          "doc": "",
+          "name": "AuctionWindow",
+          "value": 104
+        },
+        {
+          "doc": "",
+          "name": "NotEnoughLp",
+          "value": 105
+        },
+        {
+          "doc": "",
+          "name": "BidMissing",
+          "value": 106
+        },
+        {
+          "doc": "",
+          "name": "BadAmount",
+          "value": 107
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Flash-loan receiver (moderc3156). `caller` is the `from` of the flash loan (the owner).",
+      "name": "exec_op",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "fee",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "Owner: arm the next `exec_op`. mode 1 = create, 2 = fill (plan = deposit amounts),\\n3 = probe (plan[0] = USDC to swap and back), 0 = disarm.",
+      "name": "set_plan",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "mode",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "plan",
+          "type_": {
+            "vec": {
+              "element_type": "i128"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "last_auction",
+      "inputs": [],
+      "outputs": [
+        {
+          "tuple": {
+            "value_types": [
+              "i128",
+              "u32"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "owner",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool_fixed",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "pool_flash",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "comet",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "backstop",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "usdc",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "blnd",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "lot",
+          "type_": {
+            "vec": {
+              "element_type": "address"
+            }
+          }
+        }
+      ],
+      "outputs": []
+    }
+  }
+]

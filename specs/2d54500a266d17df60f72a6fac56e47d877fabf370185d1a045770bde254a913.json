@@ -1,0 +1,406 @@
+[
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Ah",
+      "fields": [
+        {
+          "doc": "",
+          "name": "f",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "i",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "p",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "t",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "x",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Bh",
+      "fields": [
+        {
+          "doc": "",
+          "name": "m",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "o",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "p",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Op",
+      "cases": [
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "S",
+            "type_": [
+              {
+                "udt": {
+                  "name": "Sh"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "A",
+            "type_": [
+              {
+                "udt": {
+                  "name": "Ah"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Sh",
+      "fields": [
+        {
+          "doc": "",
+          "name": "f",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "o",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "p",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "t",
+          "type_": "address"
+        }
+      ]
+    }
+  },
+  {
+    "udt_union_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Join",
+      "cases": [
+        {
+          "void_v0": {
+            "doc": "",
+            "name": "Sngl"
+          }
+        },
+        {
+          "tuple_v0": {
+            "doc": "",
+            "name": "Prop",
+            "type_": [
+              {
+                "udt": {
+                  "name": "Bh"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Plan",
+      "fields": [
+        {
+          "doc": "",
+          "name": "backstop",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "comet",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "join",
+          "type_": {
+            "udt": {
+              "name": "Join"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "loan_pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "max_bid_lp",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "max_usdc_in",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "min_repay",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "pool",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "swaps",
+          "type_": {
+            "vec": {
+              "element_type": {
+                "udt": {
+                  "name": "Op"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "udt_error_enum_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Error",
+      "cases": [
+        {
+          "doc": "",
+          "name": "SamePoolReentrancy",
+          "value": 1
+        },
+        {
+          "doc": "",
+          "name": "BadParams",
+          "value": 2
+        },
+        {
+          "doc": "",
+          "name": "NoAuction",
+          "value": 3
+        },
+        {
+          "doc": "",
+          "name": "BidAboveCap",
+          "value": 4
+        },
+        {
+          "doc": "",
+          "name": "SpendCapExceeded",
+          "value": 5
+        },
+        {
+          "doc": "",
+          "name": "LpResidual",
+          "value": 6
+        },
+        {
+          "doc": "",
+          "name": "InsufficientRepay",
+          "value": 7
+        },
+        {
+          "doc": "",
+          "name": "UnexpectedCaller",
+          "value": 8
+        },
+        {
+          "doc": "",
+          "name": "LpMintMismatch",
+          "value": 9
+        },
+        {
+          "doc": "",
+          "name": "BuyAboveCap",
+          "value": 10
+        },
+        {
+          "doc": "",
+          "name": "BadSupply",
+          "value": 11
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "Request",
+      "fields": [
+        {
+          "doc": "",
+          "name": "address",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "amount",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "request_type",
+          "type_": "u32"
+        }
+      ]
+    }
+  },
+  {
+    "udt_struct_v0": {
+      "doc": "",
+      "lib": "",
+      "name": "AuctionData",
+      "fields": [
+        {
+          "doc": "",
+          "name": "bid",
+          "type_": {
+            "map": {
+              "key_type": "address",
+              "value_type": "i128"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "block",
+          "type_": "u32"
+        },
+        {
+          "doc": "",
+          "name": "lot",
+          "type_": {
+            "map": {
+              "key_type": "address",
+              "value_type": "i128"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "a",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "p",
+          "type_": {
+            "udt": {
+              "name": "Plan"
+            }
+          }
+        },
+        {
+          "doc": "",
+          "name": "h",
+          "type_": "val"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "exec_op",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "caller",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "token_addr",
+          "type_": "address"
+        },
+        {
+          "doc": "",
+          "name": "c",
+          "type_": "i128"
+        },
+        {
+          "doc": "",
+          "name": "d",
+          "type_": "i128"
+        }
+      ],
+      "outputs": []
+    }
+  },
+  {
+    "function_v0": {
+      "doc": "",
+      "name": "__constructor",
+      "inputs": [
+        {
+          "doc": "",
+          "name": "orchestrator",
+          "type_": "address"
+        }
+      ],
+      "outputs": []
+    }
+  }
+]
