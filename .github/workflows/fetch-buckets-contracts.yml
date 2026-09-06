@@ -386,6 +386,10 @@ jobs:
         run: >
           ./.scripts/find_sep50_nft_contracts_token_id_types.sh | tee analysis/find_sep50_nft_contracts_token_id_types_results.csv
 
+      - name: Run find mint functions script
+        run: >
+          ./.scripts/find_mint_functions.sh | tee analysis/find_mint_functions_results.csv
+
       - name: Commit contracts
         id: commit
         run: |
